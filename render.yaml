@@ -1,12 +1,12 @@
 # ====================================================================
 # JanDrishti — Render Infrastructure-as-Code Blueprint
-# Production deployment: FastAPI + React/Vite + Read-Only SQLite
+# Civic Data Intelligence Platform
 # ====================================================================
 
 services:
 
   # ================================================================
-  # 1. BACKEND — FastAPI Web Service
+  # BACKEND — FastAPI + Immutable Read-Only SQLite
   # ================================================================
   - type: web
     name: jandrishti-api
@@ -22,7 +22,7 @@ services:
 
     envVars:
       - key: PYTHON_VERSION
-        value: "3.13.0"
+        value: 3.13.0
 
       - key: DATABASE_PATH
         value: database/mplads.db
@@ -32,7 +32,7 @@ services:
 
 
   # ================================================================
-  # 2. FRONTEND — React/Vite Static Site
+  # FRONTEND — React + Vite Static SPA
   # ================================================================
   - type: web
     name: jandrishti-web
@@ -51,7 +51,4 @@ services:
 
     envVars:
       - key: VITE_API_URL
-        fromService:
-          type: web
-          name: jandrishti-api
-          property: host
+        value: https://jandrishti-api.onrender.com

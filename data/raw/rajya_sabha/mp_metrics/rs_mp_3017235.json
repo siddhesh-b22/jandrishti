@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017235,
+  "caption": "Shri Jaggesh (2022-28)",
+  "state_id": 18,
+  "state_name": "Karnataka",
+  "house": "RAJYA_SABHA",
+  "combo": "18,0,3017235,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a019,60,63,957.11",
+      "\u00a019.61 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a013,05,87,101.00",
+      "\u00a013.06 Crore"
+    ],
+    "Works Recommended": [
+      "208",
+      "\u00a019,54,61,585.00",
+      "\u00a019.55 Crore"
+    ],
+    "Works Completed": [
+      "127",
+      "\u00a011,98,61,585.00",
+      "\u00a011.99 Crore"
+    ],
+    "Works Sanctioned": [
+      "178",
+      "\u00a014,93,61,585.00",
+      "\u00a014.94 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

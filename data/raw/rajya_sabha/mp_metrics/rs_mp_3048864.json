@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3048864,
+  "caption": "Shri Nitin Laxmanrao Jadhav Patil (2024-28)",
+  "state_id": 21,
+  "state_name": "Maharashtra",
+  "house": "RAJYA_SABHA",
+  "combo": "21,0,3048864,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a012,25,00,000.00",
+      "\u00a012.25 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a029,96,110.00",
+      "\u00a00.30 Crore"
+    ],
+    "Works Recommended": [
+      "61",
+      "\u00a07,34,50,000.00",
+      "\u00a07.34 Crore"
+    ],
+    "Works Completed": [
+      "3",
+      "\u00a030,00,000.00",
+      "\u00a00.30 Crore"
+    ],
+    "Works Sanctioned": [
+      "52",
+      "\u00a06,24,50,000.00",
+      "\u00a06.24 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

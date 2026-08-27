@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017232,
+  "caption": "Shri Aditya Prasad (2022-28)",
+  "state_id": 17,
+  "state_name": "Jharkhand",
+  "house": "RAJYA_SABHA",
+  "combo": "17,0,3017232,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a022,76,28,508.20",
+      "\u00a022.76 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a015,94,74,868.00",
+      "\u00a015.95 Crore"
+    ],
+    "Works Recommended": [
+      "226",
+      "\u00a018,41,73,092.00",
+      "\u00a018.42 Crore"
+    ],
+    "Works Completed": [
+      "141",
+      "\u00a011,56,87,342.00",
+      "\u00a011.57 Crore"
+    ],
+    "Works Sanctioned": [
+      "219",
+      "\u00a017,66,74,092.00",
+      "\u00a017.67 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3042554,
+  "caption": "Shri Ashok Singh (2024-30)",
+  "state_id": 20,
+  "state_name": "Madhya Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "20,0,3042554,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a01,80,68,265.00",
+      "\u00a01.81 Crore"
+    ],
+    "Works Recommended": [
+      "109",
+      "\u00a05,17,50,650.00",
+      "\u00a05.18 Crore"
+    ],
+    "Works Completed": [
+      "11",
+      "\u00a055,88,507.00",
+      "\u00a00.56 Crore"
+    ],
+    "Works Sanctioned": [
+      "50",
+      "\u00a03,19,85,778.00",
+      "\u00a03.20 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

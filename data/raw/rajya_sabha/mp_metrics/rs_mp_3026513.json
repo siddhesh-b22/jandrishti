@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3026513,
+  "caption": "Shri Kesridevsinh Jhala (2023-29)",
+  "state_id": 27,
+  "state_name": "Gujarat",
+  "house": "RAJYA_SABHA",
+  "combo": "27,0,3026513,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a017,15,00,000.00",
+      "\u00a017.15 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a02,65,13,551.00",
+      "\u00a02.65 Crore"
+    ],
+    "Works Recommended": [
+      "144",
+      "\u00a011,83,19,535.00",
+      "\u00a011.83 Crore"
+    ],
+    "Works Completed": [
+      "21",
+      "\u00a01,20,88,835.00",
+      "\u00a01.21 Crore"
+    ],
+    "Works Sanctioned": [
+      "107",
+      "\u00a07,64,99,535.00",
+      "\u00a07.65 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

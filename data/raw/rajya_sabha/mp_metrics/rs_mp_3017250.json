@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017250,
+  "caption": "Dr. John Brittas (2021-27)",
+  "state_id": 36,
+  "state_name": "Kerala",
+  "house": "RAJYA_SABHA",
+  "combo": "36,0,3017250,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a024,50,63,957.11",
+      "\u00a024.51 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a05,75,06,835.00",
+      "\u00a05.75 Crore"
+    ],
+    "Works Recommended": [
+      "144",
+      "\u00a021,46,37,184.00",
+      "\u00a021.46 Crore"
+    ],
+    "Works Completed": [
+      "37",
+      "\u00a05,27,55,642.00",
+      "\u00a05.28 Crore"
+    ],
+    "Works Sanctioned": [
+      "62",
+      "\u00a09,47,00,602.00",
+      "\u00a09.47 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "2",
+      "\u00a01,00,00,000.00",
+      "\u00a01.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

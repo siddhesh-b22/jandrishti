@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017267,
+  "caption": "Shri Sanjay Raut (2022-28)",
+  "state_id": 21,
+  "state_name": "Maharashtra",
+  "house": "RAJYA_SABHA",
+  "combo": "21,0,3017267,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a019,60,63,957.11",
+      "\u00a019.61 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a06,71,67,846.00",
+      "\u00a06.72 Crore"
+    ],
+    "Works Recommended": [
+      "75",
+      "\u00a018,38,61,364.00",
+      "\u00a018.39 Crore"
+    ],
+    "Works Completed": [
+      "6",
+      "\u00a076,62,364.00",
+      "\u00a00.77 Crore"
+    ],
+    "Works Sanctioned": [
+      "54",
+      "\u00a013,74,61,364.00",
+      "\u00a013.75 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

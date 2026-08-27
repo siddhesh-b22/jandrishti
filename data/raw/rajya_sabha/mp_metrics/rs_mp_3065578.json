@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3065578,
+  "caption": "Smt. Laxmi Verma (2026-32)",
+  "state_id": 8,
+  "state_name": "Chhattisgarh",
+  "house": "RAJYA_SABHA",
+  "combo": "8,0,3065578,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a04,90,00,000.00",
+      "\u00a04.90 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a012,50,000.00",
+      "\u00a00.12 Crore"
+    ],
+    "Works Recommended": [
+      "2",
+      "\u00a025,00,000.00",
+      "\u00a00.25 Crore"
+    ],
+    "Works Completed": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Sanctioned": [
+      "2",
+      "\u00a025,00,000.00",
+      "\u00a00.25 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

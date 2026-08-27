@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3043536,
+  "caption": "Shri Pradip Kumar Varma (2024-30)",
+  "state_id": 17,
+  "state_name": "Jharkhand",
+  "house": "RAJYA_SABHA",
+  "combo": "17,0,3043536,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a017,85,64,551.09",
+      "\u00a017.86 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a010,10,69,118.00",
+      "\u00a010.11 Crore"
+    ],
+    "Works Recommended": [
+      "238",
+      "\u00a014,88,91,716.00",
+      "\u00a014.89 Crore"
+    ],
+    "Works Completed": [
+      "24",
+      "\u00a02,04,85,000.00",
+      "\u00a02.05 Crore"
+    ],
+    "Works Sanctioned": [
+      "163",
+      "\u00a011,58,51,344.00",
+      "\u00a011.59 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3042562,
+  "caption": "Dr. Ajeet Madhavrao Gopchade (2024-30)",
+  "state_id": 21,
+  "state_name": "Maharashtra",
+  "house": "RAJYA_SABHA",
+  "combo": "21,0,3042562,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a05,35,32,752.00",
+      "\u00a05.35 Crore"
+    ],
+    "Works Recommended": [
+      "91",
+      "\u00a010,98,33,137.00",
+      "\u00a010.98 Crore"
+    ],
+    "Works Completed": [
+      "44",
+      "\u00a04,80,68,704.00",
+      "\u00a04.81 Crore"
+    ],
+    "Works Sanctioned": [
+      "51",
+      "\u00a05,45,33,137.00",
+      "\u00a05.45 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

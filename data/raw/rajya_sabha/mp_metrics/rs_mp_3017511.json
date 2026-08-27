@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017511,
+  "caption": "Dr. Sandeep Kumar Pathak (2022-28)",
+  "state_id": 1,
+  "state_name": "Punjab",
+  "house": "RAJYA_SABHA",
+  "combo": "1,0,3017511,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a023,22,03,454.24",
+      "\u00a023.22 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a015,85,76,383.00",
+      "\u00a015.86 Crore"
+    ],
+    "Works Recommended": [
+      "277",
+      "\u00a020,48,55,922.00",
+      "\u00a020.49 Crore"
+    ],
+    "Works Completed": [
+      "157",
+      "\u00a08,06,59,922.00",
+      "\u00a08.07 Crore"
+    ],
+    "Works Sanctioned": [
+      "269",
+      "\u00a020,07,55,922.00",
+      "\u00a020.08 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "1",
+      "\u00a01,00,00,000.00",
+      "\u00a01.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "state_id": 27,
+  "state_name": "Gujarat",
+  "house": "RAJYA_SABHA",
+  "combo": "27,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a01,20,05,00,000.00",
+      "\u00a0120.05 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a022,73,18,444.00",
+      "\u00a022.73 Crore"
+    ],
+    "Works Recommended": [
+      "1312",
+      "\u00a082,72,48,052.00",
+      "\u00a082.72 Crore"
+    ],
+    "Works Completed": [
+      "334",
+      "\u00a015,85,83,578.00",
+      "\u00a015.86 Crore"
+    ],
+    "Works Sanctioned": [
+      "1033",
+      "\u00a063,49,35,052.00",
+      "\u00a063.49 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "1",
+      "\u00a025,00,000.00",
+      "\u00a00.25 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017329,
+  "caption": "Shri Javed Ali Khan (2022-28)",
+  "state_id": 33,
+  "state_name": "Uttar Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "33,0,3017329,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a019,60,63,957.11",
+      "\u00a019.61 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a016,09,77,854.28",
+      "\u00a016.10 Crore"
+    ],
+    "Works Recommended": [
+      "193",
+      "\u00a019,36,17,976.00",
+      "\u00a019.36 Crore"
+    ],
+    "Works Completed": [
+      "125",
+      "\u00a010,18,31,420.00",
+      "\u00a010.18 Crore"
+    ],
+    "Works Sanctioned": [
+      "177",
+      "\u00a016,66,90,000.00",
+      "\u00a016.67 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

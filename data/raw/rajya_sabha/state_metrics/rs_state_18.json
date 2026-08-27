@@ -1,0 +1,42 @@
+{
+  "state_id": 18,
+  "state_name": "Karnataka",
+  "house": "RAJYA_SABHA",
+  "combo": "18,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a01,96,64,55,968.00",
+      "\u00a0196.65 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a066,81,41,472.00",
+      "\u00a066.81 Crore"
+    ],
+    "Works Recommended": [
+      "1289",
+      "\u00a01,26,15,97,653.00",
+      "\u00a0126.16 Crore"
+    ],
+    "Works Completed": [
+      "611",
+      "\u00a035,27,28,673.00",
+      "\u00a035.27 Crore"
+    ],
+    "Works Sanctioned": [
+      "1050",
+      "\u00a091,84,59,153.00",
+      "\u00a091.85 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

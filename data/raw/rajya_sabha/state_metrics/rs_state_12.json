@@ -1,0 +1,42 @@
+{
+  "state_id": 12,
+  "state_name": "Goa",
+  "house": "RAJYA_SABHA",
+  "combo": "12,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a017,15,00,000.00",
+      "\u00a017.15 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a03,78,36,353.99",
+      "\u00a03.78 Crore"
+    ],
+    "Works Recommended": [
+      "40",
+      "\u00a010,91,49,210.99",
+      "\u00a010.91 Crore"
+    ],
+    "Works Completed": [
+      "8",
+      "\u00a02,35,57,387.99",
+      "\u00a02.36 Crore"
+    ],
+    "Works Sanctioned": [
+      "15",
+      "\u00a04,39,29,925.99",
+      "\u00a04.39 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

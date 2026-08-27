@@ -1,0 +1,42 @@
+{
+  "state_id": 15,
+  "state_name": "Himachal Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "15,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a040,38,63,957.11",
+      "\u00a040.39 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a020,18,42,302.04",
+      "\u00a020.18 Crore"
+    ],
+    "Works Recommended": [
+      "850",
+      "\u00a028,52,01,837.04",
+      "\u00a028.52 Crore"
+    ],
+    "Works Completed": [
+      "321",
+      "\u00a012,80,84,499.04",
+      "\u00a012.81 Crore"
+    ],
+    "Works Sanctioned": [
+      "777",
+      "\u00a026,42,51,837.04",
+      "\u00a026.43 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

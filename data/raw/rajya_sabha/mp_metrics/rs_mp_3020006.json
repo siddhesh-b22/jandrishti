@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3020006,
+  "caption": "Shri Narain Dass Gupta (2024-30)",
+  "state_id": 11,
+  "state_name": "Delhi",
+  "house": "RAJYA_SABHA",
+  "combo": "11,0,3020006,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a016,08,37,070.00",
+      "\u00a016.08 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a02,00,20,022.00",
+      "\u00a02.00 Crore"
+    ],
+    "Works Recommended": [
+      "52",
+      "\u00a07,80,59,618.00",
+      "\u00a07.81 Crore"
+    ],
+    "Works Completed": [
+      "11",
+      "\u00a02,27,66,766.00",
+      "\u00a02.28 Crore"
+    ],
+    "Works Sanctioned": [
+      "37",
+      "\u00a05,42,77,768.00",
+      "\u00a05.43 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "2",
+      "\u00a01,00,00,000.00",
+      "\u00a01.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

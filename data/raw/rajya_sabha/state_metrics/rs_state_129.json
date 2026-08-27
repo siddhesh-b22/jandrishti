@@ -1,0 +1,42 @@
+{
+  "state_id": 129,
+  "state_name": "Telangana",
+  "house": "RAJYA_SABHA",
+  "combo": "129,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a098,00,17,044.22",
+      "\u00a098.00 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a021,36,18,258.00",
+      "\u00a021.36 Crore"
+    ],
+    "Works Recommended": [
+      "802",
+      "\u00a050,06,81,552.00",
+      "\u00a050.07 Crore"
+    ],
+    "Works Completed": [
+      "294",
+      "\u00a015,30,62,323.00",
+      "\u00a015.31 Crore"
+    ],
+    "Works Sanctioned": [
+      "625",
+      "\u00a036,83,33,848.00",
+      "\u00a036.83 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

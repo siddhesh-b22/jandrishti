@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017332,
+  "caption": "Shri Mithlesh Kumar (2022-28)",
+  "state_id": 33,
+  "state_name": "Uttar Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "33,0,3017332,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a019,60,63,957.11",
+      "\u00a019.61 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a017,07,53,928.00",
+      "\u00a017.08 Crore"
+    ],
+    "Works Recommended": [
+      "204",
+      "\u00a019,49,16,928.00",
+      "\u00a019.49 Crore"
+    ],
+    "Works Completed": [
+      "196",
+      "\u00a014,40,38,928.00",
+      "\u00a014.40 Crore"
+    ],
+    "Works Sanctioned": [
+      "200",
+      "\u00a017,19,78,928.00",
+      "\u00a017.20 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017313,
+  "caption": "Shri Ravi Chandra Vaddiraju (2024-30)",
+  "state_id": 129,
+  "state_name": "Telangana",
+  "house": "RAJYA_SABHA",
+  "combo": "129,0,3017313,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a015,27,32,534.11",
+      "\u00a015.27 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a07,36,72,123.00",
+      "\u00a07.37 Crore"
+    ],
+    "Works Recommended": [
+      "276",
+      "\u00a013,17,69,169.00",
+      "\u00a013.18 Crore"
+    ],
+    "Works Completed": [
+      "107",
+      "\u00a04,69,28,169.00",
+      "\u00a04.69 Crore"
+    ],
+    "Works Sanctioned": [
+      "211",
+      "\u00a09,17,92,169.00",
+      "\u00a09.18 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

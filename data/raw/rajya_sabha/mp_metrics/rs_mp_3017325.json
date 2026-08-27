@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017325,
+  "caption": "Prof. Ram Gopal Yadav (2020-26)",
+  "state_id": 33,
+  "state_name": "Uttar Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "33,0,3017325,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a022,12,71,395.11",
+      "\u00a022.13 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a017,87,25,656.00",
+      "\u00a017.87 Crore"
+    ],
+    "Works Recommended": [
+      "81",
+      "\u00a020,01,04,837.00",
+      "\u00a020.01 Crore"
+    ],
+    "Works Completed": [
+      "25",
+      "\u00a08,02,40,169.00",
+      "\u00a08.02 Crore"
+    ],
+    "Works Sanctioned": [
+      "75",
+      "\u00a019,23,14,337.00",
+      "\u00a019.23 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

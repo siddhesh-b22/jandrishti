@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017308,
+  "caption": "Shri K.R.N. Rajeshkumar (2022-28)",
+  "state_id": 30,
+  "state_name": "Tamil Nadu",
+  "house": "RAJYA_SABHA",
+  "combo": "30,0,3017308,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a023,85,13,975.53",
+      "\u00a023.85 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a015,29,99,036.00",
+      "\u00a015.30 Crore"
+    ],
+    "Works Recommended": [
+      "102",
+      "\u00a018,64,09,814.00",
+      "\u00a018.64 Crore"
+    ],
+    "Works Completed": [
+      "84",
+      "\u00a013,19,70,814.00",
+      "\u00a013.20 Crore"
+    ],
+    "Works Sanctioned": [
+      "102",
+      "\u00a018,64,09,814.00",
+      "\u00a018.64 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

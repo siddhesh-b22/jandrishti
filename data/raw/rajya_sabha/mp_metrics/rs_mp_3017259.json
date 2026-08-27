@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017259,
+  "caption": "Dr. Anil Sukhdeorao Bonde (2022-28)",
+  "state_id": 21,
+  "state_name": "Maharashtra",
+  "house": "RAJYA_SABHA",
+  "combo": "21,0,3017259,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a019,60,63,957.11",
+      "\u00a019.61 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a08,63,99,726.00",
+      "\u00a08.64 Crore"
+    ],
+    "Works Recommended": [
+      "185",
+      "\u00a019,49,38,204.00",
+      "\u00a019.49 Crore"
+    ],
+    "Works Completed": [
+      "50",
+      "\u00a04,89,83,466.00",
+      "\u00a04.90 Crore"
+    ],
+    "Works Sanctioned": [
+      "104",
+      "\u00a010,76,98,204.00",
+      "\u00a010.77 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

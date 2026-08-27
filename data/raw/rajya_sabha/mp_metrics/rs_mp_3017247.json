@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017247,
+  "caption": "Shri Abdul Wahab (2021-27)",
+  "state_id": 36,
+  "state_name": "Kerala",
+  "house": "RAJYA_SABHA",
+  "combo": "36,0,3017247,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a031,08,98,953.29",
+      "\u00a031.09 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a09,37,60,670.00",
+      "\u00a09.38 Crore"
+    ],
+    "Works Recommended": [
+      "367",
+      "\u00a027,30,59,149.00",
+      "\u00a027.31 Crore"
+    ],
+    "Works Completed": [
+      "120",
+      "\u00a08,07,06,445.00",
+      "\u00a08.07 Crore"
+    ],
+    "Works Sanctioned": [
+      "222",
+      "\u00a014,99,73,945.00",
+      "\u00a015.00 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "1",
+      "\u00a010,00,000.00",
+      "\u00a00.10 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

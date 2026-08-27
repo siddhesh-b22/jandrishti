@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3046918,
+  "caption": "Shri Rajib Bhattacharjee (2024-28)",
+  "state_id": 31,
+  "state_name": "Tripura",
+  "house": "RAJYA_SABHA",
+  "combo": "31,0,3046918,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a012,25,00,000.00",
+      "\u00a012.25 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a03,42,10,580.00",
+      "\u00a03.42 Crore"
+    ],
+    "Works Recommended": [
+      "58",
+      "\u00a08,46,49,344.00",
+      "\u00a08.46 Crore"
+    ],
+    "Works Completed": [
+      "18",
+      "\u00a01,95,22,053.00",
+      "\u00a01.95 Crore"
+    ],
+    "Works Sanctioned": [
+      "39",
+      "\u00a05,37,26,844.00",
+      "\u00a05.37 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3043534,
+  "caption": "Shri Naveen Jain (2024-30)",
+  "state_id": 33,
+  "state_name": "Uttar Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "33,0,3043534,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a06,47,73,227.00",
+      "\u00a06.48 Crore"
+    ],
+    "Works Recommended": [
+      "168",
+      "\u00a013,55,77,743.00",
+      "\u00a013.56 Crore"
+    ],
+    "Works Completed": [
+      "10",
+      "\u00a01,78,73,843.00",
+      "\u00a01.79 Crore"
+    ],
+    "Works Sanctioned": [
+      "88",
+      "\u00a09,06,67,943.00",
+      "\u00a09.07 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

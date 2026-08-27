@@ -1,0 +1,149 @@
+{
+  "rajya_sabha_getTilesData": {
+    "status": 200,
+    "type": "<class 'dict'>",
+    "len": 7,
+    "keys_or_sample": [
+      "Allocated Limit for Hon'ble MPs",
+      "Expenditure on Completed and On-going Works as on Date",
+      "Works Recommended",
+      "Works Completed",
+      "Works Sanctioned",
+      "Amount consented for Calamity",
+      "Current Tenure"
+    ]
+  },
+  "rajya_sabha_getStateData": {
+    "status": 200,
+    "type": "<class 'list'>",
+    "len": 36,
+    "keys_or_sample": [
+      {
+        "STATE_NAME": "Andaman And Nicobar Islands",
+        "STATE_ID": 35
+      },
+      {
+        "STATE_NAME": "Andhra Pradesh",
+        "STATE_ID": 2
+      }
+    ]
+  },
+  "rajya_sabha_getTilesReportData": {
+    "status": 200,
+    "type": "<class 'dict'>",
+    "len": 0,
+    "keys_or_sample": []
+  },
+  "rajya_sabha_getConstituencyData": {
+    "status": 200,
+    "type": "<class 'list'>",
+    "len": 0,
+    "keys_or_sample": []
+  },
+  "rajya_sabha_getTotalMPData": {
+    "status": 200,
+    "type": "<class 'dict'>",
+    "len": 1,
+    "keys_or_sample": [
+      "Total Active MP"
+    ]
+  },
+  "lok_sabha_getTilesData": {
+    "status": 200,
+    "type": "<class 'dict'>",
+    "len": 7,
+    "keys_or_sample": [
+      "Allocated Limit for Hon'ble MPs",
+      "Expenditure on Completed and On-going Works as on Date",
+      "Works Recommended",
+      "Works Completed",
+      "Works Sanctioned",
+      "Amount consented for Calamity",
+      "Current Tenure"
+    ]
+  },
+  "lok_sabha_getStateData": {
+    "status": 200,
+    "type": "<class 'list'>",
+    "len": 36,
+    "keys_or_sample": [
+      {
+        "STATE_NAME": "Andaman And Nicobar Islands",
+        "STATE_ID": 35
+      },
+      {
+        "STATE_NAME": "Andhra Pradesh",
+        "STATE_ID": 2
+      }
+    ]
+  },
+  "lok_sabha_getTilesReportData": {
+    "status": 200,
+    "type": "<class 'dict'>",
+    "len": 0,
+    "keys_or_sample": []
+  },
+  "lok_sabha_getConstituencyData": {
+    "status": 200,
+    "type": "<class 'list'>",
+    "len": 0,
+    "keys_or_sample": []
+  },
+  "lok_sabha_getTotalMPData": {
+    "status": 200,
+    "type": "<class 'dict'>",
+    "len": 1,
+    "keys_or_sample": [
+      "Total Active MP"
+    ]
+  },
+  "all_houses_getTilesData": {
+    "status": 200,
+    "type": "<class 'dict'>",
+    "len": 7,
+    "keys_or_sample": [
+      "Allocated Limit for Hon'ble MPs",
+      "Expenditure on Completed and On-going Works as on Date",
+      "Works Recommended",
+      "Works Completed",
+      "Works Sanctioned",
+      "Amount consented for Calamity",
+      "Current Tenure"
+    ]
+  },
+  "all_houses_getStateData": {
+    "status": 200,
+    "type": "<class 'list'>",
+    "len": 36,
+    "keys_or_sample": [
+      {
+        "STATE_NAME": "Andaman And Nicobar Islands",
+        "STATE_ID": 35
+      },
+      {
+        "STATE_NAME": "Andhra Pradesh",
+        "STATE_ID": 2
+      }
+    ]
+  },
+  "all_houses_getTilesReportData": {
+    "status": 200,
+    "type": "<class 'dict'>",
+    "len": 0,
+    "keys_or_sample": []
+  },
+  "all_houses_getConstituencyData": {
+    "status": 200,
+    "type": "<class 'list'>",
+    "len": 0,
+    "keys_or_sample": []
+  },
+  "all_houses_getTotalMPData": {
+    "status": 200,
+    "type": "<class 'dict'>",
+    "len": 1,
+    "keys_or_sample": [
+      "Total Active MP"
+    ]
+  }
+}

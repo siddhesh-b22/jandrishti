@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017323,
+  "caption": "Dr. Laxmikant Bajpayee (2022-28)",
+  "state_id": 33,
+  "state_name": "Uttar Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "33,0,3017323,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a019,60,00,000.00",
+      "\u00a019.60 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a03,90,61,207.00",
+      "\u00a03.91 Crore"
+    ],
+    "Works Recommended": [
+      "66",
+      "\u00a09,11,15,897.00",
+      "\u00a09.11 Crore"
+    ],
+    "Works Completed": [
+      "4",
+      "\u00a065,08,070.00",
+      "\u00a00.65 Crore"
+    ],
+    "Works Sanctioned": [
+      "45",
+      "\u00a07,50,10,536.00",
+      "\u00a07.50 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

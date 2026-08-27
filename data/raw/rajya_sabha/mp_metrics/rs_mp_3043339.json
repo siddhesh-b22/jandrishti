@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3043339,
+  "caption": "Shri Mahendra Bhatt (2024-30)",
+  "state_id": 32,
+  "state_name": "Uttarakhand",
+  "house": "RAJYA_SABHA",
+  "combo": "32,0,3043339,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a02,32,54,909.00",
+      "\u00a02.33 Crore"
+    ],
+    "Works Recommended": [
+      "119",
+      "\u00a09,05,06,104.00",
+      "\u00a09.05 Crore"
+    ],
+    "Works Completed": [
+      "11",
+      "\u00a01,12,66,510.00",
+      "\u00a01.13 Crore"
+    ],
+    "Works Sanctioned": [
+      "74",
+      "\u00a05,52,85,504.00",
+      "\u00a05.53 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

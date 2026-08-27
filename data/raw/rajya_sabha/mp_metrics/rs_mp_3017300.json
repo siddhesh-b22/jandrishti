@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017300,
+  "caption": "Dr. M. Thambi Durai (2026-32)",
+  "state_id": 30,
+  "state_name": "Tamil Nadu",
+  "house": "RAJYA_SABHA",
+  "combo": "30,0,3017300,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a04,93,56,476.50",
+      "\u00a04.94 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Recommended": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Completed": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Sanctioned": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

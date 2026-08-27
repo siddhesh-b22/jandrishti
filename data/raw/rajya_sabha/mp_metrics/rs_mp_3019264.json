@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3019264,
+  "caption": "Smt. Geeta alias Chandraprabha (2020-26)",
+  "state_id": 33,
+  "state_name": "Uttar Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "33,0,3019264,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a019,60,63,957.11",
+      "\u00a019.61 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a016,98,77,016.35",
+      "\u00a016.99 Crore"
+    ],
+    "Works Recommended": [
+      "247",
+      "\u00a019,60,63,956.35",
+      "\u00a019.61 Crore"
+    ],
+    "Works Completed": [
+      "211",
+      "\u00a016,21,72,422.35",
+      "\u00a016.22 Crore"
+    ],
+    "Works Sanctioned": [
+      "219",
+      "\u00a017,44,63,956.35",
+      "\u00a017.45 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

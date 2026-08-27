@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017334,
+  "caption": "Shri Surendra Singh Nagar (2022-28)",
+  "state_id": 33,
+  "state_name": "Uttar Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "33,0,3017334,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a022,05,63,957.11",
+      "\u00a022.06 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a010,95,00,434.16",
+      "\u00a010.95 Crore"
+    ],
+    "Works Recommended": [
+      "299",
+      "\u00a021,79,35,769.00",
+      "\u00a021.79 Crore"
+    ],
+    "Works Completed": [
+      "98",
+      "\u00a05,56,81,063.00",
+      "\u00a05.57 Crore"
+    ],
+    "Works Sanctioned": [
+      "238",
+      "\u00a017,08,37,769.00",
+      "\u00a017.08 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

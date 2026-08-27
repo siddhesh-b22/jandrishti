@@ -1,0 +1,42 @@
+{
+  "state_id": 5,
+  "state_name": "Assam",
+  "house": "RAJYA_SABHA",
+  "combo": "5,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a078,41,27,914.22",
+      "\u00a078.41 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a023,23,56,377.44",
+      "\u00a023.24 Crore"
+    ],
+    "Works Recommended": [
+      "489",
+      "\u00a054,31,20,697.54",
+      "\u00a054.31 Crore"
+    ],
+    "Works Completed": [
+      "22",
+      "\u00a02,50,17,748.44",
+      "\u00a02.50 Crore"
+    ],
+    "Works Sanctioned": [
+      "268",
+      "\u00a032,76,87,667.54",
+      "\u00a032.77 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

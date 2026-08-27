@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017258,
+  "caption": "Smt. Sumitra Balmik (2022-28)",
+  "state_id": 20,
+  "state_name": "Madhya Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "20,0,3017258,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a019,60,63,957.11",
+      "\u00a019.61 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a016,37,67,349.00",
+      "\u00a016.38 Crore"
+    ],
+    "Works Recommended": [
+      "177",
+      "\u00a018,41,37,783.00",
+      "\u00a018.41 Crore"
+    ],
+    "Works Completed": [
+      "62",
+      "\u00a07,61,04,491.00",
+      "\u00a07.61 Crore"
+    ],
+    "Works Sanctioned": [
+      "175",
+      "\u00a018,19,87,783.00",
+      "\u00a018.20 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

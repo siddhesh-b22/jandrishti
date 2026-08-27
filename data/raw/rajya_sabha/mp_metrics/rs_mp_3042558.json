@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3042558,
+  "caption": "Dr. Parmar Jashvantsinh Salamsinh (2024-30)",
+  "state_id": 27,
+  "state_name": "Gujarat",
+  "house": "RAJYA_SABHA",
+  "combo": "27,0,3042558,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a03,66,41,140.00",
+      "\u00a03.66 Crore"
+    ],
+    "Works Recommended": [
+      "373",
+      "\u00a010,85,72,244.00",
+      "\u00a010.86 Crore"
+    ],
+    "Works Completed": [
+      "61",
+      "\u00a02,75,59,430.00",
+      "\u00a02.76 Crore"
+    ],
+    "Works Sanctioned": [
+      "287",
+      "\u00a08,04,94,244.00",
+      "\u00a08.05 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "1",
+      "\u00a025,00,000.00",
+      "\u00a00.25 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

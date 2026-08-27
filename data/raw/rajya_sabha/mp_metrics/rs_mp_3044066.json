@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3044066,
+  "caption": "Shri Narayanasa K. Bhandage (2024-30)",
+  "state_id": 18,
+  "state_name": "Karnataka",
+  "house": "RAJYA_SABHA",
+  "combo": "18,0,3044066,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,74,50,000.00",
+      "\u00a014.74 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a07,71,13,625.00",
+      "\u00a07.71 Crore"
+    ],
+    "Works Recommended": [
+      "152",
+      "\u00a013,17,24,620.00",
+      "\u00a013.17 Crore"
+    ],
+    "Works Completed": [
+      "88",
+      "\u00a06,93,19,640.00",
+      "\u00a06.93 Crore"
+    ],
+    "Works Sanctioned": [
+      "115",
+      "\u00a08,24,84,620.00",
+      "\u00a08.25 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

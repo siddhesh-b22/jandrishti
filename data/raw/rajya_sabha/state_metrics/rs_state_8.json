@@ -1,0 +1,42 @@
+{
+  "state_id": 8,
+  "state_name": "Chhattisgarh",
+  "house": "RAJYA_SABHA",
+  "combo": "8,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a078,67,92,289.86",
+      "\u00a078.68 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a024,60,14,079.00",
+      "\u00a024.60 Crore"
+    ],
+    "Works Recommended": [
+      "409",
+      "\u00a035,50,35,983.00",
+      "\u00a035.50 Crore"
+    ],
+    "Works Completed": [
+      "164",
+      "\u00a016,25,45,334.00",
+      "\u00a016.25 Crore"
+    ],
+    "Works Sanctioned": [
+      "353",
+      "\u00a030,86,45,983.00",
+      "\u00a030.86 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

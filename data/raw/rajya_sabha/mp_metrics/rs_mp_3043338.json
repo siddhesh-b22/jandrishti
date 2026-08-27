@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3043338,
+  "caption": "Dr. Dharmshila Gupta (2024-30)",
+  "state_id": 6,
+  "state_name": "Bihar",
+  "house": "RAJYA_SABHA",
+  "combo": "6,0,3043338,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a018,62,00,000.00",
+      "\u00a018.62 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a013,67,14,265.00",
+      "\u00a013.67 Crore"
+    ],
+    "Works Recommended": [
+      "142",
+      "\u00a017,97,54,823.00",
+      "\u00a017.98 Crore"
+    ],
+    "Works Completed": [
+      "87",
+      "\u00a011,44,20,941.00",
+      "\u00a011.44 Crore"
+    ],
+    "Works Sanctioned": [
+      "126",
+      "\u00a016,23,99,823.00",
+      "\u00a016.24 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

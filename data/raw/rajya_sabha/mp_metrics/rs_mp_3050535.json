@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3050535,
+  "caption": "Shri Sana Sathish Babu (2026-32)",
+  "state_id": 2,
+  "state_name": "Andhra Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "2,0,3050535,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a04,90,63,978.00",
+      "\u00a04.91 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Recommended": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Completed": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Sanctioned": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

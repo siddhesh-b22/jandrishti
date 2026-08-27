@@ -1,0 +1,42 @@
+{
+  "state_id": 36,
+  "state_name": "Kerala",
+  "house": "RAJYA_SABHA",
+  "combo": "36,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a02,13,14,39,062.11",
+      "\u00a0213.14 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a045,36,51,666.00",
+      "\u00a045.37 Crore"
+    ],
+    "Works Recommended": [
+      "1513",
+      "\u00a01,53,80,29,552.00",
+      "\u00a0153.80 Crore"
+    ],
+    "Works Completed": [
+      "357",
+      "\u00a031,37,77,435.00",
+      "\u00a031.38 Crore"
+    ],
+    "Works Sanctioned": [
+      "885",
+      "\u00a089,55,09,418.00",
+      "\u00a089.55 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "11",
+      "\u00a03,20,00,000.00",
+      "\u00a03.20 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

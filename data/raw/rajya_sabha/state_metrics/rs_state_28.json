@@ -1,0 +1,42 @@
+{
+  "state_id": 28,
+  "state_name": "Rajasthan",
+  "house": "RAJYA_SABHA",
+  "combo": "28,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a01,37,22,55,828.44",
+      "\u00a0137.23 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a050,12,50,640.01",
+      "\u00a050.13 Crore"
+    ],
+    "Works Recommended": [
+      "972",
+      "\u00a090,63,29,540.00",
+      "\u00a090.63 Crore"
+    ],
+    "Works Completed": [
+      "333",
+      "\u00a031,48,09,881.00",
+      "\u00a031.48 Crore"
+    ],
+    "Works Sanctioned": [
+      "808",
+      "\u00a073,37,38,540.00",
+      "\u00a073.37 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

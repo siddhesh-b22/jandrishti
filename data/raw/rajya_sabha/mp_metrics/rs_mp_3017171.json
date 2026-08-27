@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017171,
+  "caption": "Shri Hardeep Singh Puri (2020-26)",
+  "state_id": 33,
+  "state_name": "Uttar Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "33,0,3017171,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a022,68,01,049.11",
+      "\u00a022.68 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a018,04,80,217.20",
+      "\u00a018.05 Crore"
+    ],
+    "Works Recommended": [
+      "415",
+      "\u00a018,53,55,136.20",
+      "\u00a018.54 Crore"
+    ],
+    "Works Completed": [
+      "278",
+      "\u00a011,21,38,136.20",
+      "\u00a011.21 Crore"
+    ],
+    "Works Sanctioned": [
+      "415",
+      "\u00a018,53,55,136.20",
+      "\u00a018.54 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "1",
+      "\u00a01,00,00,000.00",
+      "\u00a01.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017324,
+  "caption": "Dr. Radha Mohan Das Agrawal (2022-28)",
+  "state_id": 33,
+  "state_name": "Uttar Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "33,0,3017324,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a020,36,26,524.67",
+      "\u00a020.36 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a06,90,89,075.00",
+      "\u00a06.91 Crore"
+    ],
+    "Works Recommended": [
+      "45",
+      "\u00a013,84,28,596.00",
+      "\u00a013.84 Crore"
+    ],
+    "Works Completed": [
+      "15",
+      "\u00a04,19,01,796.00",
+      "\u00a04.19 Crore"
+    ],
+    "Works Sanctioned": [
+      "44",
+      "\u00a013,59,28,596.00",
+      "\u00a013.59 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

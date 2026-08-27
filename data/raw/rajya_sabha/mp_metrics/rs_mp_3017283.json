@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017283,
+  "caption": "Shri Harbhajan Singh (2022-28)",
+  "state_id": 1,
+  "state_name": "Punjab",
+  "house": "RAJYA_SABHA",
+  "combo": "1,0,3017283,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a022,09,84,094.27",
+      "\u00a022.10 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a010,10,56,126.52",
+      "\u00a010.11 Crore"
+    ],
+    "Works Recommended": [
+      "158",
+      "\u00a016,46,49,652.52",
+      "\u00a016.46 Crore"
+    ],
+    "Works Completed": [
+      "77",
+      "\u00a04,99,69,333.52",
+      "\u00a05.00 Crore"
+    ],
+    "Works Sanctioned": [
+      "153",
+      "\u00a015,02,56,424.52",
+      "\u00a015.03 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "1",
+      "\u00a01,00,00,000.00",
+      "\u00a01.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3064835,
+  "caption": "Shri Anurag Sharma (2026-32)",
+  "state_id": 15,
+  "state_name": "Himachal Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "15,0,3064835,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a04,90,00,000.00",
+      "\u00a04.90 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Recommended": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Completed": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Sanctioned": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

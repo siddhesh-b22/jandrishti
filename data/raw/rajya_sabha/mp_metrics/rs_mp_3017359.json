@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017359,
+  "caption": "Shri Mohammed Nadimul Haque (2024-30)",
+  "state_id": 34,
+  "state_name": "West Bengal",
+  "house": "RAJYA_SABHA",
+  "combo": "34,0,3017359,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a04,50,77,861.00",
+      "\u00a04.51 Crore"
+    ],
+    "Works Recommended": [
+      "19",
+      "\u00a09,67,99,500.00",
+      "\u00a09.68 Crore"
+    ],
+    "Works Completed": [
+      "1",
+      "\u00a011,52,000.00",
+      "\u00a00.12 Crore"
+    ],
+    "Works Sanctioned": [
+      "9",
+      "\u00a05,52,45,500.00",
+      "\u00a05.52 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3059272,
+  "caption": "Shri I.S. Inbadurai (2025-31)",
+  "state_id": 30,
+  "state_name": "Tamil Nadu",
+  "house": "RAJYA_SABHA",
+  "combo": "30,0,3059272,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a08,92,48,285.42",
+      "\u00a08.92 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a01,50,65,385.00",
+      "\u00a01.51 Crore"
+    ],
+    "Works Recommended": [
+      "83",
+      "\u00a06,30,74,512.00",
+      "\u00a06.31 Crore"
+    ],
+    "Works Completed": [
+      "12",
+      "\u00a067,59,512.00",
+      "\u00a00.68 Crore"
+    ],
+    "Works Sanctioned": [
+      "35",
+      "\u00a01,84,58,512.00",
+      "\u00a01.85 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

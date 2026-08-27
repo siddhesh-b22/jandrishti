@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017344,
+  "caption": "Smt. Seema Dwivedi (2020-26)",
+  "state_id": 33,
+  "state_name": "Uttar Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "33,0,3017344,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a017,38,30,159.11",
+      "\u00a017.38 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a013,52,82,718.40",
+      "\u00a013.53 Crore"
+    ],
+    "Works Recommended": [
+      "408",
+      "\u00a017,34,45,859.40",
+      "\u00a017.34 Crore"
+    ],
+    "Works Completed": [
+      "210",
+      "\u00a010,40,64,261.40",
+      "\u00a010.41 Crore"
+    ],
+    "Works Sanctioned": [
+      "316",
+      "\u00a015,76,98,559.40",
+      "\u00a015.77 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

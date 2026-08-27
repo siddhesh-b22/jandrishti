@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017237,
+  "caption": "Shri G.C. Chandrashekhar (2024-30)",
+  "state_id": 18,
+  "state_name": "Karnataka",
+  "house": "RAJYA_SABHA",
+  "combo": "18,0,3017237,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a06,97,67,504.00",
+      "\u00a06.98 Crore"
+    ],
+    "Works Recommended": [
+      "198",
+      "\u00a011,54,56,813.00",
+      "\u00a011.55 Crore"
+    ],
+    "Works Completed": [
+      "62",
+      "\u00a03,16,06,813.00",
+      "\u00a03.16 Crore"
+    ],
+    "Works Sanctioned": [
+      "141",
+      "\u00a08,26,46,813.00",
+      "\u00a08.26 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

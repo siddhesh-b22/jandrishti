@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017252,
+  "caption": "Shri Sandosh Kumar P (2022-28)",
+  "state_id": 36,
+  "state_name": "Kerala",
+  "house": "RAJYA_SABHA",
+  "combo": "36,0,3017252,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a022,05,63,957.11",
+      "\u00a022.06 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a05,59,57,933.00",
+      "\u00a05.60 Crore"
+    ],
+    "Works Recommended": [
+      "104",
+      "\u00a014,91,35,962.00",
+      "\u00a014.91 Crore"
+    ],
+    "Works Completed": [
+      "29",
+      "\u00a02,99,57,890.00",
+      "\u00a03.00 Crore"
+    ],
+    "Works Sanctioned": [
+      "69",
+      "\u00a09,30,70,114.00",
+      "\u00a09.31 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "1",
+      "\u00a025,00,000.00",
+      "\u00a00.25 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

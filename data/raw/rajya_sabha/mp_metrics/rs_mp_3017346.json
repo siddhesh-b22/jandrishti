@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017346,
+  "caption": "Dr. Kalpana Saini (2022-28)",
+  "state_id": 32,
+  "state_name": "Uttarakhand",
+  "house": "RAJYA_SABHA",
+  "combo": "32,0,3017346,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a020,08,30,405.80",
+      "\u00a020.08 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a06,53,08,088.00",
+      "\u00a06.53 Crore"
+    ],
+    "Works Recommended": [
+      "189",
+      "\u00a016,52,40,049.00",
+      "\u00a016.52 Crore"
+    ],
+    "Works Completed": [
+      "60",
+      "\u00a04,54,27,477.00",
+      "\u00a04.54 Crore"
+    ],
+    "Works Sanctioned": [
+      "147",
+      "\u00a012,72,88,220.00",
+      "\u00a012.73 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

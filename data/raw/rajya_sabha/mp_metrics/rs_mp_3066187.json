@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3066187,
+  "caption": "Shri Neeraj Dangi (2026-32)",
+  "state_id": 28,
+  "state_name": "Rajasthan",
+  "house": "RAJYA_SABHA",
+  "combo": "28,0,3066187,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a04,90,00,000.00",
+      "\u00a04.90 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Recommended": [
+      "4",
+      "\u00a049,99,842.00",
+      "\u00a00.50 Crore"
+    ],
+    "Works Completed": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Sanctioned": [
+      "4",
+      "\u00a049,99,842.00",
+      "\u00a00.50 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

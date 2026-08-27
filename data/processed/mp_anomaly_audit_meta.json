@@ -1,0 +1,124 @@
+{
+  "distributions": [
+    {
+      "Metric": "vendor_hhi",
+      "Min": 0.0,
+      "P10": 229.36,
+      "P25 (Q1)": 465.72,
+      "Median (P50)": 1069.89,
+      "Mean": 1880.16,
+      "P75 (Q3)": 2416.14,
+      "P90": 4853.66,
+      "P95": 6668.66,
+      "P99": 9485.1,
+      "Max": 10000.0
+    },
+    {
+      "Metric": "top_vendor_share_pct",
+      "Min": 0.0,
+      "P10": 6.72,
+      "P25 (Q1)": 12.11,
+      "Median (P50)": 21.84,
+      "Mean": 28.82,
+      "P75 (Q3)": 38.86,
+      "P90": 65.45,
+      "P95": 79.68,
+      "P99": 97.37,
+      "Max": 100.0
+    },
+    {
+      "Metric": "pending_payment_rate_pct",
+      "Min": 0.0,
+      "P10": 0.0,
+      "P25 (Q1)": 0.0,
+      "Median (P50)": 1.74,
+      "Mean": 4.8,
+      "P75 (Q3)": 5.56,
+      "P90": 12.9,
+      "P95": 19.89,
+      "P99": 36.43,
+      "Max": 94.83
+    },
+    {
+      "Metric": "utilization_pct",
+      "Min": 0.0,
+      "P10": 7.57,
+      "P25 (Q1)": 17.39,
+      "Median (P50)": 32.23,
+      "Mean": 32.76,
+      "P75 (Q3)": 47.31,
+      "P90": 59.65,
+      "P95": 65.26,
+      "P99": 80.58,
+      "Max": 93.98
+    },
+    {
+      "Metric": "completion_rate_pct",
+      "Min": 0.0,
+      "P10": 1.56,
+      "P25 (Q1)": 12.13,
+      "Median (P50)": 26.58,
+      "Mean": 29.75,
+      "P75 (Q3)": 45.45,
+      "P90": 61.15,
+      "P95": 69.71,
+      "P99": 88.15,
+      "Max": 96.39
+    },
+    {
+      "Metric": "transaction_count",
+      "Min": 0.0,
+      "P10": 14.2,
+      "P25 (Q1)": 41.0,
+      "Median (P50)": 90.0,
+      "Mean": 151.56,
+      "P75 (Q3)": 187.0,
+      "P90": 329.8,
+      "P95": 520.7,
+      "P99": 890.9,
+      "Max": 1471.0
+    },
+    {
+      "Metric": "pending_payments_count",
+      "Min": 0.0,
+      "P10": 0.0,
+      "P25 (Q1)": 0.0,
+      "Median (P50)": 2.0,
+      "Mean": 6.23,
+      "P75 (Q3)": 5.0,
+      "P90": 17.0,
+      "P95": 24.9,
+      "P99": 86.0,
+      "Max": 121.0
+    }
+  ],
+  "rule_counts": {
+    "HIGH_VENDOR_CONCENTRATION": 72,
+    "MP_UTILIZATION_EXTREME_OUTLIER": 38,
+    "UNUSUAL_PENDING_PAYMENT_RATIO": 33
+  },
+  "overlap_counts": {
+    "1": 123,
+    "2": 10
+  },
+  "pairwise_overlap": {
+    "HIGH_VENDOR_CONCENTRATION": {
+      "HIGH_VENDOR_CONCENTRATION": 72,
+      "MP_UTILIZATION_EXTREME_OUTLIER": 2,
+      "UNUSUAL_PENDING_PAYMENT_RATIO": 7
+    },
+    "MP_UTILIZATION_EXTREME_OUTLIER": {
+      "HIGH_VENDOR_CONCENTRATION": 2,
+      "MP_UTILIZATION_EXTREME_OUTLIER": 38,
+      "UNUSUAL_PENDING_PAYMENT_RATIO": 1
+    },
+    "UNUSUAL_PENDING_PAYMENT_RATIO": {
+      "HIGH_VENDOR_CONCENTRATION": 7,
+      "MP_UTILIZATION_EXTREME_OUTLIER": 1,
+      "UNUSUAL_PENDING_PAYMENT_RATIO": 33
+    }
+  },
+  "total_unique_flagged_mps": 133,
+  "total_mps": 543,
+  "flagged_percentage": 24.49
+}

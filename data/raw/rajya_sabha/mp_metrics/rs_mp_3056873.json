@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3056873,
+  "caption": "Shri C. Sadanandan Master (2025-31)",
+  "state_id": 36,
+  "state_name": "Kerala",
+  "house": "RAJYA_SABHA",
+  "combo": "36,0,3056873,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a07,35,00,000.00",
+      "\u00a07.35 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Recommended": [
+      "35",
+      "\u00a02,32,10,000.00",
+      "\u00a02.32 Crore"
+    ],
+    "Works Completed": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Sanctioned": [
+      "14",
+      "\u00a01,06,00,000.00",
+      "\u00a01.06 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

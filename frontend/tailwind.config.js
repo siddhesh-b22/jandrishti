@@ -1,0 +1,88 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        warm: {
+          canvas: '#FAF8F5',
+          surface: '#FFFFFF',
+          tint: '#F4EFEA',
+          border: '#E8E2D9',
+          borderHover: '#D5CDBF',
+          ink: '#0B1930',
+          muted: '#64748B',
+          subtle: '#94A3B8',
+        },
+        navy: {
+          800: '#1E293B',
+          900: '#0F172A',
+          950: '#0B1930',
+        },
+        saffron: {
+          50: '#FFF7ED',
+          100: '#FFEDD5',
+          200: '#FED7AA',
+          300: '#FDBA74',
+          400: '#FB923C',
+          500: '#FF6B00',
+          600: '#EA580C',
+          700: '#C2410C',
+          800: '#9A3412',
+          900: '#7C2D12',
+        },
+        emerald: {
+          50: '#ECFDF5',
+          100: '#D1FAE5',
+          200: '#A7F3D0',
+          300: '#6EE7B7',
+          400: '#34D399',
+          500: '#10B981',
+          600: '#059669',
+          700: '#047857',
+          800: '#065F46',
+        },
+        coral: {
+          50: '#FFF1F2',
+          100: '#FFE4E6',
+          200: '#FECDD3',
+          300: '#FDA4AF',
+          400: '#FB7185',
+          500: '#F43F5E',
+          600: '#E11D48',
+          700: '#BE123C',
+          800: '#9F1239',
+        },
+        brand: {
+          50: '#EFF6FF',
+          100: '#DBEAFE',
+          200: '#BFDBFE',
+          300: '#93C5FD',
+          400: '#60A5FA',
+          500: '#2563EB',
+          600: '#1D4ED8',
+          700: '#1E40AF',
+          800: '#1E3A8A',
+          900: '#172554',
+          950: '#0B1930',
+        }
+      },
+      fontFamily: {
+        sans: ['"Plus Jakarta Sans"', '"Outfit"', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['"Outfit"', '"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        serif: ['"DM Serif Display"', 'Georgia', 'serif'],
+        mono: ['"JetBrains Mono"', 'Fira Code', 'SFMono-Regular', 'Menlo', 'monospace'],
+        heading: ['"Space Grotesk"', '"Outfit"', 'sans-serif'],
+      },
+      boxShadow: {
+        'card': '0 1px 3px 0 rgba(11, 25, 48, 0.04), 0 1px 2px -1px rgba(11, 25, 48, 0.04)',
+        'elevated': '0 20px 35px -10px rgba(11, 25, 48, 0.07), 0 8px 15px -5px rgba(11, 25, 48, 0.03)',
+        'hover-lift': '0 14px 28px -6px rgba(11, 25, 48, 0.09), 0 4px 10px -2px rgba(11, 25, 48, 0.04)',
+      },
+    },
+  },
+  plugins: [],
+}

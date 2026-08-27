@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017282,
+  "caption": "Shri Sant Balbir Singh (2022-28)",
+  "state_id": 1,
+  "state_name": "Punjab",
+  "house": "RAJYA_SABHA",
+  "combo": "1,0,3017282,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a019,63,59,074.44",
+      "\u00a019.64 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a013,16,41,205.41",
+      "\u00a013.16 Crore"
+    ],
+    "Works Recommended": [
+      "371",
+      "\u00a017,59,52,668.00",
+      "\u00a017.60 Crore"
+    ],
+    "Works Completed": [
+      "206",
+      "\u00a09,93,30,334.00",
+      "\u00a09.93 Crore"
+    ],
+    "Works Sanctioned": [
+      "322",
+      "\u00a015,41,62,068.00",
+      "\u00a015.42 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017307,
+  "caption": "Shri P. Chidambaram (2022-28)",
+  "state_id": 30,
+  "state_name": "Tamil Nadu",
+  "house": "RAJYA_SABHA",
+  "combo": "30,0,3017307,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a023,63,12,242.52",
+      "\u00a023.63 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a013,34,81,597.00",
+      "\u00a013.35 Crore"
+    ],
+    "Works Recommended": [
+      "144",
+      "\u00a018,49,16,919.00",
+      "\u00a018.49 Crore"
+    ],
+    "Works Completed": [
+      "75",
+      "\u00a07,23,09,919.00",
+      "\u00a07.23 Crore"
+    ],
+    "Works Sanctioned": [
+      "140",
+      "\u00a017,12,36,919.00",
+      "\u00a017.12 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

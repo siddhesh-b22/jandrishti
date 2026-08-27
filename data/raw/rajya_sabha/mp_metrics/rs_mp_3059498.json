@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3059498,
+  "caption": "Dr. M. Dhanapal (2025-31)",
+  "state_id": 30,
+  "state_name": "Tamil Nadu",
+  "house": "RAJYA_SABHA",
+  "combo": "30,0,3059498,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a08,92,48,285.42",
+      "\u00a08.92 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a02,39,89,964.00",
+      "\u00a02.40 Crore"
+    ],
+    "Works Recommended": [
+      "51",
+      "\u00a04,72,31,733.00",
+      "\u00a04.72 Crore"
+    ],
+    "Works Completed": [
+      "27",
+      "\u00a02,03,04,733.00",
+      "\u00a02.03 Crore"
+    ],
+    "Works Sanctioned": [
+      "36",
+      "\u00a02,42,34,733.00",
+      "\u00a02.42 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

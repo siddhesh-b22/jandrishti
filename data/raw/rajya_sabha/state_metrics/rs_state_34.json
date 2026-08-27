@@ -1,0 +1,42 @@
+{
+  "state_id": 34,
+  "state_name": "West Bengal",
+  "house": "RAJYA_SABHA",
+  "combo": "34,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a01,44,61,62,892.00",
+      "\u00a0144.62 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a045,90,53,572.00",
+      "\u00a045.91 Crore"
+    ],
+    "Works Recommended": [
+      "290",
+      "\u00a081,52,48,020.68",
+      "\u00a081.52 Crore"
+    ],
+    "Works Completed": [
+      "64",
+      "\u00a06,77,71,389.00",
+      "\u00a06.78 Crore"
+    ],
+    "Works Sanctioned": [
+      "180",
+      "\u00a062,56,45,130.68",
+      "\u00a062.56 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

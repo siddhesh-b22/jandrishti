@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017340,
+  "caption": "Shri Ramji (2020-26)",
+  "state_id": 33,
+  "state_name": "Uttar Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "33,0,3017340,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a017,45,18,577.11",
+      "\u00a017.45 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a014,19,23,083.00",
+      "\u00a014.19 Crore"
+    ],
+    "Works Recommended": [
+      "245",
+      "\u00a015,63,99,935.00",
+      "\u00a015.64 Crore"
+    ],
+    "Works Completed": [
+      "154",
+      "\u00a013,39,96,851.00",
+      "\u00a013.40 Crore"
+    ],
+    "Works Sanctioned": [
+      "239",
+      "\u00a014,56,69,535.00",
+      "\u00a014.57 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

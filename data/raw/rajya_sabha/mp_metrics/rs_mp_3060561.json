@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3060561,
+  "caption": "Shri Sat Paul Sharma (2025-31)",
+  "state_id": 16,
+  "state_name": "Jammu And Kashmir",
+  "house": "RAJYA_SABHA",
+  "combo": "16,0,3060561,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a07,35,00,000.00",
+      "\u00a07.35 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Recommended": [
+      "15",
+      "\u00a01,20,86,690.00",
+      "\u00a01.21 Crore"
+    ],
+    "Works Completed": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Sanctioned": [
+      "4",
+      "\u00a031,09,365.00",
+      "\u00a00.31 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

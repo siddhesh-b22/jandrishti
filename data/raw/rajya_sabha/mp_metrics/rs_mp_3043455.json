@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3043455,
+  "caption": "Shri Sanjay Yadav (2024-30)",
+  "state_id": 6,
+  "state_name": "Bihar",
+  "house": "RAJYA_SABHA",
+  "combo": "6,0,3043455,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a018,62,00,000.00",
+      "\u00a018.62 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Recommended": [
+      "54",
+      "\u00a08,04,48,000.00",
+      "\u00a08.04 Crore"
+    ],
+    "Works Completed": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Sanctioned": [
+      "26",
+      "\u00a03,89,74,000.00",
+      "\u00a03.90 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

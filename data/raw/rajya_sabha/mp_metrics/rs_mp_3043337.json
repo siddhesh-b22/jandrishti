@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3043337,
+  "caption": "Shri Meda Raghunadha Reddy (2024-30)",
+  "state_id": 2,
+  "state_name": "Andhra Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "2,0,3043337,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a08,10,94,462.00",
+      "\u00a08.11 Crore"
+    ],
+    "Works Recommended": [
+      "250",
+      "\u00a014,49,70,524.00",
+      "\u00a014.50 Crore"
+    ],
+    "Works Completed": [
+      "111",
+      "\u00a06,45,67,524.00",
+      "\u00a06.46 Crore"
+    ],
+    "Works Sanctioned": [
+      "194",
+      "\u00a011,34,66,524.00",
+      "\u00a011.35 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3046284,
+  "caption": "Shri Manan Kumar Mishra (2024-28)",
+  "state_id": 6,
+  "state_name": "Bihar",
+  "house": "RAJYA_SABHA",
+  "combo": "6,0,3046284,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a023,52,63,957.11",
+      "\u00a023.53 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a03,84,57,500.00",
+      "\u00a03.85 Crore"
+    ],
+    "Works Recommended": [
+      "88",
+      "\u00a08,62,90,519.00",
+      "\u00a08.63 Crore"
+    ],
+    "Works Completed": [
+      "31",
+      "\u00a03,01,07,625.00",
+      "\u00a03.01 Crore"
+    ],
+    "Works Sanctioned": [
+      "62",
+      "\u00a06,09,40,519.00",
+      "\u00a06.09 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

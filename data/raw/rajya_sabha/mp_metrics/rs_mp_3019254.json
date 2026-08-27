@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3019254,
+  "caption": "Shri Gulam Ali (2022-28)",
+  "state_id": 16,
+  "state_name": "Jammu And Kashmir",
+  "house": "RAJYA_SABHA",
+  "combo": "16,0,3019254,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a019,60,63,957.11",
+      "\u00a019.61 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a013,40,33,715.00",
+      "\u00a013.40 Crore"
+    ],
+    "Works Recommended": [
+      "185",
+      "\u00a014,71,79,063.89",
+      "\u00a014.72 Crore"
+    ],
+    "Works Completed": [
+      "156",
+      "\u00a013,36,20,060.00",
+      "\u00a013.36 Crore"
+    ],
+    "Works Sanctioned": [
+      "174",
+      "\u00a014,11,30,060.00",
+      "\u00a014.11 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

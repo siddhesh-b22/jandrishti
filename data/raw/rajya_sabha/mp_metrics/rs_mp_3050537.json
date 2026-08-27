@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3050537,
+  "caption": "Shri Masthan Rao Yadav Beedha (2024-28)",
+  "state_id": 2,
+  "state_name": "Andhra Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "2,0,3050537,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a017,12,96,045.11",
+      "\u00a017.13 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a03,55,12,349.00",
+      "\u00a03.55 Crore"
+    ],
+    "Works Recommended": [
+      "120",
+      "\u00a013,64,53,548.00",
+      "\u00a013.65 Crore"
+    ],
+    "Works Completed": [
+      "33",
+      "\u00a02,67,48,548.00",
+      "\u00a02.67 Crore"
+    ],
+    "Works Sanctioned": [
+      "113",
+      "\u00a012,34,53,548.00",
+      "\u00a012.35 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3019261,
+  "caption": "Shri Damodar Rao Divakonda (2022-28)",
+  "state_id": 129,
+  "state_name": "Telangana",
+  "house": "RAJYA_SABHA",
+  "combo": "129,0,3019261,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a023,99,19,406.11",
+      "\u00a023.99 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a07,65,76,137.00",
+      "\u00a07.66 Crore"
+    ],
+    "Works Recommended": [
+      "295",
+      "\u00a017,97,45,038.00",
+      "\u00a017.97 Crore"
+    ],
+    "Works Completed": [
+      "110",
+      "\u00a04,96,05,038.00",
+      "\u00a04.96 Crore"
+    ],
+    "Works Sanctioned": [
+      "258",
+      "\u00a014,90,45,038.00",
+      "\u00a014.90 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

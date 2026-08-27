@@ -1,0 +1,42 @@
+{
+  "state_id": 17,
+  "state_name": "Jharkhand",
+  "house": "RAJYA_SABHA",
+  "combo": "17,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a086,62,81,611.58",
+      "\u00a086.63 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a050,62,81,517.00",
+      "\u00a050.63 Crore"
+    ],
+    "Works Recommended": [
+      "1217",
+      "\u00a065,73,23,837.00",
+      "\u00a065.73 Crore"
+    ],
+    "Works Completed": [
+      "335",
+      "\u00a023,76,38,795.00",
+      "\u00a023.76 Crore"
+    ],
+    "Works Sanctioned": [
+      "946",
+      "\u00a056,72,73,515.00",
+      "\u00a056.73 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

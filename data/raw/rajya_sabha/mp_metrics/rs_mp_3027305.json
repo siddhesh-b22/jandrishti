@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3027305,
+  "caption": "Shri S. Jaishankar (2023-29)",
+  "state_id": 27,
+  "state_name": "Gujarat",
+  "house": "RAJYA_SABHA",
+  "combo": "27,0,3027305,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a017,15,00,000.00",
+      "\u00a017.15 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a03,16,16,893.00",
+      "\u00a03.16 Crore"
+    ],
+    "Works Recommended": [
+      "163",
+      "\u00a017,14,79,839.00",
+      "\u00a017.15 Crore"
+    ],
+    "Works Completed": [
+      "50",
+      "\u00a02,31,70,639.00",
+      "\u00a02.32 Crore"
+    ],
+    "Works Sanctioned": [
+      "162",
+      "\u00a017,09,79,839.00",
+      "\u00a017.10 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

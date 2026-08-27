@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017509,
+  "caption": "Smt. S. Phangnon Konyak (2022-28)",
+  "state_id": 24,
+  "state_name": "Nagaland",
+  "house": "RAJYA_SABHA",
+  "combo": "24,0,3017509,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a020,65,63,957.11",
+      "\u00a020.66 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a019,61,06,200.00",
+      "\u00a019.61 Crore"
+    ],
+    "Works Recommended": [
+      "77",
+      "\u00a020,41,71,000.00",
+      "\u00a020.42 Crore"
+    ],
+    "Works Completed": [
+      "57",
+      "\u00a014,47,63,000.00",
+      "\u00a014.48 Crore"
+    ],
+    "Works Sanctioned": [
+      "73",
+      "\u00a019,78,39,000.00",
+      "\u00a019.78 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

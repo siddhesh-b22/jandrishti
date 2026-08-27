@@ -1,0 +1,42 @@
+{
+  "state_id": 29,
+  "state_name": "Sikkim",
+  "house": "RAJYA_SABHA",
+  "combo": "29,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a015,01,70,726.11",
+      "\u00a015.02 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a09,19,21,040.00",
+      "\u00a09.19 Crore"
+    ],
+    "Works Recommended": [
+      "118",
+      "\u00a014,59,96,595.00",
+      "\u00a014.60 Crore"
+    ],
+    "Works Completed": [
+      "85",
+      "\u00a08,50,96,595.00",
+      "\u00a08.51 Crore"
+    ],
+    "Works Sanctioned": [
+      "94",
+      "\u00a09,78,96,595.00",
+      "\u00a09.79 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

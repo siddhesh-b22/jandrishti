@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017288,
+  "caption": "Shri Mukul Wasnik (2022-28)",
+  "state_id": 28,
+  "state_name": "Rajasthan",
+  "house": "RAJYA_SABHA",
+  "combo": "28,0,3017288,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a019,60,63,957.11",
+      "\u00a019.61 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a011,36,78,488.01",
+      "\u00a011.37 Crore"
+    ],
+    "Works Recommended": [
+      "170",
+      "\u00a016,14,04,422.00",
+      "\u00a016.14 Crore"
+    ],
+    "Works Completed": [
+      "94",
+      "\u00a07,57,86,434.00",
+      "\u00a07.58 Crore"
+    ],
+    "Works Sanctioned": [
+      "159",
+      "\u00a014,34,04,422.00",
+      "\u00a014.34 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

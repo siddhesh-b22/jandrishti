@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3044811,
+  "caption": "Smt. Mamata Thakur (2024-30)",
+  "state_id": 34,
+  "state_name": "West Bengal",
+  "house": "RAJYA_SABHA",
+  "combo": "34,0,3044811,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a04,44,46,422.00",
+      "\u00a04.44 Crore"
+    ],
+    "Works Recommended": [
+      "60",
+      "\u00a05,47,45,953.00",
+      "\u00a05.47 Crore"
+    ],
+    "Works Completed": [
+      "51",
+      "\u00a02,86,93,058.00",
+      "\u00a02.87 Crore"
+    ],
+    "Works Sanctioned": [
+      "60",
+      "\u00a05,47,45,953.00",
+      "\u00a05.47 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

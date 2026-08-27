@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017305,
+  "caption": "Shri R. Girirajan (2022-28)",
+  "state_id": 30,
+  "state_name": "Tamil Nadu",
+  "house": "RAJYA_SABHA",
+  "combo": "30,0,3017305,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a023,63,12,242.52",
+      "\u00a023.63 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a016,56,28,943.00",
+      "\u00a016.56 Crore"
+    ],
+    "Works Recommended": [
+      "221",
+      "\u00a018,09,59,061.00",
+      "\u00a018.10 Crore"
+    ],
+    "Works Completed": [
+      "150",
+      "\u00a012,46,89,061.00",
+      "\u00a012.47 Crore"
+    ],
+    "Works Sanctioned": [
+      "192",
+      "\u00a016,89,49,061.00",
+      "\u00a016.89 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

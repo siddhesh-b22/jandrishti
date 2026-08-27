@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017501,
+  "caption": "Smt. Ranjeet Ranjan (2022-28)",
+  "state_id": 8,
+  "state_name": "Chhattisgarh",
+  "house": "RAJYA_SABHA",
+  "combo": "8,0,3017501,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a024,67,80,257.87",
+      "\u00a024.68 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a018,57,39,464.00",
+      "\u00a018.57 Crore"
+    ],
+    "Works Recommended": [
+      "279",
+      "\u00a023,52,42,048.00",
+      "\u00a023.52 Crore"
+    ],
+    "Works Completed": [
+      "157",
+      "\u00a012,82,62,054.00",
+      "\u00a012.83 Crore"
+    ],
+    "Works Sanctioned": [
+      "250",
+      "\u00a021,22,42,048.00",
+      "\u00a021.22 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

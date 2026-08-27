@@ -1,0 +1,42 @@
+{
+  "state_id": 7,
+  "state_name": "Chandigarh",
+  "house": "RAJYA_SABHA",
+  "combo": "7,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a091,04,144.00",
+      "\u00a00.91 Crore"
+    ],
+    "Works Recommended": [
+      "24",
+      "\u00a02,14,99,970.00",
+      "\u00a02.15 Crore"
+    ],
+    "Works Completed": [
+      "4",
+      "\u00a037,00,000.00",
+      "\u00a00.37 Crore"
+    ],
+    "Works Sanctioned": [
+      "10",
+      "\u00a01,07,99,970.00",
+      "\u00a01.08 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

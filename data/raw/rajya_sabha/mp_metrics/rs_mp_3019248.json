@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3019248,
+  "caption": "Shri Jairam Ramesh (2022-28)",
+  "state_id": 18,
+  "state_name": "Karnataka",
+  "house": "RAJYA_SABHA",
+  "combo": "18,0,3019248,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a022,05,63,957.11",
+      "\u00a022.06 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a07,32,53,485.00",
+      "\u00a07.33 Crore"
+    ],
+    "Works Recommended": [
+      "127",
+      "\u00a016,04,47,985.00",
+      "\u00a016.04 Crore"
+    ],
+    "Works Completed": [
+      "18",
+      "\u00a03,17,97,985.00",
+      "\u00a03.18 Crore"
+    ],
+    "Works Sanctioned": [
+      "75",
+      "\u00a09,49,47,985.00",
+      "\u00a09.49 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

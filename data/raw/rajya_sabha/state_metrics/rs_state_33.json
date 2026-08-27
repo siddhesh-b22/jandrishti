@@ -1,0 +1,42 @@
+{
+  "state_id": 33,
+  "state_name": "Uttar Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "33,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a05,67,08,05,833.97",
+      "\u00a0567.08 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a03,30,13,77,163.42",
+      "\u00a0330.14 Crore"
+    ],
+    "Works Recommended": [
+      "5696",
+      "\u00a04,62,16,17,278.81",
+      "\u00a0462.16 Crore"
+    ],
+    "Works Completed": [
+      "2968",
+      "\u00a02,05,88,32,718.36",
+      "\u00a0205.88 Crore"
+    ],
+    "Works Sanctioned": [
+      "4739",
+      "\u00a03,95,70,68,688.36",
+      "\u00a0395.71 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "1",
+      "\u00a01,00,00,000.00",
+      "\u00a01.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

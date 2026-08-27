@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017196,
+  "caption": "Shri S Niranjan Reddy (2022-28)",
+  "state_id": 2,
+  "state_name": "Andhra Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "2,0,3017196,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a022,46,21,383.11",
+      "\u00a022.46 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a02,94,99,116.00",
+      "\u00a02.95 Crore"
+    ],
+    "Works Recommended": [
+      "19",
+      "\u00a06,28,02,410.00",
+      "\u00a06.28 Crore"
+    ],
+    "Works Completed": [
+      "3",
+      "\u00a056,64,910.00",
+      "\u00a00.57 Crore"
+    ],
+    "Works Sanctioned": [
+      "13",
+      "\u00a03,75,02,410.00",
+      "\u00a03.75 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

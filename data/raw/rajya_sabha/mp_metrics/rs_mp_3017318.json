@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017318,
+  "caption": "Shri Rajeev Shukla (2022-28)",
+  "state_id": 8,
+  "state_name": "Chhattisgarh",
+  "house": "RAJYA_SABHA",
+  "combo": "8,0,3017318,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a027,11,74,394.23",
+      "\u00a027.12 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a04,05,99,928.00",
+      "\u00a04.06 Crore"
+    ],
+    "Works Recommended": [
+      "30",
+      "\u00a05,24,80,000.00",
+      "\u00a05.25 Crore"
+    ],
+    "Works Completed": [
+      "4",
+      "\u00a03,20,40,000.00",
+      "\u00a03.20 Crore"
+    ],
+    "Works Sanctioned": [
+      "28",
+      "\u00a04,89,80,000.00",
+      "\u00a04.90 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

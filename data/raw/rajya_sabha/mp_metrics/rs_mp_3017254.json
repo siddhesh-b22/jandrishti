@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017254,
+  "caption": "Dr. Kavita Patidar (2022-28)",
+  "state_id": 20,
+  "state_name": "Madhya Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "20,0,3017254,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a019,71,18,521.35",
+      "\u00a019.71 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a012,73,77,000.12",
+      "\u00a012.74 Crore"
+    ],
+    "Works Recommended": [
+      "217",
+      "\u00a014,89,06,747.00",
+      "\u00a014.89 Crore"
+    ],
+    "Works Completed": [
+      "145",
+      "\u00a08,60,42,145.00",
+      "\u00a08.60 Crore"
+    ],
+    "Works Sanctioned": [
+      "214",
+      "\u00a014,69,06,747.00",
+      "\u00a014.69 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

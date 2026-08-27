@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3019249,
+  "caption": "Shri Lahar Singh Siroya (2022-28)",
+  "state_id": 18,
+  "state_name": "Karnataka",
+  "house": "RAJYA_SABHA",
+  "combo": "18,0,3019249,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a020,62,78,088.11",
+      "\u00a020.63 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a099,64,305.00",
+      "\u00a01.00 Crore"
+    ],
+    "Works Recommended": [
+      "16",
+      "\u00a03,52,47,659.00",
+      "\u00a03.52 Crore"
+    ],
+    "Works Completed": [
+      "2",
+      "\u00a019,97,659.00",
+      "\u00a00.20 Crore"
+    ],
+    "Works Sanctioned": [
+      "9",
+      "\u00a01,24,97,659.00",
+      "\u00a01.25 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

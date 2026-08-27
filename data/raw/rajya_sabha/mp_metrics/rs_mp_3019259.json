@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3019259,
+  "caption": "Dr. Vikramjit Singh Sahney (2022-28)",
+  "state_id": 1,
+  "state_name": "Punjab",
+  "house": "RAJYA_SABHA",
+  "combo": "1,0,3019259,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a019,86,56,208.57",
+      "\u00a019.87 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a011,12,24,375.74",
+      "\u00a011.12 Crore"
+    ],
+    "Works Recommended": [
+      "61",
+      "\u00a017,42,44,637.74",
+      "\u00a017.42 Crore"
+    ],
+    "Works Completed": [
+      "27",
+      "\u00a06,06,95,547.74",
+      "\u00a06.07 Crore"
+    ],
+    "Works Sanctioned": [
+      "52",
+      "\u00a014,64,05,661.74",
+      "\u00a014.64 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "1",
+      "\u00a01,00,00,000.00",
+      "\u00a01.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

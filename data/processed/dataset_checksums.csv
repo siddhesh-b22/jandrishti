@@ -1,0 +1,58 @@
+file_path,description,file_size_bytes,file_size_mb,sha256
+data/raw/mplads_mp_summary_2026-08-26.csv,Raw MP Summary Export,65885,0.06,1a49fb26bae8f242f2104907822846e90eb4bada23c97588d38d2e4da4ffe2e8
+data/raw/mplads_recommended_works_2026-08-26.csv,Raw Recommended Works Export,17782809,16.96,a5d613204b414d929fe912cb4180025e24fac2da53819def16ae85f48deb0b73
+data/raw/mplads_completed_works_2026-08-26.csv,Raw Completed Works Export,8693682,8.29,c745e55881912e5aa1086e61cfe29744534177925a8e297e056c2f2295435dbf
+data/raw/mplads_expenditures_2026-08-26.csv,Raw Financial Expenditures Export,19400732,18.5,ab2bf1cb655260bcc98bfcf2af97ac0dd3dae6ad472159fb31ed4689ed873ca9
+data/raw/json_2026-08-26.json,Raw Portal Summary API JSON,584,0.0,ae4a5193f2a0291a388ffeb8bb2325415cadfa2988302255d1719cd3055fcdfd
+data/processed/mp_master.csv,Processed MP Master (543 rows),140251,0.13,d19925805942792586b19c3c7dd9685f7c338093bfbef80b135f1ab1f3c5d53b
+data/processed/allocation_master.csv,Processed Allocation Master (543 rows),102668,0.1,42ba35697a1b83ce07dc5b38bf046b619c3d1eb327ca5f9948dbaa5e282e0f56
+data/processed/work_master.csv,"Processed Work Master (102,437 rows)",57500832,54.84,7ba3d88abcaaef15691392c9af6f44658faf0801303f4f152a23dfc0f0e4d40f
+data/processed/expenditure_master.csv,"Processed Expenditure Master (82,296 rows)",44415243,42.36,a1ceed27a58714ff16948e64987de22b158f67b82fe867cd4afb407cfb34a21c
+data/processed/vendor_master.csv,"Processed Vendor Master (22,377 rows)",5834505,5.56,f807a80c3da9f229d256952118a787c2187fe63f20f416588678afdef0c67bd0
+data/processed/mplads_master_dataset.csv,"Processed Master Dataset (102,437 rows)",61063743,58.23,e9a6c93447390bf50279f6ce4325cc9d7a0f7cce36aa028c07d65a7843ffaf1c
+data/processed/anomaly_results.csv,"Traceable Anomaly Results (1,804 rows)",911048,0.87,6090684f4270f358ca98247e6f52f7304e94ef982a6409a74e3eb51c9f7b41c3
+data/features/work_features.csv,"Engineered Work Features (102,437 rows)",31827025,30.35,9a04ceb93ec6b2269c576b4c8572724f7b58024b994e94f53ae8f0553055f624
+data/features/transaction_features.csv,"Engineered Transaction Features (82,296 rows)",30821720,29.39,bca40d087ac594ad58af12dad80aa78d883a8f8d14e7139bf83eff9e5e20aeee
+data/features/mp_features.csv,Engineered MP Features (543 rows),193579,0.18,12712b66db8d1ec425e2108348d6294b9bf912f16ef73f8cd0b6d86933a4e288
+data/features/vendor_features.csv,"Engineered Vendor Features (22,377 rows)",5760696,5.49,98d07576d0fe25900d76bec64a78589643a2921276ba7f3904d12cd740384940
+database/mplads.db,SQLite 3 Normalized Database,164278272,156.67,e72a40b231cc2fc0f80e4240ab208bbe0b070ff75466700819cf9da31bae61f1
+data/raw/rajya_sabha/all_houses_getConstituencyData.json,Raw Official Rajya Sabha Artifact: all_houses_getConstituencyData.json,2,0.0,4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945
+data/raw/rajya_sabha/all_houses_getStateData.json,Raw Official Rajya Sabha Artifact: all_houses_getStateData.json,1532,0.0,8f367819bb2cc9b7c6f057a63db809e14f8632b9572e02becd9054413f0cf9c8
+data/raw/rajya_sabha/all_houses_getTilesData.json,Raw Official Rajya Sabha Artifact: all_houses_getTilesData.json,532,0.0,1843a8c0dd5dfbed5b4c6caf8208051a414ea7616e56d1277c0f9f3d5b8b3649
+data/raw/rajya_sabha/all_houses_getTilesReportData.json,Raw Official Rajya Sabha Artifact: all_houses_getTilesReportData.json,2,0.0,44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a
+data/raw/rajya_sabha/all_houses_getTotalMPData.json,Raw Official Rajya Sabha Artifact: all_houses_getTotalMPData.json,25,0.0,4681f3c54e68812efe3454e72ae62f03462d5a038004ce2441801c48309352b1
+data/raw/rajya_sabha/all_houses_total_mp_data.json,Raw Official Rajya Sabha Artifact: all_houses_total_mp_data.json,23,0.0,bb2ed24accf8e51965aeb132fce8db188565c17d7122e861601f528aee95d766
+data/raw/rajya_sabha/all_rs_mp_metrics.json,Raw Official Rajya Sabha Artifact: all_rs_mp_metrics.json,248146,0.24,5ae560dea52c954bd78f3d775c2f72e7b87fa2f5958764300f073d3025c83ab3
+data/raw/rajya_sabha/all_rs_state_metrics.json,Raw Official Rajya Sabha Artifact: all_rs_state_metrics.json,35247,0.03,84306dfed91af3d2818dc445f1d867d846a2221a33a1e312f6c21cd06a5df91a
+data/raw/rajya_sabha/api_query_results_summary.json,Raw Official Rajya Sabha Artifact: api_query_results_summary.json,3423,0.0,3bd34f8bb08e534dd508ad830a6624ad661e244da07261fc505bbd1fb9063696
+data/raw/rajya_sabha/combo_state_data.json,Raw Official Rajya Sabha Artifact: combo_state_data.json,1532,0.0,8f367819bb2cc9b7c6f057a63db809e14f8632b9572e02becd9054413f0cf9c8
+data/raw/rajya_sabha/dashboard.html,Raw Official Rajya Sabha Artifact: dashboard.html,24199,0.02,65cd1216d7dd7fd38d92f9a83c1493ecf42e3e28d77f35fc4f517de8d88751b2
+data/raw/rajya_sabha/discovered_endpoints.json,Raw Official Rajya Sabha Artifact: discovered_endpoints.json,5933,0.01,7747006ed3ecd22ed987cc0487333b0cda9a8ea774cb0b6b3541664fd32803b4
+data/raw/rajya_sabha/graph.js,Raw Official Rajya Sabha Artifact: graph.js,8498,0.01,017ed31cd85d5ecbf7693c6bc5475594fdfe53babb478d2ef6e2246813b6082d
+data/raw/rajya_sabha/home_page.html,Raw Official Rajya Sabha Artifact: home_page.html,64385,0.06,7cc4d1401ba6499e92981e98d2cd9cab7ecfd55669c8be4f50dfe3354504d858
+data/raw/rajya_sabha/landingpage.js,Raw Official Rajya Sabha Artifact: landingpage.js,179362,0.17,9ab5c3d88cc28a27146574b2a9ebea33e19417a904e88619ca6bfe66f71ae25c
+data/raw/rajya_sabha/lok_sabha_getConstituencyData.json,Raw Official Rajya Sabha Artifact: lok_sabha_getConstituencyData.json,2,0.0,4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945
+data/raw/rajya_sabha/lok_sabha_getStateData.json,Raw Official Rajya Sabha Artifact: lok_sabha_getStateData.json,1532,0.0,8f367819bb2cc9b7c6f057a63db809e14f8632b9572e02becd9054413f0cf9c8
+data/raw/rajya_sabha/lok_sabha_getTilesData.json,Raw Official Rajya Sabha Artifact: lok_sabha_getTilesData.json,527,0.0,ccc1af3b299d51f948534c902de007a0a6ac627734714b70d5cfa1183a36d302
+data/raw/rajya_sabha/lok_sabha_getTilesReportData.json,Raw Official Rajya Sabha Artifact: lok_sabha_getTilesReportData.json,2,0.0,44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a
+data/raw/rajya_sabha/lok_sabha_getTotalMPData.json,Raw Official Rajya Sabha Artifact: lok_sabha_getTotalMPData.json,25,0.0,0212aac959111f484cd138151280bbcce5d468288308e676181ab67d16624b71
+data/raw/rajya_sabha/lok_sabha_total_mp_data.json,Raw Official Rajya Sabha Artifact: lok_sabha_total_mp_data.json,23,0.0,bb2ed24accf8e51965aeb132fce8db188565c17d7122e861601f528aee95d766
+data/raw/rajya_sabha/loksaba.js,Raw Official Rajya Sabha Artifact: loksaba.js,8187,0.01,0b3bdfb9f3fdbe8381f9d6c3014a794d72fc557589b83651c17b438f586d58b3
+data/raw/rajya_sabha/poptable.js,Raw Official Rajya Sabha Artifact: poptable.js,114615,0.11,854c70ca822871a4c5d1d9af12b0f6495b47ebb95cbb6ce3f4bbc9abfc5615bf
+data/raw/rajya_sabha/preLoginDashboard.js,Raw Official Rajya Sabha Artifact: preLoginDashboard.js,34014,0.03,a8d7ae17f0f8d4376243466355fecfc3dc070ae8e68bb756a104606151dbeabb
+data/raw/rajya_sabha/rajya_sabha_files.json,Raw Official Rajya Sabha Artifact: rajya_sabha_files.json,83,0.0,f42ab2b2237114e23beb494a5d42c141c702202d8a3a78821f3a7071192fcc49
+data/raw/rajya_sabha/rajya_sabha_getConstituencyData.json,Raw Official Rajya Sabha Artifact: rajya_sabha_getConstituencyData.json,2,0.0,4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945
+data/raw/rajya_sabha/rajya_sabha_getStateData.json,Raw Official Rajya Sabha Artifact: rajya_sabha_getStateData.json,1532,0.0,8f367819bb2cc9b7c6f057a63db809e14f8632b9572e02becd9054413f0cf9c8
+data/raw/rajya_sabha/rajya_sabha_getTilesData.json,Raw Official Rajya Sabha Artifact: rajya_sabha_getTilesData.json,524,0.0,32b4fa82335fc0bed5c96ebe315a314bf8f4042d7f1c415e731d20f32095f7c5
+data/raw/rajya_sabha/rajya_sabha_getTilesReportData.json,Raw Official Rajya Sabha Artifact: rajya_sabha_getTilesReportData.json,2,0.0,44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a
+data/raw/rajya_sabha/rajya_sabha_getTotalMPData.json,Raw Official Rajya Sabha Artifact: rajya_sabha_getTotalMPData.json,25,0.0,9a40186b568c7c267d4bce7f7e59330faa44cec6f0139671d7b96777c5017037
+data/raw/rajya_sabha/rajya_sabha_mps_all.json,Raw Official Rajya Sabha Artifact: rajya_sabha_mps_all.json,38468,0.04,cbdc15048fbb2811a01e8d8018a849527d8e2d8b910d9345469031a8131bf681
+data/raw/rajya_sabha/rajya_sabha_mps_by_state.json,Raw Official Rajya Sabha Artifact: rajya_sabha_mps_by_state.json,42502,0.04,cd1bda7999f7960fac20336223ff1919e69595c5529a04181b1420704d6c2325
+data/raw/rajya_sabha/rajya_sabha_report_allocated_limit_for_honble_mps.json,Raw Official Rajya Sabha Artifact: rajya_sabha_report_allocated_limit_for_honble_mps.json,43,0.0,ea85caba7cecb42476a3cba102decfba6371fa45e6b0ceb5d1ad11d8e7740f88
+data/raw/rajya_sabha/rajya_sabha_report_amount_consented_for_calamity.json,Raw Official Rajya Sabha Artifact: rajya_sabha_report_amount_consented_for_calamity.json,50,0.0,df6ca545dca7b5b445f8b4d1172a6beafc8710a3943b89fc3c42130fff3b1d4f
+data/raw/rajya_sabha/rajya_sabha_report_expenditure_on_completed_and_on-going_works_as_on_date.json,Raw Official Rajya Sabha Artifact: rajya_sabha_report_expenditure_on_completed_and_on-going_works_as_on_date.json,45,0.0,db6e588382ac8829685c5e927d2b9d10c01878b1c39616d9f8ec3a80879ad155
+data/raw/rajya_sabha/rajya_sabha_report_works_completed.json,Raw Official Rajya Sabha Artifact: rajya_sabha_report_works_completed.json,49,0.0,beabf6a860d97aefee07b42cdbaeae2783edc814dd0742e38b27a25010ee70c3
+data/raw/rajya_sabha/rajya_sabha_report_works_recommended.json,Raw Official Rajya Sabha Artifact: rajya_sabha_report_works_recommended.json,51,0.0,0c664b1082b001e8a76c9248759b337e93ad3cff07982d9d70b121fc77040a65
+data/raw/rajya_sabha/rajya_sabha_report_works_sanctioned.json,Raw Official Rajya Sabha Artifact: rajya_sabha_report_works_sanctioned.json,47,0.0,067145d868f25ec8bbab0d1351a960fdb17e7bf340b0847d673eb35e03af7c35
+data/raw/rajya_sabha/rajya_sabha_total_mp_data.json,Raw Official Rajya Sabha Artifact: rajya_sabha_total_mp_data.json,23,0.0,bb2ed24accf8e51965aeb132fce8db188565c17d7122e861601f528aee95d766
+data/raw/rajya_sabha/rajyasaba.js,Raw Official Rajya Sabha Artifact: rajyasaba.js,3505,0.0,520e34e9a8f2326cd704a0e76536364888493ecbf09a1cccd104995bae2d7ff4

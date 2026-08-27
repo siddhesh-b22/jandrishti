@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3043409,
+  "caption": "Shri Devendra Pratap Singh (2024-30)",
+  "state_id": 8,
+  "state_name": "Chhattisgarh",
+  "house": "RAJYA_SABHA",
+  "combo": "8,0,3043409,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a017,08,37,637.76",
+      "\u00a017.08 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a082,75,468.00",
+      "\u00a00.83 Crore"
+    ],
+    "Works Recommended": [
+      "17",
+      "\u00a01,60,36,331.00",
+      "\u00a01.60 Crore"
+    ],
+    "Works Completed": [
+      "3",
+      "\u00a022,43,280.00",
+      "\u00a00.22 Crore"
+    ],
+    "Works Sanctioned": [
+      "14",
+      "\u00a01,50,36,331.00",
+      "\u00a01.50 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

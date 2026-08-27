@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3043324,
+  "caption": "Shri Haris Beeran (2024-30)",
+  "state_id": 36,
+  "state_name": "Kerala",
+  "house": "RAJYA_SABHA",
+  "combo": "36,0,3043324,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a012,25,00,000.00",
+      "\u00a012.25 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a01,74,80,985.00",
+      "\u00a01.75 Crore"
+    ],
+    "Works Recommended": [
+      "216",
+      "\u00a010,43,43,007.00",
+      "\u00a010.43 Crore"
+    ],
+    "Works Completed": [
+      "9",
+      "\u00a095,49,507.00",
+      "\u00a00.95 Crore"
+    ],
+    "Works Sanctioned": [
+      "90",
+      "\u00a04,35,38,007.00",
+      "\u00a04.35 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

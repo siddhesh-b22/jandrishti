@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3065300,
+  "caption": "Shri Ram Nath Thakur (2026-32)",
+  "state_id": 6,
+  "state_name": "Bihar",
+  "house": "RAJYA_SABHA",
+  "combo": "6,0,3065300,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a06,56,73,638.73",
+      "\u00a06.57 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Recommended": [
+      "33",
+      "\u00a04,94,90,700.00",
+      "\u00a04.95 Crore"
+    ],
+    "Works Completed": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Sanctioned": [
+      "4",
+      "\u00a059,90,700.00",
+      "\u00a00.60 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

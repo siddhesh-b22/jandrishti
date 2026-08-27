@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3061320,
+  "caption": "Shri P. Wilson (2025-31)",
+  "state_id": 30,
+  "state_name": "Tamil Nadu",
+  "house": "RAJYA_SABHA",
+  "combo": "30,0,3061320,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a08,92,48,285.42",
+      "\u00a08.92 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a099,98,159.00",
+      "\u00a01.00 Crore"
+    ],
+    "Works Recommended": [
+      "35",
+      "\u00a07,94,00,000.00",
+      "\u00a07.94 Crore"
+    ],
+    "Works Completed": [
+      "1",
+      "\u00a050,00,000.00",
+      "\u00a00.50 Crore"
+    ],
+    "Works Sanctioned": [
+      "16",
+      "\u00a03,07,00,000.00",
+      "\u00a03.07 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

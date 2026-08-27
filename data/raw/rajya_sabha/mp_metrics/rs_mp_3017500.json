@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017500,
+  "caption": "Smt. Phulo Devi Netam (2026-32)",
+  "state_id": 8,
+  "state_name": "Chhattisgarh",
+  "house": "RAJYA_SABHA",
+  "combo": "8,0,3017500,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a04,90,00,000.00",
+      "\u00a04.90 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a01,01,49,219.00",
+      "\u00a01.01 Crore"
+    ],
+    "Works Recommended": [
+      "81",
+      "\u00a04,87,77,604.00",
+      "\u00a04.88 Crore"
+    ],
+    "Works Completed": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Sanctioned": [
+      "59",
+      "\u00a02,98,87,604.00",
+      "\u00a02.99 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

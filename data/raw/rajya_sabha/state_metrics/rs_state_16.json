@@ -1,0 +1,42 @@
+{
+  "state_id": 16,
+  "state_name": "Jammu And Kashmir",
+  "house": "RAJYA_SABHA",
+  "combo": "16,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a049,00,63,957.11",
+      "\u00a049.01 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a013,40,33,715.00",
+      "\u00a013.40 Crore"
+    ],
+    "Works Recommended": [
+      "217",
+      "\u00a018,45,57,753.89",
+      "\u00a018.46 Crore"
+    ],
+    "Works Completed": [
+      "156",
+      "\u00a013,36,20,060.00",
+      "\u00a013.36 Crore"
+    ],
+    "Works Sanctioned": [
+      "178",
+      "\u00a014,42,39,425.00",
+      "\u00a014.42 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

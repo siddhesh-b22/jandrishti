@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017360,
+  "caption": "Ms. Dola Sen (2023-29)",
+  "state_id": 34,
+  "state_name": "West Bengal",
+  "house": "RAJYA_SABHA",
+  "combo": "34,0,3017360,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a017,15,00,000.00",
+      "\u00a017.15 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a06,94,14,332.00",
+      "\u00a06.94 Crore"
+    ],
+    "Works Recommended": [
+      "27",
+      "\u00a012,23,14,022.00",
+      "\u00a012.23 Crore"
+    ],
+    "Works Completed": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Sanctioned": [
+      "20",
+      "\u00a09,57,85,937.00",
+      "\u00a09.58 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3042570,
+  "caption": "Dr. Bhim Singh (2024-30)",
+  "state_id": 6,
+  "state_name": "Bihar",
+  "house": "RAJYA_SABHA",
+  "combo": "6,0,3042570,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a018,62,00,000.00",
+      "\u00a018.62 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a013,98,19,329.00",
+      "\u00a013.98 Crore"
+    ],
+    "Works Recommended": [
+      "316",
+      "\u00a017,11,14,095.00",
+      "\u00a017.11 Crore"
+    ],
+    "Works Completed": [
+      "233",
+      "\u00a09,42,29,910.00",
+      "\u00a09.42 Crore"
+    ],
+    "Works Sanctioned": [
+      "299",
+      "\u00a015,39,34,096.00",
+      "\u00a015.39 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

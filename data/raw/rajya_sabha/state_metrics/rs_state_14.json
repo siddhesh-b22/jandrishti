@@ -1,0 +1,42 @@
+{
+  "state_id": 14,
+  "state_name": "Haryana",
+  "house": "RAJYA_SABHA",
+  "combo": "14,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a053,90,00,000.00",
+      "\u00a053.90 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a04,50,30,247.00",
+      "\u00a04.50 Crore"
+    ],
+    "Works Recommended": [
+      "285",
+      "\u00a022,48,70,047.00",
+      "\u00a022.49 Crore"
+    ],
+    "Works Completed": [
+      "5",
+      "\u00a050,07,000.00",
+      "\u00a00.50 Crore"
+    ],
+    "Works Sanctioned": [
+      "160",
+      "\u00a015,28,13,946.00",
+      "\u00a015.28 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

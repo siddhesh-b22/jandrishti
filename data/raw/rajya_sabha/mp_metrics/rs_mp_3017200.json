@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017200,
+  "caption": "Shri Akhilesh Prasad Singh (2024-30)",
+  "state_id": 6,
+  "state_name": "Bihar",
+  "house": "RAJYA_SABHA",
+  "combo": "6,0,3017200,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a018,62,00,000.00",
+      "\u00a018.62 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a06,23,09,563.00",
+      "\u00a06.23 Crore"
+    ],
+    "Works Recommended": [
+      "56",
+      "\u00a07,30,18,211.00",
+      "\u00a07.30 Crore"
+    ],
+    "Works Completed": [
+      "38",
+      "\u00a04,97,06,511.00",
+      "\u00a04.97 Crore"
+    ],
+    "Works Sanctioned": [
+      "49",
+      "\u00a06,50,18,211.00",
+      "\u00a06.50 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017253,
+  "caption": "Smt. Jebi Mather Hisham (2022-28)",
+  "state_id": 36,
+  "state_name": "Kerala",
+  "house": "RAJYA_SABHA",
+  "combo": "36,0,3017253,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a022,05,63,957.11",
+      "\u00a022.06 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a05,44,17,993.00",
+      "\u00a05.44 Crore"
+    ],
+    "Works Recommended": [
+      "119",
+      "\u00a015,23,76,701.00",
+      "\u00a015.24 Crore"
+    ],
+    "Works Completed": [
+      "47",
+      "\u00a04,23,22,952.00",
+      "\u00a04.23 Crore"
+    ],
+    "Works Sanctioned": [
+      "89",
+      "\u00a011,48,91,701.00",
+      "\u00a011.49 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

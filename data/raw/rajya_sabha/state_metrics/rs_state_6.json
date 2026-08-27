@@ -1,0 +1,42 @@
+{
+  "state_id": 6,
+  "state_name": "Bihar",
+  "house": "RAJYA_SABHA",
+  "combo": "6,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a02,51,40,24,157.47",
+      "\u00a0251.40 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a01,16,83,92,528.00",
+      "\u00a0116.84 Crore"
+    ],
+    "Works Recommended": [
+      "1799",
+      "\u00a01,66,95,86,428.00",
+      "\u00a0166.96 Crore"
+    ],
+    "Works Completed": [
+      "1165",
+      "\u00a099,04,38,070.00",
+      "\u00a099.04 Crore"
+    ],
+    "Works Sanctioned": [
+      "1545",
+      "\u00a01,39,24,91,420.00",
+      "\u00a0139.25 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

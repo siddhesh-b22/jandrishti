@@ -1,0 +1,42 @@
+{
+  "state_id": 26,
+  "state_name": "Puducherry",
+  "house": "RAJYA_SABHA",
+  "combo": "26,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a029,28,81,856.49",
+      "\u00a029.29 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a010,16,58,946.00",
+      "\u00a010.17 Crore"
+    ],
+    "Works Recommended": [
+      "100",
+      "\u00a026,03,79,881.00",
+      "\u00a026.04 Crore"
+    ],
+    "Works Completed": [
+      "32",
+      "\u00a08,46,90,736.00",
+      "\u00a08.47 Crore"
+    ],
+    "Works Sanctioned": [
+      "58",
+      "\u00a017,55,03,711.00",
+      "\u00a017.55 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

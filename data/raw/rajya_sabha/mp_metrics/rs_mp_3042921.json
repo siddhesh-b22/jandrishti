@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3042921,
+  "caption": "Shri Amar Pal Maurya (2024-30)",
+  "state_id": 33,
+  "state_name": "Uttar Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "33,0,3042921,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a02,63,65,566.00",
+      "\u00a02.64 Crore"
+    ],
+    "Works Recommended": [
+      "138",
+      "\u00a09,65,24,000.00",
+      "\u00a09.65 Crore"
+    ],
+    "Works Completed": [
+      "18",
+      "\u00a01,43,05,309.00",
+      "\u00a01.43 Crore"
+    ],
+    "Works Sanctioned": [
+      "57",
+      "\u00a05,49,53,779.00",
+      "\u00a05.50 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

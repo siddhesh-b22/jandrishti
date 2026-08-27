@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3044299,
+  "caption": "Shri Yerram Venkata Subba Reddy (2024-30)",
+  "state_id": 2,
+  "state_name": "Andhra Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "2,0,3044299,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a03,32,32,213.00",
+      "\u00a03.32 Crore"
+    ],
+    "Works Recommended": [
+      "142",
+      "\u00a010,60,57,085.00",
+      "\u00a010.61 Crore"
+    ],
+    "Works Completed": [
+      "38",
+      "\u00a01,89,89,085.00",
+      "\u00a01.90 Crore"
+    ],
+    "Works Sanctioned": [
+      "133",
+      "\u00a08,65,49,085.00",
+      "\u00a08.65 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

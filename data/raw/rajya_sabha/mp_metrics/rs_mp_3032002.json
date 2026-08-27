@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3032002,
+  "caption": "Shri Samirul Islam (2023-29)",
+  "state_id": 34,
+  "state_name": "West Bengal",
+  "house": "RAJYA_SABHA",
+  "combo": "34,0,3032002,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a017,15,00,000.00",
+      "\u00a017.15 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a07,12,38,651.00",
+      "\u00a07.12 Crore"
+    ],
+    "Works Recommended": [
+      "57",
+      "\u00a012,14,58,527.00",
+      "\u00a012.15 Crore"
+    ],
+    "Works Completed": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Sanctioned": [
+      "21",
+      "\u00a08,49,98,527.00",
+      "\u00a08.50 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

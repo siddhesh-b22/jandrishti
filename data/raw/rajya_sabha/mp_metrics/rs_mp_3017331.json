@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017331,
+  "caption": "Shri Kapil Sibal (2022-28)",
+  "state_id": 33,
+  "state_name": "Uttar Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "33,0,3017331,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a019,60,63,957.11",
+      "\u00a019.61 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a09,28,39,935.12",
+      "\u00a09.28 Crore"
+    ],
+    "Works Recommended": [
+      "217",
+      "\u00a015,85,30,037.00",
+      "\u00a015.85 Crore"
+    ],
+    "Works Completed": [
+      "64",
+      "\u00a04,29,50,443.00",
+      "\u00a04.30 Crore"
+    ],
+    "Works Sanctioned": [
+      "195",
+      "\u00a012,50,30,037.00",
+      "\u00a012.50 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

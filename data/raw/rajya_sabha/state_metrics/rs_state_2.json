@@ -1,0 +1,42 @@
+{
+  "state_id": 2,
+  "state_name": "Andhra Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "2,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a01,49,74,58,947.12",
+      "\u00a0149.75 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a034,52,27,491.00",
+      "\u00a034.52 Crore"
+    ],
+    "Works Recommended": [
+      "854",
+      "\u00a084,22,77,160.00",
+      "\u00a084.23 Crore"
+    ],
+    "Works Completed": [
+      "292",
+      "\u00a023,30,13,660.00",
+      "\u00a023.30 Crore"
+    ],
+    "Works Sanctioned": [
+      "730",
+      "\u00a067,09,15,160.00",
+      "\u00a067.09 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

@@ -1,0 +1,401 @@
+[
+  {
+    "file_path": "data/raw/mplads_mp_summary_2026-08-26.csv",
+    "description": "Raw MP Summary Export",
+    "file_size_bytes": 65885,
+    "file_size_mb": 0.06,
+    "sha256": "1a49fb26bae8f242f2104907822846e90eb4bada23c97588d38d2e4da4ffe2e8"
+  },
+  {
+    "file_path": "data/raw/mplads_recommended_works_2026-08-26.csv",
+    "description": "Raw Recommended Works Export",
+    "file_size_bytes": 17782809,
+    "file_size_mb": 16.96,
+    "sha256": "a5d613204b414d929fe912cb4180025e24fac2da53819def16ae85f48deb0b73"
+  },
+  {
+    "file_path": "data/raw/mplads_completed_works_2026-08-26.csv",
+    "description": "Raw Completed Works Export",
+    "file_size_bytes": 8693682,
+    "file_size_mb": 8.29,
+    "sha256": "c745e55881912e5aa1086e61cfe29744534177925a8e297e056c2f2295435dbf"
+  },
+  {
+    "file_path": "data/raw/mplads_expenditures_2026-08-26.csv",
+    "description": "Raw Financial Expenditures Export",
+    "file_size_bytes": 19400732,
+    "file_size_mb": 18.5,
+    "sha256": "ab2bf1cb655260bcc98bfcf2af97ac0dd3dae6ad472159fb31ed4689ed873ca9"
+  },
+  {
+    "file_path": "data/raw/json_2026-08-26.json",
+    "description": "Raw Portal Summary API JSON",
+    "file_size_bytes": 584,
+    "file_size_mb": 0.0,
+    "sha256": "ae4a5193f2a0291a388ffeb8bb2325415cadfa2988302255d1719cd3055fcdfd"
+  },
+  {
+    "file_path": "data/processed/mp_master.csv",
+    "description": "Processed MP Master (543 rows)",
+    "file_size_bytes": 140251,
+    "file_size_mb": 0.13,
+    "sha256": "d19925805942792586b19c3c7dd9685f7c338093bfbef80b135f1ab1f3c5d53b"
+  },
+  {
+    "file_path": "data/processed/allocation_master.csv",
+    "description": "Processed Allocation Master (543 rows)",
+    "file_size_bytes": 102668,
+    "file_size_mb": 0.1,
+    "sha256": "42ba35697a1b83ce07dc5b38bf046b619c3d1eb327ca5f9948dbaa5e282e0f56"
+  },
+  {
+    "file_path": "data/processed/work_master.csv",
+    "description": "Processed Work Master (102,437 rows)",
+    "file_size_bytes": 57500832,
+    "file_size_mb": 54.84,
+    "sha256": "7ba3d88abcaaef15691392c9af6f44658faf0801303f4f152a23dfc0f0e4d40f"
+  },
+  {
+    "file_path": "data/processed/expenditure_master.csv",
+    "description": "Processed Expenditure Master (82,296 rows)",
+    "file_size_bytes": 44415243,
+    "file_size_mb": 42.36,
+    "sha256": "a1ceed27a58714ff16948e64987de22b158f67b82fe867cd4afb407cfb34a21c"
+  },
+  {
+    "file_path": "data/processed/vendor_master.csv",
+    "description": "Processed Vendor Master (22,377 rows)",
+    "file_size_bytes": 5834505,
+    "file_size_mb": 5.56,
+    "sha256": "f807a80c3da9f229d256952118a787c2187fe63f20f416588678afdef0c67bd0"
+  },
+  {
+    "file_path": "data/processed/mplads_master_dataset.csv",
+    "description": "Processed Master Dataset (102,437 rows)",
+    "file_size_bytes": 61063743,
+    "file_size_mb": 58.23,
+    "sha256": "e9a6c93447390bf50279f6ce4325cc9d7a0f7cce36aa028c07d65a7843ffaf1c"
+  },
+  {
+    "file_path": "data/processed/anomaly_results.csv",
+    "description": "Traceable Anomaly Results (1,804 rows)",
+    "file_size_bytes": 911048,
+    "file_size_mb": 0.87,
+    "sha256": "6090684f4270f358ca98247e6f52f7304e94ef982a6409a74e3eb51c9f7b41c3"
+  },
+  {
+    "file_path": "data/features/work_features.csv",
+    "description": "Engineered Work Features (102,437 rows)",
+    "file_size_bytes": 31827025,
+    "file_size_mb": 30.35,
+    "sha256": "9a04ceb93ec6b2269c576b4c8572724f7b58024b994e94f53ae8f0553055f624"
+  },
+  {
+    "file_path": "data/features/transaction_features.csv",
+    "description": "Engineered Transaction Features (82,296 rows)",
+    "file_size_bytes": 30821720,
+    "file_size_mb": 29.39,
+    "sha256": "bca40d087ac594ad58af12dad80aa78d883a8f8d14e7139bf83eff9e5e20aeee"
+  },
+  {
+    "file_path": "data/features/mp_features.csv",
+    "description": "Engineered MP Features (543 rows)",
+    "file_size_bytes": 193579,
+    "file_size_mb": 0.18,
+    "sha256": "12712b66db8d1ec425e2108348d6294b9bf912f16ef73f8cd0b6d86933a4e288"
+  },
+  {
+    "file_path": "data/features/vendor_features.csv",
+    "description": "Engineered Vendor Features (22,377 rows)",
+    "file_size_bytes": 5760696,
+    "file_size_mb": 5.49,
+    "sha256": "98d07576d0fe25900d76bec64a78589643a2921276ba7f3904d12cd740384940"
+  },
+  {
+    "file_path": "database/mplads.db",
+    "description": "SQLite 3 Normalized Database",
+    "file_size_bytes": 164278272,
+    "file_size_mb": 156.67,
+    "sha256": "e72a40b231cc2fc0f80e4240ab208bbe0b070ff75466700819cf9da31bae61f1"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/all_houses_getConstituencyData.json",
+    "description": "Raw Official Rajya Sabha Artifact: all_houses_getConstituencyData.json",
+    "file_size_bytes": 2,
+    "file_size_mb": 0.0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/all_houses_getStateData.json",
+    "description": "Raw Official Rajya Sabha Artifact: all_houses_getStateData.json",
+    "file_size_bytes": 1532,
+    "file_size_mb": 0.0,
+    "sha256": "8f367819bb2cc9b7c6f057a63db809e14f8632b9572e02becd9054413f0cf9c8"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/all_houses_getTilesData.json",
+    "description": "Raw Official Rajya Sabha Artifact: all_houses_getTilesData.json",
+    "file_size_bytes": 532,
+    "file_size_mb": 0.0,
+    "sha256": "1843a8c0dd5dfbed5b4c6caf8208051a414ea7616e56d1277c0f9f3d5b8b3649"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/all_houses_getTilesReportData.json",
+    "description": "Raw Official Rajya Sabha Artifact: all_houses_getTilesReportData.json",
+    "file_size_bytes": 2,
+    "file_size_mb": 0.0,
+    "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/all_houses_getTotalMPData.json",
+    "description": "Raw Official Rajya Sabha Artifact: all_houses_getTotalMPData.json",
+    "file_size_bytes": 25,
+    "file_size_mb": 0.0,
+    "sha256": "4681f3c54e68812efe3454e72ae62f03462d5a038004ce2441801c48309352b1"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/all_houses_total_mp_data.json",
+    "description": "Raw Official Rajya Sabha Artifact: all_houses_total_mp_data.json",
+    "file_size_bytes": 23,
+    "file_size_mb": 0.0,
+    "sha256": "bb2ed24accf8e51965aeb132fce8db188565c17d7122e861601f528aee95d766"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/all_rs_mp_metrics.json",
+    "description": "Raw Official Rajya Sabha Artifact: all_rs_mp_metrics.json",
+    "file_size_bytes": 248146,
+    "file_size_mb": 0.24,
+    "sha256": "5ae560dea52c954bd78f3d775c2f72e7b87fa2f5958764300f073d3025c83ab3"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/all_rs_state_metrics.json",
+    "description": "Raw Official Rajya Sabha Artifact: all_rs_state_metrics.json",
+    "file_size_bytes": 35247,
+    "file_size_mb": 0.03,
+    "sha256": "84306dfed91af3d2818dc445f1d867d846a2221a33a1e312f6c21cd06a5df91a"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/api_query_results_summary.json",
+    "description": "Raw Official Rajya Sabha Artifact: api_query_results_summary.json",
+    "file_size_bytes": 3423,
+    "file_size_mb": 0.0,
+    "sha256": "3bd34f8bb08e534dd508ad830a6624ad661e244da07261fc505bbd1fb9063696"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/combo_state_data.json",
+    "description": "Raw Official Rajya Sabha Artifact: combo_state_data.json",
+    "file_size_bytes": 1532,
+    "file_size_mb": 0.0,
+    "sha256": "8f367819bb2cc9b7c6f057a63db809e14f8632b9572e02becd9054413f0cf9c8"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/dashboard.html",
+    "description": "Raw Official Rajya Sabha Artifact: dashboard.html",
+    "file_size_bytes": 24199,
+    "file_size_mb": 0.02,
+    "sha256": "65cd1216d7dd7fd38d92f9a83c1493ecf42e3e28d77f35fc4f517de8d88751b2"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/discovered_endpoints.json",
+    "description": "Raw Official Rajya Sabha Artifact: discovered_endpoints.json",
+    "file_size_bytes": 5933,
+    "file_size_mb": 0.01,
+    "sha256": "7747006ed3ecd22ed987cc0487333b0cda9a8ea774cb0b6b3541664fd32803b4"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/graph.js",
+    "description": "Raw Official Rajya Sabha Artifact: graph.js",
+    "file_size_bytes": 8498,
+    "file_size_mb": 0.01,
+    "sha256": "017ed31cd85d5ecbf7693c6bc5475594fdfe53babb478d2ef6e2246813b6082d"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/home_page.html",
+    "description": "Raw Official Rajya Sabha Artifact: home_page.html",
+    "file_size_bytes": 64385,
+    "file_size_mb": 0.06,
+    "sha256": "7cc4d1401ba6499e92981e98d2cd9cab7ecfd55669c8be4f50dfe3354504d858"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/landingpage.js",
+    "description": "Raw Official Rajya Sabha Artifact: landingpage.js",
+    "file_size_bytes": 179362,
+    "file_size_mb": 0.17,
+    "sha256": "9ab5c3d88cc28a27146574b2a9ebea33e19417a904e88619ca6bfe66f71ae25c"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/lok_sabha_getConstituencyData.json",
+    "description": "Raw Official Rajya Sabha Artifact: lok_sabha_getConstituencyData.json",
+    "file_size_bytes": 2,
+    "file_size_mb": 0.0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/lok_sabha_getStateData.json",
+    "description": "Raw Official Rajya Sabha Artifact: lok_sabha_getStateData.json",
+    "file_size_bytes": 1532,
+    "file_size_mb": 0.0,
+    "sha256": "8f367819bb2cc9b7c6f057a63db809e14f8632b9572e02becd9054413f0cf9c8"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/lok_sabha_getTilesData.json",
+    "description": "Raw Official Rajya Sabha Artifact: lok_sabha_getTilesData.json",
+    "file_size_bytes": 527,
+    "file_size_mb": 0.0,
+    "sha256": "ccc1af3b299d51f948534c902de007a0a6ac627734714b70d5cfa1183a36d302"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/lok_sabha_getTilesReportData.json",
+    "description": "Raw Official Rajya Sabha Artifact: lok_sabha_getTilesReportData.json",
+    "file_size_bytes": 2,
+    "file_size_mb": 0.0,
+    "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/lok_sabha_getTotalMPData.json",
+    "description": "Raw Official Rajya Sabha Artifact: lok_sabha_getTotalMPData.json",
+    "file_size_bytes": 25,
+    "file_size_mb": 0.0,
+    "sha256": "0212aac959111f484cd138151280bbcce5d468288308e676181ab67d16624b71"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/lok_sabha_total_mp_data.json",
+    "description": "Raw Official Rajya Sabha Artifact: lok_sabha_total_mp_data.json",
+    "file_size_bytes": 23,
+    "file_size_mb": 0.0,
+    "sha256": "bb2ed24accf8e51965aeb132fce8db188565c17d7122e861601f528aee95d766"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/loksaba.js",
+    "description": "Raw Official Rajya Sabha Artifact: loksaba.js",
+    "file_size_bytes": 8187,
+    "file_size_mb": 0.01,
+    "sha256": "0b3bdfb9f3fdbe8381f9d6c3014a794d72fc557589b83651c17b438f586d58b3"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/poptable.js",
+    "description": "Raw Official Rajya Sabha Artifact: poptable.js",
+    "file_size_bytes": 114615,
+    "file_size_mb": 0.11,
+    "sha256": "854c70ca822871a4c5d1d9af12b0f6495b47ebb95cbb6ce3f4bbc9abfc5615bf"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/preLoginDashboard.js",
+    "description": "Raw Official Rajya Sabha Artifact: preLoginDashboard.js",
+    "file_size_bytes": 34014,
+    "file_size_mb": 0.03,
+    "sha256": "a8d7ae17f0f8d4376243466355fecfc3dc070ae8e68bb756a104606151dbeabb"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/rajya_sabha_files.json",
+    "description": "Raw Official Rajya Sabha Artifact: rajya_sabha_files.json",
+    "file_size_bytes": 83,
+    "file_size_mb": 0.0,
+    "sha256": "f42ab2b2237114e23beb494a5d42c141c702202d8a3a78821f3a7071192fcc49"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/rajya_sabha_getConstituencyData.json",
+    "description": "Raw Official Rajya Sabha Artifact: rajya_sabha_getConstituencyData.json",
+    "file_size_bytes": 2,
+    "file_size_mb": 0.0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/rajya_sabha_getStateData.json",
+    "description": "Raw Official Rajya Sabha Artifact: rajya_sabha_getStateData.json",
+    "file_size_bytes": 1532,
+    "file_size_mb": 0.0,
+    "sha256": "8f367819bb2cc9b7c6f057a63db809e14f8632b9572e02becd9054413f0cf9c8"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/rajya_sabha_getTilesData.json",
+    "description": "Raw Official Rajya Sabha Artifact: rajya_sabha_getTilesData.json",
+    "file_size_bytes": 524,
+    "file_size_mb": 0.0,
+    "sha256": "32b4fa82335fc0bed5c96ebe315a314bf8f4042d7f1c415e731d20f32095f7c5"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/rajya_sabha_getTilesReportData.json",
+    "description": "Raw Official Rajya Sabha Artifact: rajya_sabha_getTilesReportData.json",
+    "file_size_bytes": 2,
+    "file_size_mb": 0.0,
+    "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/rajya_sabha_getTotalMPData.json",
+    "description": "Raw Official Rajya Sabha Artifact: rajya_sabha_getTotalMPData.json",
+    "file_size_bytes": 25,
+    "file_size_mb": 0.0,
+    "sha256": "9a40186b568c7c267d4bce7f7e59330faa44cec6f0139671d7b96777c5017037"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/rajya_sabha_mps_all.json",
+    "description": "Raw Official Rajya Sabha Artifact: rajya_sabha_mps_all.json",
+    "file_size_bytes": 38468,
+    "file_size_mb": 0.04,
+    "sha256": "cbdc15048fbb2811a01e8d8018a849527d8e2d8b910d9345469031a8131bf681"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/rajya_sabha_mps_by_state.json",
+    "description": "Raw Official Rajya Sabha Artifact: rajya_sabha_mps_by_state.json",
+    "file_size_bytes": 42502,
+    "file_size_mb": 0.04,
+    "sha256": "cd1bda7999f7960fac20336223ff1919e69595c5529a04181b1420704d6c2325"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/rajya_sabha_report_allocated_limit_for_honble_mps.json",
+    "description": "Raw Official Rajya Sabha Artifact: rajya_sabha_report_allocated_limit_for_honble_mps.json",
+    "file_size_bytes": 43,
+    "file_size_mb": 0.0,
+    "sha256": "ea85caba7cecb42476a3cba102decfba6371fa45e6b0ceb5d1ad11d8e7740f88"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/rajya_sabha_report_amount_consented_for_calamity.json",
+    "description": "Raw Official Rajya Sabha Artifact: rajya_sabha_report_amount_consented_for_calamity.json",
+    "file_size_bytes": 50,
+    "file_size_mb": 0.0,
+    "sha256": "df6ca545dca7b5b445f8b4d1172a6beafc8710a3943b89fc3c42130fff3b1d4f"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/rajya_sabha_report_expenditure_on_completed_and_on-going_works_as_on_date.json",
+    "description": "Raw Official Rajya Sabha Artifact: rajya_sabha_report_expenditure_on_completed_and_on-going_works_as_on_date.json",
+    "file_size_bytes": 45,
+    "file_size_mb": 0.0,
+    "sha256": "db6e588382ac8829685c5e927d2b9d10c01878b1c39616d9f8ec3a80879ad155"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/rajya_sabha_report_works_completed.json",
+    "description": "Raw Official Rajya Sabha Artifact: rajya_sabha_report_works_completed.json",
+    "file_size_bytes": 49,
+    "file_size_mb": 0.0,
+    "sha256": "beabf6a860d97aefee07b42cdbaeae2783edc814dd0742e38b27a25010ee70c3"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/rajya_sabha_report_works_recommended.json",
+    "description": "Raw Official Rajya Sabha Artifact: rajya_sabha_report_works_recommended.json",
+    "file_size_bytes": 51,
+    "file_size_mb": 0.0,
+    "sha256": "0c664b1082b001e8a76c9248759b337e93ad3cff07982d9d70b121fc77040a65"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/rajya_sabha_report_works_sanctioned.json",
+    "description": "Raw Official Rajya Sabha Artifact: rajya_sabha_report_works_sanctioned.json",
+    "file_size_bytes": 47,
+    "file_size_mb": 0.0,
+    "sha256": "067145d868f25ec8bbab0d1351a960fdb17e7bf340b0847d673eb35e03af7c35"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/rajya_sabha_total_mp_data.json",
+    "description": "Raw Official Rajya Sabha Artifact: rajya_sabha_total_mp_data.json",
+    "file_size_bytes": 23,
+    "file_size_mb": 0.0,
+    "sha256": "bb2ed24accf8e51965aeb132fce8db188565c17d7122e861601f528aee95d766"
+  },
+  {
+    "file_path": "data/raw/rajya_sabha/rajyasaba.js",
+    "description": "Raw Official Rajya Sabha Artifact: rajyasaba.js",
+    "file_size_bytes": 3505,
+    "file_size_mb": 0.0,
+    "sha256": "520e34e9a8f2326cd704a0e76536364888493ecbf09a1cccd104995bae2d7ff4"
+  }
+]

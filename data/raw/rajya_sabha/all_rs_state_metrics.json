@@ -1,0 +1,1514 @@
+[
+  {
+    "state_id": 35,
+    "state_name": "Andaman And Nicobar Islands",
+    "house": "RAJYA_SABHA",
+    "combo": "35,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Works Recommended": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Works Completed": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Works Sanctioned": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 6,
+    "state_name": "Bihar",
+    "house": "RAJYA_SABHA",
+    "combo": "6,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a02,51,40,24,157.47",
+        "\u00a0251.40 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a01,16,83,92,528.00",
+        "\u00a0116.84 Crore"
+      ],
+      "Works Recommended": [
+        "1799",
+        "\u00a01,66,95,86,428.00",
+        "\u00a0166.96 Crore"
+      ],
+      "Works Completed": [
+        "1165",
+        "\u00a099,04,38,070.00",
+        "\u00a099.04 Crore"
+      ],
+      "Works Sanctioned": [
+        "1545",
+        "\u00a01,39,24,91,420.00",
+        "\u00a0139.25 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 3,
+    "state_name": "Arunachal Pradesh",
+    "house": "RAJYA_SABHA",
+    "combo": "3,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a04,90,00,000.00",
+        "\u00a04.90 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Works Recommended": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Works Completed": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Works Sanctioned": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 8,
+    "state_name": "Chhattisgarh",
+    "house": "RAJYA_SABHA",
+    "combo": "8,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a078,67,92,289.86",
+        "\u00a078.68 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a024,60,14,079.00",
+        "\u00a024.60 Crore"
+      ],
+      "Works Recommended": [
+        "409",
+        "\u00a035,50,35,983.00",
+        "\u00a035.50 Crore"
+      ],
+      "Works Completed": [
+        "164",
+        "\u00a016,25,45,334.00",
+        "\u00a016.25 Crore"
+      ],
+      "Works Sanctioned": [
+        "353",
+        "\u00a030,86,45,983.00",
+        "\u00a030.86 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 7,
+    "state_name": "Chandigarh",
+    "house": "RAJYA_SABHA",
+    "combo": "7,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a014,70,00,000.00",
+        "\u00a014.70 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a091,04,144.00",
+        "\u00a00.91 Crore"
+      ],
+      "Works Recommended": [
+        "24",
+        "\u00a02,14,99,970.00",
+        "\u00a02.15 Crore"
+      ],
+      "Works Completed": [
+        "4",
+        "\u00a037,00,000.00",
+        "\u00a00.37 Crore"
+      ],
+      "Works Sanctioned": [
+        "10",
+        "\u00a01,07,99,970.00",
+        "\u00a01.08 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 11,
+    "state_name": "Delhi",
+    "house": "RAJYA_SABHA",
+    "combo": "11,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a056,58,03,496.11",
+        "\u00a056.58 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a03,67,07,182.00",
+        "\u00a03.67 Crore"
+      ],
+      "Works Recommended": [
+        "168",
+        "\u00a025,70,69,922.00",
+        "\u00a025.71 Crore"
+      ],
+      "Works Completed": [
+        "28",
+        "\u00a03,45,96,236.00",
+        "\u00a03.46 Crore"
+      ],
+      "Works Sanctioned": [
+        "110",
+        "\u00a013,15,99,179.00",
+        "\u00a013.16 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "3",
+        "\u00a02,00,00,000.00",
+        "\u00a02.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 5,
+    "state_name": "Assam",
+    "house": "RAJYA_SABHA",
+    "combo": "5,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a078,41,27,914.22",
+        "\u00a078.41 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a023,23,56,377.44",
+        "\u00a023.24 Crore"
+      ],
+      "Works Recommended": [
+        "489",
+        "\u00a054,31,20,697.54",
+        "\u00a054.31 Crore"
+      ],
+      "Works Completed": [
+        "22",
+        "\u00a02,50,17,748.44",
+        "\u00a02.50 Crore"
+      ],
+      "Works Sanctioned": [
+        "268",
+        "\u00a032,76,87,667.54",
+        "\u00a032.77 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 2,
+    "state_name": "Andhra Pradesh",
+    "house": "RAJYA_SABHA",
+    "combo": "2,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a01,49,74,58,947.12",
+        "\u00a0149.75 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a034,52,27,491.00",
+        "\u00a034.52 Crore"
+      ],
+      "Works Recommended": [
+        "854",
+        "\u00a084,22,77,160.00",
+        "\u00a084.23 Crore"
+      ],
+      "Works Completed": [
+        "292",
+        "\u00a023,30,13,660.00",
+        "\u00a023.30 Crore"
+      ],
+      "Works Sanctioned": [
+        "730",
+        "\u00a067,09,15,160.00",
+        "\u00a067.09 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 14,
+    "state_name": "Haryana",
+    "house": "RAJYA_SABHA",
+    "combo": "14,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a053,90,00,000.00",
+        "\u00a053.90 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a04,50,30,247.00",
+        "\u00a04.50 Crore"
+      ],
+      "Works Recommended": [
+        "285",
+        "\u00a022,48,70,047.00",
+        "\u00a022.49 Crore"
+      ],
+      "Works Completed": [
+        "5",
+        "\u00a050,07,000.00",
+        "\u00a00.50 Crore"
+      ],
+      "Works Sanctioned": [
+        "160",
+        "\u00a015,28,13,946.00",
+        "\u00a015.28 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 12,
+    "state_name": "Goa",
+    "house": "RAJYA_SABHA",
+    "combo": "12,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a017,15,00,000.00",
+        "\u00a017.15 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a03,78,36,353.99",
+        "\u00a03.78 Crore"
+      ],
+      "Works Recommended": [
+        "40",
+        "\u00a010,91,49,210.99",
+        "\u00a010.91 Crore"
+      ],
+      "Works Completed": [
+        "8",
+        "\u00a02,35,57,387.99",
+        "\u00a02.36 Crore"
+      ],
+      "Works Sanctioned": [
+        "15",
+        "\u00a04,39,29,925.99",
+        "\u00a04.39 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 130,
+    "state_name": "Ladakh",
+    "house": "RAJYA_SABHA",
+    "combo": "130,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Works Recommended": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Works Completed": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Works Sanctioned": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 16,
+    "state_name": "Jammu And Kashmir",
+    "house": "RAJYA_SABHA",
+    "combo": "16,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a049,00,63,957.11",
+        "\u00a049.01 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a013,40,33,715.00",
+        "\u00a013.40 Crore"
+      ],
+      "Works Recommended": [
+        "217",
+        "\u00a018,45,57,753.89",
+        "\u00a018.46 Crore"
+      ],
+      "Works Completed": [
+        "156",
+        "\u00a013,36,20,060.00",
+        "\u00a013.36 Crore"
+      ],
+      "Works Sanctioned": [
+        "178",
+        "\u00a014,42,39,425.00",
+        "\u00a014.42 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 19,
+    "state_name": "Lakshadweep",
+    "house": "RAJYA_SABHA",
+    "combo": "19,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Works Recommended": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Works Completed": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Works Sanctioned": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 27,
+    "state_name": "Gujarat",
+    "house": "RAJYA_SABHA",
+    "combo": "27,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a01,20,05,00,000.00",
+        "\u00a0120.05 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a022,73,18,444.00",
+        "\u00a022.73 Crore"
+      ],
+      "Works Recommended": [
+        "1312",
+        "\u00a082,72,48,052.00",
+        "\u00a082.72 Crore"
+      ],
+      "Works Completed": [
+        "334",
+        "\u00a015,85,83,578.00",
+        "\u00a015.86 Crore"
+      ],
+      "Works Sanctioned": [
+        "1033",
+        "\u00a063,49,35,052.00",
+        "\u00a063.49 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "1",
+        "\u00a025,00,000.00",
+        "\u00a00.25 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 17,
+    "state_name": "Jharkhand",
+    "house": "RAJYA_SABHA",
+    "combo": "17,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a086,62,81,611.58",
+        "\u00a086.63 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a050,62,81,517.00",
+        "\u00a050.63 Crore"
+      ],
+      "Works Recommended": [
+        "1217",
+        "\u00a065,73,23,837.00",
+        "\u00a065.73 Crore"
+      ],
+      "Works Completed": [
+        "335",
+        "\u00a023,76,38,795.00",
+        "\u00a023.76 Crore"
+      ],
+      "Works Sanctioned": [
+        "946",
+        "\u00a056,72,73,515.00",
+        "\u00a056.73 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 15,
+    "state_name": "Himachal Pradesh",
+    "house": "RAJYA_SABHA",
+    "combo": "15,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a040,38,63,957.11",
+        "\u00a040.39 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a020,18,42,302.04",
+        "\u00a020.18 Crore"
+      ],
+      "Works Recommended": [
+        "850",
+        "\u00a028,52,01,837.04",
+        "\u00a028.52 Crore"
+      ],
+      "Works Completed": [
+        "321",
+        "\u00a012,80,84,499.04",
+        "\u00a012.81 Crore"
+      ],
+      "Works Sanctioned": [
+        "777",
+        "\u00a026,42,51,837.04",
+        "\u00a026.43 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 36,
+    "state_name": "Kerala",
+    "house": "RAJYA_SABHA",
+    "combo": "36,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a02,13,14,39,062.11",
+        "\u00a0213.14 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a045,36,51,666.00",
+        "\u00a045.37 Crore"
+      ],
+      "Works Recommended": [
+        "1513",
+        "\u00a01,53,80,29,552.00",
+        "\u00a0153.80 Crore"
+      ],
+      "Works Completed": [
+        "357",
+        "\u00a031,37,77,435.00",
+        "\u00a031.38 Crore"
+      ],
+      "Works Sanctioned": [
+        "885",
+        "\u00a089,55,09,418.00",
+        "\u00a089.55 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "11",
+        "\u00a03,20,00,000.00",
+        "\u00a03.20 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 23,
+    "state_name": "Meghalaya",
+    "house": "RAJYA_SABHA",
+    "combo": "23,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a04,90,00,000.00",
+        "\u00a04.90 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Works Recommended": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Works Completed": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Works Sanctioned": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 18,
+    "state_name": "Karnataka",
+    "house": "RAJYA_SABHA",
+    "combo": "18,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a01,96,64,55,968.00",
+        "\u00a0196.65 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a066,81,41,472.00",
+        "\u00a066.81 Crore"
+      ],
+      "Works Recommended": [
+        "1289",
+        "\u00a01,26,15,97,653.00",
+        "\u00a0126.16 Crore"
+      ],
+      "Works Completed": [
+        "611",
+        "\u00a035,27,28,673.00",
+        "\u00a035.27 Crore"
+      ],
+      "Works Sanctioned": [
+        "1050",
+        "\u00a091,84,59,153.00",
+        "\u00a091.85 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 22,
+    "state_name": "Manipur",
+    "house": "RAJYA_SABHA",
+    "combo": "22,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a04,90,00,000.00",
+        "\u00a04.90 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Works Recommended": [
+        "3",
+        "\u00a01,10,00,000.00",
+        "\u00a01.10 Crore"
+      ],
+      "Works Completed": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Works Sanctioned": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 13,
+    "state_name": "Mizoram",
+    "house": "RAJYA_SABHA",
+    "combo": "13,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a02,45,00,000.00",
+        "\u00a02.45 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Works Recommended": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Works Completed": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Works Sanctioned": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 20,
+    "state_name": "Madhya Pradesh",
+    "house": "RAJYA_SABHA",
+    "combo": "20,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a01,49,57,46,435.57",
+        "\u00a0149.57 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a061,74,01,011.12",
+        "\u00a061.74 Crore"
+      ],
+      "Works Recommended": [
+        "1360",
+        "\u00a090,59,26,547.00",
+        "\u00a090.59 Crore"
+      ],
+      "Works Completed": [
+        "379",
+        "\u00a025,36,25,630.00",
+        "\u00a025.36 Crore"
+      ],
+      "Works Sanctioned": [
+        "1099",
+        "\u00a076,82,35,552.00",
+        "\u00a076.82 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 25,
+    "state_name": "Odisha",
+    "house": "RAJYA_SABHA",
+    "combo": "25,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a01,22,05,76,598.73",
+        "\u00a0122.06 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a015,33,00,532.00",
+        "\u00a015.33 Crore"
+      ],
+      "Works Recommended": [
+        "1045",
+        "\u00a065,99,48,279.00",
+        "\u00a065.99 Crore"
+      ],
+      "Works Completed": [
+        "187",
+        "\u00a09,51,28,484.00",
+        "\u00a09.51 Crore"
+      ],
+      "Works Sanctioned": [
+        "679",
+        "\u00a042,95,94,260.00",
+        "\u00a042.96 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 1,
+    "state_name": "Punjab",
+    "house": "RAJYA_SABHA",
+    "combo": "1,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a01,35,69,19,670.91",
+        "\u00a0135.69 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a057,88,03,407.67",
+        "\u00a057.88 Crore"
+      ],
+      "Works Recommended": [
+        "920",
+        "\u00a085,38,28,953.26",
+        "\u00a085.38 Crore"
+      ],
+      "Works Completed": [
+        "486",
+        "\u00a032,32,76,115.26",
+        "\u00a032.33 Crore"
+      ],
+      "Works Sanctioned": [
+        "845",
+        "\u00a078,17,06,149.26",
+        "\u00a078.17 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "4",
+        "\u00a04,00,00,000.00",
+        "\u00a04.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 26,
+    "state_name": "Puducherry",
+    "house": "RAJYA_SABHA",
+    "combo": "26,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a029,28,81,856.49",
+        "\u00a029.29 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a010,16,58,946.00",
+        "\u00a010.17 Crore"
+      ],
+      "Works Recommended": [
+        "100",
+        "\u00a026,03,79,881.00",
+        "\u00a026.04 Crore"
+      ],
+      "Works Completed": [
+        "32",
+        "\u00a08,46,90,736.00",
+        "\u00a08.47 Crore"
+      ],
+      "Works Sanctioned": [
+        "58",
+        "\u00a017,55,03,711.00",
+        "\u00a017.55 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 21,
+    "state_name": "Maharashtra",
+    "house": "RAJYA_SABHA",
+    "combo": "21,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a02,18,05,11,557.33",
+        "\u00a0218.05 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a052,93,46,359.00",
+        "\u00a052.93 Crore"
+      ],
+      "Works Recommended": [
+        "1007",
+        "\u00a01,22,03,73,240.00",
+        "\u00a0122.04 Crore"
+      ],
+      "Works Completed": [
+        "253",
+        "\u00a026,63,45,764.00",
+        "\u00a026.63 Crore"
+      ],
+      "Works Sanctioned": [
+        "537",
+        "\u00a072,45,33,723.00",
+        "\u00a072.45 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 24,
+    "state_name": "Nagaland",
+    "house": "RAJYA_SABHA",
+    "combo": "24,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a020,65,63,957.11",
+        "\u00a020.66 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a019,61,06,200.00",
+        "\u00a019.61 Crore"
+      ],
+      "Works Recommended": [
+        "77",
+        "\u00a020,41,71,000.00",
+        "\u00a020.42 Crore"
+      ],
+      "Works Completed": [
+        "57",
+        "\u00a014,47,63,000.00",
+        "\u00a014.48 Crore"
+      ],
+      "Works Sanctioned": [
+        "73",
+        "\u00a019,78,39,000.00",
+        "\u00a019.78 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 29,
+    "state_name": "Sikkim",
+    "house": "RAJYA_SABHA",
+    "combo": "29,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a015,01,70,726.11",
+        "\u00a015.02 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a09,19,21,040.00",
+        "\u00a09.19 Crore"
+      ],
+      "Works Recommended": [
+        "118",
+        "\u00a014,59,96,595.00",
+        "\u00a014.60 Crore"
+      ],
+      "Works Completed": [
+        "85",
+        "\u00a08,50,96,595.00",
+        "\u00a08.51 Crore"
+      ],
+      "Works Sanctioned": [
+        "94",
+        "\u00a09,78,96,595.00",
+        "\u00a09.79 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 10,
+    "state_name": "The Dadra And Nagar Haveli And Daman And Diu",
+    "house": "RAJYA_SABHA",
+    "combo": "10,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Works Recommended": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Works Completed": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Works Sanctioned": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 28,
+    "state_name": "Rajasthan",
+    "house": "RAJYA_SABHA",
+    "combo": "28,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a01,37,22,55,828.44",
+        "\u00a0137.23 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a050,12,50,640.01",
+        "\u00a050.13 Crore"
+      ],
+      "Works Recommended": [
+        "972",
+        "\u00a090,63,29,540.00",
+        "\u00a090.63 Crore"
+      ],
+      "Works Completed": [
+        "333",
+        "\u00a031,48,09,881.00",
+        "\u00a031.48 Crore"
+      ],
+      "Works Sanctioned": [
+        "808",
+        "\u00a073,37,38,540.00",
+        "\u00a073.37 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 30,
+    "state_name": "Tamil Nadu",
+    "house": "RAJYA_SABHA",
+    "combo": "30,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a02,31,25,50,547.74",
+        "\u00a0231.26 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a098,03,36,471.00",
+        "\u00a098.03 Crore"
+      ],
+      "Works Recommended": [
+        "1201",
+        "\u00a01,42,43,35,426.00",
+        "\u00a0142.43 Crore"
+      ],
+      "Works Completed": [
+        "720",
+        "\u00a077,91,48,762.00",
+        "\u00a077.91 Crore"
+      ],
+      "Works Sanctioned": [
+        "936",
+        "\u00a01,11,83,87,426.00",
+        "\u00a0111.84 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 129,
+    "state_name": "Telangana",
+    "house": "RAJYA_SABHA",
+    "combo": "129,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a098,00,17,044.22",
+        "\u00a098.00 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a021,36,18,258.00",
+        "\u00a021.36 Crore"
+      ],
+      "Works Recommended": [
+        "802",
+        "\u00a050,06,81,552.00",
+        "\u00a050.07 Crore"
+      ],
+      "Works Completed": [
+        "294",
+        "\u00a015,30,62,323.00",
+        "\u00a015.31 Crore"
+      ],
+      "Works Sanctioned": [
+        "625",
+        "\u00a036,83,33,848.00",
+        "\u00a036.83 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 33,
+    "state_name": "Uttar Pradesh",
+    "house": "RAJYA_SABHA",
+    "combo": "33,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a05,67,08,05,833.97",
+        "\u00a0567.08 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a03,30,13,77,163.42",
+        "\u00a0330.14 Crore"
+      ],
+      "Works Recommended": [
+        "5696",
+        "\u00a04,62,16,17,278.81",
+        "\u00a0462.16 Crore"
+      ],
+      "Works Completed": [
+        "2968",
+        "\u00a02,05,88,32,718.36",
+        "\u00a0205.88 Crore"
+      ],
+      "Works Sanctioned": [
+        "4739",
+        "\u00a03,95,70,68,688.36",
+        "\u00a0395.71 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "1",
+        "\u00a01,00,00,000.00",
+        "\u00a01.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 31,
+    "state_name": "Tripura",
+    "house": "RAJYA_SABHA",
+    "combo": "31,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a012,25,00,000.00",
+        "\u00a012.25 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a03,42,10,580.00",
+        "\u00a03.42 Crore"
+      ],
+      "Works Recommended": [
+        "58",
+        "\u00a08,46,49,344.00",
+        "\u00a08.46 Crore"
+      ],
+      "Works Completed": [
+        "18",
+        "\u00a01,95,22,053.00",
+        "\u00a01.95 Crore"
+      ],
+      "Works Sanctioned": [
+        "39",
+        "\u00a05,37,26,844.00",
+        "\u00a05.37 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 32,
+    "state_name": "Uttarakhand",
+    "house": "RAJYA_SABHA",
+    "combo": "32,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a056,98,73,590.51",
+        "\u00a056.99 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a021,28,79,324.00",
+        "\u00a021.29 Crore"
+      ],
+      "Works Recommended": [
+        "541",
+        "\u00a046,91,96,882.00",
+        "\u00a046.92 Crore"
+      ],
+      "Works Completed": [
+        "177",
+        "\u00a015,67,82,137.00",
+        "\u00a015.68 Crore"
+      ],
+      "Works Sanctioned": [
+        "430",
+        "\u00a037,15,09,981.00",
+        "\u00a037.15 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  },
+  {
+    "state_id": 34,
+    "state_name": "West Bengal",
+    "house": "RAJYA_SABHA",
+    "combo": "34,0,0,1",
+    "metrics": {
+      "Allocated Limit for Hon'ble MPs": [
+        "\u00a01,44,61,62,892.00",
+        "\u00a0144.62 Crore"
+      ],
+      "Expenditure on Completed and On-going Works as on Date": [
+        "\u00a045,90,53,572.00",
+        "\u00a045.91 Crore"
+      ],
+      "Works Recommended": [
+        "290",
+        "\u00a081,52,48,020.68",
+        "\u00a081.52 Crore"
+      ],
+      "Works Completed": [
+        "64",
+        "\u00a06,77,71,389.00",
+        "\u00a06.78 Crore"
+      ],
+      "Works Sanctioned": [
+        "180",
+        "\u00a062,56,45,130.68",
+        "\u00a062.56 Crore"
+      ],
+      "Amount consented for Calamity": [
+        "0",
+        "\u00a00.00",
+        "\u00a00.00 Crore"
+      ],
+      "Current Tenure": [
+        {
+          "ID": 7,
+          "CAPTION": "18th Lok Sabha"
+        }
+      ]
+    }
+  }
+]

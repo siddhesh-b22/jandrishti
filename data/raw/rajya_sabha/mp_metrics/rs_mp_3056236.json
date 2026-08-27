@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3056236,
+  "caption": "Shri Paka Venkata Satyanarayana (2025-28)",
+  "state_id": 2,
+  "state_name": "Andhra Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "2,0,3056236,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a09,80,00,000.00",
+      "\u00a09.80 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a015,99,035.00",
+      "\u00a00.16 Crore"
+    ],
+    "Works Recommended": [
+      "13",
+      "\u00a03,52,80,000.00",
+      "\u00a03.53 Crore"
+    ],
+    "Works Completed": [
+      "1",
+      "\u00a016,00,000.00",
+      "\u00a00.16 Crore"
+    ],
+    "Works Sanctioned": [
+      "9",
+      "\u00a02,42,80,000.00",
+      "\u00a02.43 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

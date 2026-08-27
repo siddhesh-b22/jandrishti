@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3049850,
+  "caption": "Smt. Rekha Sharma (2024-28)",
+  "state_id": 14,
+  "state_name": "Haryana",
+  "house": "RAJYA_SABHA",
+  "combo": "14,0,3049850,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a09,80,00,000.00",
+      "\u00a09.80 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a01,41,83,077.00",
+      "\u00a01.42 Crore"
+    ],
+    "Works Recommended": [
+      "145",
+      "\u00a07,84,68,585.00",
+      "\u00a07.85 Crore"
+    ],
+    "Works Completed": [
+      "1",
+      "\u00a05,27,000.00",
+      "\u00a00.05 Crore"
+    ],
+    "Works Sanctioned": [
+      "56",
+      "\u00a04,51,78,290.00",
+      "\u00a04.52 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

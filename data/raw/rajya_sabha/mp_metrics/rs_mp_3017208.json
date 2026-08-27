@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017208,
+  "caption": "Shri Satish Chandra Dubey (2022-28)",
+  "state_id": 6,
+  "state_name": "Bihar",
+  "house": "RAJYA_SABHA",
+  "combo": "6,0,3017208,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a023,52,63,957.11",
+      "\u00a023.53 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a015,83,49,542.00",
+      "\u00a015.83 Crore"
+    ],
+    "Works Recommended": [
+      "249",
+      "\u00a022,20,18,286.00",
+      "\u00a022.20 Crore"
+    ],
+    "Works Completed": [
+      "162",
+      "\u00a012,88,59,487.00",
+      "\u00a012.89 Crore"
+    ],
+    "Works Sanctioned": [
+      "216",
+      "\u00a018,16,73,287.00",
+      "\u00a018.17 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

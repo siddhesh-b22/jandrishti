@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017168,
+  "caption": "Shri Ilaiyaraaja (2022-28)",
+  "state_id": 30,
+  "state_name": "Tamil Nadu",
+  "house": "RAJYA_SABHA",
+  "combo": "30,0,3017168,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a022,05,63,957.11",
+      "\u00a022.06 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a04,43,81,022.00",
+      "\u00a04.44 Crore"
+    ],
+    "Works Recommended": [
+      "27",
+      "\u00a05,19,56,357.00",
+      "\u00a05.20 Crore"
+    ],
+    "Works Completed": [
+      "17",
+      "\u00a03,23,56,357.00",
+      "\u00a03.24 Crore"
+    ],
+    "Works Sanctioned": [
+      "21",
+      "\u00a04,48,56,357.00",
+      "\u00a04.49 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3050536,
+  "caption": "Shri Ryaga Krishnaiah (2024-28)",
+  "state_id": 2,
+  "state_name": "Andhra Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "2,0,3050536,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a017,04,13,583.79",
+      "\u00a017.04 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a05,46,08,584.00",
+      "\u00a05.46 Crore"
+    ],
+    "Works Recommended": [
+      "71",
+      "\u00a014,90,57,484.00",
+      "\u00a014.91 Crore"
+    ],
+    "Works Completed": [
+      "30",
+      "\u00a04,49,57,484.00",
+      "\u00a04.50 Crore"
+    ],
+    "Works Sanctioned": [
+      "52",
+      "\u00a010,46,07,484.00",
+      "\u00a010.46 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

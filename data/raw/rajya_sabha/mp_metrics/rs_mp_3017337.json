@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017337,
+  "caption": "Shri B.L. Verma (2020-26)",
+  "state_id": 33,
+  "state_name": "Uttar Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "33,0,3017337,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a019,60,63,957.11",
+      "\u00a019.61 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a016,89,37,264.09",
+      "\u00a016.89 Crore"
+    ],
+    "Works Recommended": [
+      "414",
+      "\u00a018,64,51,342.09",
+      "\u00a018.65 Crore"
+    ],
+    "Works Completed": [
+      "350",
+      "\u00a011,76,81,104.09",
+      "\u00a011.77 Crore"
+    ],
+    "Works Sanctioned": [
+      "409",
+      "\u00a018,14,51,342.09",
+      "\u00a018.15 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

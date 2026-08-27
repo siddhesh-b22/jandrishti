@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017304,
+  "caption": "Shri S. Kalyanasundaram (2022-28)",
+  "state_id": 30,
+  "state_name": "Tamil Nadu",
+  "house": "RAJYA_SABHA",
+  "combo": "30,0,3017304,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a023,97,63,792.52",
+      "\u00a023.98 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a017,89,30,791.00",
+      "\u00a017.89 Crore"
+    ],
+    "Works Recommended": [
+      "185",
+      "\u00a023,71,77,871.00",
+      "\u00a023.72 Crore"
+    ],
+    "Works Completed": [
+      "141",
+      "\u00a016,50,69,207.00",
+      "\u00a016.51 Crore"
+    ],
+    "Works Sanctioned": [
+      "150",
+      "\u00a020,47,27,871.00",
+      "\u00a020.47 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

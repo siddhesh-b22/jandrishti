@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3043454,
+  "caption": "Shri Sanjay Kumar Jha (2024-30)",
+  "state_id": 6,
+  "state_name": "Bihar",
+  "house": "RAJYA_SABHA",
+  "combo": "6,0,3043454,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a018,62,00,000.00",
+      "\u00a018.62 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a050,78,584.00",
+      "\u00a00.51 Crore"
+    ],
+    "Works Recommended": [
+      "6",
+      "\u00a062,54,795.00",
+      "\u00a00.63 Crore"
+    ],
+    "Works Completed": [
+      "4",
+      "\u00a043,64,795.00",
+      "\u00a00.44 Crore"
+    ],
+    "Works Sanctioned": [
+      "5",
+      "\u00a053,54,795.00",
+      "\u00a00.54 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3042557,
+  "caption": "Shri Ashokrao Shankarrao Chavan (2024-30)",
+  "state_id": 21,
+  "state_name": "Maharashtra",
+  "house": "RAJYA_SABHA",
+  "combo": "21,0,3042557,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a089,68,982.00",
+      "\u00a00.90 Crore"
+    ],
+    "Works Recommended": [
+      "33",
+      "\u00a04,30,78,446.00",
+      "\u00a04.31 Crore"
+    ],
+    "Works Completed": [
+      "2",
+      "\u00a014,97,921.00",
+      "\u00a00.15 Crore"
+    ],
+    "Works Sanctioned": [
+      "8",
+      "\u00a089,78,446.00",
+      "\u00a00.90 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

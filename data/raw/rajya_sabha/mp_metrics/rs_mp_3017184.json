@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017184,
+  "caption": "Smt. Mahua Maji (2022-28)",
+  "state_id": 17,
+  "state_name": "Jharkhand",
+  "house": "RAJYA_SABHA",
+  "combo": "17,0,3017184,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a023,25,24,001.20",
+      "\u00a023.25 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a016,31,93,927.00",
+      "\u00a016.32 Crore"
+    ],
+    "Works Recommended": [
+      "465",
+      "\u00a019,95,43,815.00",
+      "\u00a019.95 Crore"
+    ],
+    "Works Completed": [
+      "150",
+      "\u00a08,11,23,339.00",
+      "\u00a08.11 Crore"
+    ],
+    "Works Sanctioned": [
+      "326",
+      "\u00a016,96,82,865.00",
+      "\u00a016.97 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

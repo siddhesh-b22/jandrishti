@@ -1,0 +1,42 @@
+{
+  "state_id": 1,
+  "state_name": "Punjab",
+  "house": "RAJYA_SABHA",
+  "combo": "1,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a01,35,69,19,670.91",
+      "\u00a0135.69 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a057,88,03,407.67",
+      "\u00a057.88 Crore"
+    ],
+    "Works Recommended": [
+      "920",
+      "\u00a085,38,28,953.26",
+      "\u00a085.38 Crore"
+    ],
+    "Works Completed": [
+      "486",
+      "\u00a032,32,76,115.26",
+      "\u00a032.33 Crore"
+    ],
+    "Works Sanctioned": [
+      "845",
+      "\u00a078,17,06,149.26",
+      "\u00a078.17 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "4",
+      "\u00a04,00,00,000.00",
+      "\u00a04.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

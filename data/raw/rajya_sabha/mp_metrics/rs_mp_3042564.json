@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3042564,
+  "caption": "Shri Praful Patel (2024-30)",
+  "state_id": 21,
+  "state_name": "Maharashtra",
+  "house": "RAJYA_SABHA",
+  "combo": "21,0,3042564,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a02,53,40,576.00",
+      "\u00a02.53 Crore"
+    ],
+    "Works Recommended": [
+      "116",
+      "\u00a07,95,19,538.00",
+      "\u00a07.95 Crore"
+    ],
+    "Works Completed": [
+      "22",
+      "\u00a01,56,64,898.00",
+      "\u00a01.57 Crore"
+    ],
+    "Works Sanctioned": [
+      "57",
+      "\u00a03,84,04,521.00",
+      "\u00a03.84 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

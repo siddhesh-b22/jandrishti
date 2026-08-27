@@ -1,0 +1,42 @@
+{
+  "state_id": 30,
+  "state_name": "Tamil Nadu",
+  "house": "RAJYA_SABHA",
+  "combo": "30,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a02,31,25,50,547.74",
+      "\u00a0231.26 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a098,03,36,471.00",
+      "\u00a098.03 Crore"
+    ],
+    "Works Recommended": [
+      "1201",
+      "\u00a01,42,43,35,426.00",
+      "\u00a0142.43 Crore"
+    ],
+    "Works Completed": [
+      "720",
+      "\u00a077,91,48,762.00",
+      "\u00a077.91 Crore"
+    ],
+    "Works Sanctioned": [
+      "936",
+      "\u00a01,11,83,87,426.00",
+      "\u00a0111.84 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

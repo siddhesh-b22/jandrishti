@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017264,
+  "caption": "Shri Imran Pratapgarhi (2022-28)",
+  "state_id": 21,
+  "state_name": "Maharashtra",
+  "house": "RAJYA_SABHA",
+  "combo": "21,0,3017264,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a019,60,00,000.00",
+      "\u00a019.60 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a010,27,38,277.00",
+      "\u00a010.27 Crore"
+    ],
+    "Works Recommended": [
+      "108",
+      "\u00a014,29,59,046.00",
+      "\u00a014.30 Crore"
+    ],
+    "Works Completed": [
+      "54",
+      "\u00a05,29,60,406.00",
+      "\u00a05.30 Crore"
+    ],
+    "Works Sanctioned": [
+      "82",
+      "\u00a011,44,59,046.00",
+      "\u00a011.45 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

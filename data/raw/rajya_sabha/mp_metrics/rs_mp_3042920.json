@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3042920,
+  "caption": "Shri Sanjay Seth (2024-30)",
+  "state_id": 33,
+  "state_name": "Uttar Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "33,0,3042920,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a05,63,57,801.00",
+      "\u00a05.64 Crore"
+    ],
+    "Works Recommended": [
+      "59",
+      "\u00a08,55,20,963.00",
+      "\u00a08.55 Crore"
+    ],
+    "Works Completed": [
+      "19",
+      "\u00a02,63,42,670.00",
+      "\u00a02.63 Crore"
+    ],
+    "Works Sanctioned": [
+      "49",
+      "\u00a06,91,74,963.00",
+      "\u00a06.92 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

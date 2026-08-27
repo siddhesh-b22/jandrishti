@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017289,
+  "caption": "Shri Pramod Tiwari (2022-28)",
+  "state_id": 28,
+  "state_name": "Rajasthan",
+  "house": "RAJYA_SABHA",
+  "combo": "28,0,3017289,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a019,60,63,957.11",
+      "\u00a019.61 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a010,06,49,660.00",
+      "\u00a010.06 Crore"
+    ],
+    "Works Recommended": [
+      "130",
+      "\u00a013,68,41,398.00",
+      "\u00a013.68 Crore"
+    ],
+    "Works Completed": [
+      "64",
+      "\u00a06,61,18,305.00",
+      "\u00a06.61 Crore"
+    ],
+    "Works Sanctioned": [
+      "119",
+      "\u00a012,82,16,398.00",
+      "\u00a012.82 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "state_id": 21,
+  "state_name": "Maharashtra",
+  "house": "RAJYA_SABHA",
+  "combo": "21,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a02,18,05,11,557.33",
+      "\u00a0218.05 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a052,93,46,359.00",
+      "\u00a052.93 Crore"
+    ],
+    "Works Recommended": [
+      "1007",
+      "\u00a01,22,03,73,240.00",
+      "\u00a0122.04 Crore"
+    ],
+    "Works Completed": [
+      "253",
+      "\u00a026,63,45,764.00",
+      "\u00a026.63 Crore"
+    ],
+    "Works Sanctioned": [
+      "537",
+      "\u00a072,45,33,723.00",
+      "\u00a072.45 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

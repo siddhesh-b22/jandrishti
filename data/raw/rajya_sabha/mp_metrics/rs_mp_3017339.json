@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017339,
+  "caption": "Shri Neeraj Shekhar (2020-26)",
+  "state_id": 33,
+  "state_name": "Uttar Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "33,0,3017339,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a023,64,83,662.11",
+      "\u00a023.65 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a09,02,66,672.00",
+      "\u00a09.03 Crore"
+    ],
+    "Works Recommended": [
+      "227",
+      "\u00a014,70,23,319.00",
+      "\u00a014.70 Crore"
+    ],
+    "Works Completed": [
+      "41",
+      "\u00a04,78,14,319.00",
+      "\u00a04.78 Crore"
+    ],
+    "Works Sanctioned": [
+      "93",
+      "\u00a09,51,13,319.00",
+      "\u00a09.51 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

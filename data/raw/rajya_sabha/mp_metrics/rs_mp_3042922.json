@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3042922,
+  "caption": "Shri Harsh Mahajan (2024-30)",
+  "state_id": 15,
+  "state_name": "Himachal Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "15,0,3042922,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a07,49,31,105.00",
+      "\u00a07.49 Crore"
+    ],
+    "Works Recommended": [
+      "456",
+      "\u00a011,84,44,772.00",
+      "\u00a011.84 Crore"
+    ],
+    "Works Completed": [
+      "152",
+      "\u00a03,83,20,017.00",
+      "\u00a03.83 Crore"
+    ],
+    "Works Sanctioned": [
+      "410",
+      "\u00a010,79,44,772.00",
+      "\u00a010.79 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

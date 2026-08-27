@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3019257,
+  "caption": "Smt. P. T. Usha (2022-28)",
+  "state_id": 36,
+  "state_name": "Kerala",
+  "house": "RAJYA_SABHA",
+  "combo": "36,0,3019257,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a019,60,63,957.11",
+      "\u00a019.61 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a05,52,06,130.00",
+      "\u00a05.52 Crore"
+    ],
+    "Works Recommended": [
+      "122",
+      "\u00a013,86,46,464.00",
+      "\u00a013.86 Crore"
+    ],
+    "Works Completed": [
+      "39",
+      "\u00a04,08,96,464.00",
+      "\u00a04.09 Crore"
+    ],
+    "Works Sanctioned": [
+      "89",
+      "\u00a09,42,96,464.00",
+      "\u00a09.43 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "2",
+      "\u00a010,00,000.00",
+      "\u00a00.10 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

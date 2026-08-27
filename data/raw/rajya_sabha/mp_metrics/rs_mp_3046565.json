@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3046565,
+  "caption": "Shri Jagat Prakash Nadda (2024-30)",
+  "state_id": 27,
+  "state_name": "Gujarat",
+  "house": "RAJYA_SABHA",
+  "combo": "27,0,3046565,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a021,00,000.00",
+      "\u00a00.21 Crore"
+    ],
+    "Works Recommended": [
+      "74",
+      "\u00a04,93,00,000.00",
+      "\u00a04.93 Crore"
+    ],
+    "Works Completed": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Sanctioned": [
+      "34",
+      "\u00a01,65,00,000.00",
+      "\u00a01.65 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

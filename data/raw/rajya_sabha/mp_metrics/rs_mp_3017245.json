@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017245,
+  "caption": "Dr. V. Sivadasan (2021-27)",
+  "state_id": 36,
+  "state_name": "Kerala",
+  "house": "RAJYA_SABHA",
+  "combo": "36,0,3017245,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a027,67,20,323.27",
+      "\u00a027.67 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a02,48,63,346.00",
+      "\u00a02.49 Crore"
+    ],
+    "Works Recommended": [
+      "63",
+      "\u00a019,10,22,745.00",
+      "\u00a019.10 Crore"
+    ],
+    "Works Completed": [
+      "14",
+      "\u00a086,83,745.00",
+      "\u00a00.87 Crore"
+    ],
+    "Works Sanctioned": [
+      "46",
+      "\u00a010,15,92,745.00",
+      "\u00a010.16 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "1",
+      "\u00a025,00,000.00",
+      "\u00a00.25 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

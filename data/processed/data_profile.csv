@@ -1,0 +1,62 @@
+﻿dataset_name,file_type,file_size_bytes,file_size_mb,row_count,column_count,column_name,data_type,null_count,null_percentage,unique_count,sample_values,min_val,max_val,sum_val
+mplads_mp_summary_2026-08-26.csv,CSV,65885,0.0628,543,15,MP Name,str,0,0.0,543,S SUPONGMEREN JAMIR; VIJAYLAKSHMI DEVI; Smt Veena Devi ,N/A,N/A,N/A
+mplads_mp_summary_2026-08-26.csv,CSV,65885,0.0628,543,15,Constituency,str,0,0.0,539,NAGALAND; SIWAN; VAISHALI,N/A,N/A,N/A
+mplads_mp_summary_2026-08-26.csv,CSV,65885,0.0628,543,15,State,str,0,0.0,36,Nagaland; Bihar; Uttar Pradesh,N/A,N/A,N/A
+mplads_mp_summary_2026-08-26.csv,CSV,65885,0.0628,543,15,House,str,0,0.0,1,Lok Sabha,N/A,N/A,N/A
+mplads_mp_summary_2026-08-26.csv,CSV,65885,0.0628,543,15,Allocated Amount (₹),float64,0,0.0,150,147000000.0; 171821957.11; 204176957.11,0.0000,327477390.8600,83062104294.5300
+mplads_mp_summary_2026-08-26.csv,CSV,65885,0.0628,543,15,Total Expenditure (₹),float64,0,0.0,532,138150000.0; 134748616.0; 131108889.0,0.0000,184783789.0000,27191390292.4500
+mplads_mp_summary_2026-08-26.csv,CSV,65885,0.0628,543,15,Utilization %,float64,0,0.0,502,93.98; 91.67; 89.19,0.0000,93.9800,17787.4800
+mplads_mp_summary_2026-08-26.csv,CSV,65885,0.0628,543,15,Completed Works,int64,0,0.0,175,38; 95; 30,0.0000,725.0000,33746.0000
+mplads_mp_summary_2026-08-26.csv,CSV,65885,0.0628,543,15,Recommended Works,int64,0,0.0,254,18; 87; 29,0.0000,1356.0000,68872.0000
+mplads_mp_summary_2026-08-26.csv,CSV,65885,0.0628,543,15,Completion Rate %,float64,0,0.0,461,67.86; 52.2; 50.85,0.0000,96.3900,16152.8100
+mplads_mp_summary_2026-08-26.csv,CSV,65885,0.0628,543,15,Unspent Amount (₹),float64,0,0.0,534,8850000.0; 12251384.0; 15891111.0,0.0000,292768720.8600,55870714002.0800
+mplads_mp_summary_2026-08-26.csv,CSV,65885,0.0628,543,15,Transaction Count,int64,0,0.0,273,81; 142; 49,0.0000,1471.0000,82296.0000
+mplads_mp_summary_2026-08-26.csv,CSV,65885,0.0628,543,15,Successful Payments,int64,0,0.0,273,81; 120; 49,0.0000,1410.0000,78915.0000
+mplads_mp_summary_2026-08-26.csv,CSV,65885,0.0628,543,15,Pending Payments,int64,0,0.0,47,0; 22; 8,0.0000,121.0000,3381.0000
+mplads_mp_summary_2026-08-26.csv,CSV,65885,0.0628,543,15,Average Rating,float64,539,99.26,2,1.0; 5.0,1.0000,5.0000,8.0000
+mplads_recommended_works_2026-08-26.csv,CSV,17782809,16.959,68872,11,Work ID,int64,0,0.0,68872,175556; 175559; 175561,817.0000,306831.0000,16558506346.0000
+mplads_recommended_works_2026-08-26.csv,CSV,17782809,16.959,68872,11,Work Description,str,33,0.05,63469,"Repair and renovation of road from CPWD complex, Ranchi Tikrey Dairyfarm to Fisheries Quarter, Port Blair; Extension of Multipurpse Hall at Nayagaon near Juvenile Home, Port Blair; Construction of CC Motorable road between Govt. Primary School and Shri SK Singh house at Garacharma, Ward No.18, Port Blair",N/A,N/A,N/A
+mplads_recommended_works_2026-08-26.csv,CSV,17782809,16.959,68872,11,Category,str,0,0.0,4,Repair and Renovation; Normal/Others; Trust and Society,N/A,N/A,N/A
+mplads_recommended_works_2026-08-26.csv,CSV,17782809,16.959,68872,11,MP Name,str,0,0.0,538,BISHNU PADA RAY; Putta Mahesh Kumar; Balashowry Vallabbhaneni,N/A,N/A,N/A
+mplads_recommended_works_2026-08-26.csv,CSV,17782809,16.959,68872,11,Constituency,str,0,0.0,535,ANDAMAN AND NICOBAR ISLANDS; ELURU; MACHILIPATNAM,N/A,N/A,N/A
+mplads_recommended_works_2026-08-26.csv,CSV,17782809,16.959,68872,11,State,str,0,0.0,36,Andaman And Nicobar Islands; Andhra Pradesh; Arunachal Pradesh,N/A,N/A,N/A
+mplads_recommended_works_2026-08-26.csv,CSV,17782809,16.959,68872,11,House,str,0,0.0,1,Lok Sabha,N/A,N/A,N/A
+mplads_recommended_works_2026-08-26.csv,CSV,17782809,16.959,68872,11,Recommended Amount (₹),float64,0,0.0,5267,4947034.0; 976436.0; 1498887.0,1.0000,99965000.0000,39681479028.5400
+mplads_recommended_works_2026-08-26.csv,CSV,17782809,16.959,68872,11,Recommendation Date,str,0,0.0,734,2025-02-14T00:00:00.000Z; 2025-03-18T00:00:00.000Z; 2025-03-28T00:00:00.000Z,N/A,N/A,N/A
+mplads_recommended_works_2026-08-26.csv,CSV,17782809,16.959,68872,11,Has Images,bool,0,0.0,2,False; True,N/A,N/A,N/A
+mplads_recommended_works_2026-08-26.csv,CSV,17782809,16.959,68872,11,IDA,str,0,0.0,749,SOUTH ANDAMANS(Implementing District Authority(SA)); NORTH AND MIDDLE ANDAMAN(Implementing District Authority(N&MA)); NICOBARS(DEPUTY COMMISSIONER NICOBAR_IDA),N/A,N/A,N/A
+mplads_completed_works_2026-08-26.csv,CSV,8693682,8.2909,33746,12,Work ID,int64,0,0.0,33746,134703; 135593; 135595,133166.0000,292762.0000,6323361434.0000
+mplads_completed_works_2026-08-26.csv,CSV,8693682,8.2909,33746,12,Work Description,str,79,0.23,30372,Upgradation of Road from Madhavaram Village to Company Indlu of Madhavaram GP; Construction of CC Road from Amudala Village to AmudalaHW in Amudala Village&GP of Palasamudram MAndal of GD Nellore Constituency; Construction of CC road from Amudala Village to Amudala ST colony in Amudala Village & GP of Palasamudram Mandal of GD Nelloore Constituency,N/A,N/A,N/A
+mplads_completed_works_2026-08-26.csv,CSV,8693682,8.2909,33746,12,Category,str,0,0.0,3,Normal/Others; Repair and Renovation; Trust and Society,N/A,N/A,N/A
+mplads_completed_works_2026-08-26.csv,CSV,8693682,8.2909,33746,12,MP Name,str,0,0.0,501,DAGGUMALLA PRASADA RAO; Y S Avinash Reddy; Maddila Gurumoorthy,N/A,N/A,N/A
+mplads_completed_works_2026-08-26.csv,CSV,8693682,8.2909,33746,12,Constituency,str,0,0.0,498,CHITTOOR; KADAPA; TIRUPATI,N/A,N/A,N/A
+mplads_completed_works_2026-08-26.csv,CSV,8693682,8.2909,33746,12,State,str,0,0.0,33,Andhra Pradesh; Arunachal Pradesh; Assam,N/A,N/A,N/A
+mplads_completed_works_2026-08-26.csv,CSV,8693682,8.2909,33746,12,House,str,0,0.0,1,Lok Sabha,N/A,N/A,N/A
+mplads_completed_works_2026-08-26.csv,CSV,8693682,8.2909,33746,12,Final Amount (₹),float64,0,0.0,12637,499993.0; 448722.0; 448970.0,8448.0000,46470400.0000,16260632748.4000
+mplads_completed_works_2026-08-26.csv,CSV,8693682,8.2909,33746,12,Completed Date,str,0,0.0,588,2025-01-31T00:00:00.000Z; 2024-12-05T00:00:00.000Z; 2025-08-20T00:00:00.000Z,N/A,N/A,N/A
+mplads_completed_works_2026-08-26.csv,CSV,8693682,8.2909,33746,12,Has Images,bool,0,0.0,2,True; False,N/A,N/A,N/A
+mplads_completed_works_2026-08-26.csv,CSV,8693682,8.2909,33746,12,Average Rating,float64,33742,99.99,2,5.0; 1.0,1.0000,5.0000,8.0000
+mplads_completed_works_2026-08-26.csv,CSV,8693682,8.2909,33746,12,IDA,str,0,0.0,667,CHITTOOR(DISTRICT COLLECTOR CHITTOOR_IDA); Y.S.R. Kadapa(DISTRICT COLLECTOR CUDDAPAH_IDA); Tirupati(DISTRICT COLLECTOR TIRUPATI_IDA),N/A,N/A,N/A
+mplads_expenditures_2026-08-26.csv,CSV,19400732,18.502,82296,10,MP Name,str,0,0.0,531,SUNIL BOSE; ATUL GARG; TARIQ ANWAR,N/A,N/A,N/A
+mplads_expenditures_2026-08-26.csv,CSV,19400732,18.502,82296,10,Constituency,str,0,0.0,528,CHAMARAJANAGAR; GHAZIABAD; KATIHAR,N/A,N/A,N/A
+mplads_expenditures_2026-08-26.csv,CSV,19400732,18.502,82296,10,State,str,0,0.0,35,Karnataka; Uttar Pradesh; Bihar,N/A,N/A,N/A
+mplads_expenditures_2026-08-26.csv,CSV,19400732,18.502,82296,10,House,str,0,0.0,1,Lok Sabha,N/A,N/A,N/A
+mplads_expenditures_2026-08-26.csv,CSV,19400732,18.502,82296,10,Work Description,str,0,0.0,110,Construction of footpaths and pedestrian ways; Construction of boundary walls of existing public and community buildings; Construction of buildings for community cultural activities,N/A,N/A,N/A
+mplads_expenditures_2026-08-26.csv,CSV,19400732,18.502,82296,10,Vendor,str,0,0.0,23111,KRIDL BHUSIRI ACCOUNT WORKS; DARSH BUILDCON; R K Construction,N/A,N/A,N/A
+mplads_expenditures_2026-08-26.csv,CSV,19400732,18.502,82296,10,IDA,str,0,0.0,736,Chamarajanagar(DEPUTY COMMISSIONER CHAMARAJNAGAR_IDA); GHAZIABAD(DISTRICT MAGISTRAE GHAZIABAD_IDA); KATIHAR(DISTRICT PLANNING OFFICER KATIHAR_IDA),N/A,N/A,N/A
+mplads_expenditures_2026-08-26.csv,CSV,19400732,18.502,82296,10,Expenditure Amount (₹),float64,0,0.0,30159,250000.0; 125000.0; 799146.0,1.0000,32562250.0000,27191390292.4500
+mplads_expenditures_2026-08-26.csv,CSV,19400732,18.502,82296,10,Expenditure Date,str,0,0.0,680,2026-08-20T00:00:00.000Z; 2026-08-21T00:00:00.000Z; 2026-08-24T00:00:00.000Z,N/A,N/A,N/A
+mplads_expenditures_2026-08-26.csv,CSV,19400732,18.502,82296,10,Payment Status,str,0,0.0,2,Payment In-Progress; Payment Success,N/A,N/A,N/A
+json_2026-08-26.json,JSON,584,0.0006,1,13,totalAllocated,float,0,0.0,1,83062104294.53,83062104294.53,83062104294.53,83062104294.53
+json_2026-08-26.json,JSON,584,0.0006,1,13,totalExpenditure,float,0,0.0,1,27191390292.45,27191390292.45,27191390292.45,27191390292.45
+json_2026-08-26.json,JSON,584,0.0006,1,13,utilizationPercentage,float,0,0.0,1,32.736216501368695,32.736216501368695,32.736216501368695,32.736216501368695
+json_2026-08-26.json,JSON,584,0.0006,1,13,totalMPs,int,0,0.0,1,543,543,543,543
+json_2026-08-26.json,JSON,584,0.0006,1,13,totalWorksCompleted,int,0,0.0,1,33746,33746,33746,33746
+json_2026-08-26.json,JSON,584,0.0006,1,13,totalWorksRecommended,int,0,0.0,1,68872,68872,68872,68872
+json_2026-08-26.json,JSON,584,0.0006,1,13,completionRate,float,0,0.0,1,48.99814147984667,48.99814147984667,48.99814147984667,48.99814147984667
+json_2026-08-26.json,JSON,584,0.0006,1,13,totalTransactions,int,0,0.0,1,82296,82296,82296,82296
+json_2026-08-26.json,JSON,584,0.0006,1,13,avgAllocation,float,0,0.0,1,152968884.52031308,152968884.52031308,152968884.52031308,152968884.52031308
+json_2026-08-26.json,JSON,584,0.0006,1,13,pendingWorks,int,0,0.0,1,35126,35126,35126,35126
+json_2026-08-26.json,JSON,584,0.0006,1,13,paymentGap,float,0,0.0,1,40.19933304802384,40.19933304802384,40.19933304802384,40.19933304802384
+json_2026-08-26.json,JSON,584,0.0006,1,13,completedWorksValue,float,0,0.0,1,16260632748.4,16260632748.4,16260632748.4,16260632748.4
+json_2026-08-26.json,JSON,584,0.0006,1,13,inProgressPayments,float,0,0.0,1,10930757544.05,10930757544.05,10930757544.05,10930757544.05

@@ -1,0 +1,42 @@
+{
+  "state_id": 11,
+  "state_name": "Delhi",
+  "house": "RAJYA_SABHA",
+  "combo": "11,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a056,58,03,496.11",
+      "\u00a056.58 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a03,67,07,182.00",
+      "\u00a03.67 Crore"
+    ],
+    "Works Recommended": [
+      "168",
+      "\u00a025,70,69,922.00",
+      "\u00a025.71 Crore"
+    ],
+    "Works Completed": [
+      "28",
+      "\u00a03,45,96,236.00",
+      "\u00a03.46 Crore"
+    ],
+    "Works Sanctioned": [
+      "110",
+      "\u00a013,15,99,179.00",
+      "\u00a013.16 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "3",
+      "\u00a02,00,00,000.00",
+      "\u00a02.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

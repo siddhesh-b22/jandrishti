@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017197,
+  "caption": "Dr. Faiyaz Ahmad (2022-28)",
+  "state_id": 6,
+  "state_name": "Bihar",
+  "house": "RAJYA_SABHA",
+  "combo": "6,0,3017197,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a023,52,63,957.11",
+      "\u00a023.53 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a018,11,86,677.00",
+      "\u00a018.12 Crore"
+    ],
+    "Works Recommended": [
+      "189",
+      "\u00a022,30,29,994.00",
+      "\u00a022.30 Crore"
+    ],
+    "Works Completed": [
+      "130",
+      "\u00a014,52,55,894.00",
+      "\u00a014.53 Crore"
+    ],
+    "Works Sanctioned": [
+      "181",
+      "\u00a021,65,34,994.00",
+      "\u00a021.65 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

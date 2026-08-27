@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3046257,
+  "caption": "Shri P. P. Suneer (2024-30)",
+  "state_id": 36,
+  "state_name": "Kerala",
+  "house": "RAJYA_SABHA",
+  "combo": "36,0,3046257,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a012,25,00,000.00",
+      "\u00a012.25 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a01,84,39,441.00",
+      "\u00a01.84 Crore"
+    ],
+    "Works Recommended": [
+      "88",
+      "\u00a08,07,68,775.00",
+      "\u00a08.08 Crore"
+    ],
+    "Works Completed": [
+      "19",
+      "\u00a01,06,62,525.00",
+      "\u00a01.07 Crore"
+    ],
+    "Works Sanctioned": [
+      "46",
+      "\u00a04,16,01,275.00",
+      "\u00a04.16 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "2",
+      "\u00a01,00,00,000.00",
+      "\u00a01.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

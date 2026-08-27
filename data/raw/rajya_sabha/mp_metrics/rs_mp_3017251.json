@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017251,
+  "caption": "Shri Jose K. Mani (2024-30)",
+  "state_id": 36,
+  "state_name": "Kerala",
+  "house": "RAJYA_SABHA",
+  "combo": "36,0,3017251,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a012,25,00,000.00",
+      "\u00a012.25 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a01,93,84,930.00",
+      "\u00a01.94 Crore"
+    ],
+    "Works Recommended": [
+      "180",
+      "\u00a09,21,79,774.00",
+      "\u00a09.22 Crore"
+    ],
+    "Works Completed": [
+      "26",
+      "\u00a01,03,77,474.00",
+      "\u00a01.04 Crore"
+    ],
+    "Works Sanctioned": [
+      "100",
+      "\u00a04,44,09,774.00",
+      "\u00a04.44 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "1",
+      "\u00a025,00,000.00",
+      "\u00a00.25 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

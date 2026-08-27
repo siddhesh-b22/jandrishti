@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017263,
+  "caption": "Shri Dhananjay Bhimrao Mahadik (2022-28)",
+  "state_id": 21,
+  "state_name": "Maharashtra",
+  "house": "RAJYA_SABHA",
+  "combo": "21,0,3017263,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a022,03,83,643.11",
+      "\u00a022.04 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a04,84,15,797.00",
+      "\u00a04.84 Crore"
+    ],
+    "Works Recommended": [
+      "150",
+      "\u00a011,81,44,252.00",
+      "\u00a011.81 Crore"
+    ],
+    "Works Completed": [
+      "32",
+      "\u00a03,96,88,752.00",
+      "\u00a03.97 Crore"
+    ],
+    "Works Sanctioned": [
+      "51",
+      "\u00a05,46,99,752.00",
+      "\u00a05.47 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

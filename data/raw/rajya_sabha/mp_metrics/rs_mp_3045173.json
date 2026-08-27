@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3045173,
+  "caption": "Dr. Sarfraz Ahmad (2024-30)",
+  "state_id": 17,
+  "state_name": "Jharkhand",
+  "house": "RAJYA_SABHA",
+  "combo": "17,0,3045173,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a017,85,64,551.09",
+      "\u00a017.86 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a08,25,43,604.00",
+      "\u00a08.25 Crore"
+    ],
+    "Works Recommended": [
+      "288",
+      "\u00a012,47,15,214.00",
+      "\u00a012.47 Crore"
+    ],
+    "Works Completed": [
+      "20",
+      "\u00a02,03,43,114.00",
+      "\u00a02.03 Crore"
+    ],
+    "Works Sanctioned": [
+      "238",
+      "\u00a010,50,65,214.00",
+      "\u00a010.51 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

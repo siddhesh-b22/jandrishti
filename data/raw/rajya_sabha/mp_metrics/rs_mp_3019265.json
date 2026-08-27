@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3019265,
+  "caption": "Shri Naresh Bansal (2020-26)",
+  "state_id": 32,
+  "state_name": "Uttarakhand",
+  "house": "RAJYA_SABHA",
+  "combo": "32,0,3019265,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a022,20,43,184.71",
+      "\u00a022.20 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a012,43,16,327.00",
+      "\u00a012.43 Crore"
+    ],
+    "Works Recommended": [
+      "233",
+      "\u00a021,34,50,729.00",
+      "\u00a021.35 Crore"
+    ],
+    "Works Completed": [
+      "106",
+      "\u00a010,00,88,150.00",
+      "\u00a010.01 Crore"
+    ],
+    "Works Sanctioned": [
+      "209",
+      "\u00a018,89,36,257.00",
+      "\u00a018.89 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

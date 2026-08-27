@@ -1,0 +1,42 @@
+{
+  "state_id": 32,
+  "state_name": "Uttarakhand",
+  "house": "RAJYA_SABHA",
+  "combo": "32,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a056,98,73,590.51",
+      "\u00a056.99 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a021,28,79,324.00",
+      "\u00a021.29 Crore"
+    ],
+    "Works Recommended": [
+      "541",
+      "\u00a046,91,96,882.00",
+      "\u00a046.92 Crore"
+    ],
+    "Works Completed": [
+      "177",
+      "\u00a015,67,82,137.00",
+      "\u00a015.68 Crore"
+    ],
+    "Works Sanctioned": [
+      "430",
+      "\u00a037,15,09,981.00",
+      "\u00a037.15 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

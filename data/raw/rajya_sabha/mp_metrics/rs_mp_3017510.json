@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017510,
+  "caption": "Shri Raghav Chadha (2022-28)",
+  "state_id": 1,
+  "state_name": "Punjab",
+  "house": "RAJYA_SABHA",
+  "combo": "1,0,3017510,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a023,72,29,207.25",
+      "\u00a023.72 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a03,45,58,312.00",
+      "\u00a03.46 Crore"
+    ],
+    "Works Recommended": [
+      "6",
+      "\u00a04,45,86,378.00",
+      "\u00a04.46 Crore"
+    ],
+    "Works Completed": [
+      "4",
+      "\u00a070,86,378.00",
+      "\u00a00.71 Crore"
+    ],
+    "Works Sanctioned": [
+      "6",
+      "\u00a04,45,86,378.00",
+      "\u00a04.46 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

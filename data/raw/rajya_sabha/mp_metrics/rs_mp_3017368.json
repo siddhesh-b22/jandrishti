@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017368,
+  "caption": "Shri Ashwini Vaishnaw (2024-30)",
+  "state_id": 25,
+  "state_name": "Odisha",
+  "house": "RAJYA_SABHA",
+  "combo": "25,0,3017368,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a026,55,63,957.11",
+      "\u00a026.56 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a01,45,65,426.00",
+      "\u00a01.46 Crore"
+    ],
+    "Works Recommended": [
+      "17",
+      "\u00a013,46,19,600.00",
+      "\u00a013.46 Crore"
+    ],
+    "Works Completed": [
+      "4",
+      "\u00a055,00,000.00",
+      "\u00a00.55 Crore"
+    ],
+    "Works Sanctioned": [
+      "12",
+      "\u00a09,60,69,600.00",
+      "\u00a09.61 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

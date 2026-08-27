@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3025895,
+  "caption": "Shri Babubhai Jesangbhai Desai (2023-29)",
+  "state_id": 27,
+  "state_name": "Gujarat",
+  "house": "RAJYA_SABHA",
+  "combo": "27,0,3025895,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a017,15,00,000.00",
+      "\u00a017.15 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a08,49,30,425.00",
+      "\u00a08.49 Crore"
+    ],
+    "Works Recommended": [
+      "265",
+      "\u00a014,25,82,823.00",
+      "\u00a014.26 Crore"
+    ],
+    "Works Completed": [
+      "137",
+      "\u00a06,81,15,523.00",
+      "\u00a06.81 Crore"
+    ],
+    "Works Sanctioned": [
+      "210",
+      "\u00a010,98,32,823.00",
+      "\u00a010.98 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

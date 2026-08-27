@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017290,
+  "caption": "Shri Randeep Singh Surjewala (2022-28)",
+  "state_id": 28,
+  "state_name": "Rajasthan",
+  "house": "RAJYA_SABHA",
+  "combo": "28,0,3017290,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a019,60,63,957.11",
+      "\u00a019.61 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a06,08,81,596.00",
+      "\u00a06.09 Crore"
+    ],
+    "Works Recommended": [
+      "146",
+      "\u00a013,35,63,665.00",
+      "\u00a013.36 Crore"
+    ],
+    "Works Completed": [
+      "55",
+      "\u00a04,21,37,589.00",
+      "\u00a04.21 Crore"
+    ],
+    "Works Sanctioned": [
+      "121",
+      "\u00a010,06,13,665.00",
+      "\u00a010.06 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

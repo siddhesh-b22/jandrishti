@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3023812,
+  "caption": "Shri Nagendra Ray (2023-29)",
+  "state_id": 34,
+  "state_name": "West Bengal",
+  "house": "RAJYA_SABHA",
+  "combo": "34,0,3023812,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a017,15,00,000.00",
+      "\u00a017.15 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a08,20,24,946.00",
+      "\u00a08.20 Crore"
+    ],
+    "Works Recommended": [
+      "22",
+      "\u00a012,24,35,034.68",
+      "\u00a012.24 Crore"
+    ],
+    "Works Completed": [
+      "2",
+      "\u00a02,37,75,426.00",
+      "\u00a02.38 Crore"
+    ],
+    "Works Sanctioned": [
+      "21",
+      "\u00a011,54,35,034.68",
+      "\u00a011.54 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

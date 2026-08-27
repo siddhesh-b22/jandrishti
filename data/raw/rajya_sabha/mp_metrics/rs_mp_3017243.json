@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017243,
+  "caption": "Smt. Nirmala Sitharaman (2022-28)",
+  "state_id": 18,
+  "state_name": "Karnataka",
+  "house": "RAJYA_SABHA",
+  "combo": "18,0,3017243,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a021,59,72,051.45",
+      "\u00a021.60 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a09,13,94,660.00",
+      "\u00a09.14 Crore"
+    ],
+    "Works Recommended": [
+      "23",
+      "\u00a017,26,86,000.00",
+      "\u00a017.27 Crore"
+    ],
+    "Works Completed": [
+      "8",
+      "\u00a06,66,86,000.00",
+      "\u00a06.67 Crore"
+    ],
+    "Works Sanctioned": [
+      "17",
+      "\u00a016,66,86,000.00",
+      "\u00a016.67 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017255,
+  "caption": "Dr. L. Murugan (2024-30)",
+  "state_id": 20,
+  "state_name": "Madhya Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "20,0,3017255,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a03,86,99,774.00",
+      "\u00a03.87 Crore"
+    ],
+    "Works Recommended": [
+      "38",
+      "\u00a08,34,49,574.00",
+      "\u00a08.34 Crore"
+    ],
+    "Works Completed": [
+      "6",
+      "\u00a076,99,574.00",
+      "\u00a00.77 Crore"
+    ],
+    "Works Sanctioned": [
+      "28",
+      "\u00a06,29,49,574.00",
+      "\u00a06.29 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

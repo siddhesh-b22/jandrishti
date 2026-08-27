@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3019262,
+  "caption": "Shri Baburam Nishad (2022-28)",
+  "state_id": 33,
+  "state_name": "Uttar Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "33,0,3019262,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a019,60,63,957.11",
+      "\u00a019.61 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a013,60,82,109.32",
+      "\u00a013.61 Crore"
+    ],
+    "Works Recommended": [
+      "649",
+      "\u00a018,74,51,684.30",
+      "\u00a018.75 Crore"
+    ],
+    "Works Completed": [
+      "436",
+      "\u00a011,36,21,860.32",
+      "\u00a011.36 Crore"
+    ],
+    "Works Sanctioned": [
+      "493",
+      "\u00a014,47,00,487.32",
+      "\u00a014.47 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

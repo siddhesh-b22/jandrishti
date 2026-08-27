@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3042565,
+  "caption": "Smt. Sonia Gandhi (2024-30)",
+  "state_id": 28,
+  "state_name": "Rajasthan",
+  "house": "RAJYA_SABHA",
+  "combo": "28,0,3042565,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a07,36,50,240.00",
+      "\u00a07.37 Crore"
+    ],
+    "Works Recommended": [
+      "128",
+      "\u00a012,58,86,435.00",
+      "\u00a012.59 Crore"
+    ],
+    "Works Completed": [
+      "46",
+      "\u00a04,27,33,781.00",
+      "\u00a04.27 Crore"
+    ],
+    "Works Sanctioned": [
+      "103",
+      "\u00a010,01,86,435.00",
+      "\u00a010.02 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

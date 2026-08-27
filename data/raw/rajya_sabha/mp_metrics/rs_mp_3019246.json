@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3019246,
+  "caption": "Shri Rwngwra Narzary (2022-28)",
+  "state_id": 5,
+  "state_name": "Assam",
+  "house": "RAJYA_SABHA",
+  "combo": "5,0,3019246,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a022,05,63,957.11",
+      "\u00a022.06 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a011,80,06,237.00",
+      "\u00a011.80 Crore"
+    ],
+    "Works Recommended": [
+      "166",
+      "\u00a020,38,69,662.00",
+      "\u00a020.39 Crore"
+    ],
+    "Works Completed": [
+      "16",
+      "\u00a01,81,69,662.00",
+      "\u00a01.82 Crore"
+    ],
+    "Works Sanctioned": [
+      "122",
+      "\u00a014,29,69,662.00",
+      "\u00a014.30 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3043966,
+  "caption": "Shri Banshilal Gurjar (2024-30)",
+  "state_id": 20,
+  "state_name": "Madhya Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "20,0,3043966,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a04,14,24,435.00",
+      "\u00a04.14 Crore"
+    ],
+    "Works Recommended": [
+      "81",
+      "\u00a06,09,75,222.00",
+      "\u00a06.10 Crore"
+    ],
+    "Works Completed": [
+      "10",
+      "\u00a01,05,75,000.00",
+      "\u00a01.06 Crore"
+    ],
+    "Works Sanctioned": [
+      "50",
+      "\u00a04,44,54,462.00",
+      "\u00a04.45 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

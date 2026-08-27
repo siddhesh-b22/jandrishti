@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3045962,
+  "caption": "Shri Mayankkumar Nayak (2024-30)",
+  "state_id": 27,
+  "state_name": "Gujarat",
+  "house": "RAJYA_SABHA",
+  "combo": "27,0,3045962,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a01,95,60,868.00",
+      "\u00a01.96 Crore"
+    ],
+    "Works Recommended": [
+      "171",
+      "\u00a09,23,56,983.00",
+      "\u00a09.24 Crore"
+    ],
+    "Works Completed": [
+      "21",
+      "\u00a096,98,823.00",
+      "\u00a00.97 Crore"
+    ],
+    "Works Sanctioned": [
+      "119",
+      "\u00a05,91,91,983.00",
+      "\u00a05.92 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

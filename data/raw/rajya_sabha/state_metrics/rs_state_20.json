@@ -1,0 +1,42 @@
+{
+  "state_id": 20,
+  "state_name": "Madhya Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "20,0,0,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a01,49,57,46,435.57",
+      "\u00a0149.57 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a061,74,01,011.12",
+      "\u00a061.74 Crore"
+    ],
+    "Works Recommended": [
+      "1360",
+      "\u00a090,59,26,547.00",
+      "\u00a090.59 Crore"
+    ],
+    "Works Completed": [
+      "379",
+      "\u00a025,36,25,630.00",
+      "\u00a025.36 Crore"
+    ],
+    "Works Sanctioned": [
+      "1099",
+      "\u00a076,82,35,552.00",
+      "\u00a076.82 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

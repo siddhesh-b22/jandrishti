@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3023700,
+  "caption": "Dr. Dinesh Sharma (2023-26)",
+  "state_id": 33,
+  "state_name": "Uttar Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "33,0,3023700,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a05,70,84,177.00",
+      "\u00a05.71 Crore"
+    ],
+    "Works Recommended": [
+      "91",
+      "\u00a012,29,78,044.00",
+      "\u00a012.30 Crore"
+    ],
+    "Works Completed": [
+      "2",
+      "\u00a020,02,273.00",
+      "\u00a00.20 Crore"
+    ],
+    "Works Sanctioned": [
+      "66",
+      "\u00a08,72,42,544.00",
+      "\u00a08.72 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description"
+	content="The Members of Parliament Local Area Development Scheme (MPLADS) is a Central Sector Scheme fully funded by the Government of India and was launched on 23 December 1993.Its primary focus is on creating durable community assets and improving essential public services, including healthcare, sanitation, education, and drinking water infrastructure.">
+<meta name="keywords"
+	content="MPLADS, MPLADS e-SAKSHI, e-SAKSHI, Allocated Limit, Consituency Wise Data, Government Data, Indian Public Data, Citizen Dashboard, Public Spending, MP Profiles, MPLADS Dashboard">
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="MPLADS">
+<meta property="og:description"
+	content="MPLADS, mplads, MPLADS Development, MPLADS Scheme, Allocated Limit, Consituency Wise Data, Government Data, Indian Public Data, Citizen Dashboard, Public Spending, MP Profiles, MPLADS Dashboard">
+
+<!-- Twitter -->
+<meta name="twitter:title" content="MPLADS">
+<meta name="twitter:description"
+	content="MPLADS, Allocated Limit, Consituency Wise Data, Government Data, Indian Public Data, Citizen Dashboard, Public Spending, MP Profiles, MPLADS Dashboard">
+<!-- Bootstrap CSS -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+	crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src='https://code.jquery.com/jquery-3.7.0.js'></script>
+<script type="module" src="/libs/simplegrid/landingpage.js"></script>
+<link rel="stylesheet" href="../../../../style/css/landingpage.css">
+
+<link
+	href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap"
+	rel="stylesheet">
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" />
+<link
+	href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap5.css" />
+<title>MPLADS</title>
+<script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
+<link
+	href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+	rel="stylesheet" />
+</head>
+<body oncontextmenu="return false;">
+	<!-- <nav-section style="height:13vh;display:block;background:white;" class="">
+		 <nav
+        class="navbar navbar-expand-lg navbar-light navcus d-flex"
+        style="height: 10vh;"
+      >
+        <div class="container-fluid">
+          <a href="#"><img src="/zkImages/Mplads.png" class="mainlogo" /></a>
+          <button
+            class="navbar-toggler main-nav-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#mainNavBar"
+            aria-controls="mainNavBar"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse linkcus" id="mainNavBar">
+		      <ul class="navbar-nav "> 
+		        <li class="nav-item bold">
+		          <a class="nav-link active  " aria-current="page" href="#" style="color:rgb(26 147 111);"><object id="home_icon" data="/zkImages/Home.svg"></object>&nbsp;Home</a>
+		        </li>
+		         <li class="nav-item bold">
+		          <a class="nav-link active  " aria-current="page" href="/digigov/dashboard.html" target="_blank"><object data="/zkImages/Dashboard.svg"></object>&nbsp;Dashboard</a>
+		        </li>
+		        <li class="nav-item bold">
+		          <a class="nav-link active" aria-current="page" href="#" data-bs-toggle="modal" data-bs-target="#citi-login">
+		            <button class="but1" id="citi-modal">Citizen Request</button> 
+		          </a>
+		        </li>
+		        <li class="nav-item bold">
+		          <a class="nav-link active" aria-current="page" href="/digigov/Login.zul" target="_blank">
+		            <button class="but1">Login</button> 
+		          </a>
+		        </li>
+		      </ul>
+		    </div>
+		  </div>
+		</nav>
+	</nav-section> -->
+
+	<!-- MODAL FOR CITIZEN_LOGIN -->
+
+	<div class="modal fade" id="citi-login" tabindex="-1"
+		aria-labelledby="exampleModalLabel" aria-hidden="true"
+		data-bs-backdrop="static" data-bs-keyboard="false">
+
+		<div class="modal-dialog">
+			<!--  modal-xl -->
+			<div class="modal-content modified-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Citizen Request</h5>
+					<button type="button" id="x-button" style="" class="btn-close"
+						data-bs-dismiss="modal" aria-label="Close"></button>
+					<!-- <button class="btn" id="logout-button" type="button" style="color: #0199ca; border:0.4vh solid #0199ca; font-size: 1.5vw; font-weight: 500; background: white; display:none;">Logout</button> -->
+					<div id="logout-button" style="display: none;">
+						<label>Logout</label>
+						<object data="/zkImages/logout.svg"></object>
+					</div>
+				</div>
+				<div class="modal-body modified-modal">
+					<div class="logo-container" hidden>
+						<div class="round-logo"></div>
+						<label>OTP Authentication</label>
+					</div>
+					<div class="citi-form">
+						<div class="form-container container">
+							<div class="row login_title">
+								<h4>Citizen Login</h4>
+							</div>
+							<div class="row">
+								<!-- <div class="input-group mb-3"> -->
+								<!-- <span class="input-group-text"  style="font-size:2.5vw;"><i class="fa fa-mobile-phone"></i></span> -->
+								<input type="text" class="form-control" id="mobile_box"
+									placeholder="Enter mobile number" maxlength="10"
+									aria-label="Username" aria-describedby="basic-addon1">
+								<!-- </div> -->
+							</div>
+							<div class="row captcha-container">
+								<div class="col captcha-col">
+									<input type="text" id="cap-inp" placeholder="Enter Captcha" />
+									<div id="change-cap">
+										<!-- <object data="/zkImages/captcha_refresh.svg" style="height:100%;" ></object> -->
+									</div>
+									<img alt="captcha" id="cap-img" src="/zkImages/captcha.png" />
+								</div>
+							</div>
+							<div class="row">
+								<button type="submit" class="btn btn-light button1" id="get_otp">Send
+									OTP</button>
+								<!-- <div class="col">
+									
+								</div> -->
+							</div>
+						</div>
+					</div>
+					<div class="insert-otp" style="display: none;">
+						<div class="back-btn" hidden>
+							<i class="fa fa-arrow-left"></i><label>Back</label>
+						</div>
+						<div class="otp_info">
+							<object style="height: 4vw; width: 4vw;"
+								data="/zkImages/otp_check.svg"></object>
+							<!-- <label id="timer"></label> -->
+							<div class="text-msg">
+								Please enter the OTP sent to <label id="phone_number">
+							</div>
+							<div class="time-out">Kindly click on Resend for new OTP</div>
+
+							<div class="input-boxes">
+								<input type="text" id="inp1" maxlength="1"
+									onkeyup="focuson(this,inp2)" required /> <input type="text"
+									id="inp2" maxlength="1" onkeyup="focuson(this,inp3)" required />
+								<input type="text" id="inp3" maxlength="1"
+									onkeyup="focuson(this,inp4)" required /> <input type="text"
+									id="inp4" maxlength="1" onkeyup="focuson(this,inp5)" required />
+								<input type="text" id="inp5" maxlength="1"
+									onkeyup="focuson(this,inp6)" required /> <input type="text"
+									id="inp6" maxlength="1" onkeyup="focuson(this,submitOtp)"
+									required />
+							</div>
+							<div class="timer-container">
+								<label id="timer"></label>
+								<div id="resendOtp">Resend OTP</div>
+							</div>
+
+							<div class="button-grp">
+								<button class="btn btn-light" id="submitOtp">Submit</button>
+								<!-- <button class="btn btn-warning" id="resendOtp" style="display:none;">Re-send OTP</button> -->
+							</div>
+
+						</div>
+
+						<script type="text/javascript">
+							function focuson(current, next) {
+								$(next).focus();
+							}
+						</script>
+					</div>
+					<div class="main-form container">
+						<!-- USER NAVBAR -->
+						<nav class="navbar navbar-expand-lg navbar-light">
+							<div class="container-fluid">
+								<div class="collapse navbar-collapse show"
+									id="navbarSupportedContent">
+									<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+										<li class="nav-item clicked" id="raise-req"><a
+											class="nav-link active" aria-current="page" href="#">Raise
+												Request</a></li>
+										<li class="nav-item" id="track-req"><a
+											class="nav-link  linkmate" href="#">Track Request</a></li>
+										<li class="nav-item" id="review-rating"><a
+											class="nav-link  linkmate" href="#">Review/Rating</a></li>
+									</ul>
+
+								</div>
+							</div>
+						</nav>
+
+
+
+						<!-- USER NAVBAR -->
+						<div class="form-body">
+
+							<div class="row">
+								<h3>User Details</h3>
+								<div class="row-separator"></div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<div class="custom-floating">
+										<input id="name" type="text" class="form-control txt-required"
+											placeholder="Enter Your Name"> <label
+											for="floatingInput">Name</label>
+									</div>
+								</div>
+								<div class="col">
+									<div class="custom-floating">
+										<input id="email" type="email"
+											class="form-control not-required"
+											placeholder="Enter Your Email"> <label
+											for="floatingInput">Email ID</label>
+									</div>
+								</div>
+								<div class="col">
+									<div class="custom-floating">
+										<input type="tel" class="form-control" disabled
+											id="mobile_input" placeholder="Mobile No."> <label
+											for="floatingInput">Mobile No.</label>
+									</div>
+								</div>
+
+							</div>
+							<div class="consent-row">
+								<input type="checkbox" id="user-check" class="check-required">
+								<p>You may receive SMS notifications from the MPLADS
+									Division.</p>
+							</div>
+
+							<div class="row">
+								<h3>Work Details</h3>
+								<div class="row-separator"></div>
+							</div>
+
+							<div class="row">
+								<div class="col">
+									<div class="custom-floating">
+										<select id="state" class="form-select sel-required"
+											aria-label="Floating label select example">
+											<option selected value="not">Please Select State</option>
+										</select> <label for="floatingSelectGrid">State</label>
+									</div>
+								</div>
+								<div class="col">
+									<div class="custom-floating">
+										<select id="district" class="form-select sel-required"
+											aria-label="Floating label select example">
+											<option selected value="not">Please Select District</option>
+										</select> <label for="floatingSelectGrid">District</label>
+									</div>
+								</div>
+								<div class="col ">
+									<label class="recomm">Location Type: </label>
+									<div class="radio-group">
+										<div>
+											<input type="radio" id="work-rural" name="location-type"
+												checked="checked" value="rural"><label
+												for="work-rural">Rural</label>
+										</div>
+										<div>
+											<input type="radio" id="work-urban" name="location-type"
+												value="urban"><label for="work-urban">Urban</label>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<div id="sub-district-container" class="custom-floating">
+										<select id="sub-district" class="form-select sel-required"
+											aria-label="Floating label select example">
+											<option selected value="not">Please Select
+												Sub-District</option>
+										</select> <label for="floatingSelectGrid">Sub-District</label>
+									</div>
+									<div id="city-container" class="custom-floating"
+										style="display: none;">
+										<select id="city" class="form-select"
+											aria-label="Floating label select example">
+											<option selected value="not">Please Select City</option>
+										</select> <label for="floatingSelectGrid">City</label>
+									</div>
+
+								</div>
+								<div class="col">
+
+									<div id="village-container" class="custom-floating">
+										<select id="village" class="form-select sel-required"
+											aria-label="Floating label select example">
+											<option selected value="not">Please Select Village</option>
+										</select> <label for="floatingSelectGrid">Village</label>
+									</div>
+									<div id="ward-container" class="custom-floating"
+										style="display: none;">
+										<select id="ward" class="form-select"
+											aria-label="Floating label select example">
+											<option selected value="not">Please Select Ward</option>
+										</select> <label for="floatingSelectGrid">Ward</label>
+									</div>
+
+									<!-- <div class="custom-floating">
+										<input type="search" class="form-control"
+											placeholder="Village"> <label for="floatingInput">Village</label>
+									</div> -->
+
+
+
+								</div>
+								<div class="col">
+									<div class="custom-floating">
+										<textarea id="dol" class="form-control area-required"
+											maxlength="500"
+											placeholder="Please Mention your Details of Locality"
+											maxlength="500"></textarea>
+										<label for="floatingTextarea">Details of Locality</label>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<div class="custom-floating">
+										<select id="mp" class="form-select sel-required"
+											aria-label="Floating label select example">
+											<option selected value="not">Please Select MP</option>
+										</select> <label for="floatingSelectGrid">Select Your MP</label>
+									</div>
+								</div>
+
+								<div class="col">
+									<div class="custom-floating work-col">
+										<input id="work-title" type="text"
+											class="form-control txt-required"
+											placeholder="Enter Your Work Title" maxlength="100">
+										<label for="floatingInput">Work Title</label>
+									</div>
+								</div>
+
+								<div class="col">
+									<div class="custom-floating long-textarea ">
+										<textarea id="work-desc" class="form-control area-required"
+											contenteditable="true"
+											placeholder="Please Mention your Work Description"
+											maxlength="500"></textarea>
+										<label for="floatingTextarea">Work Description</label>
+									</div>
+
+
+									<!-- <label></label>
+									<textarea rows="" cols="" id="work-desc-info"></textarea> -->
+								</div>
+
+							</div>
+
+							<!--Keyur for make optional felilds num-required , check-required -->
+							<div class="row">
+								<div class="col">
+									<div class="custom-floating">
+										<input id="item" type="text" class="form-control"
+											placeholder="Enter Item" maxlength="200"> <label
+											for="floatingInput">Item</label>
+									</div>
+								</div>
+								<div class="col">
+									<div class="custom-floating">
+										<input id="quantity" type="text" class="form-control"
+											placeholder="Enter Quantity"> <label
+											for="floatingInput">Quantity</label>
+									</div>
+								</div>
+								<div class="col">
+									<div class="custom-floating">
+										<input id="rate" type="text" class="form-control"
+											placeholder="Enter Rate"> <label for="floatingInput">Rate</label>
+									</div>
+								</div>
+
+							</div>
+							<div class="row">
+								<div class="col">
+									<div class="custom-floating">
+										<input id="total" type="text" class="form-control "
+											placeholder="Enter Approximate Fund Required"> <label
+											for="floatingInput">Approximate Fund Required</label>
+									</div>
+								</div>
+								<div class="col">
+									<label>Attachment</label> <label class="attachment-div"
+										for="attach-info">Browse File</label> <input id="attach-info"
+										type="file" accept="application/pdf" style="display: none;">
+								</div>
+								<div class="col"></div>
+							</div>
+							<div class="consent-row">
+								<input type="checkbox" id="locality-check"
+									class="check-required" />
+								<p>This is intended to capture locally felt needs. However,
+									the selection of the project rests entirely at the discretion
+									of the concerned MP.</p>
+							</div>
+							<div class="row">
+								<div
+									class="col buttons-div py-1 d-flex justify-content-center gap-2">
+									<button type="button" id="submit-request"
+										class="btn btn-info bt-effect">Submit</button>
+									<button type="button" id="reset-form"
+										class="btn btn-warning bt-effect">Reset</button>
+								</div>
+							</div>
+						</div>
+
+						<div class="review-form">
+							<div class="row">
+								<div class="col-4">
+									<div class="custom-floating">
+										<select id="re-state" class="form-select re-sel-required"
+											aria-label="Floating label select example">
+											<option selected value="not">Please Select State</option>
+										</select> <label for="floatingSelectGrid">State</label>
+									</div>
+								</div>
+								<div class="col-4">
+									<div class="custom-floating">
+										<select id="re-district" class="form-select re-sel-required"
+											aria-label="Floating label select example">
+											<option selected value="not">Please Select District</option>
+										</select> <label for="floatingSelectGrid">District</label>
+									</div>
+								</div>
+								<!-- Keyur : Change here  -->
+								<div class="col-4">
+									<label class="recomm">Location Type: </label>
+									<div class="radio-group">
+										<div>
+											<input type="radio" id="re-work-rural"
+												name="location-type-re" checked="checked" value="rural"><label
+												for="re-work-rural">Rural</label>
+										</div>
+										<div>
+											<input type="radio" id="re-work-urban"
+												name="location-type-re" value="urban"><label
+												for="re-work-urban">Urban</label>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+
+								<div class="col-4">
+									<div id="re-sub-district-container" class="custom-floating">
+										<select id="re-sub-district"
+											class="form-select re-sel-required"
+											aria-label="Floating label select example">
+											<option selected value="not">Please Select
+												Sub-District</option>
+										</select> <label for="floatingSelectGrid">Sub-District</label>
+									</div>
+									<div id="re-city-container" class="custom-floating"
+										style="display: none;">
+										<select id="re-city" class="form-select"
+											aria-label="Floating label select example">
+											<option selected value="not">Please Select City</option>
+										</select> <label for="floatingSelectGrid">City</label>
+									</div>
+
+								</div>
+								<div class="col-4">
+
+									<div id="re-village-container" class="custom-floating">
+										<select id="re-village" class="form-select re-sel-required"
+											aria-label="Floating label select example">
+											<option selected value="not">Please Select Village</option>
+										</select> <label for="floatingSelectGrid">Village</label>
+									</div>
+									<div id="re-ward-container" class="custom-floating"
+										style="display: none;">
+										<select id="re-ward" class="form-select"
+											aria-label="Floating label select example">
+											<option selected value="not">Please Select Ward</option>
+										</select> <label for="floatingSelectGrid">Ward</label>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-4">
+									<div class="custom-floating">
+										<select id="re-tenure" class="form-select re-sel-required"
+											aria-label="Floating label select example">
+											<option selected value="not">Please Select Tenure</option>
+										</select> <label for="floatingSelectGrid">Tenure</label>
+									</div>
+								</div>
+								<div class="col-4">
+									<div class="custom-floating">
+										<select id="re-mp" class="form-select re-sel-required"
+											aria-label="Floating label select example">
+											<option selected value="not">Please Select MP</option>
+										</select> <label for="floatingSelectGrid">Select Your MP</label>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div
+									class="col search-reset-btn-col d-flex justify-content-center gap-2">
+									<button class="btn" id="search-work">Search</button>
+									<button class="btn" id="reset-work">Reset</button>
+								</div>
+							</div>
+						</div>
+
+						<div class="track-table">
+							<table id="track-requests" class="table" style="width: 100%">
+								<thead>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+						<div class="work-table">
+							<table id="work-requests" class="table" style="width: 100%">
+								<thead></thead>
+								<tbody></tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- MODAL FOR CITIZEN_LOGIN -->
+
+
+
+
+	<!--  Modal for submit form -->
+
+	<div class="modal fade" id="final-submit" data-bs-backdrop="static"
+		data-bs-keyboard="false" tabindex="-1"
+		aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div id="form-spin" class="form-spinner hide" style="display: none;">
+			<div class="spinner-border format-spin text-primary" role="status">
+				<span class="visually-hidden">Loading...</span>
+			</div>
+		</div>
+
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="staticBackdropLabel">Submit
+						Request</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="alert-message">Do you want to save details?</div>
+					<div class="ynbox">
+						<button type="submit" class="btn btn-light button1" id="Yes">Yes</button>
+						<button type="submit" class="btn btn-light button1" id="No">No</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+	<!-- Modal for submit form -->
+
+
+	<!-- USER REQUESTS MODAL -->
+
+	<!-- Button trigger modal -->
+
+
+	<!-- TOASTS FOR UPLOAD -->
+
+	<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 99999">
+		<div id="liveToast" class="toast hide" role="alert"
+			aria-live="assertive" aria-atomic="true">
+			<div class="toast-header">
+				<img src="/zkImages/mplads_logo_2023.jpg" class="rounded me-2"
+					alt="MPLADS"
+					style="width: 2.5vw; object-fit: contain; height: 100%;"> <strong
+					class="me-auto">MPLADS</strong> <small>Just Now</small>
+				<button type="button" class="btn-close" data-bs-dismiss="toast"
+					aria-label="Close"></button>
+			</div>
+			<div class="toast-body">
+				<label id="upload-sucess"></label>
+			</div>
+		</div>
+	</div>
+
+	<!-- TOASTS FOR UPLOAD -->
+
+
+
+
+	<!-- Logout Modal -->
+
+	<div class="modal fade" id="Logout-form" data-bs-backdrop="static"
+		data-bs-keyboard="false" tabindex="-1"
+		aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="staticBackdropLabel">Logout</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="alert-message">Are you sure you want to Log Out?
+					</div>
+					<div class="ynbox">
+						<button type="submit" class="btn btn-light button1" id="Yes-out">Yes</button>
+						<button type="submit" class="btn btn-light button1" id="No-out">No</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Logout Modal -->
+
+
+	<!-- Star MODAL -->
+
+	<div class="modal fade" id="star-form" data-bs-backdrop="static"
+		data-bs-keyboard="false" tabindex="-1"
+		aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="staticBackdropLabel">
+						Review/Rating:&nbsp;<label id="wrk-title"></label>
+					</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col">
+							<div class="custom-floating">
+								<textarea id="rating-text" class="form-control ra-required"
+									maxlength="1000" placeholder="Enter Your Review"></textarea>
+								<label for="floatingTextarea">Review</label>
+							</div>
+						</div>
+						<div class="col">
+							<div class="custom-floating">
+								<div class="star-container" rating="0">
+									<div class="star" id="fill1"></div>
+									<div class="star" id="fill2"></div>
+									<div class="star" id="fill3"></div>
+									<div class="star" id="fill4"></div>
+									<div class="star" id="fill5"></div>
+								</div>
+								<label for="floatingTextarea">Rating</label>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<button type="submit" class="btn btn-light button1"
+							id="Update-review" style="display: none;">Update</button>
+						<button type="submit" class="btn btn-light button1"
+							id="Submit-review">Submit</button>
+						<button type="submit" class="btn btn-light button2"
+							id="Close-review">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Star Modal -->
+
+	<div class="modal fade" id="user-req-modal" tabindex="-1"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-xl"
+			style="justify-content: center;">
+			<div class="modal-content" style="width: 90%;">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel"></h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="req-details">
+						<div class="row">
+							<h3>User Details</h3>
+							<div class="row-separator"></div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<div class="submitted-labels">
+									<label>Name</label> <label id="name-data"></label>
+								</div>
+							</div>
+							<div class="col">
+								<div class="submitted-labels">
+									<label>Email ID</label> <label id="email-data"></label>
+								</div>
+							</div>
+							<div class="col">
+								<div class="submitted-labels">
+									<label>Mobile No.</label> <label id="mobile-data"></label>
+								</div>
+							</div>
+
+						</div>
+						<div class="row">
+							<h3>Work Details</h3>
+							<div class="row-separator"></div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<div class="submitted-labels">
+									<label>State</label> <label id="state-data"></label>
+								</div>
+							</div>
+							<div class="col">
+								<div class="submitted-labels">
+									<label>District</label> <label id="district-data"></label>
+								</div>
+							</div>
+							<div class="col">
+								<div class="submitted-labels">
+									<label>Location Type</label> <label id="loctype-data"></label>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<div class="submitted-labels sub-district-labels">
+									<label>Sub-District</label> <label id="sub-district-data"></label>
+								</div>
+								<div class="submitted-labels city-labels" style="display: none;">
+									<label>City</label> <label id="city-data"></label>
+								</div>
+							</div>
+							<div class="col">
+								<div class="submitted-labels village-labels">
+									<label>Village</label> <label id="village-data"></label>
+								</div>
+								<div class="submitted-labels ward-labels" style="display: none;">
+									<label>Ward</label> <label id="ward-data"></label>
+								</div>
+							</div>
+							<div class="col">
+								<div class="submitted-labels">
+									<label>Details of Locality</label>
+									<textarea disabled id="dol-data"></textarea>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col">
+								<div class="submitted-labels">
+									<label>MP Name</label> <label id="mp-data"></label>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-4">
+								<div class="submitted-labels">
+									<label>Work Title</label> <label id="work-title-data"></label>
+								</div>
+							</div>
+							<div class="col">
+								<div class="submitted-labels">
+									<label>Work Description</label>
+									<textarea disabled class="work-desc-data"
+										style="min-height: 20vh;"></textarea>
+								</div>
+							</div>
+
+						</div>
+						<div class="row">
+							<div class="col">
+								<div class="submitted-labels">
+									<label>Item</label> <label id="item-data"></label>
+								</div>
+							</div>
+							<div class="col">
+								<div class="submitted-labels">
+									<label>Quantity</label> <label id="quantity-data"></label>
+								</div>
+							</div>
+							<div class="col">
+								<div class="submitted-labels">
+									<label>Rate</label> <label id="rate-data"></label>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<div class="submitted-labels">
+									<label>Total</label> <label id="total-data"></label>
+								</div>
+							</div>
+							<div class="col">
+								<div class="submitted-labels">
+									<label>Attachments</label>
+									<div id="attach-data"></div>
+								</div>
+							</div>
+							<div class="col"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- USER REQUESTS MODAL -->
+
+
+	<!-- QUICK LINKS MODAL  -->
+	<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
+		data-bs-keyboard="false" tabindex="-1"
+		aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+
+				<div class="modal-body" style="height: 350px">
+
+
+					<div id="forguide">
+						<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+							<div class="container-fluid">
+								<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+									<div class="navbar-nav">
+										<a id="eng" class="nav-link active" aria-current="page"
+											href="javascript:void(0)">English</a> <a id="hin"
+											class="nav-link" href="javascript:void(0)">Hindi</a> <a
+											id="onBoardingForm" class="nav-link"
+											href="javascript:void(0)">Onboarding Forms</a>
+									</div>
+								</div>
+							</div>
+						</nav>
+						<div id="spin" class="text-center"
+							style="height: 50vh !important; width: 100% !important;">
+							<div class="spinner-border text-success"
+								style="height: 70px; width: 70px; font-size: 30;" role="status">
+								<span class="visually-hidden">Loading...</span>
+							</div>
+						</div>
+						<script>
+							$("#spin").hide();
+						</script>
+						<div id="english_guide" class="modalguide">
+							<ul id="english_links">
+							</ul>
+						</div>
+						<div id="hindi_guide" class="modalguide">
+							<ul id="hindi_links">
+							</ul>
+						</div>
+						<div id="onBoarding_form" class="modalguide">
+							<ul id="form_links">
+							</ul>
+						</div>
+
+					</div>
+					<div id="video_content">
+						<div id="forvedio">
+							<ul id="video_links">
+							</ul>
+						</div>
+						<video id="myvid" autoplay poster="/zkImages/vid_view.png"
+							controls style="object-fit: contain !important;">
+
+						</video>
+					</div>
+					<div id="forms" class="formguide">
+						<ul id="form_links">
+						</ul>
+					</div>
+
+					<script>
+						$("#hindi_guide").hide();
+						$("#eng").click(function() {
+							$("#eng").addClass("active");
+							$("#hin").removeClass("active");
+							$("#onBoardingForm").removeClass("active");
+							$("#hindi_guide").hide();
+							$("#spin").show();
+							$("#english_guide").hide();
+							setTimeout(function() {
+								$("#spin").hide();
+								$("#english_guide").fadeIn();
+							}, 2000);
+
+						})
+						$("#hin").click(function() {
+							$("#hin").addClass("active");
+							$("#eng").removeClass("active");
+							$("#onBoardingForm").removeClass("active");
+							$("#hindi_guide").hide();
+							$("#spin").show();
+							setTimeout(function() {
+								$("#spin").hide();
+								$("#hindi_guide").fadeIn();
+							}, 2000);
+							$("#english_guide").hide();
+						});
+
+						$("#onBoardingForm").click(function() {
+							$("#hin").removeClass("active");
+							$("#eng").removeClass("active");
+							$("#onBoardingForm").addClass("active");
+							$("#formguide").hide();
+							$("#spin").show();
+							setTimeout(function() {
+								$("#spin").hide();
+								$("#formguide").fadeIn();
+							}, 2000);
+							$("#english_guide").hide();
+							$("#hindi_guide").hide();
+						});
+					</script>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary cls-btn"
+						data-bs-dismiss="modal" id="btnFooterClose">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- QUICK LINKS MODAL -->
+
+
+	<header>
+
+		<div class="top-header">
+			<div class="font-resizer">
+				<button id="font-decrease" aria-label="Decrease font size">A-</button>
+				<span class="separator"></span>
+				<button id="font-default" aria-label="Default font size">A</button>
+				<span class="separator"></span>
+				<button id="font-increase" aria-label="Increase font size">A+</button>
+			</div>
+		</div>
+		<nav-section style="height:auto;" class="nav-section">
+		<nav class="navbar navbar-expand-lg navbar-light navcus d-flex"
+			style="height: auto;">
+			<a href="#"><img src="/zkImages/Mplads_logo_white.png"
+				class="mainlogo" style="width: auto; max-height: 54px;"
+				alt="MPLADS e-SAKSHI Logo" /></a>
+			<div class="bg-nav">
+				<button class="navbar-toggler main-nav-toggler" type="button"
+					data-bs-toggle="collapse" data-bs-target="#mainNavBar"
+					aria-controls="mainNavBar" aria-expanded="false"
+					aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse linkcus" id="mainNavBar">
+					<ul class="navbar-nav ">
+						<li class="nav-item bold"><a class="nav-link"
+							aria-current="page" href="#">Home</a></li>
+						<li class="nav-item bold"><a class="nav-link active  "
+							aria-current="page" href="#aboutus">About the Scheme</a></li>
+						<li class="nav-item bold"><a class="nav-link active  "
+							aria-current="page" href="/digigov/dashboard.html"
+							target="_blank">Dashboard</a></li>
+						<li class="nav-item bold"><a class="nav-link active"
+							aria-current="page" href="#" data-bs-toggle="modal"
+							data-bs-target="#citi-login" id="citi-modal"> Citizen Request
+						</a></li>
+
+					</ul>
+				</div>
+			</div>
+
+
+			<a class="nav-link active" aria-current="page"
+				href="/digigov/Login.zul" target="_blank">
+				<button class="but1">Login</button>
+			</a>
+
+		</nav>
+		</nav-section>
+
+		<!-- <div class="lang-switch">
+			<span>EN</span> | <span>HI</span>
+		</div> -->
+	</header>
+
+	<slider-section class=""> <!-- <nav-section
+		style="height:auto;" class="nav-section">
+	<nav class="navbar navbar-expand-lg navbar-light navcus d-flex"
+		style="height: auto;">
+		<a href="#"><img src="/zkImages/Mplads_logo_white.png"
+			class="mainlogo" /></a>
+		<div class="bg-nav">
+			<button class="navbar-toggler main-nav-toggler" type="button"
+				data-bs-toggle="collapse" data-bs-target="#mainNavBar"
+				aria-controls="mainNavBar" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse linkcus" id="mainNavBar">
+				<ul class="navbar-nav ">
+					<li class="nav-item bold"><a class="nav-link"
+						aria-current="page" href="#">Home</a></li>
+					<li class="nav-item bold"><a class="nav-link active  "
+						aria-current="page" href="#aboutus">About the Scheme</a></li>
+					<li class="nav-item bold"><a class="nav-link active  "
+						aria-current="page" href="/digigov/dashboard.html" target="_blank">Dashboard</a>
+					</li>
+					<li class="nav-item bold"><a class="nav-link active"
+						aria-current="page" href="#" data-bs-toggle="modal"
+						data-bs-target="#citi-login" id="citi-modal"> Citizen Request
+					</a></li>
+
+				</ul>
+			</div>
+		</div>
+
+		<a class="nav-link active" aria-current="page"
+			href="/digigov/Login.zul" target="_blank">
+			<button class="but1">Login</button>
+		</a>
+
+	</nav>
+	</nav-section> --> <!-- <content-section-1 class="content-sec">
+    		<p>The Members of Parliament Local Area Development Division is entrusted with the responsibility of implementation of Members of Parliament Local Area Development Scheme (MPLADS).</p>
+    		<div class="quicklinks" >
+				<div style="width:100%;" class="iconbox f-row-centered">
+					<div style="width:33.33%;overflow:hidden;" id="guidediv" class="ext"><div class="quickicon"><img src="/zkImages/documentlogo.png"></div><label style="text-align:center;width:100%;">Documents</label></div>
+					<div style="width:33.33%;overflow:hidden;" id="vediodiv" class="ext"><div class="quickicon"><img src="/zkImages/videologo.png"></div><label style="text-align:center;width:100%;">Videos</label></div>
+					<div style="width:33.33%;overflow:hidden;" id="formsdiv" class="ext"><div class="quickicon"><img src="/zkImages/onboarding_forms.svg"></div><label style="text-align:center;width:100%;">Onboarding Forms</label></div>
+				</div>
+   			</div>
+    	</content-section-1> --> <slider> <!--Keyur : new start Privacy Policy Modal -->
+	<!-- <div class="modal fade privacy-policy-modal" id="privacyPolicyModal"
+		data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+		aria-labelledby="privacyPolicyModalLabel" aria-hidden="true">
+
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<h5 class="modal-title">Important Information</h5>
+
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+
+				<div class="modal-body">
+
+					<div class="modal-body">
+						<h3 style="font-size: 1.42vw; padding: 0 1vw">What you need
+							to know about the process of works recommendation, sanction and
+							completion and fund utilization under MPLADS on the eSAKSHI
+							Portal</h3>
+						<ul>
+							<li>The MPLADS–eSAKSHI web portal <a
+								href="www.mplads.mospi.gov.in">(www.mplads.mospi.gov.in)</a> was
+								introduced with effect from 1 April 2023 to manage the revised
+								fund-flow procedure under the MPLADS Scheme. With the launch of
+								the eSAKSHI portal, the annual entitlement of Hon’ble Members of
+								Parliament (MPs) is made available through online authorisations
+								at the beginning of each financial year or tenure
+							</li>
+							<li>Prior to 1 April 2023, the Scheme was being implemented
+								in a physical mode and the information regarding works
+								recommended and sanctioned District -wise were being maintained
+								by the concerned District Authorities. The expenditure against
+								these works were also made through physical bank accounts
+								maintained by the respective Districts for the purpose. <b>The
+									information regarding number of works recommended and
+									sanctioned and their respective amounts in respect of the 17th
+									Lok Sabha is available on the eSAKSHI portal for the year
+									2023-24 and not available for the first four years viz.
+									2019-20, 2020-21, 2021-22 and 2022-23. Similarly, the details
+									of works recommended and sanctioned in respect of Rajya Sabha
+									MPs is not available on eSAKSHI Portal prior to the year
+									2023-24.</b>
+							</li>
+							<li>The portal provides login credentials to all
+								stakeholders of the Scheme, including Hon’ble MPs, the Central
+								Nodal Agency (MoSPI), State Nodal Authorities (SNAs), District
+								Authorities (NDAs and IDAs), and Implementing Agencies (IAs).
+								Hon’ble MPs use the portal to recommend eligible developmental
+								works in their constituencies and earmark funds from their
+								annual entitlement. <b>For Hon’ble MPs, the total amount
+									recommended on the portal indicates the utilisation of the
+									allocated amounts to them under the Scheme.</b>
+							</li>
+							<li>The responsibility for sanctioning and executing the
+								recommended works rests with the District Authorities. After
+								conducting the necessary feasibility checks, the District
+								Authorities sanction the works and designate the Implementing
+								Agencies responsible for execution. As per the Scheme
+								guidelines, sanctioned works are generally required to be
+								completed within one year of sanction.</li>
+							<li>Implementing Agencies raise vendor payment requests on
+								the portal at various stages of work execution, in accordance
+								with the sanction orders issued by the District Authorities. The
+								expenditure figures displayed on the dashboard represent the
+								total vendor payments released against completed/ongoing works.</li>
+							<li>Data on the eSAKSHI portal are updated in real time
+								based on inputs provided by different stakeholders through their
+								respective logins. Details of recommendations are updated when
+								an Hon’ble MP submits an online recommendation. The status of
+								sanction is updated upon sanction of the work by the District
+								Authority. Progress at different stages of sanctioned works is
+								updated based on entries made by the concerned Implementing
+								Agencies.</li>
+							<li>Upon release of the final payment, Implementing Agencies
+								are required to “mark the work as complete” on the portal as the
+								final step. <b>Only those works that are marked as complete
+									by the Implementing Agencies are reflected as completed works
+									on the public dashboard. </b>The District Authorities are
+								continuously pursued to ensure compliance by the Implementing
+								Agencies to mark the projects as completed following requisite
+								formalities.
+							</li>
+							<li>The eSAKSHI portal also provides for uploading images of
+								assets and relevant documents at each stage of payment
+								processing. Accordingly, <b>Implementing Agencies upload
+									photographs of assets at different stages of completion, along
+									with documents such as sanction orders.</b>
+							</li>
+							<li><b>Implementing Agencies upload photographs of
+									assets at different stages of completion, along with documents
+									such as sanction orders. </b>so as to enable correct interpretation
+								and understanding by the public/ stakeholders.</li>
+						</ul>
+					</div>
+
+					<div class="form-check mt-1 d-flex align-items-center" style="gap:30px;">
+						<input class="form-check-input" type="checkbox" id="privacyCheck">
+
+						<label class="form-check-label" for="privacyCheck"> I have
+							read and understood the above information. </label>
+					</div>
+
+				</div>
+
+				<div class="" style="display: flex; align-items: center; justify-content: center; ">
+
+					<button type="button" class="btn btn-secondary" style="margin: 10px"
+						data-bs-dismiss="modal">Close</button>
+
+					<button type="button" class="btn btn-primary" id="privacyOkBtn" >
+						OK</button>
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+ --> <!-- new end -->
+
+
+	<div id="carouselExampleIndicators"
+		class="carousel carousel-dark slide custom-slider"
+		data-bs-ride="carousel">
+		<div class="carousel-indicators dark">
+			<!--  <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-label="Slide 1"></button>-->
+			<!--  <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button> -->
+			<button type="button" data-bs-target="#carouselExampleIndicators"
+				data-bs-slide-to="0" aria-label="Slide 1" class="active"></button>
+			<button type="button" data-bs-target="#carouselExampleIndicators"
+				data-bs-slide-to="1" aria-label="Slide 2"></button>
+			<!-- <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button> -->
+
+		</div>
+		<div class="carousel-inner">
+			<!--  <div class="carousel-item active">
+                        <img src="/zkImages/mpslide1.png" class="d-block w-100" alt="">
+                      </div>
+                      <div class="carousel-item">
+                        <img src="/zkImages/mpslide2.png" class="d-block w-100" alt="">
+                      </div> -->
+
+			<div class="carousel-caption d-block w-100">
+				<!-- <h5></h5> -->
+				<p class="carousel-title">
+					<strong class="title-highlight">MPLADS: </strong>From Local
+					Priorities to National Development
+				</p>
+				<!-- <p class="carousel-content">Ensures effective planning,
+					execution, and monitoring of development works under the scheme.</p> -->
+				<!-- <p>The Members of Parliament Local Area Development Division is entrusted with the responsibility of implementation of Members of Parliament Local Area Development Scheme (MPLADS).</p> -->
+			</div>
+
+			<div class="carousel-item active">
+				<img src="/zkImages/MP_21.png" class="d-block w-100 carousel-img"
+					alt="MPLADS e-SAKSHI">
+
+				<div class="text-blur"></div>
+			</div>
+			<div class="carousel-item">
+				<img src="/zkImages/MP_21.png" class="d-block w-100 carousel-img"
+					alt="MPLADS">
+				<!-- <div class="carousel-caption d-block w-100">
+					        <h5></h5>
+					        <p class="carousel-title">Enabling local development through <strong class="title-highlight">MPLADS</strong></p>
+					        <p class="carousel-content">Ensures effective planning, execution, and monitoring of development works under the scheme.</p>
+					    </div> -->
+				<div class="text-blur"></div>
+			</div>
+			<!-- <div class="carousel-item">
+                        <img src="/zkImages/mpslide5.png" class="d-block w-100" alt="">
+                      </div> -->
+
+		</div>
+		<!-- <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Previous</span>
+                    </button> -->
+		<!-- <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Next</span>
+                    </button> -->
+
+		<!-- WAVE OVERLAY SECTION -->
+
+
+		<div class="carousel-wave">
+
+			<img src="/zkImages/Wave1.png" class="wave-img" alt="MPLADS e-SAKSHI"
+				aria-hidden="true" />
+
+			<div class="wave-links">
+
+
+				<div class="wave-link" id="guidediv">
+					<span class="icon-circle"> <img
+						src="/zkImages/documentlogo.png" alt="MPLADS Documents" />
+					</span> <span class="icon-text">Documents</span>
+				</div>
+
+				<div class="wave-link" id="vediodiv">
+					<span class="icon-circle"> <img
+						src="/zkImages/videologo.png" alt="MPLADS e-SAKSHI Video" />
+					</span> <span class="icon-text">Videos</span>
+				</div>
+
+				<!-- <div class="wave-link">
+					<span class="icon-circle" id="formsdiv"> <img
+						src="/zkImages/onboarding_forms.png" alt="" />
+					</span> <span class="icon-text">Onboarding<br>Forms
+					</span>
+				</div> -->
+
+			</div>
+		</div>
+
+	</div>
+
+
+	<!--Slider--> </slider> </slider-section>
+	<section class="dashboard-wrap">
+
+		<section class="kpi-section" style="display: none;">
+			<!-- <div class="kpi-overlay"> -->
+			<div class="kpi-container">
+
+				<div class="kpi-card">
+
+					<div class="kpi-part kpi-icon">
+						<img src="/zkImages/Mps.png" alt="e-SAKSHI Mps">
+					</div>
+
+					<div class="kpi-part kpi-text">
+						<div class="kpi-title">Members of Parliament's</div>
+						<div class="kpi-labels">
+							<div>Rajya Sabha</div>
+							<div>Lok Sabha</div>
+						</div>
+					</div>
+
+					<div class="kpi-part kpi-values">
+						<div class="kpi-main" id="totmp"></div>
+						<div class="kpi-numbers">
+							<div id="rajtotmp"></div>
+							<div id="loktotmp"></div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="kpi-card">
+
+					<div class="kpi-part kpi-icon">
+						<img src="/zkImages/AllocatedLimits.png"
+							alt="Mplads Allocated Limits">
+					</div>
+
+					<div class="kpi-part kpi-text">
+						<div class="kpi-title">Allocated Limit</div>
+						<div class="kpi-labels">
+							<div>Rajya Sabha</div>
+							<div>Lok Sabha</div>
+						</div>
+					</div>
+
+					<div class="kpi-part kpi-values">
+						<div class="kpi-main" id="fra"></div>
+						<div class="kpi-numbers">
+							<div id="rajfra"></div>
+							<div id="lokfra"></div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="kpi-card">
+
+					<div class="kpi-part kpi-icon">
+						<img src="/zkImages/WorksRecommended.png"
+							alt="Mplads Works Recommended">
+					</div>
+
+					<div class="kpi-part kpi-text">
+						<div class="kpi-title">Total Works Recommended</div>
+						<div class="kpi-labels">
+							<div>Rajya Sabha</div>
+							<div>Lok Sabha</div>
+						</div>
+					</div>
+
+					<div class="kpi-part kpi-values">
+						<div class="kpi-main" id="tra"></div>
+						<div class="kpi-numbers">
+							<div id="rajtra"></div>
+							<div id="loktra"></div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="kpi-card">
+
+					<div class="kpi-part kpi-icon">
+						<img src="/zkImages/WorksSanctioned.png"
+							alt="Mplads Works Sanctioned">
+					</div>
+
+					<div class="kpi-part kpi-text">
+						<div class="kpi-title">Total Works Sanctioned</div>
+						<div class="kpi-labels">
+							<div>Rajya Sabha</div>
+							<div>Lok Sabha</div>
+						</div>
+					</div>
+
+					<div class="kpi-part kpi-values">
+						<div class="kpi-main" id="tsa"></div>
+						<div class="kpi-numbers">
+							<div id="rajtsa"></div>
+							<div id="loktsa"></div>
+						</div>
+					</div>
+
+				</div>
+
+
+				<div class="kpi-card">
+
+					<div class="kpi-part kpi-icon">
+						<img src="/zkImages/WorksCompleted.png"
+							alt="Mplads Works Completed">
+					</div>
+
+					<div class="kpi-part kpi-text">
+						<div class="kpi-title">Total Works Completed</div>
+						<div class="kpi-labels">
+							<div>Rajya Sabha</div>
+							<div>Lok Sabha</div>
+						</div>
+					</div>
+
+					<div class="kpi-part kpi-values">
+						<div class="kpi-main" id="tca"></div>
+						<div class="kpi-numbers">
+							<div id="rajtca"></div>
+							<div id="loktca"></div>
+						</div>
+					</div>
+
+				</div>
+
+
+				<div class="kpi-card">
+
+					<div class="kpi-part kpi-icon">
+						<img src="/zkImages/Expenditure.png" alt="Mplads Expenditure">
+					</div>
+
+					<div class="kpi-part kpi-text">
+						<div class="kpi-title">Total Expenditure</div>
+						<div class="kpi-labels">
+							<div>Rajya Sabha</div>
+							<div>Lok Sabha</div>
+						</div>
+					</div>
+
+					<div class="kpi-part kpi-values">
+						<div class="kpi-main" id="tea"></div>
+						<div class="kpi-numbers">
+							<div id="rajtea"></div>
+							<div id="loktea"></div>
+						</div>
+					</div>
+
+				</div>
+
+
+
+
+
+			</div>
+			<!-- </div> -->
+		</section>
+
+		<!--  <tile-content>
+    	<div class="financeData">
+  		
+  		<div id="toptotmp" class="topdiv">
+        	
+        	<div id="totmp" class="fr maindiv position-relative" style="background-color:#f36b4f;"></div>
+        	<div class="bifurcation">
+	        	<div id="rajtotmp" class="subdiv">
+	        		<label>Rajya Sabha</label>
+	        	</div>
+	        	<div id="loktotmp" class="subdiv">
+	        		<label>Lok Sabha</label>
+	        	</div>
+        	</div>
+        </div>
+        <div id="topfra" class="topdiv">
+        	
+        	<div id="fra"  class="fr maindiv position-relative" ></div>
+        	<div class="bifurcation">
+        		<div id="rajfra"  class="subdiv">
+        		<label>Rajya Sabha</label>
+        		</div>
+        	
+        		<div id="lokfra"   class="subdiv">
+        		<label>Lok Sabha</label>
+        		</div>
+        	</div>
+        </div>
+		<div id="toptea" class="topdiv">
+			
+			<div id="tea"   class="te maindiv position-relative">
+			</div>
+			<div class="bifurcation">
+				<div id="rajtea"   class="subdiv" >
+				<label>Rajya Sabha</label>
+				</div>
+			
+				<div id="loktea"    class="subdiv" >
+					<label>Lok Sabha</label>
+				</div>
+			</div>
+		</div>
+		<div id="toptra" class="topdiv">
+			
+			<div id="tra"   class="twr maindiv position-relative">
+			</div>
+			
+			<div class="bifurcation">
+				<div id="rajtra"   class="subdiv" >
+					<label>Rajya Sabha</label>
+				</div>
+			
+				<div id="loktra"   class="subdiv">
+					<label>Lok Sabha</label>
+				</div>
+			</div>
+		</div>
+		<div id="toptca" class="topdiv">
+			<div id="tca"   class="twc maindiv position-relative"></div>
+			<div class="bifurcation">
+			
+				<div id="rajtca"   class="subdiv">
+					<label>Rajya Sabha</label>
+				</div>
+				<div id="loktca"   class="subdiv">
+					<label>Lok Sabha</label>
+				</div>
+			</div>
+		</div>
+
+    </div>
+   		
+    </tile-content> -->
+
+		<section class="about-section" id="aboutus">
+			<div class="text-content">
+				<span class="section-label">About the Scheme</span>
+
+				<p>
+					<b>The Members of Parliament Local Area Development Scheme
+						(MPLADS)</b> is a Central Sector Scheme fully funded by the Government
+					of India, launched on 23 December 1993. The Scheme enables Members
+					of Parliament (MPs) to recommend developmental works based on the
+					locally felt needs of their constituencies, with a focus on
+					creating durable community assets and improving essential public
+					services such as health, sanitation, education, and drinking water
+					infrastructure.
+				</p>
+				<p>The Scheme is administered by the Ministry of Statistics and
+					Programme Implementation (MoSPI), which is responsible for
+					formulating guidelines and overseeing the implementation and
+					monitoring of the Scheme.</p>
+				<p>At the time of its launch in 1993-94, each Member of
+					Parliament was allocated ₹5 lakh per annum under MPLADS. The annual
+					allocation was subsequently enhanced to ₹1 crore in 1994-95, ₹2
+					crore in 1998-99, and ₹5 crore from the financial year 2011-12
+					onwards. In view of the COVID-19 pandemic, the Scheme was suspended
+					from 6 April 2020 to 9 November 2021, and no funds were allocated
+					during FY 2020-21. For the remaining period of FY 2021-22 (10
+					November 2021 to 31 March 2022), an allocation of ₹2 crore was
+					provided to each Member of Parliament.</p>
+				<p>The first MPLADS Guidelines were issued in February 1994 and
+					have since been revised periodically in December 1994, February
+					1997, September 1999, April 2002, November 2005, August 2012, May
+					2014, June 2016, and most recently in April 2023. The current
+					Guidelines of 2023 reflect nearly three decades of implementation
+					experience and incorporate suggestions from Members of Parliament
+					of both Lok Sabha and Rajya Sabha, feedback from Central
+					Ministries, State/UT Governments, other stakeholders, and findings
+					from independent third-party evaluations commissioned by MoSPI.</p>
+				<p>In April 2023, MPLADS transitioned from a paper-based system
+					to a fully digital end-to-end platform, eSAKSHI, comprising a web
+					portal and mobile application. The platform provides dedicated
+					login access to all stakeholders and facilitates transparent,
+					efficient, and seamless implementation, monitoring, and management
+					of the Scheme. Since April 2025, MPLAD Scheme implemented the
+					TSA/Hybrid fund flow procedure achieving the goal of ‘just-in-time’
+					fund release to the vendors through an integrated network of PFMS,
+					RBI and SBI (Scheduled Commercial Bank).</p>
+				<p>MPLAD Scheme is strategically aligned with the vision of
+					Viksit Bharat @ 2047, which seeks to transform India into a
+					developed, inclusive, and self-reliant nation by the centenary of
+					its independence. While continuing to address immediate local
+					needs, the Scheme encourages MPs to prioritize the creation of
+					sustainable and future-ready assets. By promoting green practices,
+					digital inclusion, skill development, and social equity, MPLADS
+					contributes to grassroots development while supporting the nation's
+					long-term growth and transformation.</p>
+
+			</div>
+
+			<div class="visual">
+				<!-- <div class="ring ring-3"></div>
+	    <div class="ring ring-2"></div>
+	    <div class="ring ring-1"></div> -->
+				<div class="circle-outer">
+					<div class="circle-wrap">
+						<img src="/zkImages/FLAG.png" alt="Mplads About us image">
+					</div>
+				</div>
+			</div>
+		</section>
+	</section>
+	<!-- <div class="content4">
+		<div class="aboutcus" style="height: 100%;">
+			<p>The Members of Parliament Local Area Development Division is entrusted with the responsibility of implementation of Members of Parliament Local Area Development Scheme (MPLADS). Under the scheme, each MP has the choice to suggest to the District Collector for works to the tune of Rs.5 Crores per annum to be taken up in his/her constituency.</p>
+			<p>The Rajya Sabha Members of Parliament can recommend works in one or more districts in the State from where he/she has been elected.
+			The Nominated Members of the <b>Lok Sabha</b> and <b>Rajya Sabha</b> may select any one or more Districts from any one State in the Country for implementation of their choice of work under the scheme. The Ministry has issued the guidelines on MPLADS Scheme including implementation and monitoring of the scheme. The Department has initiated all necessary steps to ensure that the scheme is successfully implemented in the field.</p>
+		</div>
+	</div> -->
+	<div class="PM-content" hidden>
+
+		<div class="quotebox">
+			<p>
+				E-Governance is an essential part of our dream of Digital India,<br>
+				The more Technology we infuse in Governance the better it is for
+				India
+			</p>
+		</div>
+
+		<div class="contentbox1">
+			<div class="content2">
+				<div class="roundimg">
+					<img class="roundimg" src="/zkImages/pm_img.png"
+						alt="MPLADS e-SAKSHI">
+				</div>
+			</div>
+			<div class="content3">
+				<h3 class="applycolor">SHRI NARENDRA MODI</h3>
+				<hr>
+				<p>Hon'ble Prime Minister Of INDIA</p>
+			</div>
+		</div>
+	</div>
+
+
+
+
+	<footer>
+		<div class="footer-top">
+
+			<div class="contact-info">
+				<div>
+					<strong>Contact us:&nbsp;</strong>
+					<div>
+						Landline no: 011-2345602, 011-23455607<br> Email id:
+						cna-mplads@mospi.gov.in
+					</div>
+				</div>
+			</div>
+			<div class="socialicon">
+				<div>
+					<img id="playStoreIcon"
+						style="height: 39px; cursor: pointer; margin-top: 20px;"
+						src="/zkImages/play-store.png" onclick="callApi('playstore')"
+						alt="MPLADS e-SAKSHI App"> <img id="appStoreIcon"
+						style="height: 40px; margin-top: 18px; cursor: pointer;"
+						src="/zkImages/app-store.png" onclick="callApi('appstore')"
+						alt="MPLADS e-SAKSHI App">
+				</div>
+			</div>
+		</div>
+
+		<div class="footercus">
+			<p>© Content Owned by Ministry of Statistics and Programme
+				Implementation Government of India | Site Maintained by Tata
+				Consultancy Services Ltd.&nbsp;</p>
+		</div>
+	</footer>
+	<!-- Option 1: Bootstrap Bundle with Popper -->
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+		crossorigin="anonymous"></script>
+
+	<!-- Option 2: Separate Popper and Bootstrap JS -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
+	<script
+		src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"
+		integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA=="
+		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+	<!--  -->
+</body>
+</html>

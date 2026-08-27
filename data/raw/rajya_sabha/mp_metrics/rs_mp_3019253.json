@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3019253,
+  "caption": "Dr. Dharmasthala Veerendra Heggade (2022-28)",
+  "state_id": 18,
+  "state_name": "Karnataka",
+  "house": "RAJYA_SABHA",
+  "combo": "18,0,3019253,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a019,60,63,957.11",
+      "\u00a019.61 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a05,68,79,514.00",
+      "\u00a05.69 Crore"
+    ],
+    "Works Recommended": [
+      "474",
+      "\u00a013,34,50,991.00",
+      "\u00a013.35 Crore"
+    ],
+    "Works Completed": [
+      "301",
+      "\u00a02,91,58,991.00",
+      "\u00a02.92 Crore"
+    ],
+    "Works Sanctioned": [
+      "451",
+      "\u00a011,07,65,491.00",
+      "\u00a011.08 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

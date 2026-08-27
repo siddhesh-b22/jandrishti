@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3042556,
+  "caption": "Dr. Medha Vishram Kulkarni (2024-30)",
+  "state_id": 21,
+  "state_name": "Maharashtra",
+  "house": "RAJYA_SABHA",
+  "combo": "21,0,3042556,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a04,17,37,818.00",
+      "\u00a04.17 Crore"
+    ],
+    "Works Recommended": [
+      "105",
+      "\u00a010,18,56,671.00",
+      "\u00a010.19 Crore"
+    ],
+    "Works Completed": [
+      "31",
+      "\u00a03,09,16,671.00",
+      "\u00a03.09 Crore"
+    ],
+    "Works Sanctioned": [
+      "46",
+      "\u00a04,29,16,671.00",
+      "\u00a04.29 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

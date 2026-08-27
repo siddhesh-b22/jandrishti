@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3020005,
+  "caption": "Shri Sanjay Singh (2024-30)",
+  "state_id": 11,
+  "state_name": "Delhi",
+  "house": "RAJYA_SABHA",
+  "combo": "11,0,3020005,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a018,44,66,426.11",
+      "\u00a018.45 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a01,66,87,160.00",
+      "\u00a01.67 Crore"
+    ],
+    "Works Recommended": [
+      "103",
+      "\u00a014,75,05,679.00",
+      "\u00a014.75 Crore"
+    ],
+    "Works Completed": [
+      "17",
+      "\u00a01,18,29,470.00",
+      "\u00a01.18 Crore"
+    ],
+    "Works Sanctioned": [
+      "70",
+      "\u00a07,43,99,286.00",
+      "\u00a07.44 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "1",
+      "\u00a01,00,00,000.00",
+      "\u00a01.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

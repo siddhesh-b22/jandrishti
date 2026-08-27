@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017341,
+  "caption": "Dr. Sudhanshu Trivedi (2024-30)",
+  "state_id": 33,
+  "state_name": "Uttar Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "33,0,3017341,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a03,36,46,948.00",
+      "\u00a03.36 Crore"
+    ],
+    "Works Recommended": [
+      "53",
+      "\u00a07,40,04,164.00",
+      "\u00a07.40 Crore"
+    ],
+    "Works Completed": [
+      "14",
+      "\u00a01,68,86,943.00",
+      "\u00a01.69 Crore"
+    ],
+    "Works Sanctioned": [
+      "35",
+      "\u00a04,46,44,943.00",
+      "\u00a04.46 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

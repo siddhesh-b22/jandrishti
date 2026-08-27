@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #1E3A8A;
+  --color-primary-dark: #0F172A;
+  --color-accent-blue: #2563EB;
+  --color-accent-emerald: #10B981;
+  --color-accent-amber: #F59E0B;
+}
+
+/* ========================================================= */
+/* HIDE RIGHT SIDE SCROLLBAR ACROSS ALL BROWSERS             */
+/* (Preserves full smooth scrolling without visible bars)   */
+/* ========================================================= */
+html,
+body,
+#root {
+  -ms-overflow-style: none !important; /* IE and Edge */
+  scrollbar-width: none !important; /* Firefox */
+}
+
+/* Chrome, Safari, Edge, and WebKit */
+::-webkit-scrollbar {
+  display: none !important;
+  width: 0px !important;
+  height: 0px !important;
+  background: transparent !important;
+}
+
+* {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+@layer base {
+  body {
+    background-color: #F8FAFC;
+    color: #0F172A;
+    min-height: 100vh;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    letter-spacing: -0.015em;
+  }
+
+  ::selection {
+    background-color: #2563EB;
+    color: #FFFFFF;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    letter-spacing: -0.03em;
+  }
+
+  /* Tabular numbers for accurate data ledger comparison */
+  .font-mono {
+    font-feature-settings: 'tnum' on, 'lnum' on, 'zero' on;
+  }
+}
+
+/* Reference Card Styles */
+.card-executive {
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-executive:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 30px -10px rgba(15, 23, 42, 0.1), 0 2px 6px rgba(0, 0, 0, 0.04);
+  border-color: #CBD5E1;
+}
+
+/* Shimmer Loading Animation */
+.shimmer-skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: #E2E8F0;
+}
+
+.shimmer-skeleton::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}

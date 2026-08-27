@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017170,
+  "caption": "Shri R. Dharmar (2022-28)",
+  "state_id": 30,
+  "state_name": "Tamil Nadu",
+  "house": "RAJYA_SABHA",
+  "combo": "30,0,3017170,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a026,08,12,242.52",
+      "\u00a026.08 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a020,78,77,791.00",
+      "\u00a020.79 Crore"
+    ],
+    "Works Recommended": [
+      "244",
+      "\u00a025,92,42,482.00",
+      "\u00a025.92 Crore"
+    ],
+    "Works Completed": [
+      "189",
+      "\u00a020,44,42,482.00",
+      "\u00a020.44 Crore"
+    ],
+    "Works Sanctioned": [
+      "194",
+      "\u00a020,79,42,482.00",
+      "\u00a020.79 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

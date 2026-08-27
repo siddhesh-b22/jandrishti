@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3017338,
+  "caption": "Shri Brij Lal (2020-26)",
+  "state_id": 33,
+  "state_name": "Uttar Pradesh",
+  "house": "RAJYA_SABHA",
+  "combo": "33,0,3017338,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a019,60,63,957.11",
+      "\u00a019.61 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a09,13,70,638.00",
+      "\u00a09.14 Crore"
+    ],
+    "Works Recommended": [
+      "150",
+      "\u00a019,37,33,662.00",
+      "\u00a019.37 Crore"
+    ],
+    "Works Completed": [
+      "113",
+      "\u00a01,06,46,507.00",
+      "\u00a01.06 Crore"
+    ],
+    "Works Sanctioned": [
+      "147",
+      "\u00a017,57,33,662.00",
+      "\u00a017.57 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

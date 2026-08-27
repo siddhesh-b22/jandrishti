@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3042559,
+  "caption": "Shri Milind Murli Deora (2024-30)",
+  "state_id": 21,
+  "state_name": "Maharashtra",
+  "house": "RAJYA_SABHA",
+  "combo": "21,0,3042559,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a014,70,00,000.00",
+      "\u00a014.70 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a09,99,996.00",
+      "\u00a00.10 Crore"
+    ],
+    "Works Recommended": [
+      "25",
+      "\u00a03,28,30,000.00",
+      "\u00a03.28 Crore"
+    ],
+    "Works Completed": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Works Sanctioned": [
+      "5",
+      "\u00a055,00,000.00",
+      "\u00a00.55 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "0",
+      "\u00a00.00",
+      "\u00a00.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

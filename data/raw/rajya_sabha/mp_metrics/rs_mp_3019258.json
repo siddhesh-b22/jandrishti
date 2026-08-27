@@ -1,0 +1,44 @@
+{
+  "source_mp_id": 3019258,
+  "caption": "Dr. Ashok Kumar Mittal (2022-28)",
+  "state_id": 1,
+  "state_name": "Punjab",
+  "house": "RAJYA_SABHA",
+  "combo": "1,0,3019258,1",
+  "metrics": {
+    "Allocated Limit for Hon'ble MPs": [
+      "\u00a022,24,87,632.14",
+      "\u00a022.25 Crore"
+    ],
+    "Expenditure on Completed and On-going Works as on Date": [
+      "\u00a04,17,47,005.00",
+      "\u00a04.17 Crore"
+    ],
+    "Works Recommended": [
+      "47",
+      "\u00a08,95,39,695.00",
+      "\u00a08.95 Crore"
+    ],
+    "Works Completed": [
+      "15",
+      "\u00a02,55,34,600.00",
+      "\u00a02.55 Crore"
+    ],
+    "Works Sanctioned": [
+      "43",
+      "\u00a08,55,39,695.00",
+      "\u00a08.55 Crore"
+    ],
+    "Amount consented for Calamity": [
+      "1",
+      "\u00a01,00,00,000.00",
+      "\u00a01.00 Crore"
+    ],
+    "Current Tenure": [
+      {
+        "ID": 7,
+        "CAPTION": "18th Lok Sabha"
+      }
+    ]
+  }
+}

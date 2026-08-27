@@ -1,2 +1,4 @@
 *.db filter=lfs diff=lfs merge=lfs -text
 *.geojson filter=lfs diff=lfs merge=lfs -text
+data/processed/mplads_master_dataset.csv filter=lfs diff=lfs merge=lfs -text
+data/processed/work_master.csv filter=lfs diff=lfs merge=lfs -text

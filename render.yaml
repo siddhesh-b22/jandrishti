@@ -22,11 +22,10 @@ services:
         value: "*"
 
   # 2. Frontend Static Site (React + Vite SPA)
-  - type: web
+    - type: web
     name: jandrishti-web
     runtime: static
     plan: free
-    region: oregon
     rootDir: frontend
     buildCommand: "npm install && npm run build"
     staticPublishPath: dist

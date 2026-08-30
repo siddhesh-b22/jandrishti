@@ -23,6 +23,8 @@ import {
   Building2,
   ShieldCheck,
   TrendingUp,
+  Search,
+  Compass,
 } from 'lucide-react';
 import { StateSummary, StatsResponse } from '../../api/types';
 import { useHouse } from '../../context/HouseContext';
@@ -106,16 +108,15 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
   className = '',
   onFollowTheMoney,
 }) => {
-  const { selectedHouse, setSelectedHouse } = useHouse();
+  const { selectedHouse } = useHouse();
   const navigate = useNavigate();
 
   const [selectedMetric, setSelectedMetric] = useState<MapMetric>('UTILIZATION');
   const [selectedState, setSelectedState] = useState<string | null>(null);
   const [hoveredState, setHoveredState] = useState<string | null>(null);
   const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(null);
-
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [followMoneyModalOpen, setFollowMoneyModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Zoom & ViewBox State (Unified D3 Projection: 0 0 800 900)
   const defaultViewBox = DEFAULT_INDIA_PROJECTION.viewBox;
@@ -142,6 +143,25 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
     states.forEach((s) => map.set(s.state, s));
     return map;
   }, [states]);
+
+  // Sorted list of all available states for the dropdown search
+  const stateList = useMemo(() => {
+    return Object.entries(DEFAULT_INDIA_PROJECTION.states)
+      .map(([key, val]) => ({
+        key,
+        name: val.display_name,
+        data: stateDataMap.get(key),
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [stateDataMap]);
+
+  // Filtered states for quick search
+  const filteredStates = useMemo(() => {
+    if (!searchQuery.trim()) return stateList;
+    return stateList.filter((s) =>
+      s.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [stateList, searchQuery]);
 
   // Metric Range Extents for accurate analytical scaling
   const metricExtents = useMemo(() => {
@@ -195,11 +215,11 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
       .slice(0, 5);
   }, [states, selectedMetric]);
 
-  // Monochromatic Analytical Gradient Interpolation
+  // Continuous High-Precision Color Scaling
   const getStateColor = (stateKey: string) => {
     const data = stateDataMap.get(stateKey);
     if (!data || data.total_mps === 0) {
-      return '#E2E8F0'; // Neutral
+      return '#F1F5F9'; // Neutral Light Slate
     }
 
     let val = 0;
@@ -238,15 +258,15 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
       return '#FFE4E6';
     }
 
-    if (ratio > 0.85) return '#0F172A'; // Midnight Navy
-    if (ratio > 0.70) return '#1E3A8A'; // Parliamentary Blue
-    if (ratio > 0.50) return '#2563EB'; // Royal Blue
+    if (ratio > 0.85) return '#08102B'; // Deep Midnight Obsidian
+    if (ratio > 0.70) return '#1D4ED8'; // Deep Royal Blue
+    if (ratio > 0.50) return '#2563EB'; // Vibrant Electric Blue
     if (ratio > 0.30) return '#3B82F6'; // Medium Blue
     if (ratio > 0.15) return '#60A5FA'; // Sky Blue
-    return '#DBEAFE'; // Light Blue Tint
+    return '#DBEAFE'; // Crisp Light Tint
   };
 
-  // State Click & Zoom
+  // State Click & Precise Focus Zoom
   const handleStateClick = (stateKey: string) => {
     const geo = DEFAULT_INDIA_PROJECTION.states[stateKey];
     if (!geo) return;
@@ -274,6 +294,7 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
     setSelectedState(null);
     setViewBox(defaultViewBox);
     setZoomLevel(1);
+    setSearchQuery('');
   };
 
   const handleZoom = (delta: number) => {
@@ -287,6 +308,37 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
     if (newW > 1000 || newW < 120) return;
     setViewBox(`${newX} ${newY} ${newW} ${newH}`);
     setZoomLevel((prev) => (delta > 0 ? prev * 1.25 : prev * 0.8));
+  };
+
+  // Regional Focus Presets
+  const handleRegionPreset = (region: 'NORTH' | 'SOUTH' | 'EAST' | 'WEST' | 'NE' | 'ALL') => {
+    setSelectedState(null);
+    switch (region) {
+      case 'NORTH':
+        setViewBox('100 0 500 500');
+        setZoomLevel(1.6);
+        break;
+      case 'SOUTH':
+        setViewBox('150 480 500 420');
+        setZoomLevel(1.6);
+        break;
+      case 'WEST':
+        setViewBox('40 250 450 450');
+        setZoomLevel(1.6);
+        break;
+      case 'EAST':
+        setViewBox('350 250 450 450');
+        setZoomLevel(1.6);
+        break;
+      case 'NE':
+        setViewBox('500 200 300 350');
+        setZoomLevel(2.2);
+        break;
+      case 'ALL':
+      default:
+        handleResetZoom();
+        break;
+    }
   };
 
   // Hover tracker
@@ -313,7 +365,7 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
   // Small Union Territories locator markers
   const smallTerritories = [
     { key: 'CHANDIGARH', name: 'Chandigarh', center: [248, 222] },
-    { key: 'DELHI', name: 'Delhi', center: [270, 268] },
+    { key: 'DELHI', name: 'Delhi (NCR)', center: [270, 268] },
     { key: 'THE DADRA AND NAGAR HAVELI AND DAMAN AND DIU', name: 'DNH & DD', center: [194, 520] },
     { key: 'GOA', name: 'Goa', center: [205, 665] },
     { key: 'PUDUCHERRY', name: 'Puducherry', center: [332, 755] },
@@ -324,19 +376,17 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
   return (
     <div
       ref={containerRef}
-      className={`rounded-3xl border border-slate-200 bg-white shadow-xs overflow-hidden transition-all duration-300 relative ${
+      className={`rounded-3xl border border-slate-200/90 bg-white shadow-3xl overflow-hidden font-manrope transition-all duration-300 relative ${
         isFullscreen
-          ? 'fixed inset-0 z-50 rounded-none border-none p-6 bg-slate-900/95 backdrop-blur-xl flex flex-col justify-between text-white'
-          : `p-5 sm:p-6 ${className}`
+          ? 'fixed inset-0 z-50 rounded-none border-none p-6 bg-[#08102B] text-white flex flex-col justify-between'
+          : `p-4 sm:p-6 ${className}`
       }`}
     >
-      {/* 1. Header Toolbar with Intuitive Filter Pills */}
-      <div className="flex flex-col gap-3 border-b border-slate-100 pb-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      {/* 1. Header Toolbar with Filter Pills & Quick Search */}
+      <div className="space-y-3 border-b border-slate-100 pb-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          {/* Metric Selector Pills */}
           <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-0.5">
-            <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider mr-1 hidden sm:inline">
-              METHOD:
-            </span>
             {(
               [
                 'UTILIZATION',
@@ -349,15 +399,16 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
             ).map((metricKey) => {
               const cfg = METRIC_CONFIGS[metricKey];
               const Icon = cfg.icon;
+              const isActive = selectedMetric === metricKey;
               return (
                 <button
                   key={metricKey}
                   type="button"
                   onClick={() => setSelectedMetric(metricKey)}
                   className={`px-3 py-1.5 rounded-full text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 ${
-                    selectedMetric === metricKey
-                      ? 'bg-blue-600 text-white shadow-xs'
-                      : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
+                    isActive
+                      ? 'bg-[#2563EB] text-white shadow-xs'
+                      : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200/80'
                   }`}
                 >
                   <Icon className="w-3.5 h-3.5" />
@@ -367,8 +418,30 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
             })}
           </div>
 
-          {/* Fullscreen & Reset Controls */}
-          <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
+          {/* Search Dropdown & Controls */}
+          <div className="flex items-center gap-2 shrink-0">
+            {/* Territory Quick Selector */}
+            <div className="relative">
+              <select
+                value={selectedState || ''}
+                onChange={(e) => {
+                  if (e.target.value) handleStateClick(e.target.value);
+                  else handleResetZoom();
+                }}
+                className="pl-7 pr-8 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-100 transition focus:outline-none focus:ring-2 focus:ring-blue-500/20 appearance-none"
+              >
+                <option value="">Jump to State / UT ({stateList.length})...</option>
+                {stateList.map((s) => (
+                  <option key={s.key} value={s.key}>
+                    {s.name} ({s.data?.total_mps || 0} MPs)
+                  </option>
+                ))}
+              </select>
+              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <ChevronRight className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 rotate-90 pointer-events-none" />
+            </div>
+
+            {/* Fullscreen Toggle */}
             <button
               type="button"
               onClick={() => setIsFullscreen(!isFullscreen)}
@@ -380,47 +453,69 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
           </div>
         </div>
 
-        {/* Shading Explanation & Gradient Scale Bar */}
+        {/* Shading Metric Description & Continuous Color Gradient Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs bg-slate-50/80 rounded-xl px-3.5 py-2 border border-slate-200/60">
           <div className="flex items-center gap-2 text-slate-600">
-            <Info className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+            <Info className="w-3.5 h-3.5 text-[#2563EB] shrink-0" />
             <span className="text-[11px] font-medium font-sans">
               <strong className="text-slate-900 font-bold">{activeMetricMeta.label}:</strong> {activeMetricMeta.description}
             </span>
           </div>
 
-          {/* Dynamic Color Scale */}
+          {/* Color Ramp Legend */}
           <div className="flex items-center gap-2 text-[10px] font-mono text-slate-500 shrink-0 self-end sm:self-auto">
             <span>Min: {metricExtents.min.toFixed(0)}</span>
             <div
-              className={`w-20 h-2 rounded-full ${
+              className={`w-24 h-2 rounded-full ${
                 selectedMetric === 'ANOMALIES'
                   ? 'bg-gradient-to-r from-rose-200 via-rose-500 to-rose-900'
-                  : 'bg-gradient-to-r from-blue-200 via-blue-500 to-slate-950'
+                  : 'bg-gradient-to-r from-[#DBEAFE] via-[#2563EB] to-[#08102B]'
               }`}
             />
             <span className="font-bold text-slate-800">Max: {metricExtents.max.toFixed(0)}</span>
           </div>
         </div>
+
+        {/* Region Quick Zoom Presets */}
+        <div className="flex flex-wrap items-center gap-1.5 text-xs font-bold pt-0.5">
+          <span className="text-[10px] font-mono text-slate-400 uppercase mr-1">Region:</span>
+          {[
+            { id: 'ALL', label: 'All India' },
+            { id: 'NORTH', label: 'North' },
+            { id: 'SOUTH', label: 'South' },
+            { id: 'WEST', label: 'West' },
+            { id: 'EAST', label: 'East' },
+            { id: 'NE', label: 'North-East' },
+          ].map((reg) => (
+            <button
+              key={reg.id}
+              type="button"
+              onClick={() => handleRegionPreset(reg.id as any)}
+              className="px-2.5 py-1 rounded-full bg-slate-100/80 hover:bg-slate-200 text-slate-700 text-[11px] transition"
+            >
+              {reg.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* 2. Main Map Grid: Split-Screen Canvas + Intelligence Rail */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 my-4 items-start">
-        {/* Left (7-8 cols): SVG Map Canvas (Optimized Height: ~480px) */}
+        {/* Left (7-8 cols): SVG Map Canvas */}
         <div className="lg:col-span-8 relative h-[380px] sm:h-[460px] md:h-[500px] w-full bg-[#F8FAFC] rounded-2xl border border-slate-200 overflow-hidden flex items-center justify-center select-none shadow-inner">
-          {/* Scope Indicator */}
+          {/* Scope Indicator Badge */}
           <div className="absolute top-3 left-3 z-10 flex items-center gap-2 bg-white/95 backdrop-blur-md px-3 py-1 rounded-full border border-slate-200 shadow-xs text-xs font-mono">
             <span className="w-2 h-2 rounded-full bg-emerald-500" />
             <span className="font-bold text-slate-800 text-[11px]">
               {selectedHouse === 'ALL'
-                ? 'All India (36 States • 778 MPs)'
+                ? '36 States & UTs (778 MPs)'
                 : selectedHouse === 'LOK_SABHA'
-                ? '18th Lok Sabha (543 MPs)'
-                : 'Rajya Sabha (235 Members)'}
+                ? '543 Lok Sabha Constituencies'
+                : '235 Rajya Sabha Representatives'}
             </span>
           </div>
 
-          {/* Zoom & Reset Controls */}
+          {/* Zoom & Reset Buttons */}
           <div className="absolute bottom-3 left-3 z-10 flex flex-col gap-1 bg-white/95 backdrop-blur-md p-1 rounded-xl border border-slate-200 shadow-xs">
             <button
               type="button"
@@ -441,7 +536,7 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
             <button
               type="button"
               onClick={handleResetZoom}
-              className="p-1.5 rounded-lg hover:bg-slate-100 text-blue-600 transition active:scale-95 border-t border-slate-100"
+              className="p-1.5 rounded-lg hover:bg-slate-100 text-[#2563EB] transition active:scale-95 border-t border-slate-100"
               title="Reset View"
             >
               <RotateCcw className="w-3.5 h-3.5" />
@@ -457,10 +552,10 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
           >
             <defs>
               <filter id="hover-glow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#2563EB" floodOpacity="0.4" />
+                <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#2563EB" floodOpacity="0.5" />
               </filter>
               <filter id="select-glow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="3" stdDeviation="5" floodColor="#0F172A" floodOpacity="0.6" />
+                <feDropShadow dx="0" dy="3" stdDeviation="5" floodColor="#08102B" floodOpacity="0.7" />
               </filter>
             </defs>
 
@@ -496,7 +591,7 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
                       fill: { duration: 0.25 },
                     }}
                     stroke="#FFFFFF"
-                    strokeWidth={0.8}
+                    strokeWidth={0.9}
                     strokeLinejoin="round"
                     strokeLinecap="round"
                     className="cursor-pointer transition-all duration-100"
@@ -515,8 +610,8 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
                   <path
                     d={DEFAULT_INDIA_PROJECTION.states[selectedState].path}
                     fill="none"
-                    stroke="#0F172A"
-                    strokeWidth={2.6}
+                    stroke="#08102B"
+                    strokeWidth={2.8}
                     strokeLinejoin="round"
                     strokeLinecap="round"
                     vectorEffect="non-scaling-stroke"
@@ -528,7 +623,7 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
                     d={DEFAULT_INDIA_PROJECTION.states[hoveredState].path}
                     fill="none"
                     stroke="#2563EB"
-                    strokeWidth={2.2}
+                    strokeWidth={2.4}
                     strokeLinejoin="round"
                     strokeLinecap="round"
                     vectorEffect="non-scaling-stroke"
@@ -562,7 +657,7 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
                     y={geo.centroid[1]}
                     fontSize={width < 50 || height < 50 ? 7.5 : 8.5}
                     fontWeight="800"
-                    fill={isSelected ? '#0F172A' : isHovered ? '#2563EB' : '#1E293B'}
+                    fill={isSelected ? '#08102B' : isHovered ? '#2563EB' : '#1E293B'}
                     stroke="#FFFFFF"
                     strokeWidth="2.8"
                     paintOrder="stroke fill"
@@ -576,7 +671,7 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
               })}
             </g>
 
-            {/* LAYER 4: Small Territory Locator Points */}
+            {/* LAYER 4: Small Territory Locator Badges */}
             <g className="small-territories-layer">
               {smallTerritories.map((ut) => {
                 const isSelected = selectedState === ut.key;
@@ -593,17 +688,17 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
                     onMouseLeave={handleMouseLeave}
                   >
                     <circle
-                      r={isSelected ? 7 : isHovered ? 6 : 4.5}
+                      r={isSelected ? 7.5 : isHovered ? 6.5 : 4.5}
                       fill={color}
                       stroke="#FFFFFF"
                       strokeWidth={1.8}
                     />
                     <text
-                      x={7}
-                      y={3}
+                      x={8}
+                      y={3.5}
                       fontSize={8}
                       fontWeight="bold"
-                      fill="#0F172A"
+                      fill="#08102B"
                       stroke="#FFFFFF"
                       strokeWidth="2.2"
                       paintOrder="stroke fill"
@@ -618,7 +713,7 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
             </g>
           </svg>
 
-          {/* DYNAMIC HOVER TOOLTIP */}
+          {/* DYNAMIC HIGH-PRECISION FLOATING TOOLTIP */}
           <AnimatePresence>
             {hoveredState && tooltipPos && (
               <motion.div
@@ -627,52 +722,47 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.12 }}
                 style={{
-                  left: Math.min(tooltipPos.x + 12, (containerRef.current?.clientWidth || 700) - 240),
-                  top: Math.max(tooltipPos.y - 120, 10),
+                  left: Math.min(tooltipPos.x + 12, (containerRef.current?.clientWidth || 700) - 260),
+                  top: Math.max(tooltipPos.y - 140, 10),
                 }}
-                className="absolute z-30 pointer-events-none w-56 rounded-2xl bg-white/95 backdrop-blur-md p-3 border border-slate-200 shadow-xl text-xs space-y-2 text-slate-900"
+                className="absolute z-30 pointer-events-none w-64 rounded-2xl bg-[#08102B] text-white p-3.5 border border-slate-700 shadow-2xl text-xs space-y-2 font-manrope"
               >
-                <div className="flex items-center justify-between border-b border-slate-100 pb-1.5">
+                <div className="flex items-center justify-between border-b border-slate-700/80 pb-1.5">
                   <div>
-                    <span className="text-[9px] font-mono font-bold text-blue-600 uppercase block">State Intelligence</span>
-                    <strong className="text-xs font-black text-slate-900 font-sans block truncate max-w-[140px]">
+                    <span className="text-[9px] font-mono font-bold text-blue-400 uppercase block tracking-wider">
+                      Constitutional Jurisdiction
+                    </span>
+                    <strong className="text-xs font-black text-white font-sans block truncate max-w-[160px]">
                       {hoveredGeo?.display_name || hoveredState}
                     </strong>
                   </div>
-                  <span className="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 font-bold text-[10px]">
+                  <span className="px-2 py-0.5 rounded-full bg-[#2563EB] text-white font-bold text-[10px]">
                     {hoveredData?.total_mps || 0} MPs
                   </span>
                 </div>
 
                 <div className="space-y-1 font-mono text-[11px]">
-                  <div className="flex justify-between text-slate-500">
-                    <span>Allocated:</span>
-                    <strong className="text-slate-900">
-                      ₹{((hoveredData?.total_allocated_amount || 0) / 1e7).toFixed(1)} Cr
-                    </strong>
+                  <div className="flex justify-between text-slate-300">
+                    <span className="text-slate-400 font-sans">Statutory Corpus:</span>
+                    <strong>₹{((hoveredData?.total_allocated_amount || 0) / 1e7).toFixed(1)} Cr</strong>
                   </div>
-                  <div className="flex justify-between text-slate-500">
-                    <span>Disbursed:</span>
-                    <strong className="text-emerald-600 font-bold">
-                      ₹{((hoveredData?.total_expenditure || 0) / 1e7).toFixed(1)} Cr
-                    </strong>
+                  <div className="flex justify-between text-emerald-400">
+                    <span className="text-slate-400 font-sans">Disbursed Spend:</span>
+                    <strong>₹{((hoveredData?.total_expenditure || 0) / 1e7).toFixed(1)} Cr</strong>
                   </div>
-                  <div className="flex justify-between text-slate-500">
-                    <span>Utilization:</span>
-                    <strong className="text-blue-700 font-bold">
-                      {hoveredData?.state_utilization_pct?.toFixed(1) || '0.0'}%
-                    </strong>
+                  <div className="flex justify-between text-blue-400">
+                    <span className="text-slate-400 font-sans">Utilization Rate:</span>
+                    <strong>{hoveredData?.state_utilization_pct?.toFixed(1) || '0.0'}%</strong>
                   </div>
-                  <div className="flex justify-between text-slate-500">
-                    <span>Works Built:</span>
-                    <strong className="text-slate-800">
-                      {hoveredData?.total_completed_works?.toLocaleString() || 0}
-                    </strong>
+                  <div className="flex justify-between text-slate-200">
+                    <span className="text-slate-400 font-sans">Delivered Works:</span>
+                    <strong>{hoveredData?.total_completed_works?.toLocaleString() || 0}</strong>
                   </div>
                 </div>
 
-                <div className="pt-1 text-[9px] font-mono text-slate-400 text-center border-t border-slate-100">
-                  Click state to lock dossier
+                <div className="pt-1 text-[9px] font-mono text-emerald-400 text-center border-t border-slate-800 flex items-center justify-center gap-1">
+                  <ShieldCheck className="w-3 h-3" />
+                  <span>Click to lock &amp; inspect State dossier</span>
                 </div>
               </motion.div>
             )}
@@ -686,17 +776,17 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-xs space-y-4">
               <div className="flex items-start justify-between border-b border-slate-200 pb-3">
                 <div>
-                  <span className="text-[10px] font-mono font-bold text-blue-600 uppercase">
-                    SELECTED STATE DOSSIER
+                  <span className="text-[10px] font-mono font-bold text-[#2563EB] uppercase tracking-wider">
+                    SELECTED TERRITORY DOSSIER
                   </span>
-                  <h3 className="text-lg font-black text-slate-900 mt-0.5">
+                  <h3 className="text-lg font-black text-[#08102B] mt-0.5">
                     {activeDossierData.state}
                   </h3>
                 </div>
                 <button
                   type="button"
                   onClick={handleResetZoom}
-                  className="p-1 rounded-full hover:bg-white text-slate-400 hover:text-slate-900 border border-slate-200 transition"
+                  className="p-1.5 rounded-full hover:bg-white text-slate-400 hover:text-slate-900 border border-slate-200 transition"
                   title="Close State View"
                 >
                   <X className="w-3.5 h-3.5" />
@@ -706,15 +796,15 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
               {/* Progress & Utilization */}
               <div className="p-3.5 rounded-xl bg-white border border-slate-200 space-y-1.5">
                 <div className="flex justify-between items-center text-xs font-mono">
-                  <span className="text-slate-500">Fund Utilization</span>
-                  <strong className="text-blue-700 font-black">
+                  <span className="text-slate-500 font-sans">Fund Utilization</span>
+                  <strong className="text-[#2563EB] font-black">
                     {activeDossierData.state_utilization_pct.toFixed(1)}%
                   </strong>
                 </div>
                 <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
                   <div
                     style={{ width: `${Math.min(100, activeDossierData.state_utilization_pct)}%` }}
-                    className="h-full rounded-full bg-blue-600"
+                    className="h-full rounded-full bg-[#2563EB]"
                   />
                 </div>
               </div>
@@ -723,7 +813,7 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
               <div className="grid grid-cols-2 gap-2.5 text-xs">
                 <div className="p-3 rounded-xl bg-white border border-slate-200 space-y-0.5">
                   <span className="text-[10px] font-mono text-slate-400 uppercase">Allocated</span>
-                  <div className="text-sm font-black font-mono text-slate-900">
+                  <div className="text-sm font-black font-mono text-[#08102B]">
                     ₹{(activeDossierData.total_allocated_amount / 1e7).toFixed(2)} Cr
                   </div>
                 </div>
@@ -736,36 +826,45 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
                 </div>
 
                 <div className="p-3 rounded-xl bg-white border border-slate-200 space-y-0.5">
-                  <span className="text-[10px] font-mono text-slate-400 uppercase">Members</span>
-                  <div className="text-sm font-black font-mono text-slate-900">
+                  <span className="text-[10px] font-mono text-slate-400 uppercase">Parliamentarians</span>
+                  <div className="text-sm font-black font-mono text-[#08102B]">
                     {activeDossierData.total_mps} MPs
                   </div>
                 </div>
 
                 <div className="p-3 rounded-xl bg-white border border-slate-200 space-y-0.5">
-                  <span className="text-[10px] font-mono text-slate-400 uppercase">Works Built</span>
+                  <span className="text-[10px] font-mono text-slate-400 uppercase">Delivered Works</span>
                   <div className="text-sm font-black font-mono text-emerald-700">
                     {activeDossierData.total_completed_works.toLocaleString()}
                   </div>
                 </div>
               </div>
 
-              {/* Action Link */}
-              <button
-                type="button"
-                onClick={() => navigate(`/mps?state=${encodeURIComponent(activeDossierData.state)}`)}
-                className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition"
-              >
-                <span>Inspect {activeDossierData.total_mps} State MPs →</span>
-              </button>
+              {/* Action Links */}
+              <div className="space-y-2 pt-1">
+                <button
+                  type="button"
+                  onClick={() => navigate(`/mps?state=${encodeURIComponent(activeDossierData.state)}`)}
+                  className="w-full py-2.5 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition shadow-xs"
+                >
+                  <span>Explore {activeDossierData.total_mps} State MPs →</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate(`/works?state=${encodeURIComponent(activeDossierData.state)}`)}
+                  className="w-full py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center gap-1.5 transition border border-slate-200"
+                >
+                  <span>View State Ground Works →</span>
+                </button>
+              </div>
             </div>
           ) : (
             /* National Geographic Leaderboard Rail */
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-xs space-y-3">
               <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
-                <span className="text-xs font-mono font-bold text-slate-900 uppercase flex items-center gap-1.5">
-                  <TrendingUp className="w-4 h-4 text-blue-600" />
-                  TOP STATES ({activeMetricMeta.short})
+                <span className="text-xs font-mono font-bold text-[#08102B] uppercase flex items-center gap-1.5">
+                  <TrendingUp className="w-4 h-4 text-[#2563EB]" />
+                  TOP TERRITORIES ({activeMetricMeta.short})
                 </span>
                 <span className="text-[10px] font-mono text-slate-400 font-bold">RANK</span>
               </div>
@@ -782,7 +881,7 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
                         0{idx + 1}
                       </span>
                       <div>
-                        <div className="font-bold text-slate-900 group-hover:text-blue-600 transition truncate max-w-[120px]">
+                        <div className="font-bold text-[#08102B] group-hover:text-[#2563EB] transition truncate max-w-[120px]">
                           {st.state}
                         </div>
                         <div className="text-[10px] text-slate-400 font-mono">{st.total_mps} MPs</div>
@@ -790,7 +889,7 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
                     </div>
 
                     <div className="text-right">
-                      <div className="font-mono font-black text-blue-600 text-xs">
+                      <div className="font-mono font-black text-[#2563EB] text-xs">
                         {selectedMetric === 'UTILIZATION'
                           ? `${st.state_utilization_pct.toFixed(1)}%`
                           : selectedMetric === 'ALLOCATION'
@@ -813,9 +912,6 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
           )}
         </div>
       </div>
-
-      {/* Interactive Modal */}
-      <FollowTheMoneyModal isOpen={followMoneyModalOpen} onClose={() => setFollowMoneyModalOpen(false)} />
     </div>
   );
 };

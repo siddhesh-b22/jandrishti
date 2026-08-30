@@ -37,6 +37,7 @@ import { ErrorDisplay } from '../components/common/ErrorDisplay';
 import { IndiaParliamentaryMap } from '../components/map/IndiaParliamentaryMap';
 import { AnalyticsSuite } from '../components/analytics/AnalyticsSuite';
 import { HeroTechIllustration } from '../components/common/HeroTechIllustration';
+import { HowJanDrishtiWorks } from '../components/common/HowJanDrishtiWorks';
 import { FollowTheMoneyModal } from '../components/common/FollowTheMoneyModal';
 import { EntityDossierDrawer, DossierEntity } from '../components/common/EntityDossierDrawer';
 import { useCountUp } from '../hooks/useCountUp';
@@ -537,52 +538,11 @@ export const OverviewPage: React.FC = () => {
       </section>
 
       {/* ========================================================= */}
-      {/* 05. 4-STEP CIVIC DATA FORENSIC PIPELINE                   */}
+      {/* 05. INTERACTIVE HOW JANDRISHTI WORKS PIPELINE             */}
       {/* ========================================================= */}
-      <section className="py-8 sm:py-12 bg-white border-t border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-          <div className="text-center max-w-2xl mx-auto">
-            <span className="text-xs font-extrabold uppercase tracking-widest text-[#2563EB]">
-              Architecture &amp; Proofs
-            </span>
-            <h2 className="mt-0.5 text-xl sm:text-2xl font-extrabold text-[#08102B] tracking-tight">
-              From raw government data to verified intelligence
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="rounded-2xl bg-slate-50 p-4 border border-slate-200 shadow-xs space-y-1.5">
-              <span className="text-xl font-extrabold text-[#2563EB] font-mono">01</span>
-              <h3 className="text-sm font-extrabold text-[#08102B]">Data Ingestion</h3>
-              <p className="text-xs text-slate-600 font-light leading-relaxed">
-                Automated ingestion of official reports across 778 MPs, 102K works, and 82K vouchers.
-              </p>
-            </div>
-
-            <div className="rounded-2xl bg-slate-50 p-4 border border-slate-200 shadow-xs space-y-1.5">
-              <span className="text-xl font-extrabold text-[#2563EB] font-mono">02</span>
-              <h3 className="text-sm font-extrabold text-[#08102B]">Ledger Validation</h3>
-              <p className="text-xs text-slate-600 font-light leading-relaxed">
-                Double-entry fiscal validation verifying reconciliations with ₹0.00 discrepancy.
-              </p>
-            </div>
-
-            <div className="rounded-2xl bg-slate-50 p-4 border border-slate-200 shadow-xs space-y-1.5">
-              <span className="text-xl font-extrabold text-[#2563EB] font-mono">03</span>
-              <h3 className="text-sm font-extrabold text-[#08102B]">MAD Robust Z-Scores</h3>
-              <p className="text-xs text-slate-600 font-light leading-relaxed">
-                Empirical anomaly engine computing 1,831 objective signals without outlier distortion.
-              </p>
-            </div>
-
-            <div className="rounded-2xl bg-slate-50 p-4 border border-slate-200 shadow-xs space-y-1.5">
-              <span className="text-xl font-extrabold text-[#2563EB] font-mono">04</span>
-              <h3 className="text-sm font-extrabold text-[#08102B]">Citizen Dossiers</h3>
-              <p className="text-xs text-slate-600 font-light leading-relaxed">
-                Instant generation of verifiable entity dossiers, geospatial maps, and CSV exports.
-              </p>
-            </div>
-          </div>
+      <section className="py-8 sm:py-14 bg-white border-t border-slate-200/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <HowJanDrishtiWorks />
         </div>
       </section>
 

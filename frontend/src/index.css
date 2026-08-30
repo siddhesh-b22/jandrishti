@@ -3,25 +3,23 @@
 @tailwind utilities;
 
 :root {
-  --color-primary: #1E3A8A;
-  --color-primary-dark: #0F172A;
-  --color-accent-blue: #2563EB;
+  --color-primary: #2563EB;
+  --color-primary-dark: #08102B;
+  --color-accent-blue: #3B82F6;
   --color-accent-emerald: #10B981;
   --color-accent-amber: #F59E0B;
 }
 
 /* ========================================================= */
 /* HIDE RIGHT SIDE SCROLLBAR ACROSS ALL BROWSERS             */
-/* (Preserves full smooth scrolling without visible bars)   */
 /* ========================================================= */
 html,
 body,
 #root {
-  -ms-overflow-style: none !important; /* IE and Edge */
-  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
 }
 
-/* Chrome, Safari, Edge, and WebKit */
 ::-webkit-scrollbar {
   display: none !important;
   width: 0px !important;
@@ -37,13 +35,13 @@ body,
 @layer base {
   body {
     background-color: #F8FAFC;
-    color: #0F172A;
+    color: #08102B;
     min-height: 100vh;
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Manrope', 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.018em;
   }
 
   ::selection {
@@ -51,27 +49,100 @@ body,
     color: #FFFFFF;
   }
 
-  h1, h2, h3, h4, .font-display {
+  h1, h2, h3, h4, .font-display, .font-manrope {
+    font-family: 'Manrope', sans-serif;
     letter-spacing: -0.03em;
   }
 
-  /* Tabular numbers for accurate data ledger comparison */
   .font-mono {
     font-feature-settings: 'tnum' on, 'lnum' on, 'zero' on;
   }
 }
 
-/* Reference Card Styles */
+/* Alluxi Button System */
+.alx-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #2563EB;
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.35);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.alx-btn-primary:hover {
+  background-color: #1D4ED8;
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px -5px rgba(37, 99, 235, 0.45);
+}
+
+.alx-btn-primary:active {
+  transform: translateY(0);
+}
+
+.alx-btn-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #08102B;
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 0.875rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 9999px;
+  box-shadow: 0 4px 15px rgba(8, 16, 43, 0.15);
+  transition: all 0.25s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.alx-btn-cta:hover {
+  background-color: #1E3A8A;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(8, 16, 43, 0.25);
+}
+
+.alx-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #FFFFFF;
+  color: #08102B;
+  font-weight: 700;
+  font-size: 0.875rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 9999px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 2px 8px rgba(8, 16, 43, 0.04);
+  transition: all 0.25s ease;
+}
+
+.alx-btn-secondary:hover {
+  background-color: #F8FAFC;
+  border-color: #CBD5E1;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(8, 16, 43, 0.08);
+}
+
+/* Alluxi Card Executive */
 .card-executive {
   background-color: #FFFFFF;
   border: 1px solid #E2E8F0;
-  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 40px -15px rgba(8, 16, 43, 0.07);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .card-executive:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 30px -10px rgba(15, 23, 42, 0.1), 0 2px 6px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 30px 60px -15px rgba(8, 16, 43, 0.12);
   border-color: #CBD5E1;
 }
 
@@ -79,7 +150,7 @@ body,
 .shimmer-skeleton {
   position: relative;
   overflow: hidden;
-  background-color: #E2E8F0;
+  background-color: #F1F5F9;
 }
 
 .shimmer-skeleton::after {
@@ -93,7 +164,7 @@ body,
   background-image: linear-gradient(
     90deg,
     rgba(255, 255, 255, 0) 0,
-    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0.7) 50%,
     rgba(255, 255, 255, 0) 100%
   );
   animation: shimmer 1.5s infinite;
@@ -103,4 +174,13 @@ body,
   100% {
     transform: translateX(100%);
   }
+}
+
+.floating-effect {
+  animation: floatEffect 6s ease-in-out infinite;
+}
+
+@keyframes floatEffect {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
 }

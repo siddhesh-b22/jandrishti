@@ -25,7 +25,7 @@ import {
   Award,
   Sparkles,
   TrendingUp,
-  Train,
+  Zap,
 } from 'lucide-react';
 import { api } from '../api/client';
 import { StatsResponse, StateSummary, WorkCategory } from '../api/types';
@@ -41,7 +41,7 @@ import { useCountUp } from '../hooks/useCountUp';
 import slideParliamentChamber from '../assets/images/slide_parliament_chamber.jpg';
 import slideChenab from '../assets/images/slide_chenab.jpg';
 import slideAtalSetu from '../assets/images/slide_atalsetu.jpg';
-import slideVandeMetro from '../assets/images/slide_vandebharat_metro.jpg'; // Vande Metro Train
+import slideVandeMetro from '../assets/images/slide_vandebharat_metro.jpg';
 import slidePamban from '../assets/images/slide_pamban.jpg';
 
 export const OverviewPage: React.FC = () => {
@@ -57,7 +57,7 @@ export const OverviewPage: React.FC = () => {
 
   // Hero Carousel State (5 Iconic High-Res Photos)
   const [currentSlide, setCurrentSlide] = useState(0);
-  const SLIDE_DURATION = 4500; // 4.5 seconds per slide for smooth continuous auto-advance
+  const SLIDE_DURATION = 4500;
 
   const heroSlides = [
     {
@@ -67,7 +67,6 @@ export const OverviewPage: React.FC = () => {
       tag: 'PARLIAMENTARY SOVEREIGNTY · 778 SEATS',
       titlePart1: 'Parliamentary Allocations.',
       titleHighlight: 'Traced to Ground Delivery.',
-      highlightColor: 'text-blue-400',
       desc: 'Auditing ₹11,667.55 Crore statutory development fund authorized across 778 parliamentary seats with zero accounting discrepancy.',
       stat: '₹11,667.55 Cr',
       statLabel: 'Statutory Corpus',
@@ -80,7 +79,6 @@ export const OverviewPage: React.FC = () => {
       tag: 'MEGA INFRASTRUCTURE · PUBLIC ASSETS',
       titlePart1: '102,437 Ground Works.',
       titleHighlight: 'Monitored Across 28 States & 8 UTs.',
-      highlightColor: 'text-emerald-400',
       desc: 'Granular monitoring of drinking water pipelines, high-altitude bridges, schools, and hospitals across 28 States and 8 Union Territories.',
       stat: '102,437 Works',
       statLabel: 'Public Assets',
@@ -93,7 +91,6 @@ export const OverviewPage: React.FC = () => {
       tag: 'COASTAL CORRIDORS · ZERO VARIANCE',
       titlePart1: 'Constitutional Integrity.',
       titleHighlight: '& Mathematical Reconciliation.',
-      highlightColor: 'text-amber-400',
       desc: 'Every rupee verified with strict double-entry ledger audits, ensuring ₹0.00 mathematical variance across central exchequer returns.',
       stat: '₹0.00 Variance',
       statLabel: 'Audit Standard',
@@ -102,11 +99,10 @@ export const OverviewPage: React.FC = () => {
     {
       id: 3,
       title: 'Vande Metro Transit',
-      image: slideVandeMetro, // Vande Metro Train Official Release
+      image: slideVandeMetro,
       tag: 'RAPID MOBILITY · 82K+ VOUCHERS',
       titlePart1: '82,296 Treasury Records.',
       titleHighlight: 'Line-Item Lineage Verified.',
-      highlightColor: 'text-sky-400',
       desc: 'Direct financial visibility connecting central allocations to district-level treasury vouchers and modern Vande Metro transit disbursements.',
       stat: '₹3,947.25 Cr',
       statLabel: 'Disbursed Funds',
@@ -118,16 +114,15 @@ export const OverviewPage: React.FC = () => {
       image: slidePamban,
       tag: 'MARITIME CONNECTIVITY · OPEN DATA',
       titlePart1: 'Open Fiscal Intelligence.',
-      titleHighlight: 'For Every Indian Citizen.',
-      highlightColor: 'text-indigo-400',
-      desc: 'Transforming complex ministerial ledgers into explainable statistical signals and verifiable public records for every constituency.',
-      stat: '100% Open Data',
-      statLabel: 'Public Trust',
-      meta: 'Single Source of Truth',
+      titleHighlight: 'Empowering Every Citizen.',
+      desc: 'Bridging public fund governance and grassroots visibility through explainable algorithms, interactive cartography, and vendor tracking.',
+      stat: '22,377 Vendors',
+      statLabel: 'Procurement Entities',
+      meta: 'Open Civic Data',
     },
   ];
 
-  // Continuous auto-advance carousel every 4.5s
+  // Auto-advance hero carousel
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
@@ -135,693 +130,658 @@ export const OverviewPage: React.FC = () => {
     return () => clearInterval(timer);
   }, [heroSlides.length]);
 
-  const loadData = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const houseParam = selectedHouse === 'ALL' ? undefined : selectedHouse;
-      const [statsData, statesData, categoriesData] = await Promise.all([
-        api.getStats({ house: houseParam }),
-        api.getStates({ house: houseParam }),
-        api.getCategories(),
-      ]);
-      setStats(statsData);
-      setStates(statesData);
-      setCategories(categoriesData);
-    } catch (err: any) {
-      setError(err.message || 'Failed to load national intelligence data');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    async function loadData() {
+      try {
+        setLoading(true);
+        setError(null);
+        const [statsData, statesData, catData] = await Promise.all([
+          api.getStats({ house: selectedHouse === 'ALL' ? undefined : selectedHouse }),
+          api.getStates({ house: selectedHouse === 'ALL' ? undefined : selectedHouse }),
+          api.getCategories(),
+        ]);
+        setStats(statsData);
+        setStates(statesData);
+        setCategories(catData);
+      } catch (err: any) {
+        setError(err.message || 'Failed to connect to the JanDrishti analytical backend.');
+      } finally {
+        setLoading(false);
+      }
+    }
     loadData();
   }, [selectedHouse]);
 
-  const heroMpsCount = useCountUp({
-    end: stats?.total_mps || 778,
-    duration: 900,
-    trigger: !loading,
-  });
+  const formatCr = (val?: number) => {
+    if (val === undefined || val === null) return '₹0.00 Cr';
+    return `₹${(val / 10000000).toLocaleString('en-IN', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })} Cr`;
+  };
 
-  const heroWorksCount = useCountUp({
-    end: stats?.total_recommended_works || 102437,
-    duration: 1000,
-    trigger: !loading,
-  });
+  const totalAllocated = stats?.total_allocated_amount || 0;
+  const totalExpenditure = stats?.total_expenditure || 0;
+  const totalUnspent = stats?.total_unspent_amount || 0;
+  const utilizationPct = stats?.national_utilization_pct || 0;
 
-  const heroSignalsCount = useCountUp({
-    end: stats?.total_anomalies || 1831,
-    duration: 1100,
-    trigger: !loading,
-  });
+  // Animated numbers
+  const animatedMps = useCountUp({ end: stats?.total_mps || 0, duration: 1200 });
+  const animatedWorks = useCountUp({ end: stats?.total_recommended_works || 102437, duration: 1400 });
+  const animatedVouchers = useCountUp({ end: stats?.total_transactions || 82296, duration: 1400 });
+  const animatedVendors = useCountUp({ end: stats?.total_vendors || 22377, duration: 1200 });
+  const animatedAnomalies = useCountUp({ end: stats?.total_anomalies || 1831, duration: 1200 });
 
-  if (loading) {
+  if (loading && !stats) {
     return (
-      <div className="space-y-8 animate-fade-in py-6 max-w-7xl mx-auto px-4">
-        <div className="h-12 w-72 shimmer-skeleton rounded-lg" />
-        <div className="h-[520px] w-full shimmer-skeleton rounded-2xl" />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="h-36 shimmer-skeleton rounded-xl" />
-          <div className="h-36 shimmer-skeleton rounded-xl" />
-          <div className="h-36 shimmer-skeleton rounded-xl" />
-        </div>
+      <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
+        <LoadingSkeleton rows={4} height="h-28" />
+        <LoadingSkeleton rows={4} height="h-28" />
       </div>
     );
   }
 
-  if (error || !stats) {
-    return <ErrorDisplay message={error || 'Failed to initialize overview'} onRetry={loadData} />;
+  if (error && !stats) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-16">
+        <ErrorDisplay
+          message={error}
+          onRetry={() => window.location.reload()}
+        />
+      </div>
+    );
   }
 
-  // 3 Civic Pillars (Institutional Services)
-  const servicePillars = [
-    {
-      icon: Users,
-      title: 'Parliamentary Allocation',
-      desc: 'Complete tracking of ₹11,667.55 Cr statutory development fund across 543 Lok Sabha and 235 Rajya Sabha representatives.',
-      metric: '₹11,667.55 Cr Authorized',
-      metricSub: '778 Representatives',
-      to: '/mps',
-      toLabel: 'Inspect 778 Representatives',
-      badgeColor: 'text-blue-600 bg-blue-50 border-blue-100',
-    },
-    {
-      icon: Layers,
-      title: 'Physical Works Delivery',
-      desc: 'Granular monitoring of 102,437 developmental projects across drinking water, roads, education, and community healthcare.',
-      metric: '102,437 Ground Works',
-      metricSub: '61,842 Completed Works',
-      to: '/works',
-      toLabel: 'Inspect 102K+ Works Delivered',
-      badgeColor: 'text-emerald-600 bg-emerald-50 border-emerald-100',
-    },
-    {
-      icon: Receipt,
-      title: 'Treasury Disbursements',
-      desc: 'Line-item financial verification across 82,296 treasury vouchers with verified ₹0.00 mathematical reconciliation variance.',
-      metric: '₹3,947.25 Cr Disbursed',
-      metricSub: '82,296 Vouchers Reconciled',
-      to: '/transactions',
-      toLabel: 'Inspect 82,296 Vouchers',
-      badgeColor: 'text-indigo-600 bg-indigo-50 border-indigo-100',
-    },
-  ];
-
-  // 4 Features for "Why Choose JanDrishti"
-  const darkSectionFeatures = [
-    {
-      icon: ShieldCheck,
-      title: 'Double-Entry Audit',
-      desc: 'Every single rupee reconciled with verified ₹0.00 variance against central ministry statutory standards.',
-    },
-    {
-      icon: Activity,
-      title: 'MAD Robust Z-Score',
-      desc: 'Empirical Median Absolute Deviation algorithms isolating statistical deviations without arbitrary thresholds.',
-    },
-    {
-      icon: Building2,
-      title: 'Contractor Reliance',
-      desc: 'Quantitative Herfindahl-Hirschman Index (HHI) calculating vendor concentration across districts.',
-    },
-    {
-      icon: FileCheck,
-      title: 'Deterministic Lineage',
-      desc: '100% transparent audit trails connecting results directly to official raw source datasets.',
-    },
-  ];
-
-  // Case Studies
-  const caseStudies = [
-    {
-      image: slideAtalSetu,
-      category: 'DRINKING WATER & SANITATION',
-      title: '31,420 Ground Projects Completed',
-      desc: 'Delivering pipeline infrastructure, community water filtration, and sanitation facilities nationwide.',
-      metric: '30.7% of National Works',
-      to: '/works',
-    },
-    {
-      image: slideChenab,
-      category: 'ROADS, PATHWAYS & BRIDGES',
-      title: '28,150 Connectivity Arteries',
-      desc: 'Linking rural gram panchayats, block headquarters, and developmental zones across 36 States.',
-      metric: '27.5% of National Works',
-      to: '/works',
-    },
-    {
-      image: slideVandeMetro,
-      category: 'TRANSIT & HIGH-SPEED MOBILITY',
-      title: 'Vande Metro & Rail Assets',
-      desc: 'Modernizing railway connectivity, passenger amenities, and regional mobility corridors across India.',
-      metric: '27.8% of National Works',
-      to: '/works',
-    },
-  ];
+  const activeSlideData = heroSlides[currentSlide];
 
   return (
-    <div className="space-y-12 lg:space-y-16 animate-fade-in pb-20 text-[#0F172A] bg-[#F8FAFC]">
-      {/* ========================================================= */}
-      {/* 01. MINIMAL & ATTRACTIVE 100% VIEWPORT HERO CAROUSEL       */}
-      {/* (CLEAN VIEWPORT, NO CLUTTER, FLOATING MINIMAL INDICATORS)  */}
-      {/* ========================================================= */}
-      <section
-        className="w-full relative overflow-hidden bg-slate-950 h-[calc(100vh-68px)] min-h-[580px] flex flex-col justify-between select-none shadow-2xl border-b border-slate-800/80"
-      >
-        {/* Dynamic Background Image with Smooth Crossfade & Motion */}
-        <div className="absolute inset-0 z-0">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentSlide}
-              initial={{ opacity: 0, scale: 1.04 }}
-              animate={{ opacity: 1, scale: 1.0 }}
-              exit={{ opacity: 0, scale: 0.98 }}
-              transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute inset-0"
-            >
-              <img
-                src={heroSlides[currentSlide].image}
-                alt={heroSlides[currentSlide].titlePart1}
-                className="w-full h-full object-cover object-center"
-              />
-            </motion.div>
-          </AnimatePresence>
+    <div className="min-h-screen bg-[#F8FAFC] font-manrope">
+      {/* 01. ALLUXI-STYLE HIGH-IMPACT HERO SECTION */}
+      <section className="bg-[#F1F5F9] pt-8 md:pt-14 pb-12 border-b border-slate-200/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left Column: Alluxi Typography & Dual CTA */}
+            <div className="lg:col-span-6 text-center lg:text-left space-y-6">
+              {/* Category Pill Tag */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200 shadow-xs text-xs font-extrabold uppercase tracking-widest text-[#2563EB]">
+                <span className="flex h-2 w-2 relative">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2563EB]"></span>
+                </span>
+                <span>Civic Intelligence &amp; Fiscal Forensics</span>
+              </div>
 
-          {/* Minimal Clean Vignette Overlay (Leaves image open on the right) */}
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/70 to-slate-950/20" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-slate-950/20" />
-        </div>
+              {/* Alluxi Signature Headline */}
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl text-[#08102B] font-extrabold leading-[1.15] tracking-tight">
+                Public finance is <span className="text-[#2563EB]">complex.</span> <br />
+                Your civic intelligence <span className="text-[#2563EB]">shouldn't be.</span>
+              </h1>
 
-        {/* Minimal Side Arrow Buttons (Desktop) */}
-        <button
-          type="button"
-          onClick={() => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)}
-          className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-slate-900/40 hover:bg-slate-900/80 backdrop-blur-md border border-white/10 text-white items-center justify-center transition active:scale-95 shadow-md hidden md:flex hover:scale-105"
-          title="Previous Slide"
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </button>
-        <button
-          type="button"
-          onClick={() => setCurrentSlide((prev) => (prev + 1) % heroSlides.length)}
-          className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-slate-900/40 hover:bg-slate-900/80 backdrop-blur-md border border-white/10 text-white items-center justify-center transition active:scale-95 shadow-md hidden md:flex hover:scale-105"
-          title="Next Slide"
-        >
-          <ChevronRight className="w-5 h-5" />
-        </button>
+              {/* Body Subtitle */}
+              <p className="text-slate-600 font-normal text-base sm:text-lg leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                Tracking ₹11,667.55 Crore across 102,437 ground works and 82,296 treasury vouchers for 778 Parliamentarians in 28 States &amp; 8 UTs. Deterministically reconciled to ₹0.00 variance.
+              </p>
 
-        {/* Hero Content (Clean, Minimal, Non-Cluttered) */}
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex flex-col justify-center pt-8">
-          <div className="max-w-2xl space-y-4 sm:space-y-5">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentSlide}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                className="space-y-3 sm:space-y-4"
-              >
-                {/* Minimalist Kicker Tag */}
-                <div className="inline-flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-[10px] sm:text-xs font-mono font-bold text-slate-300 uppercase tracking-widest">
-                    {heroSlides[currentSlide].tag}
-                  </span>
-                </div>
+              {/* Action Buttons & Verified Checkmarks */}
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                <Link
+                  to="/mps"
+                  className="w-full sm:w-auto alx-btn-primary text-center whitespace-nowrap cursor-pointer text-sm"
+                >
+                  <span>Explore All 778 MPs</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
 
-                {/* Bold Editorial Headline */}
-                <h1 className="text-3xl sm:text-4xl lg:text-[48px] font-black text-white tracking-tight leading-[1.1] font-display drop-shadow-md">
-                  <span>{heroSlides[currentSlide].titlePart1} </span>
-                  <span className={`${heroSlides[currentSlide].highlightColor} block sm:inline`}>
-                    {heroSlides[currentSlide].titleHighlight}
-                  </span>
-                </h1>
+                <button
+                  type="button"
+                  onClick={() => setFollowTheMoneyOpen(true)}
+                  className="w-full sm:w-auto alx-btn-secondary text-center whitespace-nowrap cursor-pointer text-sm font-bold flex items-center justify-center gap-2"
+                >
+                  <Zap className="w-4 h-4 text-amber-500 fill-amber-500" />
+                  <span>Follow The Money</span>
+                </button>
+              </div>
 
-                {/* Clear Context Subtitle */}
-                <p className="text-xs sm:text-sm lg:text-base text-slate-300/90 leading-relaxed font-normal font-sans drop-shadow-xs max-w-xl">
-                  {heroSlides[currentSlide].desc}
-                </p>
+              {/* 3-Point Verified Assurance Checklist */}
+              <ul className="pt-3 space-y-2 text-slate-600 font-medium text-xs sm:text-sm text-left max-w-md mx-auto lg:mx-0">
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                  <span><strong>₹0.00 Reconciliation Variance:</strong> 100% matched to treasury vouchers</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                  <span><strong>100% Traceable Lineage:</strong> Official MoSPI &amp; eSAKSHI data pipelines</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                  <span><strong>Explainable MAD Z-Scores:</strong> 1,831 non-accusatory analytical signals</span>
+                </li>
+              </ul>
+            </div>
 
-                {/* Premium Financial Intelligence Capsule */}
-                <div className="inline-flex flex-wrap items-center gap-3 p-3 px-4 rounded-2xl bg-slate-900/60 backdrop-blur-xl border border-white/15 text-white shadow-2xl">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-400 shrink-0">
-                      <IndianRupee className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <span className="text-[9px] text-slate-300 font-bold block uppercase font-mono tracking-wider">
-                        {heroSlides[currentSlide].statLabel}
+            {/* Right Column: Alluxi Interactive Device & Image Showcase Frame */}
+            <div className="lg:col-span-6 w-full">
+              <div className="relative mx-auto max-w-lg lg:max-w-none">
+                <div className="relative rounded-3xl md:rounded-[2.5rem] bg-white p-3 md:p-4 shadow-3xl border border-slate-200/80 overflow-hidden group">
+                  <div className="relative rounded-2xl md:rounded-[2rem] overflow-hidden aspect-[4/3] bg-slate-900">
+                    <AnimatePresence mode="wait">
+                      <motion.img
+                        key={activeSlideData.id}
+                        src={activeSlideData.image}
+                        alt={activeSlideData.title}
+                        initial={{ opacity: 0, scale: 1.05 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.6 }}
+                        className="absolute inset-0 w-full h-full object-cover select-none"
+                      />
+                    </AnimatePresence>
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#08102B]/90 via-[#08102B]/30 to-transparent" />
+
+                    <div className="absolute top-4 left-4 z-20 flex items-center gap-2">
+                      <span className="px-3 py-1 rounded-full bg-white/95 text-[#08102B] text-[11px] font-extrabold tracking-wide uppercase shadow-md backdrop-blur-md">
+                        {activeSlideData.tag}
                       </span>
-                      <strong className="text-sm sm:text-base font-black font-mono text-emerald-400 tracking-tight">
-                        {heroSlides[currentSlide].stat}
-                      </strong>
+                    </div>
+
+                    <div className="absolute bottom-4 left-4 right-4 z-20 text-white">
+                      <p className="text-xl md:text-2xl font-extrabold tracking-tight drop-shadow-md">
+                        {activeSlideData.title}
+                      </p>
+                      <p className="text-xs text-slate-200 line-clamp-2 mt-1 drop-shadow-sm font-light">
+                        {activeSlideData.desc}
+                      </p>
                     </div>
                   </div>
 
-                  <span className="h-6 w-px bg-white/20 hidden sm:block" />
+                  {/* Carousel Progress Navigation Pills */}
+                  <div className="pt-3 pb-1 flex items-center justify-between gap-2 px-2">
+                    <div className="flex items-center gap-1.5">
+                      {heroSlides.map((slide, idx) => (
+                        <button
+                          key={slide.id}
+                          type="button"
+                          onClick={() => setCurrentSlide(idx)}
+                          className={`h-2 rounded-full transition-all duration-300 ${
+                            idx === currentSlide
+                              ? 'w-8 bg-[#2563EB]'
+                              : 'w-2 bg-slate-300 hover:bg-slate-400'
+                          }`}
+                          aria-label={`Slide ${idx + 1}`}
+                        />
+                      ))}
+                    </div>
 
-                  <div className="flex items-center gap-2 text-xs font-sans text-slate-200">
-                    <span className="px-2.5 py-0.5 rounded-full bg-white/10 border border-white/15 text-[11px] font-mono font-medium text-slate-200">
-                      {heroSlides[currentSlide].meta}
-                    </span>
+                    <div className="flex items-center gap-2 text-xs font-bold text-[#08102B] bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
+                      <span className="font-mono text-[#2563EB]">{activeSlideData.stat}</span>
+                      <span className="text-slate-400">·</span>
+                      <span className="text-slate-600 text-[11px]">{activeSlideData.statLabel}</span>
+                    </div>
                   </div>
                 </div>
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Action Buttons */}
-            <div className="flex flex-wrap items-center gap-3 pt-1">
-              <Link
-                to="/states"
-                className="px-6 sm:px-7 py-2.5 sm:py-3 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm shadow-lg shadow-blue-600/30 transition transform hover:-translate-y-0.5 font-sans"
-              >
-                Explore National Map
-              </Link>
-              <button
-                type="button"
-                onClick={() => setFollowTheMoneyOpen(true)}
-                className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/30 text-white font-bold text-xs sm:text-sm shadow-sm transition font-sans"
-              >
-                Trace Funds Flow
-              </button>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* SLEEK FLOATING SLIDE INDICATOR PILLS (WITH CONTINUOUS PROGRESS ANIMATION) */}
-        <div className="relative z-10 w-full py-4 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {heroSlides.map((slide, idx) => (
-              <button
-                key={slide.id}
-                type="button"
-                onClick={() => setCurrentSlide(idx)}
-                className={`transition-all duration-300 rounded-full cursor-pointer h-1.5 relative overflow-hidden ${
-                  currentSlide === idx
-                    ? 'w-9 bg-white/30 shadow-md shadow-blue-500/40'
-                    : 'w-2 bg-white/40 hover:bg-white/70'
-                }`}
-                title={`Slide ${idx + 1}: ${slide.title}`}
-              >
-                {currentSlide === idx && (
-                  <motion.div
-                    key={`pill-progress-${idx}`}
-                    initial={{ width: '0%' }}
-                    animate={{ width: '100%' }}
-                    transition={{ duration: SLIDE_DURATION / 1000, ease: 'linear' }}
-                    className="absolute inset-0 bg-blue-500 rounded-full"
-                  />
-                )}
-              </button>
-            ))}
-          </div>
-
-          <div className="text-[11px] font-mono text-slate-400 font-medium hidden sm:block">
-            0{currentSlide + 1} / 0{heroSlides.length} · {heroSlides[currentSlide].title}
+        {/* COVERAGE & TRUST MARQUEE TICKER */}
+        <div className="pt-10 md:pt-14">
+          <p className="text-slate-500 font-bold text-xs uppercase tracking-widest text-center mb-4">
+            Official Data Sources &amp; Reconciled Registries
+          </p>
+          <div className="relative overflow-hidden group/carousel py-2">
+            <div className="flex gap-4 md:gap-6 animate-carousel-left group-hover/carousel:[animation-play-state:paused] w-max">
+              {[
+                '🏛️ MoSPI Official Portal',
+                '🇮🇳 28 States & 8 UTs',
+                '👥 778 Parliamentarians',
+                '🏗️ 102,437 Physical Works',
+                '📜 82,296 Treasury Vouchers',
+                '🏢 22,377 Contractors',
+                '🛡️ ₹0.00 Ledger Variance',
+                '⚡ 1,831 MAD Signals',
+                '📊 eSAKSHI Central Engine',
+                '🏛️ MoSPI Official Portal',
+                '🇮🇳 28 States & 8 UTs',
+                '👥 778 Parliamentarians',
+                '🏗️ 102,437 Physical Works',
+                '📜 82,296 Treasury Vouchers',
+                '🏢 22,377 Contractors',
+                '🛡️ ₹0.00 Ledger Variance',
+                '⚡ 1,831 MAD Signals',
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="flex-shrink-0 px-4 py-2 rounded-full bg-white border border-slate-200/90 shadow-xs text-xs font-bold text-slate-700 whitespace-nowrap"
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+            <div className="absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-[#F1F5F9] to-transparent pointer-events-none" />
+            <div className="absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-[#F1F5F9] to-transparent pointer-events-none" />
           </div>
         </div>
       </section>
 
-      {/* ========================================================= */}
-      {/* 02. OPTIMIZED PROVENANCE TRUST RIBBON                      */}
-      {/* ========================================================= */}
-      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="p-3 sm:p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4 items-center">
-          <div className="flex items-center gap-2.5 p-2 rounded-xl bg-slate-50 border border-slate-100">
-            <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-              <Landmark className="w-4 h-4" />
-            </div>
-            <div className="truncate">
-              <strong className="text-xs font-bold text-slate-900 block truncate">778 Parliament</strong>
-              <span className="text-[10px] text-slate-500 font-mono">Bicameral Seats</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2.5 p-2 rounded-xl bg-slate-50 border border-slate-100">
-            <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-              <FileCheck className="w-4 h-4" />
-            </div>
-            <div className="truncate">
-              <strong className="text-xs font-bold text-slate-900 block truncate">MoSPI Raw Data</strong>
-              <span className="text-[10px] text-slate-500 font-mono">Ministry Source</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2.5 p-2 rounded-xl bg-slate-50 border border-slate-100">
-            <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
-              <MapPin className="w-4 h-4" />
-            </div>
-            <div className="truncate">
-              <strong className="text-xs font-bold text-slate-900 block truncate">28 States &amp; 8 UTs</strong>
-              <span className="text-[10px] text-slate-500 font-mono">Territorial Atlas</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2.5 p-2 rounded-xl bg-slate-50 border border-slate-100">
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
-              <Receipt className="w-4 h-4" />
-            </div>
-            <div className="truncate">
-              <strong className="text-xs font-bold text-slate-900 block truncate">82,296 Vouchers</strong>
-              <span className="text-[10px] text-slate-500 font-mono">Treasury Lineage</span>
-            </div>
-          </div>
-
-          <div className="col-span-2 sm:col-span-1 flex items-center gap-2.5 p-2 rounded-xl bg-rose-50/70 border border-rose-100">
-            <div className="w-8 h-8 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center shrink-0">
-              <ShieldCheck className="w-4 h-4" />
-            </div>
-            <div className="truncate">
-              <strong className="text-xs font-bold text-rose-950 block truncate">Zero Variance</strong>
-              <span className="text-[10px] text-rose-700 font-mono">₹0.00 Reconciled</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================================= */}
-      {/* 03. OPTIMIZED CORE CIVIC PILLARS (OUR SERVICES)           */}
-      {/* ========================================================= */}
-      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200/80 pb-4">
-          <div className="space-y-1">
-            <span className="text-[11px] font-mono font-bold text-blue-600 uppercase tracking-wider block">
-              CIVIC INTELLIGENCE PLATFORM
+      {/* 02. WHY CIVIC TEAMS PICK JANDRISHTI (3 Bento Outcome Cards) */}
+      <section className="py-14 md:py-20 bg-[#F1F5F9]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <span className="text-xs font-extrabold uppercase tracking-widest text-[#2563EB]">
+              Outcomes &amp; Data Integrity
             </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 font-display">
-              Our Core Services
+            <h2 className="mt-2 text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#08102B] tracking-tight">
+              Built for precision. Verified for citizens.
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 font-medium">
-              Trusted by Citizens &amp; Public Auditors Nationwide
+            <p className="mt-3 text-slate-600 text-base md:text-lg font-light">
+              How JanDrishti converts opaque parliamentary PDFs and disjointed portals into clean, double-entry verified civic intelligence.
             </p>
           </div>
 
-          <Link
-            to="/states"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-700 font-sans shrink-0 hover:underline"
-          >
-            <span>View 28 States &amp; 8 UTs Overview</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {servicePillars.map((serv, idx) => {
-            const Icon = serv.icon;
-            return (
-              <div
-                key={idx}
-                className="card-executive p-6 rounded-3xl flex flex-col justify-between space-y-5 hover:border-blue-200 transition"
-              >
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className={`w-11 h-11 rounded-2xl flex items-center justify-center border ${serv.badgeColor}`}>
-                      <Icon className="w-5 h-5" />
-                    </div>
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
-                      Pillar 0{idx + 1}
-                    </span>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <h3 className="text-lg font-bold text-slate-900 font-display">{serv.title}</h3>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      {serv.desc}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t border-slate-100 space-y-3">
-                  <div className="flex items-baseline justify-between font-mono">
-                    <strong className="text-sm font-black text-slate-900">{serv.metric}</strong>
-                    <span className="text-[10px] text-slate-500 font-medium">{serv.metricSub}</span>
-                  </div>
-
-                  <Link
-                    to={serv.to}
-                    className="w-full py-2 px-4 rounded-xl bg-slate-50 hover:bg-blue-600 hover:text-white text-slate-800 text-xs font-bold transition inline-flex items-center justify-between group"
-                  >
-                    <span>{serv.toLabel}</span>
-                    <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-white transition transform group-hover:translate-x-0.5" />
-                  </Link>
-                </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            {/* Outcome Card 1: Zero Reconciliation Variance */}
+            <div className="flex flex-col h-full rounded-3xl bg-white p-6 md:p-8 shadow-3xl hover:shadow-4xl transition-all duration-300 border border-slate-200/80">
+              <p className="text-4xl md:text-5xl font-extrabold leading-none tabular-nums bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] bg-clip-text text-transparent font-mono">
+                ₹0.00
+              </p>
+              <p className="mt-2 text-xs md:text-sm font-bold text-slate-500 uppercase tracking-wider">
+                Reconciliation Variance
+              </p>
+              <h3 className="mt-4 pt-4 border-t border-slate-100 text-lg md:text-xl text-[#08102B] font-extrabold">
+                Spend less time verifying, zero rupee leakage
+              </h3>
+              <p className="mt-2 text-sm md:text-base text-slate-600 font-light leading-relaxed">
+                100% of ₹3,947.25 Cr disbursed funds mathematically validated against line-item treasury vouchers with verified constitutional reconciliation.
+              </p>
+              <div className="mt-auto pt-6 flex items-center justify-between">
+                <span className="text-xs font-mono font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                  Double-Entry Reconciled
+                </span>
+                <Link
+                  to="/methodology"
+                  className="inline-flex items-center gap-1 text-xs md:text-sm font-bold text-[#2563EB] hover:underline"
+                >
+                  <span>Learn more</span>
+                  <span aria-hidden="true">→</span>
+                </Link>
               </div>
-            );
-          })}
+            </div>
+
+            {/* Outcome Card 2: 102,437 Ground Projects */}
+            <div className="flex flex-col h-full rounded-3xl bg-white p-6 md:p-8 shadow-3xl hover:shadow-4xl transition-all duration-300 border border-slate-200/80">
+              <p className="text-4xl md:text-5xl font-extrabold leading-none tabular-nums bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] bg-clip-text text-transparent font-mono">
+                102,437
+              </p>
+              <p className="mt-2 text-xs md:text-sm font-bold text-slate-500 uppercase tracking-wider">
+                Physical Works Monitored
+              </p>
+              <h3 className="mt-4 pt-4 border-t border-slate-100 text-lg md:text-xl text-[#08102B] font-extrabold">
+                Ground infrastructure tracked end-to-end
+              </h3>
+              <p className="mt-2 text-sm md:text-base text-slate-600 font-light leading-relaxed">
+                Granular tracking of drinking water, roads, educational halls, and healthcare facilities from parliamentary recommendation to verified execution.
+              </p>
+              <div className="mt-auto pt-6 flex items-center justify-between">
+                <span className="text-xs font-mono font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200">
+                  49.0% Delivery Rate
+                </span>
+                <Link
+                  to="/works"
+                  className="inline-flex items-center gap-1 text-xs md:text-sm font-bold text-[#2563EB] hover:underline"
+                >
+                  <span>Explore Works</span>
+                  <span aria-hidden="true">→</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Outcome Card 3: 1,831 Statistical Signals */}
+            <div className="flex flex-col h-full rounded-3xl bg-white p-6 md:p-8 shadow-3xl hover:shadow-4xl transition-all duration-300 border border-slate-200/80">
+              <p className="text-4xl md:text-5xl font-extrabold leading-none tabular-nums bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] bg-clip-text text-transparent font-mono">
+                1,831
+              </p>
+              <p className="mt-2 text-xs md:text-sm font-bold text-slate-500 uppercase tracking-wider">
+                MAD Statistical Signals
+              </p>
+              <h3 className="mt-4 pt-4 border-t border-slate-100 text-lg md:text-xl text-[#08102B] font-extrabold">
+                Objective audit signals, zero accusation
+              </h3>
+              <p className="mt-2 text-sm md:text-base text-slate-600 font-light leading-relaxed">
+                Median Absolute Deviation (MAD) robust Z-score flagging vendor concentration, budget variance, and fund stall without political or subjective bias.
+              </p>
+              <div className="mt-auto pt-6 flex items-center justify-between">
+                <span className="text-xs font-mono font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
+                  21 Critical · 614 High
+                </span>
+                <Link
+                  to="/anomalies"
+                  className="inline-flex items-center gap-1 text-xs md:text-sm font-bold text-[#2563EB] hover:underline"
+                >
+                  <span>Inspect Signals</span>
+                  <span aria-hidden="true">→</span>
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ========================================================= */}
-      {/* 04. WHO WE ARE (2 LARGE PHOTO CARDS)                      */}
-      {/* ========================================================= */}
-      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6">
-        <div className="text-center space-y-1 max-w-xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-black text-[#0F172A] font-display">
-            Who We Are
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-500 font-medium">
-            Personalized civic intelligence to trace public funds.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-          {/* Card 1 */}
-          <div className="card-executive rounded-3xl overflow-hidden p-5 sm:p-6 space-y-4">
-            <div className="h-52 rounded-2xl overflow-hidden relative">
-              <img
-                src={slideChenab}
-                alt="Public Works"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-xs font-bold text-slate-900">
-                Ground Execution
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <h3 className="text-lg font-bold text-slate-900 font-display">Physical Infrastructure Delivery</h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                Tracking 102,437 developmental assets including drinking water systems, road networks, schools, and hospitals across 778 parliamentary constituencies.
-              </p>
-            </div>
-
-            <div className="pt-2 flex items-center justify-between">
-              <span className="text-xs font-mono font-bold text-slate-500">102,437 Works Monitored</span>
-              <Link
-                to="/works"
-                className="px-4 py-2 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition"
-              >
-                Explore Works →
-              </Link>
-            </div>
+      {/* 03. ALLUXI-STYLE DIGITAL SOLUTIONS & DATA PORTFOLIOS */}
+      <section className="py-16 md:py-24 bg-white border-y border-slate-200/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <span className="text-xs font-extrabold uppercase tracking-widest text-[#2563EB]">
+              National Explorers
+            </span>
+            <h2 className="mt-2 text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#08102B] tracking-tight">
+              Data solutions for real public accountability
+            </h2>
+            <p className="mt-3 text-slate-600 text-base md:text-lg font-light">
+              Explore our core analytical suites designed for citizens, public auditors, and investigative researchers.
+            </p>
           </div>
 
-          {/* Card 2 */}
-          <div className="card-executive rounded-3xl overflow-hidden p-5 sm:p-6 space-y-4">
-            <div className="h-52 rounded-2xl overflow-hidden relative">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {/* Portfolio 1: Parliamentarians */}
+            <Link
+              to="/mps"
+              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[7/8] flex flex-col justify-end p-6 md:p-8"
+            >
               <img
                 src={slideParliamentChamber}
-                alt="Parliamentary Oversight"
-                className="w-full h-full object-cover"
+                alt="Parliament"
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-60"
               />
-              <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-xs font-bold text-slate-900">
-                Constitutional Oversight
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <h3 className="text-lg font-bold text-slate-900 font-display">Parliamentary Ledger Reconciled</h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                Direct territorial accountability connecting 543 Lok Sabha and 235 Rajya Sabha representatives with 82,296 treasury vouchers and 22,377 contractors.
-              </p>
-            </div>
-
-            <div className="pt-2 flex items-center justify-between">
-              <span className="text-xs font-mono font-bold text-slate-500">778 Representatives Tracked</span>
-              <Link
-                to="/mps"
-                className="px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition"
-              >
-                Inspect Parliament →
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================================= */}
-      {/* 05. SPATIAL ATLAS (INDIA MAP SECTION)                     */}
-      {/* ========================================================= */}
-      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-4">
-        <div className="space-y-1">
-          <span className="text-xs font-bold text-blue-600 uppercase tracking-wider block">
-            TERRITORIAL CANVAS
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 font-display">
-            Every Allocation Has A Geography.
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-500">
-            Interactive visual atlas across all 28 States &amp; 8 Union Territories of India.
-          </p>
-        </div>
-
-        <IndiaParliamentaryMap states={states} stats={stats} />
-      </section>
-
-      {/* ========================================================= */}
-      {/* 06. WHY CHOOSE JANDRISHTI (DARK SECTION)                  */}
-      {/* ========================================================= */}
-      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="rounded-3xl bg-[#0F172A] text-white p-6 sm:p-10 shadow-xl space-y-8">
-          <div className="text-center space-y-1 max-w-xl mx-auto">
-            <h2 className="text-2xl sm:text-3xl font-black text-white font-display">
-              Why Choose JanDrishti
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-400">
-              Objective mathematical rigor and open data standards.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {darkSectionFeatures.map((feat, idx) => {
-              const Icon = feat.icon;
-              return (
-                <div
-                  key={idx}
-                  className="p-5 rounded-2xl bg-white text-slate-900 shadow-md space-y-3 flex flex-col justify-between"
-                >
-                  <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-                    <Icon className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-slate-900 leading-snug font-display">{feat.title}</h3>
-                    <p className="text-xs text-slate-500 leading-relaxed mt-1 font-sans">
-                      {feat.desc}
-                    </p>
-                  </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#08102B] via-[#08102B]/40 to-transparent" />
+              <div className="relative z-10 space-y-2">
+                <div className="flex gap-2">
+                  <span className="px-3 py-1 rounded-full bg-white/90 text-[#08102B] text-xs font-extrabold">
+                    778 Members
+                  </span>
+                  <span className="px-3 py-1 rounded-full bg-[#2563EB] text-white text-xs font-extrabold">
+                    Parliament
+                  </span>
                 </div>
-              );
-            })}
-          </div>
+                <h3 className="text-xl md:text-2xl font-extrabold text-white">
+                  Parliamentary Profiles
+                </h3>
+                <p className="text-xs md:text-sm text-slate-200 font-light line-clamp-2">
+                  Comprehensive performance cards, statutory allocation balances, and ground project recommendations for every Lok Sabha and Rajya Sabha MP.
+                </p>
+              </div>
+            </Link>
 
-          <div className="text-center pt-1">
+            {/* Portfolio 2: Physical Works */}
+            <Link
+              to="/works"
+              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[7/8] flex flex-col justify-end p-6 md:p-8"
+            >
+              <img
+                src={slideChenab}
+                alt="Works"
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-60"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#08102B] via-[#08102B]/40 to-transparent" />
+              <div className="relative z-10 space-y-2">
+                <div className="flex gap-2">
+                  <span className="px-3 py-1 rounded-full bg-white/90 text-[#08102B] text-xs font-extrabold">
+                    102,437 Works
+                  </span>
+                  <span className="px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-extrabold">
+                    Infrastructure
+                  </span>
+                </div>
+                <h3 className="text-xl md:text-2xl font-extrabold text-white">
+                  Physical Infrastructure
+                </h3>
+                <p className="text-xs md:text-sm text-slate-200 font-light line-clamp-2">
+                  Search, filter, and inspect public works across drinking water, transportation, education, and healthcare facilities in any constituency.
+                </p>
+              </div>
+            </Link>
+
+            {/* Portfolio 3: Treasury Disbursements */}
+            <Link
+              to="/transactions"
+              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[7/8] flex flex-col justify-end p-6 md:p-8"
+            >
+              <img
+                src={slideVandeMetro}
+                alt="Treasury"
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-60"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#08102B] via-[#08102B]/40 to-transparent" />
+              <div className="relative z-10 space-y-2">
+                <div className="flex gap-2">
+                  <span className="px-3 py-1 rounded-full bg-white/90 text-[#08102B] text-xs font-extrabold">
+                    82,296 Vouchers
+                  </span>
+                  <span className="px-3 py-1 rounded-full bg-amber-600 text-white text-xs font-extrabold">
+                    Treasury
+                  </span>
+                </div>
+                <h3 className="text-xl md:text-2xl font-extrabold text-white">
+                  Treasury Disbursements
+                </h3>
+                <p className="text-xs md:text-sm text-slate-200 font-light line-clamp-2">
+                  Line-item disbursement vouchers matching central exchequer releases directly to district treasury execution accounts.
+                </p>
+              </div>
+            </Link>
+
+            {/* Portfolio 4: Contractor Intelligence */}
+            <Link
+              to="/vendors"
+              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[7/8] flex flex-col justify-end p-6 md:p-8"
+            >
+              <img
+                src={slideAtalSetu}
+                alt="Contractors"
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-60"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#08102B] via-[#08102B]/40 to-transparent" />
+              <div className="relative z-10 space-y-2">
+                <div className="flex gap-2">
+                  <span className="px-3 py-1 rounded-full bg-white/90 text-[#08102B] text-xs font-extrabold">
+                    22,377 Vendors
+                  </span>
+                  <span className="px-3 py-1 rounded-full bg-indigo-600 text-white text-xs font-extrabold">
+                    Procurement
+                  </span>
+                </div>
+                <h3 className="text-xl md:text-2xl font-extrabold text-white">
+                  Contractor Footprints
+                </h3>
+                <p className="text-xs md:text-sm text-slate-200 font-light line-clamp-2">
+                  Procurement market share, revenue percentiles, and single-patron reliance tracking across all executing construction vendors.
+                </p>
+              </div>
+            </Link>
+
+            {/* Portfolio 5: 28 States & 8 UTs Atlas */}
+            <Link
+              to="/states"
+              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[7/8] flex flex-col justify-end p-6 md:p-8"
+            >
+              <img
+                src={slidePamban}
+                alt="States"
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-60"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#08102B] via-[#08102B]/40 to-transparent" />
+              <div className="relative z-10 space-y-2">
+                <div className="flex gap-2">
+                  <span className="px-3 py-1 rounded-full bg-white/90 text-[#08102B] text-xs font-extrabold">
+                    36 Territorial Units
+                  </span>
+                  <span className="px-3 py-1 rounded-full bg-sky-600 text-white text-xs font-extrabold">
+                    Geospatial
+                  </span>
+                </div>
+                <h3 className="text-xl md:text-2xl font-extrabold text-white">
+                  Spatial State Atlas
+                </h3>
+                <p className="text-xs md:text-sm text-slate-200 font-light line-clamp-2">
+                  Interactive state and union territory comparison cards showcasing fund utilization rates, unspent balances, and project delivery velocity.
+                </p>
+              </div>
+            </Link>
+
+            {/* Portfolio 6: Anomaly Signal Center */}
             <Link
               to="/anomalies"
-              className="px-6 py-2.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md transition inline-flex items-center gap-2 font-sans"
+              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[7/8] flex flex-col justify-end p-6 md:p-8"
             >
-              <span>Inspect Signal Center (1,831 Signals)</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <div className="absolute inset-0 bg-gradient-to-br from-[#08102B] via-[#1E1B4B] to-[#BE123C]/80" />
+              <div className="relative z-10 space-y-2">
+                <div className="flex gap-2">
+                  <span className="px-3 py-1 rounded-full bg-white/90 text-[#08102B] text-xs font-extrabold">
+                    1,831 Signals
+                  </span>
+                  <span className="px-3 py-1 rounded-full bg-rose-600 text-white text-xs font-extrabold">
+                    Audit Engine
+                  </span>
+                </div>
+                <h3 className="text-xl md:text-2xl font-extrabold text-white">
+                  MAD Signal Center
+                </h3>
+                <p className="text-xs md:text-sm text-slate-200 font-light line-clamp-2">
+                  Empirical statistical deviations categorized into Contractor Dominance, Timeline Delays, Budget Variance, and Low Utilization.
+                </p>
+              </div>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ========================================================= */}
-      {/* 07. RECENT CASE STUDIES (3-COLUMN GRID)                   */}
-      {/* ========================================================= */}
-      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6">
-        <div className="text-center space-y-1 max-w-xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 font-display">
-            Recent Case Studies
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-500 font-medium">
-            Physical project execution across key developmental sectors.
-          </p>
-        </div>
+      {/* 04. INTERACTIVE GEOSPATIAL EXPLORER SECTION */}
+      <section className="py-14 md:py-20 bg-[#F1F5F9]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-10">
+            <span className="text-xs font-extrabold uppercase tracking-widest text-[#2563EB]">
+              Geospatial Cartography
+            </span>
+            <h2 className="mt-2 text-3xl md:text-4xl font-extrabold text-[#08102B] tracking-tight">
+              Explore 28 States &amp; 8 Union Territories
+            </h2>
+            <p className="mt-2 text-slate-600 text-sm md:text-base font-light">
+              Interactive vector cartography showing statutory allocations, treasury disbursements, and anomaly signals across all Indian administrative boundaries.
+            </p>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {caseStudies.map((cs, idx) => (
-            <div
-              key={idx}
-              className="card-executive rounded-3xl overflow-hidden p-5 space-y-4 flex flex-col justify-between"
+          <div className="bg-white rounded-3xl p-4 md:p-6 shadow-3xl border border-slate-200/80">
+            <IndiaParliamentaryMap
+              states={states}
+              stats={stats}
+              onFollowTheMoney={() => setFollowTheMoneyOpen(true)}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* 05. 4-STEP CIVIC DATA FORENSIC PIPELINE */}
+      <section className="py-16 md:py-24 bg-white border-t border-slate-200/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <span className="text-xs font-extrabold uppercase tracking-widest text-[#2563EB]">
+              Architecture &amp; Proofs
+            </span>
+            <h2 className="mt-2 text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#08102B] tracking-tight">
+              From raw government reports to verified intelligence
+            </h2>
+            <p className="mt-3 text-slate-600 text-base md:text-lg font-light">
+              How JanDrishti enforces double-entry reconciliation and explainable statistics.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="rounded-3xl bg-slate-50 p-6 border border-slate-200 shadow-xs space-y-3">
+              <span className="text-3xl font-extrabold text-[#2563EB] font-mono">01</span>
+              <h3 className="text-lg font-extrabold text-[#08102B]">Data Ingestion</h3>
+              <p className="text-xs md:text-sm text-slate-600 font-light leading-relaxed">
+                Automated ingestion of official MoSPI reports across 778 MPs, 102,437 physical works, and 82,296 treasury vouchers.
+              </p>
+            </div>
+
+            <div className="rounded-3xl bg-slate-50 p-6 border border-slate-200 shadow-xs space-y-3">
+              <span className="text-3xl font-extrabold text-[#2563EB] font-mono">02</span>
+              <h3 className="text-lg font-extrabold text-[#08102B]">Ledger Reconciliation</h3>
+              <p className="text-xs md:text-sm text-slate-600 font-light leading-relaxed">
+                Double-entry fiscal validation verifying that allocations, expenditures, and unspent balances reconcile with ₹0.00 discrepancy.
+              </p>
+            </div>
+
+            <div className="rounded-3xl bg-slate-50 p-6 border border-slate-200 shadow-xs space-y-3">
+              <span className="text-3xl font-extrabold text-[#2563EB] font-mono">03</span>
+              <h3 className="text-lg font-extrabold text-[#08102B]">MAD Robust Z-Scores</h3>
+              <p className="text-xs md:text-sm text-slate-600 font-light leading-relaxed">
+                Empirical anomaly engine computing 1,831 objective signals using Median Absolute Deviation to prevent outlier distortion.
+              </p>
+            </div>
+
+            <div className="rounded-3xl bg-slate-50 p-6 border border-slate-200 shadow-xs space-y-3">
+              <span className="text-3xl font-extrabold text-[#2563EB] font-mono">04</span>
+              <h3 className="text-lg font-extrabold text-[#08102B]">Citizen Dossiers</h3>
+              <p className="text-xs md:text-sm text-slate-600 font-light leading-relaxed">
+                Instant generation of verifiable entity dossiers, geospatial maps, and open CSV exports for public audit review.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 06. ALLUXI-STYLE HIGH-CONVERSION CIVIC CALL-TO-ACTION */}
+      <section className="py-16 md:py-24 bg-[#08102B] text-white relative overflow-hidden">
+        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-[#2563EB]/20 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 rounded-full bg-[#1E3A8A]/30 blur-3xl pointer-events-none" />
+
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-8">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-extrabold uppercase tracking-widest">
+            <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+            Empowering Democratic Transparency
+          </span>
+
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
+            Ready to audit your constituency's public developmental funds?
+          </h2>
+
+          <p className="text-slate-300 text-base md:text-lg max-w-2xl mx-auto font-light leading-relaxed">
+            Search any Member of Parliament, track local infrastructure delivery, and inspect treasury vouchers in real time.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+            <Link
+              to="/mps"
+              className="w-full sm:w-auto alx-btn-primary px-8 py-3.5 text-base font-bold"
             >
-              <div className="space-y-2.5">
-                <div className="h-40 rounded-2xl overflow-hidden">
-                  <img
-                    src={cs.image}
-                    alt={cs.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wider block font-mono">
-                  {cs.category}
-                </span>
-                <h3 className="text-sm sm:text-base font-bold text-slate-900 leading-snug font-display">{cs.title}</h3>
-                <p className="text-xs text-slate-500 leading-relaxed font-sans">
-                  {cs.desc}
-                </p>
-              </div>
+              <span>Explore All 778 MPs</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
 
-              <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                <span className="text-xs font-mono font-bold text-slate-700">{cs.metric}</span>
-                <Link
-                  to={cs.to}
-                  className="px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition font-sans"
-                >
-                  View Case Study →
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ========================================================= */}
-      {/* 08. TESTIMONIALS / BENCHMARKS                             */}
-      {/* ========================================================= */}
-      <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6">
-        <div className="text-center space-y-1 max-w-xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 font-display">
-            Public Benchmarks
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-500 font-medium">
-            Authoritative national public data metrics.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div className="card-executive p-5 rounded-2xl text-center space-y-1.5">
-            <div className="w-9 h-9 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mx-auto">
-              <MapPin className="w-4 h-4" />
-            </div>
-            <strong className="text-2xl font-black text-slate-900 font-mono block">28 + 8</strong>
-            <span className="text-xs font-bold text-slate-600 uppercase">28 States &amp; 8 UTs</span>
-          </div>
-
-          <div className="card-executive p-5 rounded-2xl text-center space-y-1.5">
-            <div className="w-9 h-9 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
-              <Users className="w-4 h-4" />
-            </div>
-            <strong className="text-2xl font-black text-slate-900 font-mono block">{heroMpsCount}</strong>
-            <span className="text-xs font-bold text-slate-600 uppercase">Parliamentarians</span>
-          </div>
-
-          <div className="card-executive p-5 rounded-2xl text-center space-y-1.5">
-            <div className="w-9 h-9 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
-              <Layers className="w-4 h-4" />
-            </div>
-            <strong className="text-2xl font-black text-slate-900 font-mono block">{heroWorksCount.toLocaleString()}</strong>
-            <span className="text-xs font-bold text-slate-600 uppercase">Physical Works</span>
-          </div>
-
-          <div className="card-executive p-5 rounded-2xl text-center space-y-1.5">
-            <div className="w-9 h-9 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto">
-              <ShieldAlert className="w-4 h-4" />
-            </div>
-            <strong className="text-2xl font-black text-slate-900 font-mono block">{heroSignalsCount.toLocaleString()}</strong>
-            <span className="text-xs font-bold text-slate-600 uppercase">MAD Signals</span>
+            <button
+              type="button"
+              onClick={() => setFollowTheMoneyOpen(true)}
+              className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold text-base transition border border-white/20 flex items-center justify-center gap-2"
+            >
+              <Zap className="w-4 h-4 text-amber-400 fill-amber-400" />
+              <span>Launch Money Flow Tracer</span>
+            </button>
           </div>
         </div>
       </section>
 
-      {/* Interactive Flow Modal */}
-      <FollowTheMoneyModal isOpen={followTheMoneyOpen} onClose={() => setFollowTheMoneyOpen(false)} />
+      {/* Modals and Drawers */}
+      <FollowTheMoneyModal
+        isOpen={followTheMoneyOpen}
+        onClose={() => setFollowTheMoneyOpen(false)}
+      />
 
-      {/* Slide-out Entity Dossier */}
-      <EntityDossierDrawer entity={activeDossier} onClose={() => setActiveDossier(null)} />
+      <EntityDossierDrawer
+        entity={activeDossier}
+        onClose={() => setActiveDossier(null)}
+      />
     </div>
   );
 };

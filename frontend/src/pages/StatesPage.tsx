@@ -11,6 +11,7 @@ import {
   Layers,
   Users,
   IndianRupee,
+  Sparkles,
 } from 'lucide-react';
 import { api } from '../api/client';
 import { StateSummary, StatsResponse } from '../api/types';
@@ -70,137 +71,167 @@ export const StatesPage: React.FC = () => {
   );
 
   return (
-    <div className="space-y-6 animate-fade-in text-[#0F172A] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <Breadcrumbs items={[{ label: 'National Atlas', to: '/states', icon: MapPin }]} />
+    <div className="space-y-8 text-[#08102B] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 font-manrope">
+      <Breadcrumbs items={[{ label: 'National Spatial Atlas', to: '/states', icon: MapPin }]} />
 
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+      {/* Alluxi Modern Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/80 pb-6">
         <div>
-          <span className="text-[11px] font-mono font-bold text-blue-600 uppercase tracking-widest block">
+          <span className="text-xs font-extrabold uppercase tracking-widest text-[#2563EB] block mb-1">
             28 STATES &amp; 8 UNION TERRITORIES
           </span>
-          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-sans">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#08102B] tracking-tight">
             National Spatial Atlas
           </h1>
-          <p className="text-xs text-slate-500 font-medium">
-            Macro-level fiscal velocity and implementation comparisons across all 28 States and 8 Union Territories.
+          <p className="text-sm text-slate-600 font-light mt-1">
+            Macro-level fiscal velocity and ground implementation comparisons across all 28 States and 8 Union Territories.
           </p>
         </div>
 
         {/* View Mode Toggle */}
-        <div className="flex items-center gap-1 p-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold">
+        <div className="flex items-center gap-1 p-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold shrink-0">
           <button
             type="button"
             onClick={() => setViewMode('MAP')}
-            className={`px-3 py-1.5 rounded-full transition flex items-center gap-1.5 ${
-              viewMode === 'MAP' ? 'bg-white text-blue-600 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+            className={`px-4 py-2 rounded-full transition flex items-center gap-1.5 ${
+              viewMode === 'MAP' ? 'bg-[#2563EB] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <MapIcon className="w-3.5 h-3.5" />
-            <span>Atlas Map</span>
+            <MapIcon className="w-4 h-4" />
+            <span>Interactive Map</span>
           </button>
           <button
             type="button"
             onClick={() => setViewMode('TABLE')}
-            className={`px-3 py-1.5 rounded-full transition flex items-center gap-1.5 ${
-              viewMode === 'TABLE' ? 'bg-white text-blue-600 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+            className={`px-4 py-2 rounded-full transition flex items-center gap-1.5 ${
+              viewMode === 'TABLE' ? 'bg-[#2563EB] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <TableProperties className="w-3.5 h-3.5" />
-            <span>State Ledger</span>
+            <TableProperties className="w-4 h-4" />
+            <span>Comparative Table</span>
           </button>
         </div>
       </div>
 
       {loading ? (
-        <LoadingSkeleton rows={6} height="h-20" />
-      ) : error ? (
-        <ErrorDisplay message={error} onRetry={loadStates} />
-      ) : viewMode === 'MAP' ? (
         <div className="space-y-6">
-          <IndiaParliamentaryMap states={states} stats={stats} />
+          <LoadingSkeleton rows={3} height="h-28" />
+          <LoadingSkeleton rows={4} height="h-28" />
         </div>
+      ) : error ? (
+        <ErrorDisplay message={error} onRetry={() => loadStates()} />
       ) : (
-        /* High-Density State Table */
-        <div className="space-y-4">
-          <div className="flex items-center justify-between gap-3">
-            <form onSubmit={handleSearchSubmit} className="relative max-w-sm w-full">
-              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input
-                type="text"
-                placeholder="Search state..."
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-600 transition"
+        <>
+          {viewMode === 'MAP' ? (
+            <div className="bg-white rounded-3xl p-4 md:p-6 shadow-3xl border border-slate-200/80">
+              <IndiaParliamentaryMap
+                states={states}
+                stats={stats}
               />
-            </form>
-            <span className="text-xs font-mono text-slate-500 font-bold">
-              {filteredStates.length} Territories
-            </span>
-          </div>
-
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs font-sans">
-                <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase font-mono text-[10px] tracking-wider">
-                  <tr>
-                    <th className="py-3 px-4 font-bold">State / UT</th>
-                    <th className="py-3 px-4 font-bold text-center">MPs</th>
-                    <th className="py-3 px-4 font-bold text-right">Allocated</th>
-                    <th className="py-3 px-4 font-bold text-right">Disbursed</th>
-                    <th className="py-3 px-4 font-bold text-center">Utilization</th>
-                    <th className="py-3 px-4 font-bold text-right">Proposed Works</th>
-                    <th className="py-3 px-4 font-bold text-right">Completed Works</th>
-                    <th className="py-3 px-4 font-bold text-center">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {filteredStates.map((s) => (
-                    <tr
-                      key={s.state}
-                      onClick={() => setActiveDossier({ type: 'STATE', data: s })}
-                      className="hover:bg-blue-50/40 cursor-pointer transition"
-                    >
-                      <td className="py-3.5 px-4 font-bold text-slate-900">{s.state}</td>
-                      <td className="py-3.5 px-4 text-center font-mono font-bold text-slate-700">{s.total_mps}</td>
-                      <td className="py-3.5 px-4 font-mono font-bold text-slate-900 text-right">
-                        ₹{(s.total_allocated_amount / 1e7).toFixed(2)} Cr
-                      </td>
-                      <td className="py-3.5 px-4 font-mono font-bold text-emerald-600 text-right">
-                        ₹{(s.total_expenditure / 1e7).toFixed(2)} Cr
-                      </td>
-                      <td className="py-3.5 px-4 text-center font-mono font-bold text-slate-800">
-                        {s.state_utilization_pct.toFixed(1)}%
-                      </td>
-                      <td className="py-3.5 px-4 font-mono text-right text-slate-600">
-                        {s.total_recommended_works.toLocaleString()}
-                      </td>
-                      <td className="py-3.5 px-4 font-mono font-bold text-emerald-700 text-right">
-                        {s.total_completed_works.toLocaleString()}
-                      </td>
-                      <td className="py-3.5 px-4 text-center">
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setActiveDossier({ type: 'STATE', data: s });
-                          }}
-                          className="px-3 py-1 rounded-full bg-slate-100 hover:bg-blue-600 hover:text-white text-slate-700 text-xs font-bold transition"
-                        >
-                          Dossier →
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
             </div>
-          </div>
-        </div>
+          ) : (
+            <div className="space-y-6">
+              {/* Search Bar */}
+              <div className="flex items-center justify-between gap-4">
+                <form onSubmit={handleSearchSubmit} className="relative flex-1 max-w-md">
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    placeholder="Filter by State or Union Territory..."
+                    className="w-full pl-10 pr-4 py-2.5 rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] shadow-xs"
+                  />
+                </form>
+                <div className="text-xs text-slate-500 font-bold">
+                  Showing <strong className="text-[#08102B] font-mono">{filteredStates.length}</strong> of 36 Territories
+                </div>
+              </div>
+
+              {/* States Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredStates.map((st) => (
+                  <div
+                    key={st.state}
+                    className="rounded-3xl bg-white p-6 shadow-3xl hover:shadow-4xl transition-all duration-300 border border-slate-200/80 flex flex-col justify-between"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between gap-2 mb-3">
+                        <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                          Territory
+                        </span>
+                        <span className="text-xs font-mono font-bold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200">
+                          {st.total_mps} MPs
+                        </span>
+                      </div>
+
+                      <h3 className="text-xl font-extrabold text-[#08102B] mb-4">
+                        {st.state}
+                      </h3>
+
+                      <div className="grid grid-cols-2 gap-3 py-3 border-y border-slate-100 text-xs">
+                        <div>
+                          <span className="text-slate-500 font-medium">Allocated:</span>
+                          <p className="font-mono font-bold text-slate-900 mt-0.5">
+                            ₹{(st.total_allocated_amount / 10000000).toFixed(2)} Cr
+                          </p>
+                        </div>
+                        <div>
+                          <span className="text-slate-500 font-medium">Disbursed:</span>
+                          <p className="font-mono font-bold text-slate-900 mt-0.5">
+                            ₹{(st.total_expenditure / 10000000).toFixed(2)} Cr
+                          </p>
+                        </div>
+                        <div>
+                          <span className="text-slate-500 font-medium">Utilization:</span>
+                          <p className="font-mono font-bold text-emerald-600 mt-0.5">
+                            {st.state_utilization_pct.toFixed(1)}%
+                          </p>
+                        </div>
+                        <div>
+                          <span className="text-slate-500 font-medium">Delivered:</span>
+                          <p className="font-mono font-bold text-slate-900 mt-0.5">
+                            {st.total_completed_works.toLocaleString()} / {st.total_recommended_works.toLocaleString()}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="pt-4 flex items-center justify-between">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setActiveDossier({
+                            type: 'STATE',
+                            data: st,
+                          })
+                        }
+                        className="text-xs font-bold text-[#2563EB] hover:underline"
+                      >
+                        View State Dossier
+                      </button>
+
+                      <Link
+                        to={`/mps?state=${encodeURIComponent(st.state)}`}
+                        className="inline-flex items-center gap-1 text-xs font-bold text-slate-700 hover:text-[#2563EB] transition"
+                      >
+                        <span>Explore MPs</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </>
       )}
 
-      {/* Slide-out State Dossier */}
-      <EntityDossierDrawer entity={activeDossier} onClose={() => setActiveDossier(null)} />
+      {/* Entity Dossier Drawer */}
+      <EntityDossierDrawer
+        entity={activeDossier}
+        onClose={() => setActiveDossier(null)}
+      />
     </div>
   );
 };

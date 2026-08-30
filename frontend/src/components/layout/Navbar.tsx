@@ -70,19 +70,9 @@ export const Navbar: React.FC = () => {
       <header className={`sticky top-0 z-50 bg-white/95 backdrop-blur-md transition-all duration-200 font-manrope ${scrolled ? 'shadow-xs border-b border-slate-200/80' : ''}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
-            {/* Left: Brand Logo (Alluxi Asterisk Style) */}
-            <NavLink to="/" className="flex items-center gap-3 group">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#2563EB] to-[#60A5FA] flex items-center justify-center text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition">
-                <Sparkles className="w-5 h-5 fill-white" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xl font-extrabold tracking-tight text-[#08102B]">
-                  Jan<span className="text-[#2563EB]">Drishti</span>
-                </span>
-                <span className="text-[10px] font-bold text-slate-400 -mt-1 tracking-widest uppercase font-mono">
-                  Civic Intelligence
-                </span>
-              </div>
+            {/* Left: Brand Logo */}
+            <NavLink to="/" className="flex items-center group">
+              <BrandLogo size="md" />
             </NavLink>
 
             {/* Center: Clean Text Navigation Links (Exact Alluxi Style) */}

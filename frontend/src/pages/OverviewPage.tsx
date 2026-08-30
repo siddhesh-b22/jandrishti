@@ -84,16 +84,16 @@ export const OverviewPage: React.FC = () => {
 
   if (loading && !stats) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
-        <LoadingSkeleton rows={3} height="h-24" />
-        <LoadingSkeleton rows={4} height="h-32" />
+      <div className="max-w-7xl mx-auto px-4 py-6 space-y-4">
+        <LoadingSkeleton rows={3} height="h-20" />
+        <LoadingSkeleton rows={4} height="h-28" />
       </div>
     );
   }
 
   if (error && !stats) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="max-w-7xl mx-auto px-4 py-10">
         <ErrorDisplay
           message={error}
           onRetry={() => window.location.reload()}
@@ -105,49 +105,49 @@ export const OverviewPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-white font-manrope text-[#08102B]">
       {/* ========================================================= */}
-      {/* 01. ALLUXI-IDENTICAL HERO SECTION                         */}
+      {/* 01. ALLUXI-IDENTICAL HERO SECTION (STREAMLINED & LEAN)    */}
       {/* ========================================================= */}
-      <section className="pt-8 sm:pt-14 pb-14 sm:pb-20 border-b border-slate-100 bg-white">
+      <section className="pt-6 sm:pt-10 pb-10 sm:pb-12 border-b border-slate-100 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
             {/* Left Column: Tech Graphic Illustration (Laptop + Phone) */}
             <div className="lg:col-span-5 flex justify-center order-2 lg:order-1">
               <HeroTechIllustration />
             </div>
 
             {/* Right Column: Alluxi Typography, Subtitle & Action Area */}
-            <div className="lg:col-span-7 order-1 lg:order-2 space-y-4 text-left">
+            <div className="lg:col-span-7 order-1 lg:order-2 space-y-3.5 text-left">
               {/* Alluxi Signature Headline */}
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#08102B] tracking-tight leading-[1.12]">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#08102B] tracking-tight leading-[1.12]">
                 Public finance is <span className="text-[#08102B]">complex.</span> <br />
                 Your civic intelligence <span className="text-[#2563EB]">shouldn't be.</span>
               </h1>
 
               {/* Body Subtitle */}
-              <p className="text-slate-600 font-light text-base sm:text-lg leading-relaxed max-w-xl">
+              <p className="text-slate-600 font-light text-sm sm:text-base leading-relaxed max-w-xl">
                 Tracking ₹11,667.55 Crore across 102,437 ground works and 82,296 treasury vouchers for 778 Parliamentarians in 28 States &amp; 8 UTs. Deterministically reconciled to ₹0.00 variance.
               </p>
 
               {/* Action Button & 3-Point Verified Bullets */}
-              <div className="pt-4 flex flex-col sm:flex-row sm:items-center gap-6">
+              <div className="pt-2 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
                 <Link
                   to="/mps"
-                  className="px-8 py-3.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-sm sm:text-base shadow-lg shadow-blue-500/25 transition-all text-center whitespace-nowrap hover:scale-[1.02] active:scale-[0.98]"
+                  className="px-7 py-3 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-sm shadow-md shadow-blue-500/25 transition-all text-center whitespace-nowrap hover:scale-[1.02] active:scale-[0.98]"
                 >
                   Explore All 778 MPs
                 </Link>
 
-                <ul className="space-y-2 text-xs sm:text-sm text-slate-600 font-medium">
+                <ul className="space-y-1.5 text-xs text-slate-600 font-medium">
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                     <span>₹0.00 Reconciliation Variance</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                     <span>100% Traceable Lineage (MoSPI &amp; eSAKSHI)</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                     <span>Explainable MAD Z-Scores (1,831 Signals)</span>
                   </li>
                 </ul>
@@ -157,12 +157,12 @@ export const OverviewPage: React.FC = () => {
         </div>
 
         {/* TRUST STRIP (Alluxi "They already trust us" Style) */}
-        <div className="pt-16 sm:pt-20">
-          <p className="text-center text-xs font-extrabold text-slate-400 uppercase tracking-widest mb-6 font-manrope">
+        <div className="pt-10 sm:pt-12">
+          <p className="text-center text-[11px] font-extrabold text-slate-400 uppercase tracking-widest mb-4 font-manrope">
             Official Data Registries &amp; Reconciled Sources
           </p>
-          <div className="relative overflow-hidden group/carousel py-2">
-            <div className="flex gap-4 md:gap-6 animate-carousel-left group-hover/carousel:[animation-play-state:paused] w-max">
+          <div className="relative overflow-hidden group/carousel py-1">
+            <div className="flex gap-3 md:gap-4 animate-carousel-left group-hover/carousel:[animation-play-state:paused] w-max">
               {[
                 '🏛️ MoSPI Official Central Portal',
                 '🇮🇳 28 States & 8 Union Territories',
@@ -184,14 +184,14 @@ export const OverviewPage: React.FC = () => {
               ].map((item, i) => (
                 <div
                   key={i}
-                  className="flex-shrink-0 px-4 py-2 rounded-full bg-slate-50 border border-slate-200/80 shadow-xs text-xs font-bold text-slate-700 whitespace-nowrap"
+                  className="flex-shrink-0 px-3.5 py-1.5 rounded-full bg-slate-50 border border-slate-200/80 shadow-xs text-xs font-bold text-slate-700 whitespace-nowrap"
                 >
                   {item}
                 </div>
               ))}
             </div>
-            <div className="absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-white to-transparent pointer-events-none" />
-            <div className="absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-white to-transparent pointer-events-none" />
+            <div className="absolute left-0 top-0 h-full w-12 bg-gradient-to-r from-white to-transparent pointer-events-none" />
+            <div className="absolute right-0 top-0 h-full w-12 bg-gradient-to-l from-white to-transparent pointer-events-none" />
           </div>
         </div>
       </section>
@@ -199,25 +199,25 @@ export const OverviewPage: React.FC = () => {
       {/* ========================================================= */}
       {/* 02. WHY CIVIC TEAMS PICK JANDRISHTI (3 Bento Outcome Cards)*/}
       {/* ========================================================= */}
-      <section className="py-14 sm:py-20 bg-[#F1F5F9] border-b border-slate-200/80">
+      <section className="py-8 sm:py-12 bg-[#F1F5F9] border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {/* Outcome Card 1: Zero Reconciliation Variance */}
-            <div className="flex flex-col h-full rounded-3xl bg-white p-6 sm:p-8 shadow-3xl hover:shadow-4xl transition-all duration-300 border border-slate-200/80">
-              <p className="text-4xl sm:text-5xl font-extrabold leading-none tabular-nums bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] bg-clip-text text-transparent font-mono">
+            <div className="flex flex-col h-full rounded-2xl bg-white p-5 sm:p-6 shadow-3xl hover:shadow-4xl transition-all duration-300 border border-slate-200/80">
+              <p className="text-3xl sm:text-4xl font-extrabold leading-none tabular-nums bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] bg-clip-text text-transparent font-mono">
                 ₹0.00
               </p>
-              <p className="mt-2 text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-wider">
+              <p className="mt-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider">
                 Reconciliation Variance
               </p>
-              <h3 className="mt-4 pt-4 border-t border-slate-100 text-lg sm:text-xl text-[#08102B] font-extrabold">
+              <h3 className="mt-3 pt-3 border-t border-slate-100 text-base sm:text-lg text-[#08102B] font-extrabold">
                 Zero rupee accounting discrepancy
               </h3>
-              <p className="mt-2 text-xs sm:text-sm text-slate-600 font-light leading-relaxed">
+              <p className="mt-1 text-xs text-slate-600 font-light leading-relaxed">
                 100% of ₹3,947.25 Cr disbursed funds mathematically validated against line-item treasury vouchers.
               </p>
-              <div className="mt-auto pt-6 flex items-center justify-between">
-                <span className="text-xs font-mono font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+              <div className="mt-auto pt-4 flex items-center justify-between">
+                <span className="text-[11px] font-mono font-bold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
                   Double-Entry Reconciled
                 </span>
                 <Link
@@ -231,21 +231,21 @@ export const OverviewPage: React.FC = () => {
             </div>
 
             {/* Outcome Card 2: 102,437 Ground Projects */}
-            <div className="flex flex-col h-full rounded-3xl bg-white p-6 sm:p-8 shadow-3xl hover:shadow-4xl transition-all duration-300 border border-slate-200/80">
-              <p className="text-4xl sm:text-5xl font-extrabold leading-none tabular-nums bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] bg-clip-text text-transparent font-mono">
+            <div className="flex flex-col h-full rounded-2xl bg-white p-5 sm:p-6 shadow-3xl hover:shadow-4xl transition-all duration-300 border border-slate-200/80">
+              <p className="text-3xl sm:text-4xl font-extrabold leading-none tabular-nums bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] bg-clip-text text-transparent font-mono">
                 102,437
               </p>
-              <p className="mt-2 text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-wider">
+              <p className="mt-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider">
                 Physical Works Monitored
               </p>
-              <h3 className="mt-4 pt-4 border-t border-slate-100 text-lg sm:text-xl text-[#08102B] font-extrabold">
+              <h3 className="mt-3 pt-3 border-t border-slate-100 text-base sm:text-lg text-[#08102B] font-extrabold">
                 Ground infrastructure tracked end-to-end
               </h3>
-              <p className="mt-2 text-xs sm:text-sm text-slate-600 font-light leading-relaxed">
+              <p className="mt-1 text-xs text-slate-600 font-light leading-relaxed">
                 Granular tracking of drinking water, roads, educational halls, and healthcare from recommendation to verified execution.
               </p>
-              <div className="mt-auto pt-6 flex items-center justify-between">
-                <span className="text-xs font-mono font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
+              <div className="mt-auto pt-4 flex items-center justify-between">
+                <span className="text-[11px] font-mono font-bold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200">
                   49.0% Delivery Rate
                 </span>
                 <Link
@@ -259,21 +259,21 @@ export const OverviewPage: React.FC = () => {
             </div>
 
             {/* Outcome Card 3: 1,831 Statistical Signals */}
-            <div className="flex flex-col h-full rounded-3xl bg-white p-6 sm:p-8 shadow-3xl hover:shadow-4xl transition-all duration-300 border border-slate-200/80">
-              <p className="text-4xl sm:text-5xl font-extrabold leading-none tabular-nums bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] bg-clip-text text-transparent font-mono">
+            <div className="flex flex-col h-full rounded-2xl bg-white p-5 sm:p-6 shadow-3xl hover:shadow-4xl transition-all duration-300 border border-slate-200/80">
+              <p className="text-3xl sm:text-4xl font-extrabold leading-none tabular-nums bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] bg-clip-text text-transparent font-mono">
                 1,831
               </p>
-              <p className="mt-2 text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-wider">
+              <p className="mt-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider">
                 MAD Statistical Signals
               </p>
-              <h3 className="mt-4 pt-4 border-t border-slate-100 text-lg sm:text-xl text-[#08102B] font-extrabold">
+              <h3 className="mt-3 pt-3 border-t border-slate-100 text-base sm:text-lg text-[#08102B] font-extrabold">
                 Objective audit signals, zero accusation
               </h3>
-              <p className="mt-2 text-xs sm:text-sm text-slate-600 font-light leading-relaxed">
+              <p className="mt-1 text-xs text-slate-600 font-light leading-relaxed">
                 Median Absolute Deviation robust Z-score flagging vendor concentration, budget variance, and fund stall without bias.
               </p>
-              <div className="mt-auto pt-6 flex items-center justify-between">
-                <span className="text-xs font-mono font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
+              <div className="mt-auto pt-4 flex items-center justify-between">
+                <span className="text-[11px] font-mono font-bold text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
                   21 Critical · 614 High
                 </span>
                 <Link
@@ -290,40 +290,40 @@ export const OverviewPage: React.FC = () => {
       </section>
 
       {/* ========================================================= */}
-      {/* 03. INTERACTIVE ANALYTICAL & GEOSPATIAL COMMAND CENTER    */}
+      {/* 03. HIGH-PRECISION FORENSIC ANALYTICAL STUDIO             */}
       {/* ========================================================= */}
-      <section className="py-14 sm:py-20 bg-white border-b border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <section className="py-8 sm:py-12 bg-white border-b border-slate-200/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <span className="text-xs font-extrabold uppercase tracking-widest text-[#2563EB] block">
                 Visual Analytics &amp; Spatial Intelligence
               </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#08102B] tracking-tight mt-1">
+              <h2 className="text-xl sm:text-2xl font-extrabold text-[#08102B] tracking-tight mt-0.5">
                 Forensic Command Center
               </h2>
             </div>
 
             {/* View Mode Switcher: Graphs vs Map */}
-            <div className="flex items-center gap-1 p-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold shrink-0">
+            <div className="flex items-center gap-1 p-0.5 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold shrink-0">
               <button
                 type="button"
                 onClick={() => setCommandViewMode('GRAPHS')}
-                className={`px-4 py-2 rounded-full transition flex items-center gap-1.5 ${
+                className={`px-3.5 py-1.5 rounded-full transition flex items-center gap-1.5 ${
                   commandViewMode === 'GRAPHS' ? 'bg-[#2563EB] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                <BarChart3 className="w-4 h-4" />
+                <BarChart3 className="w-3.5 h-3.5" />
                 <span>Graphical Analytics</span>
               </button>
               <button
                 type="button"
                 onClick={() => setCommandViewMode('MAP')}
-                className={`px-4 py-2 rounded-full transition flex items-center gap-1.5 ${
+                className={`px-3.5 py-1.5 rounded-full transition flex items-center gap-1.5 ${
                   commandViewMode === 'MAP' ? 'bg-[#2563EB] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                <MapIcon className="w-4 h-4" />
+                <MapIcon className="w-3.5 h-3.5" />
                 <span>28 States &amp; 8 UTs Map</span>
               </button>
             </div>
@@ -338,7 +338,7 @@ export const OverviewPage: React.FC = () => {
               onSelectState={(stName) => navigate(`/mps?state=${encodeURIComponent(stName)}`)}
             />
           ) : (
-            <div className="bg-white rounded-3xl p-4 md:p-6 shadow-3xl border border-slate-200/80">
+            <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-3xl border border-slate-200/80">
               <IndiaParliamentaryMap
                 states={states}
                 stats={stats}
@@ -352,22 +352,22 @@ export const OverviewPage: React.FC = () => {
       {/* ========================================================= */}
       {/* 04. STREAMLINED DIGITAL SOLUTIONS SHOWCASE                */}
       {/* ========================================================= */}
-      <section className="py-14 sm:py-20 bg-[#F1F5F9]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <section className="py-8 sm:py-12 bg-[#F1F5F9]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <div className="text-center max-w-2xl mx-auto">
             <span className="text-xs font-extrabold uppercase tracking-widest text-[#2563EB]">
               National Explorers
             </span>
-            <h2 className="mt-1 text-2xl sm:text-3xl font-extrabold text-[#08102B] tracking-tight">
+            <h2 className="mt-0.5 text-xl sm:text-2xl font-extrabold text-[#08102B] tracking-tight">
               Data solutions for real public accountability
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {/* Portfolio 1: Parliamentarians */}
             <Link
               to="/mps"
-              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/11] flex flex-col justify-end p-6"
+              className="group relative rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/10] flex flex-col justify-end p-5"
             >
               <img
                 src={slideParliamentChamber}
@@ -375,16 +375,16 @@ export const OverviewPage: React.FC = () => {
                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-60"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#08102B] via-[#08102B]/40 to-transparent" />
-              <div className="relative z-10 space-y-1.5">
+              <div className="relative z-10 space-y-1">
                 <div className="flex gap-2">
-                  <span className="px-2.5 py-0.5 rounded-full bg-white/90 text-[#08102B] text-[10px] font-extrabold">
+                  <span className="px-2 py-0.5 rounded-full bg-white/90 text-[#08102B] text-[10px] font-extrabold">
                     778 Members
                   </span>
-                  <span className="px-2.5 py-0.5 rounded-full bg-[#2563EB] text-white text-[10px] font-extrabold">
+                  <span className="px-2 py-0.5 rounded-full bg-[#2563EB] text-white text-[10px] font-extrabold">
                     Parliament
                   </span>
                 </div>
-                <h3 className="text-xl font-extrabold text-white">
+                <h3 className="text-base sm:text-lg font-extrabold text-white">
                   Parliamentary Profiles
                 </h3>
                 <p className="text-xs text-slate-200 font-light line-clamp-1">
@@ -396,7 +396,7 @@ export const OverviewPage: React.FC = () => {
             {/* Portfolio 2: Physical Works */}
             <Link
               to="/works"
-              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/11] flex flex-col justify-end p-6"
+              className="group relative rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/10] flex flex-col justify-end p-5"
             >
               <img
                 src={slideChenab}
@@ -404,16 +404,16 @@ export const OverviewPage: React.FC = () => {
                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-60"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#08102B] via-[#08102B]/40 to-transparent" />
-              <div className="relative z-10 space-y-1.5">
+              <div className="relative z-10 space-y-1">
                 <div className="flex gap-2">
-                  <span className="px-2.5 py-0.5 rounded-full bg-white/90 text-[#08102B] text-[10px] font-extrabold">
+                  <span className="px-2 py-0.5 rounded-full bg-white/90 text-[#08102B] text-[10px] font-extrabold">
                     102,437 Works
                   </span>
-                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-extrabold">
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-extrabold">
                     Infrastructure
                   </span>
                 </div>
-                <h3 className="text-xl font-extrabold text-white">
+                <h3 className="text-base sm:text-lg font-extrabold text-white">
                   Physical Infrastructure
                 </h3>
                 <p className="text-xs text-slate-200 font-light line-clamp-1">
@@ -425,7 +425,7 @@ export const OverviewPage: React.FC = () => {
             {/* Portfolio 3: Treasury Disbursements */}
             <Link
               to="/transactions"
-              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/11] flex flex-col justify-end p-6"
+              className="group relative rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/10] flex flex-col justify-end p-5"
             >
               <img
                 src={slideVandeMetro}
@@ -433,16 +433,16 @@ export const OverviewPage: React.FC = () => {
                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-60"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#08102B] via-[#08102B]/40 to-transparent" />
-              <div className="relative z-10 space-y-1.5">
+              <div className="relative z-10 space-y-1">
                 <div className="flex gap-2">
-                  <span className="px-2.5 py-0.5 rounded-full bg-white/90 text-[#08102B] text-[10px] font-extrabold">
+                  <span className="px-2 py-0.5 rounded-full bg-white/90 text-[#08102B] text-[10px] font-extrabold">
                     82,296 Vouchers
                   </span>
-                  <span className="px-2.5 py-0.5 rounded-full bg-amber-600 text-white text-[10px] font-extrabold">
+                  <span className="px-2 py-0.5 rounded-full bg-amber-600 text-white text-[10px] font-extrabold">
                     Treasury
                   </span>
                 </div>
-                <h3 className="text-xl font-extrabold text-white">
+                <h3 className="text-base sm:text-lg font-extrabold text-white">
                   Treasury Disbursements
                 </h3>
                 <p className="text-xs text-slate-200 font-light line-clamp-1">
@@ -454,7 +454,7 @@ export const OverviewPage: React.FC = () => {
             {/* Portfolio 4: Contractor Intelligence */}
             <Link
               to="/vendors"
-              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/11] flex flex-col justify-end p-6"
+              className="group relative rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/10] flex flex-col justify-end p-5"
             >
               <img
                 src={slideAtalSetu}
@@ -462,16 +462,16 @@ export const OverviewPage: React.FC = () => {
                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-60"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#08102B] via-[#08102B]/40 to-transparent" />
-              <div className="relative z-10 space-y-1.5">
+              <div className="relative z-10 space-y-1">
                 <div className="flex gap-2">
-                  <span className="px-2.5 py-0.5 rounded-full bg-white/90 text-[#08102B] text-[10px] font-extrabold">
+                  <span className="px-2 py-0.5 rounded-full bg-white/90 text-[#08102B] text-[10px] font-extrabold">
                     22,377 Vendors
                   </span>
-                  <span className="px-2.5 py-0.5 rounded-full bg-indigo-600 text-white text-[10px] font-extrabold">
+                  <span className="px-2 py-0.5 rounded-full bg-indigo-600 text-white text-[10px] font-extrabold">
                     Procurement
                   </span>
                 </div>
-                <h3 className="text-xl font-extrabold text-white">
+                <h3 className="text-base sm:text-lg font-extrabold text-white">
                   Contractor Footprints
                 </h3>
                 <p className="text-xs text-slate-200 font-light line-clamp-1">
@@ -483,7 +483,7 @@ export const OverviewPage: React.FC = () => {
             {/* Portfolio 5: 28 States & 8 UTs Atlas */}
             <Link
               to="/states"
-              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/11] flex flex-col justify-end p-6"
+              className="group relative rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/10] flex flex-col justify-end p-5"
             >
               <img
                 src={slidePamban}
@@ -491,16 +491,16 @@ export const OverviewPage: React.FC = () => {
                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-60"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#08102B] via-[#08102B]/40 to-transparent" />
-              <div className="relative z-10 space-y-1.5">
+              <div className="relative z-10 space-y-1">
                 <div className="flex gap-2">
-                  <span className="px-2.5 py-0.5 rounded-full bg-white/90 text-[#08102B] text-[10px] font-extrabold">
+                  <span className="px-2 py-0.5 rounded-full bg-white/90 text-[#08102B] text-[10px] font-extrabold">
                     36 Territories
                   </span>
-                  <span className="px-2.5 py-0.5 rounded-full bg-sky-600 text-white text-[10px] font-extrabold">
+                  <span className="px-2 py-0.5 rounded-full bg-sky-600 text-white text-[10px] font-extrabold">
                     Geospatial
                   </span>
                 </div>
-                <h3 className="text-xl font-extrabold text-white">
+                <h3 className="text-base sm:text-lg font-extrabold text-white">
                   Spatial State Atlas
                 </h3>
                 <p className="text-xs text-slate-200 font-light line-clamp-1">
@@ -512,19 +512,19 @@ export const OverviewPage: React.FC = () => {
             {/* Portfolio 6: Anomaly Signal Center */}
             <Link
               to="/anomalies"
-              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/11] flex flex-col justify-end p-6"
+              className="group relative rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/10] flex flex-col justify-end p-5"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-[#08102B] via-[#1E1B4B] to-[#BE123C]/80" />
-              <div className="relative z-10 space-y-1.5">
+              <div className="relative z-10 space-y-1">
                 <div className="flex gap-2">
-                  <span className="px-2.5 py-0.5 rounded-full bg-white/90 text-[#08102B] text-[10px] font-extrabold">
+                  <span className="px-2 py-0.5 rounded-full bg-white/90 text-[#08102B] text-[10px] font-extrabold">
                     1,831 Signals
                   </span>
-                  <span className="px-2.5 py-0.5 rounded-full bg-rose-600 text-white text-[10px] font-extrabold">
+                  <span className="px-2 py-0.5 rounded-full bg-rose-600 text-white text-[10px] font-extrabold">
                     Audit Engine
                   </span>
                 </div>
-                <h3 className="text-xl font-extrabold text-white">
+                <h3 className="text-base sm:text-lg font-extrabold text-white">
                   MAD Signal Center
                 </h3>
                 <p className="text-xs text-slate-200 font-light line-clamp-1">
@@ -539,45 +539,45 @@ export const OverviewPage: React.FC = () => {
       {/* ========================================================= */}
       {/* 05. 4-STEP CIVIC DATA FORENSIC PIPELINE                   */}
       {/* ========================================================= */}
-      <section className="py-14 sm:py-20 bg-white border-t border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <section className="py-8 sm:py-12 bg-white border-t border-slate-200/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <div className="text-center max-w-2xl mx-auto">
             <span className="text-xs font-extrabold uppercase tracking-widest text-[#2563EB]">
               Architecture &amp; Proofs
             </span>
-            <h2 className="mt-1 text-2xl sm:text-3xl font-extrabold text-[#08102B] tracking-tight">
+            <h2 className="mt-0.5 text-xl sm:text-2xl font-extrabold text-[#08102B] tracking-tight">
               From raw government data to verified intelligence
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="rounded-3xl bg-slate-50 p-6 border border-slate-200 shadow-xs space-y-2">
-              <span className="text-2xl font-extrabold text-[#2563EB] font-mono">01</span>
-              <h3 className="text-base font-extrabold text-[#08102B]">Data Ingestion</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="rounded-2xl bg-slate-50 p-4 border border-slate-200 shadow-xs space-y-1.5">
+              <span className="text-xl font-extrabold text-[#2563EB] font-mono">01</span>
+              <h3 className="text-sm font-extrabold text-[#08102B]">Data Ingestion</h3>
               <p className="text-xs text-slate-600 font-light leading-relaxed">
                 Automated ingestion of official reports across 778 MPs, 102K works, and 82K vouchers.
               </p>
             </div>
 
-            <div className="rounded-3xl bg-slate-50 p-6 border border-slate-200 shadow-xs space-y-2">
-              <span className="text-2xl font-extrabold text-[#2563EB] font-mono">02</span>
-              <h3 className="text-base font-extrabold text-[#08102B]">Ledger Validation</h3>
+            <div className="rounded-2xl bg-slate-50 p-4 border border-slate-200 shadow-xs space-y-1.5">
+              <span className="text-xl font-extrabold text-[#2563EB] font-mono">02</span>
+              <h3 className="text-sm font-extrabold text-[#08102B]">Ledger Validation</h3>
               <p className="text-xs text-slate-600 font-light leading-relaxed">
                 Double-entry fiscal validation verifying reconciliations with ₹0.00 discrepancy.
               </p>
             </div>
 
-            <div className="rounded-3xl bg-slate-50 p-6 border border-slate-200 shadow-xs space-y-2">
-              <span className="text-2xl font-extrabold text-[#2563EB] font-mono">03</span>
-              <h3 className="text-base font-extrabold text-[#08102B]">MAD Robust Z-Scores</h3>
+            <div className="rounded-2xl bg-slate-50 p-4 border border-slate-200 shadow-xs space-y-1.5">
+              <span className="text-xl font-extrabold text-[#2563EB] font-mono">03</span>
+              <h3 className="text-sm font-extrabold text-[#08102B]">MAD Robust Z-Scores</h3>
               <p className="text-xs text-slate-600 font-light leading-relaxed">
                 Empirical anomaly engine computing 1,831 objective signals without outlier distortion.
               </p>
             </div>
 
-            <div className="rounded-3xl bg-slate-50 p-6 border border-slate-200 shadow-xs space-y-2">
-              <span className="text-2xl font-extrabold text-[#2563EB] font-mono">04</span>
-              <h3 className="text-base font-extrabold text-[#08102B]">Citizen Dossiers</h3>
+            <div className="rounded-2xl bg-slate-50 p-4 border border-slate-200 shadow-xs space-y-1.5">
+              <span className="text-xl font-extrabold text-[#2563EB] font-mono">04</span>
+              <h3 className="text-sm font-extrabold text-[#08102B]">Citizen Dossiers</h3>
               <p className="text-xs text-slate-600 font-light leading-relaxed">
                 Instant generation of verifiable entity dossiers, geospatial maps, and CSV exports.
               </p>
@@ -589,28 +589,28 @@ export const OverviewPage: React.FC = () => {
       {/* ========================================================= */}
       {/* 06. COMPACT HIGH-CONVERSION CIVIC CALL-TO-ACTION          */}
       {/* ========================================================= */}
-      <section className="py-14 sm:py-20 bg-[#08102B] text-white relative overflow-hidden">
+      <section className="py-10 sm:py-14 bg-[#08102B] text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 rounded-full bg-[#2563EB]/20 blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-[#1E3A8A]/30 blur-3xl pointer-events-none" />
 
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-6">
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-extrabold uppercase tracking-widest">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-4">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-extrabold uppercase tracking-widest">
             <Sparkles className="w-3.5 h-3.5 text-blue-400" />
             Empowering Democratic Transparency
           </span>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight leading-tight">
             Ready to audit your constituency's public developmental funds?
           </h2>
 
-          <p className="text-slate-300 text-sm sm:text-base max-w-xl mx-auto font-light leading-relaxed">
+          <p className="text-slate-300 text-xs sm:text-sm max-w-xl mx-auto font-light leading-relaxed">
             Search any Member of Parliament, track local infrastructure delivery, and inspect treasury vouchers in real time.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
             <Link
               to="/mps"
-              className="w-full sm:w-auto alx-btn-primary px-8 py-3.5 text-base font-bold"
+              className="w-full sm:w-auto alx-btn-primary px-7 py-3 text-sm font-bold"
             >
               <span>Explore All 778 MPs</span>
               <ArrowRight className="w-4 h-4" />
@@ -619,7 +619,7 @@ export const OverviewPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setFollowTheMoneyOpen(true)}
-              className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold text-base transition border border-white/20 flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-7 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold text-sm transition border border-white/20 flex items-center justify-center gap-2"
             >
               <Zap className="w-4 h-4 text-amber-400 fill-amber-400" />
               <span>Launch Money Flow Tracer</span>

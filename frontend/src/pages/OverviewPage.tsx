@@ -48,7 +48,7 @@ import slideVandeMetro from '../assets/images/slide_vandebharat_metro.jpg';
 import slidePamban from '../assets/images/slide_pamban.jpg';
 
 export const OverviewPage: React.FC = () => {
-  const { selectedHouse, setSelectedHouse } = useHouse();
+  const { selectedHouse } = useHouse();
   const navigate = useNavigate();
   const [stats, setStats] = useState<StatsResponse | null>(null);
   const [states, setStates] = useState<StateSummary[]>([]);
@@ -58,70 +58,46 @@ export const OverviewPage: React.FC = () => {
   const [followTheMoneyOpen, setFollowTheMoneyOpen] = useState(false);
   const [activeDossier, setActiveDossier] = useState<DossierEntity | null>(null);
   const [commandViewMode, setCommandViewMode] = useState<'GRAPHS' | 'MAP'>('GRAPHS');
+  const [heroSearchQuery, setHeroSearchQuery] = useState('');
 
-  // Hero Carousel State (5 Iconic High-Res Photos)
+  // Background Ambient Carousel (5 Iconic High-Res Photos cycling in background)
   const [currentSlide, setCurrentSlide] = useState(0);
-  const SLIDE_DURATION = 4500;
+  const SLIDE_DURATION = 6000;
 
   const heroSlides = [
     {
       id: 0,
-      title: 'Sansad Bhavan',
+      title: 'Sansad Bhavan (New Delhi)',
       image: slideParliamentChamber,
-      tag: 'PARLIAMENTARY SOVEREIGNTY · 778 SEATS',
-      titlePart1: 'Parliamentary Allocations.',
-      titleHighlight: 'Traced to Ground Delivery.',
-      desc: 'Auditing ₹11,667.55 Crore statutory development fund authorized across 778 parliamentary seats with zero accounting discrepancy.',
-      stat: '₹11,667.55 Cr',
-      statLabel: 'Statutory Corpus',
+      meta: '778 Parliamentary Seats · ₹11,667.55 Cr Corpus',
     },
     {
       id: 1,
-      title: 'Chenab Bridge',
+      title: 'Chenab Rail Bridge (J&K)',
       image: slideChenab,
-      tag: 'MEGA INFRASTRUCTURE · PUBLIC ASSETS',
-      titlePart1: '102,437 Ground Works.',
-      titleHighlight: 'Monitored Across 28 States & 8 UTs.',
-      desc: 'Granular monitoring of drinking water pipelines, high-altitude bridges, schools, and hospitals across 28 States and 8 Union Territories.',
-      stat: '102,437 Works',
-      statLabel: 'Public Assets',
+      meta: '102,437 Public Works · 28 States & 8 UTs',
     },
     {
       id: 2,
-      title: 'Atal Setu Link',
+      title: 'Atal Setu Sea Link (Maharashtra)',
       image: slideAtalSetu,
-      tag: 'COASTAL CORRIDORS · ZERO VARIANCE',
-      titlePart1: 'Constitutional Integrity.',
-      titleHighlight: '& Mathematical Reconciliation.',
-      desc: 'Every rupee verified with strict double-entry ledger audits, ensuring ₹0.00 mathematical variance across central exchequer returns.',
-      stat: '₹0.00 Variance',
-      statLabel: 'Audit Standard',
+      meta: 'Double-Entry Reconciled · ₹0.00 Variance',
     },
     {
       id: 3,
-      title: 'Vande Metro Transit',
+      title: 'Vande Metro Rapid Transit',
       image: slideVandeMetro,
-      tag: 'RAPID MOBILITY · 82K+ VOUCHERS',
-      titlePart1: '82,296 Treasury Records.',
-      titleHighlight: 'Line-Item Lineage Verified.',
-      desc: 'Direct financial visibility connecting central allocations to district-level treasury vouchers and modern Vande Metro transit disbursements.',
-      stat: '₹3,947.25 Cr',
-      statLabel: 'Disbursed Funds',
+      meta: '82,296 Treasury Vouchers · ₹3,947.25 Cr Spend',
     },
     {
       id: 4,
-      title: 'Pamban Bridge',
+      title: 'Pamban Vertical Lift Bridge (Tamil Nadu)',
       image: slidePamban,
-      tag: 'MARITIME CONNECTIVITY · OPEN DATA',
-      titlePart1: 'Open Fiscal Intelligence.',
-      titleHighlight: 'Empowering Every Citizen.',
-      desc: 'Bridging public fund governance and grassroots visibility through explainable algorithms, interactive cartography, and vendor tracking.',
-      stat: '22,377 Vendors',
-      statLabel: 'Procurement Entities',
+      meta: '22,377 Executing Vendors · Open Civic Data',
     },
   ];
 
-  // Auto-advance hero carousel
+  // Auto-advance ambient background carousel
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
@@ -151,6 +127,13 @@ export const OverviewPage: React.FC = () => {
     loadData();
   }, [selectedHouse]);
 
+  const handleHeroSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (heroSearchQuery.trim()) {
+      navigate(`/mps?search=${encodeURIComponent(heroSearchQuery.trim())}`);
+    }
+  };
+
   if (loading && !stats) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
@@ -175,14 +158,32 @@ export const OverviewPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] font-manrope">
-      {/* 01. ALLUXI-STYLE COMPACT HIGH-IMPACT HERO SECTION */}
-      <section className="bg-[#F1F5F9] pt-6 md:pt-10 pb-8 border-b border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
+      {/* 01. ALLUXI-STYLE HERO SECTION WITH AMBIENT BACKGROUND CAROUSEL & LIVE CIVIC CONSOLE */}
+      <section className="relative overflow-hidden bg-[#F1F5F9] pt-8 md:pt-12 pb-10 border-b border-slate-200/80">
+        {/* Ambient Photographic Background Layer with Smooth Fade Transition */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeSlideData.id}
+              initial={{ opacity: 0, scale: 1.05 }}
+              animate={{ opacity: 0.12, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.2, ease: 'easeInOut' }}
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${activeSlideData.image})` }}
+            />
+          </AnimatePresence>
+          {/* Frosted Gradient Masks */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#F1F5F9]/80 via-[#F1F5F9]/90 to-[#F1F5F9]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#F1F5F9] via-transparent to-[#F1F5F9]/90" />
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left Column: Alluxi Typography & Dual CTA */}
-            <div className="lg:col-span-6 text-center lg:text-left space-y-4">
+            <div className="lg:col-span-6 text-center lg:text-left space-y-5">
               {/* Category Pill Tag */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200 shadow-xs text-xs font-extrabold uppercase tracking-widest text-[#2563EB]">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-slate-200 shadow-xs text-xs font-extrabold uppercase tracking-widest text-[#2563EB]">
                 <span className="flex h-2 w-2 relative">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2563EB]"></span>
@@ -191,21 +192,21 @@ export const OverviewPage: React.FC = () => {
               </div>
 
               {/* Alluxi Signature Headline */}
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl text-[#08102B] font-extrabold leading-[1.12] tracking-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl text-[#08102B] font-extrabold leading-[1.12] tracking-tight">
                 Public finance is <span className="text-[#2563EB]">complex.</span> <br />
                 Your civic intelligence <span className="text-[#2563EB]">shouldn't be.</span>
               </h1>
 
               {/* Body Subtitle */}
-              <p className="text-slate-600 font-normal text-sm sm:text-base leading-relaxed max-w-xl mx-auto lg:mx-0">
-                Tracking ₹11,667.55 Crore across 102,437 works and 82,296 treasury vouchers for 778 Parliamentarians in 28 States &amp; 8 UTs. Deterministically reconciled to ₹0.00 variance.
+              <p className="text-slate-600 font-normal text-sm sm:text-base md:text-lg leading-relaxed max-w-xl mx-auto lg:mx-0">
+                Tracking ₹11,667.55 Crore across 102,437 ground works and 82,296 treasury vouchers for 778 Parliamentarians in 28 States &amp; 8 UTs. Deterministically reconciled to ₹0.00 variance.
               </p>
 
-              {/* Action Buttons & Verified Checkmarks */}
-              <div className="pt-1 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
+              {/* Action Buttons */}
+              <div className="pt-1 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5">
                 <Link
                   to="/mps"
-                  className="w-full sm:w-auto alx-btn-primary text-center whitespace-nowrap cursor-pointer text-xs sm:text-sm"
+                  className="w-full sm:w-auto alx-btn-primary text-center whitespace-nowrap cursor-pointer text-sm font-bold flex items-center justify-center gap-2"
                 >
                   <span>Explore All 778 MPs</span>
                   <ArrowRight className="w-4 h-4" />
@@ -214,7 +215,7 @@ export const OverviewPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setFollowTheMoneyOpen(true)}
-                  className="w-full sm:w-auto alx-btn-secondary text-center whitespace-nowrap cursor-pointer text-xs sm:text-sm font-bold flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto alx-btn-secondary text-center whitespace-nowrap cursor-pointer text-sm font-bold flex items-center justify-center gap-2"
                 >
                   <Zap className="w-4 h-4 text-amber-500 fill-amber-500" />
                   <span>Follow The Money</span>
@@ -222,82 +223,129 @@ export const OverviewPage: React.FC = () => {
               </div>
 
               {/* 3-Point Verified Assurance Checklist */}
-              <ul className="pt-2 space-y-1.5 text-slate-600 font-medium text-xs text-left max-w-md mx-auto lg:mx-0">
+              <ul className="pt-2 space-y-2 text-slate-600 font-medium text-xs sm:text-sm text-left max-w-md mx-auto lg:mx-0">
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                   <span><strong>₹0.00 Reconciliation Variance:</strong> 100% matched to treasury vouchers</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                   <span><strong>100% Traceable Lineage:</strong> Official MoSPI &amp; eSAKSHI data</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
                   <span><strong>Explainable MAD Z-Scores:</strong> 1,831 non-accusatory analytical signals</span>
                 </li>
               </ul>
             </div>
 
-            {/* Right Column: Compact Device Frame & Photo Carousel */}
+            {/* Right Column: Executive Live Civic Intelligence Console (Alluxi Bento Card) */}
             <div className="lg:col-span-6 w-full">
-              <div className="relative mx-auto max-w-lg lg:max-w-none">
-                <div className="relative rounded-3xl bg-white p-3 shadow-3xl border border-slate-200/80 overflow-hidden group">
-                  <div className="relative rounded-2xl overflow-hidden aspect-[16/10] bg-slate-900">
-                    <AnimatePresence mode="wait">
-                      <motion.img
-                        key={activeSlideData.id}
-                        src={activeSlideData.image}
-                        alt={activeSlideData.title}
-                        initial={{ opacity: 0, scale: 1.04 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="absolute inset-0 w-full h-full object-cover select-none"
-                      />
-                    </AnimatePresence>
+              <div className="rounded-3xl bg-white/95 backdrop-blur-md p-6 md:p-7 shadow-3xl border border-slate-200/90 space-y-5">
+                {/* Console Header */}
+                <div className="flex items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-xs font-mono font-bold text-slate-800 uppercase tracking-wider">
+                      Live Parliamentary Audit Console
+                    </span>
+                  </div>
+                  <span className="text-[11px] font-mono font-bold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200">
+                    26 Aug 2026 Snapshot
+                  </span>
+                </div>
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#08102B]/90 via-[#08102B]/30 to-transparent" />
-
-                    <div className="absolute top-3 left-3 z-20 flex items-center gap-2">
-                      <span className="px-2.5 py-0.5 rounded-full bg-white/95 text-[#08102B] text-[10px] font-extrabold tracking-wide uppercase shadow-md backdrop-blur-md">
-                        {activeSlideData.tag}
+                {/* Zero Variance Shield Highlight */}
+                <div className="rounded-2xl bg-gradient-to-r from-emerald-50 via-teal-50/50 to-white p-4 border border-emerald-200/80 flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm shrink-0">
+                      <ShieldCheck className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-extrabold uppercase font-mono tracking-wider text-emerald-700 block">
+                        Reconciliation Guarantee
                       </span>
-                    </div>
-
-                    <div className="absolute bottom-3 left-3 right-3 z-20 text-white">
-                      <p className="text-lg sm:text-xl font-extrabold tracking-tight drop-shadow-md">
-                        {activeSlideData.title}
-                      </p>
-                      <p className="text-xs text-slate-200 line-clamp-2 mt-0.5 font-light">
-                        {activeSlideData.desc}
+                      <p className="text-lg font-extrabold text-slate-900 font-mono">
+                        ₹0.00 Variance
                       </p>
                     </div>
                   </div>
+                  <span className="text-[11px] font-bold text-emerald-700 bg-white/90 px-2.5 py-1 rounded-full border border-emerald-200 shadow-xs">
+                    Double-Entry Validated
+                  </span>
+                </div>
 
-                  {/* Carousel Navigation Strip */}
-                  <div className="pt-2.5 pb-0.5 flex items-center justify-between gap-2 px-1.5">
-                    <div className="flex items-center gap-1.5">
-                      {heroSlides.map((slide, idx) => (
-                        <button
-                          key={slide.id}
-                          type="button"
-                          onClick={() => setCurrentSlide(idx)}
-                          className={`h-1.5 rounded-full transition-all duration-300 ${
-                            idx === currentSlide
-                              ? 'w-6 bg-[#2563EB]'
-                              : 'w-1.5 bg-slate-300 hover:bg-slate-400'
-                          }`}
-                          aria-label={`Slide ${idx + 1}`}
-                        />
-                      ))}
-                    </div>
-
-                    <div className="flex items-center gap-1.5 text-xs font-bold text-[#08102B] bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
-                      <span className="font-mono text-[#2563EB]">{activeSlideData.stat}</span>
-                      <span className="text-slate-400">·</span>
-                      <span className="text-slate-600 text-[10px]">{activeSlideData.statLabel}</span>
-                    </div>
+                {/* Statutory Corpus Progress Gauge */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs font-bold font-manrope">
+                    <span className="text-slate-500">Statutory Allocation (₹11,667.55 Cr)</span>
+                    <span className="text-[#2563EB] font-mono">₹3,947.25 Cr Disbursed (33.8%)</span>
                   </div>
+                  <div className="w-full h-3 rounded-full bg-slate-100 overflow-hidden p-0.5 border border-slate-200/80">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-[#2563EB] to-[#10B981] transition-all duration-1000"
+                      style={{ width: '33.8%' }}
+                    />
+                  </div>
+                </div>
+
+                {/* 4-Metric Grid */}
+                <div className="grid grid-cols-2 gap-3 pt-1 text-xs">
+                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 space-y-0.5">
+                    <span className="text-slate-400 font-medium text-[11px]">Parliamentarians</span>
+                    <p className="text-base font-extrabold text-slate-900 font-mono">
+                      778 MPs
+                    </p>
+                    <span className="text-[10px] text-slate-500">543 Lok Sabha · 235 Rajya Sabha</span>
+                  </div>
+
+                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 space-y-0.5">
+                    <span className="text-slate-400 font-medium text-[11px]">Ground Works</span>
+                    <p className="text-base font-extrabold text-slate-900 font-mono">
+                      102,437 Works
+                    </p>
+                    <span className="text-[10px] text-emerald-600 font-semibold">49.0% Delivered</span>
+                  </div>
+
+                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 space-y-0.5">
+                    <span className="text-slate-400 font-medium text-[11px]">Disbursement Records</span>
+                    <p className="text-base font-extrabold text-slate-900 font-mono">
+                      82,296 Vouchers
+                    </p>
+                    <span className="text-[10px] text-slate-500">22,377 Vendors</span>
+                  </div>
+
+                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 space-y-0.5">
+                    <span className="text-slate-400 font-medium text-[11px]">Statistical Flags</span>
+                    <p className="text-base font-extrabold text-amber-600 font-mono">
+                      1,831 Signals
+                    </p>
+                    <span className="text-[10px] text-slate-500">21 Critical · 614 High</span>
+                  </div>
+                </div>
+
+                {/* Quick Constituency Search Input Bar */}
+                <form onSubmit={handleHeroSearch} className="relative pt-1">
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={heroSearchQuery}
+                    onChange={(e) => setHeroSearchQuery(e.target.value)}
+                    placeholder="Search by MP name or constituency..."
+                    className="w-full pl-10 pr-24 py-2.5 rounded-full border border-slate-200 bg-slate-50/70 text-xs font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] shadow-xs"
+                  />
+                  <button
+                    type="submit"
+                    className="absolute right-1.5 top-1/2 -translate-y-1/2 px-4 py-1.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-bold transition shadow-xs"
+                  >
+                    Inspect
+                  </button>
+                </form>
+
+                {/* Background Photo Credit Capsule */}
+                <div className="text-[11px] text-slate-400 flex items-center justify-between pt-1 border-t border-slate-100">
+                  <span>Background: <strong className="text-slate-600 font-semibold">{activeSlideData.title}</strong></span>
+                  <span className="font-mono text-slate-400">{activeSlideData.meta}</span>
                 </div>
               </div>
             </div>
@@ -305,7 +353,7 @@ export const OverviewPage: React.FC = () => {
         </div>
 
         {/* COVERAGE & TRUST MARQUEE TICKER */}
-        <div className="pt-6 md:pt-8">
+        <div className="pt-8 md:pt-10">
           <div className="relative overflow-hidden group/carousel py-1">
             <div className="flex gap-3 md:gap-4 animate-carousel-left group-hover/carousel:[animation-play-state:paused] w-max">
               {[

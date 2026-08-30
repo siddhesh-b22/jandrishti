@@ -9,6 +9,7 @@ import {
   ShieldCheck,
   Zap,
   Layers,
+  Sparkles,
 } from 'lucide-react';
 import { useHouse } from '../../context/HouseContext';
 import { BrandLogo } from '../common/BrandLogo';
@@ -61,29 +62,29 @@ export const Navbar: React.FC = () => {
   return (
     <>
       <header className="sticky top-0 z-50 transition-all duration-300">
-        {/* Top Active Progress Glow Line */}
+        {/* Top Active Gradient Progress Glow Line */}
         <div className="h-0.5 bg-gradient-to-r from-[#2563EB] via-[#60A5FA] to-[#08102B] w-full" />
 
-        <div className="bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs transition-all duration-200">
+        <div className={`bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs transition-all duration-200 ${scrolled ? 'shadow-md bg-white/98' : ''}`}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className={`flex items-center justify-between gap-4 transition-all duration-200 ${scrolled ? 'py-2.5' : 'py-3.5'}`}>
               {/* Left: Brand Mark */}
-              <NavLink to="/" className="flex items-center gap-2.5 group shrink-0">
+              <NavLink to="/" className="flex items-center gap-3 group shrink-0">
                 <BrandLogo size="md" />
               </NavLink>
 
-              {/* Center: Navigation Links (Alluxi Pill Navigation) */}
-              <nav className="hidden lg:flex items-center gap-1 font-manrope font-bold text-xs text-slate-600 bg-slate-100/80 px-2 py-1.5 rounded-full border border-slate-200/70 shrink-0">
+              {/* Center: Navigation Links (Alluxi Capsule Navbar) */}
+              <nav className="hidden lg:flex items-center gap-1 font-manrope font-bold text-xs text-slate-600 bg-slate-100/90 px-2 py-1 rounded-full border border-slate-200/80 shrink-0">
                 {navLinks.map((link) => (
                   <NavLink
                     key={link.to}
                     to={link.to}
                     end={link.end}
                     className={({ isActive }) =>
-                      `px-3 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap ${
+                      `px-3.5 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap ${
                         isActive
                           ? 'bg-[#2563EB] text-white font-extrabold shadow-sm shadow-blue-500/30'
-                          : 'hover:text-[#08102B] hover:bg-white/80'
+                          : 'hover:text-[#08102B] hover:bg-white/90'
                       }`
                     }
                   >
@@ -92,13 +93,13 @@ export const Navbar: React.FC = () => {
                 ))}
               </nav>
 
-              {/* Right: Search, Chamber Switcher & Alluxi CTA */}
+              {/* Right: Search, Chamber Switcher & High-Contrast CTA */}
               <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
                 {/* Global Search Button */}
                 <button
                   type="button"
                   onClick={() => setSearchModalOpen(true)}
-                  className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100/80 hover:bg-slate-200/70 border border-slate-200 text-slate-500 text-xs font-semibold transition shrink-0"
+                  className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200/80 border border-slate-200 text-slate-600 text-xs font-semibold transition shrink-0"
                 >
                   <Search className="w-3.5 h-3.5 text-slate-400" />
                   <span className="font-manrope">Search</span>
@@ -177,7 +178,7 @@ export const Navbar: React.FC = () => {
               exit={{ opacity: 0, height: 0 }}
               className="lg:hidden bg-white border-b border-slate-200 shadow-xl overflow-hidden"
             >
-              <div className="px-4 py-4 space-y-3">
+              <div className="px-4 py-4 space-y-3 font-manrope">
                 {/* Search Bar Mobile */}
                 <button
                   type="button"
@@ -185,7 +186,7 @@ export const Navbar: React.FC = () => {
                     setMobileMenuOpen(false);
                     setSearchModalOpen(true);
                   }}
-                  className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-500 text-xs font-manrope font-semibold"
+                  className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-500 text-xs font-semibold"
                 >
                   <div className="flex items-center gap-2">
                     <Search className="w-4 h-4 text-slate-400" />
@@ -197,7 +198,7 @@ export const Navbar: React.FC = () => {
                 </button>
 
                 {/* Chamber Switcher Mobile */}
-                <div className="flex items-center justify-between bg-slate-100 p-1 rounded-xl font-manrope text-xs font-bold">
+                <div className="flex items-center justify-between bg-slate-100 p-1 rounded-xl text-xs font-bold">
                   <button
                     type="button"
                     onClick={() => setSelectedHouse('ALL')}
@@ -227,38 +228,38 @@ export const Navbar: React.FC = () => {
                   </button>
                 </div>
 
-                {/* Mobile Links */}
-                <nav className="grid grid-cols-2 gap-1 pt-1 font-manrope font-bold text-xs">
+                {/* Navigation Links Mobile */}
+                <div className="grid grid-cols-2 gap-1.5 pt-2 border-t border-slate-100">
                   {navLinks.map((link) => (
                     <NavLink
                       key={link.to}
                       to={link.to}
                       end={link.end}
-                      onClick={() => setMobileMenuOpen(false)}
                       className={({ isActive }) =>
-                        `px-3 py-2 rounded-lg transition ${
+                        `px-3 py-2 rounded-xl text-xs font-bold transition flex items-center justify-between ${
                           isActive
-                            ? 'bg-[#2563EB] text-white font-extrabold'
+                            ? 'bg-[#2563EB] text-white'
                             : 'text-slate-700 hover:bg-slate-100'
                         }`
                       }
                     >
-                      {link.label}
+                      <span>{link.label}</span>
+                      <ArrowRight className="w-3 h-3 opacity-60" />
                     </NavLink>
                   ))}
-                </nav>
+                </div>
 
-                <div className="pt-2 border-t border-slate-100">
+                <div className="pt-2">
                   <button
                     type="button"
                     onClick={() => {
                       setMobileMenuOpen(false);
                       setFollowMoneyModalOpen(true);
                     }}
-                    className="w-full alx-btn-primary py-2.5 text-xs font-manrope font-bold"
+                    className="w-full alx-btn-cta py-2.5 text-center text-xs flex items-center justify-center gap-2"
                   >
-                    <Zap className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
-                    Launch Follow The Money Engine
+                    <Zap className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                    <span>Follow The Money</span>
                   </button>
                 </div>
               </div>

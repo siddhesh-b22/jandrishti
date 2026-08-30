@@ -1,6 +1,4 @@
 import React from 'react';
-import { Sparkles, Eye, ShieldCheck } from 'lucide-react';
-import logoImg from '../Logo/Logo SIH26102-Photoroom.png';
 
 interface BrandLogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -16,10 +14,10 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
   className = '',
 }) => {
   const iconSizes = {
-    sm: 'w-7 h-7',
-    md: 'w-9 h-9',
-    lg: 'w-11 h-11',
-    xl: 'w-14 h-14',
+    sm: 'w-8 h-8',
+    md: 'w-10 h-10',
+    lg: 'w-12 h-12',
+    xl: 'w-16 h-16',
   };
 
   const titleSizes = {
@@ -36,65 +34,80 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
     xl: 'text-sm',
   };
 
-  if (variant === 'image') {
-    return (
-      <div className={`flex items-center gap-2.5 select-none ${className}`}>
-        <img
-          src={logoImg}
-          alt="JanDrishti Civic Intelligence"
-          className={`${size === 'sm' ? 'h-8' : size === 'md' ? 'h-10' : size === 'lg' ? 'h-12' : 'h-16'} w-auto object-contain transition-transform duration-200 group-hover:scale-[1.02]`}
-        />
-      </div>
-    );
-  }
-
-  if (variant === 'hybrid') {
-    return (
-      <div className={`flex items-center gap-3 select-none font-manrope ${className}`}>
-        <img
-          src={logoImg}
-          alt="JanDrishti"
-          className={`${size === 'sm' ? 'h-7' : size === 'md' ? 'h-9' : 'h-11'} w-auto object-contain`}
-        />
-        <div className="flex flex-col">
-          <span className={`${titleSizes[size]} font-extrabold tracking-tight text-[#08102B] leading-none`}>
-            Jan<span className="text-[#2563EB]">Drishti</span>
-          </span>
-          {showSubtitle && (
-            <span className={`${subSizes[size]} font-extrabold text-slate-400 tracking-widest uppercase font-mono mt-0.5`}>
-              Civic Intelligence
-            </span>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  // Modern Alluxi-styled Icon Lockup (Drishti / Civic Vision Emblem)
+  // Modern People's Civic Rights & Democratic Oversight Emblem
+  // Fuses: 1. Civic Protection Shield (Rights) + 2. Three Sovereign Citizens / People ("Jan") + 3. Radiant Eye of Transparency ("Drishti")
   return (
-    <div className={`flex items-center gap-2.5 select-none font-manrope ${className}`}>
-      {/* Modern Geometric Civic Vision Emblem */}
-      <div className={`${iconSizes[size]} rounded-xl bg-gradient-to-tr from-[#2563EB] via-[#1D4ED8] to-[#60A5FA] p-0.5 flex items-center justify-center text-white shadow-md shadow-blue-500/25 shrink-0 group-hover:scale-105 transition-transform duration-200 relative overflow-hidden`}>
-        {/* Ambient Corner Flare */}
-        <div className="absolute top-0 right-0 w-3 h-3 bg-white/30 rounded-full blur-xs pointer-events-none" />
-        
-        {/* Civic Vision Geometric Star & Eye SVG */}
+    <div className={`flex items-center gap-3 select-none font-manrope ${className}`}>
+      {/* People's Rights & Civic Drishti Emblem */}
+      <div
+        className={`${iconSizes[size]} rounded-2xl bg-gradient-to-br from-[#2563EB] via-[#1D4ED8] to-[#08102B] p-1.5 flex items-center justify-center text-white shadow-lg shadow-blue-500/30 shrink-0 group-hover:scale-105 transition-all duration-300 relative overflow-hidden border border-white/20`}
+      >
+        {/* Soft Radial Ambient Flare */}
+        <div className="absolute top-0 right-0 w-4 h-4 bg-white/25 rounded-full blur-xs pointer-events-none" />
+
         <svg
-          viewBox="0 0 24 24"
+          viewBox="0 0 32 32"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="w-5 h-5 text-white"
+          className="w-full h-full drop-shadow-sm"
         >
-          {/* 8-Ray Civic Star Structure (Alluxi Style) */}
+          {/* Outer Protective Shield of Public Rights */}
           <path
-            d="M12 2V6M12 18V22M2 12H6M18 12H22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93"
-            stroke="currentColor"
-            strokeWidth="2.2"
+            d="M16 2.5 L28 7 C28 17 21 25.5 16 29.5 C11 25.5 4 17 4 7 Z"
+            fill="url(#shieldFillGradient)"
+            stroke="#FFFFFF"
+            strokeWidth="1.5"
+            strokeLinejoin="round"
+          />
+
+          {/* Central Eye / Drishti Arc of Democratic Oversight */}
+          <path
+            d="M8.5 13 C11 9.5 21 9.5 23.5 13 C21 16.5 11 16.5 8.5 13 Z"
+            fill="#FFFFFF"
+            fillOpacity="0.15"
+            stroke="#FFFFFF"
+            strokeWidth="1.2"
             strokeLinecap="round"
           />
-          {/* Central Drishti Vision Core */}
-          <circle cx="12" cy="12" r="3.5" fill="currentColor" />
-          <circle cx="12" cy="12" r="1.5" fill="#1D4ED8" />
+
+          {/* Center Iris: Ashoka Chakra / Sovereign Citizen Sun */}
+          <circle cx="16" cy="13" r="2.4" fill="#FFFFFF" />
+          <circle cx="16" cy="13" r="1.1" fill="#2563EB" />
+
+          {/* People / Citizens Triad ("Jan" - Community of Citizens Standing for Rights) */}
+          {/* Left Citizen */}
+          <circle cx="11.5" cy="19.5" r="1.4" fill="#93C5FD" />
+          <path
+            d="M8.8 24.5 C8.8 22.2 10.2 21.5 11.5 21.5 C12.8 21.5 14.2 22.2 14.2 24.5"
+            stroke="#93C5FD"
+            strokeWidth="1.2"
+            strokeLinecap="round"
+          />
+
+          {/* Right Citizen */}
+          <circle cx="20.5" cy="19.5" r="1.4" fill="#93C5FD" />
+          <path
+            d="M17.8 24.5 C17.8 22.2 19.2 21.5 20.5 21.5 C21.8 21.5 23.2 22.2 23.2 24.5"
+            stroke="#93C5FD"
+            strokeWidth="1.2"
+            strokeLinecap="round"
+          />
+
+          {/* Center Lead Sovereign Citizen */}
+          <circle cx="16" cy="18" r="1.8" fill="#FFFFFF" />
+          <path
+            d="M12.8 25.5 C12.8 22.8 14.4 21.8 16 21.8 C17.6 21.8 19.2 22.8 19.2 25.5"
+            stroke="#FFFFFF"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+
+          <defs>
+            <linearGradient id="shieldFillGradient" x1="16" y1="2.5" x2="16" y2="29.5" gradientUnits="userSpaceOnUse">
+              <stop stopColor="#2563EB" stopOpacity="0.6" />
+              <stop offset="1" stopColor="#08102B" stopOpacity="0.95" />
+            </linearGradient>
+          </defs>
         </svg>
       </div>
 
@@ -104,8 +117,8 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
           Jan<span className="text-[#2563EB]">Drishti</span>
         </span>
         {showSubtitle && (
-          <span className={`${subSizes[size]} font-extrabold text-slate-400 tracking-widest uppercase font-mono mt-0.5`}>
-            Civic Intelligence
+          <span className={`${subSizes[size]} font-extrabold text-slate-400 tracking-widest uppercase font-mono mt-1`}>
+            People's Civic Intelligence
           </span>
         )}
       </div>

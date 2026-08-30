@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   ResponsiveContainer,
   BarChart,
@@ -16,6 +17,7 @@ interface Props {
 }
 
 export const SectorDistributionChart: React.FC<Props> = ({ categories }) => {
+  const navigate = useNavigate();
   const [metricMode, setMetricMode] = useState<'WORKS' | 'AMOUNT'>('WORKS');
 
   const defaultCategories: WorkCategory[] = categories.length
@@ -39,11 +41,20 @@ export const SectorDistributionChart: React.FC<Props> = ({ categories }) => {
     color: colors[i % colors.length],
   }));
 
+  const handleBarClick = (entry: any) => {
+    const item = entry?.activePayload?.[0]?.payload || entry;
+    if (item && item.fullName) {
+      navigate(`/works?category=${encodeURIComponent(item.fullName)}`);
+    } else {
+      navigate('/works');
+    }
+  };
+
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       const item = payload[0].payload;
       return (
-        <div className="bg-[#08102B] text-white p-3.5 rounded-2xl border border-slate-700 shadow-2xl text-xs space-y-1.5 font-manrope min-w-[210px]">
+        <div className="bg-[#08102B] text-white p-3.5 rounded-2xl border border-slate-700 shadow-2xl text-xs space-y-1.5 font-manrope min-w-[220px]">
           <div className="font-extrabold text-blue-400 border-b border-slate-700/80 pb-1">
             {item.fullName}
           </div>
@@ -59,6 +70,9 @@ export const SectorDistributionChart: React.FC<Props> = ({ categories }) => {
             <span className="text-slate-400 font-sans">Total Spend:</span>
             <strong>₹{item.amountCr.toLocaleString()} Cr</strong>
           </div>
+          <div className="pt-1 text-[10px] text-blue-400 border-t border-slate-800 text-center font-bold">
+            👆 Click bar to inspect {item.works.toLocaleString()} works in this sector →
+          </div>
         </div>
       );
     }
@@ -66,10 +80,10 @@ export const SectorDistributionChart: React.FC<Props> = ({ categories }) => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 font-manrope">
       {/* Metric Mode Switcher */}
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-1.5 p-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold font-manrope">
+        <div className="flex items-center gap-1.5 p-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold">
           <button
             type="button"
             onClick={() => setMetricMode('WORKS')}
@@ -90,24 +104,28 @@ export const SectorDistributionChart: React.FC<Props> = ({ categories }) => {
           </button>
         </div>
 
-        <span className="text-xs font-bold text-slate-500 font-manrope">
+        <span className="text-xs font-bold text-slate-500">
           102,437 Public Works Distributed
         </span>
       </div>
 
       {/* Chart Canvas */}
-      <div className="w-full h-64 sm:h-72">
+      <div className="w-full h-64 sm:h-72 cursor-pointer">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{ top: 10, right: 20, left: -10, bottom: 25 }}>
+          <BarChart
+            data={data}
+            margin={{ top: 15, right: 20, left: 10, bottom: 25 }}
+            onClick={handleBarClick}
+          >
             <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
             <XAxis
               dataKey="name"
               stroke="#64748B"
-              fontSize={10}
+              fontSize={11}
               tickLine={false}
               axisLine={{ stroke: '#E2E8F0' }}
               interval={0}
-              angle={-15}
+              angle={-10}
               textAnchor="end"
             />
             <YAxis
@@ -115,10 +133,10 @@ export const SectorDistributionChart: React.FC<Props> = ({ categories }) => {
               fontSize={10}
               tickLine={false}
               axisLine={false}
-              tickFormatter={(v) => (metricMode === 'WORKS' ? (v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v) : `₹${v}Cr`)}
+              tickFormatter={(v) => (metricMode === 'WORKS' ? `${(v / 1000).toFixed(0)}k` : `₹${v}Cr`)}
             />
             <Tooltip content={<CustomTooltip />} />
-            <Bar dataKey="value" radius={[6, 6, 0, 0]} barSize={36}>
+            <Bar dataKey="value" radius={[4, 4, 0, 0]} barSize={34}>
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}

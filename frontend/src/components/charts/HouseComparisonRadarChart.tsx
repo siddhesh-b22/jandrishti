@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   ResponsiveContainer,
   RadarChart,
@@ -16,6 +17,7 @@ interface Props {
 }
 
 export const HouseComparisonRadarChart: React.FC<Props> = ({ stats }) => {
+  const navigate = useNavigate();
   const ls = stats.house_breakdown?.lok_sabha;
   const rs = stats.house_breakdown?.rajya_sabha;
 
@@ -57,10 +59,14 @@ export const HouseComparisonRadarChart: React.FC<Props> = ({ stats }) => {
     },
   ];
 
+  const handleHouseClick = (house: 'LOK_SABHA' | 'RAJYA_SABHA') => {
+    navigate(`/mps?house=${house}`);
+  };
+
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-[#08102B] text-white p-3 rounded-xl border border-slate-700 shadow-2xl text-xs space-y-1.5 font-manrope min-w-[180px]">
+        <div className="bg-[#08102B] text-white p-3.5 rounded-2xl border border-slate-700 shadow-2xl text-xs space-y-1.5 font-manrope min-w-[200px]">
           <div className="font-extrabold text-blue-400 border-b border-slate-700/80 pb-1">
             {payload[0]?.payload?.subject}
           </div>
@@ -72,6 +78,9 @@ export const HouseComparisonRadarChart: React.FC<Props> = ({ stats }) => {
             <span className="text-slate-400 font-sans">Rajya Sabha (235):</span>
             <strong>{payload[1]?.value} {payload[1]?.payload?.unit}</strong>
           </div>
+          <div className="pt-1 text-[10px] text-blue-400 border-t border-slate-800 text-center font-bold">
+            👆 Click to view Parliamentarians →
+          </div>
         </div>
       );
     }
@@ -80,23 +89,31 @@ export const HouseComparisonRadarChart: React.FC<Props> = ({ stats }) => {
 
   return (
     <div className="space-y-3 font-manrope">
-      <div className="flex items-center justify-between text-xs">
+      <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
         <span className="font-bold text-slate-700">Constitutional Chamber Multi-Axis Metrics</span>
-        <div className="flex items-center gap-3 font-bold">
-          <span className="flex items-center gap-1 text-[#2563EB]">
+        <div className="flex items-center gap-2 font-bold">
+          <button
+            type="button"
+            onClick={() => handleHouseClick('LOK_SABHA')}
+            className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 hover:bg-blue-100 text-[#2563EB] border border-blue-200 transition"
+          >
             <span className="w-2.5 h-2.5 rounded-full bg-[#2563EB]" />
-            Lok Sabha (543)
-          </span>
-          <span className="flex items-center gap-1 text-[#10B981]">
+            <span>Explore 543 Lok Sabha MPs →</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleHouseClick('RAJYA_SABHA')}
+            className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 transition"
+          >
             <span className="w-2.5 h-2.5 rounded-full bg-[#10B981]" />
-            Rajya Sabha (235)
-          </span>
+            <span>Explore 235 Rajya Sabha MPs →</span>
+          </button>
         </div>
       </div>
 
-      <div className="w-full h-56 sm:h-64 flex items-center justify-center">
+      <div className="w-full h-56 sm:h-64 flex items-center justify-center cursor-pointer">
         <ResponsiveContainer width="100%" height="100%">
-          <RadarChart cx="50%" cy="50%" outerRadius="75%" data={data}>
+          <RadarChart cx="50%" cy="50%" outerRadius="75%" data={data} onClick={() => handleHouseClick('LOK_SABHA')}>
             <PolarGrid stroke="#E2E8F0" />
             <PolarAngleAxis dataKey="subject" stroke="#64748B" fontSize={11} />
             <PolarRadiusAxis angle={30} domain={[0, 'auto']} stroke="#CBD5E1" fontSize={9} />

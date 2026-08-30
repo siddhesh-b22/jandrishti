@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   ResponsiveContainer,
   BarChart,
@@ -11,6 +12,7 @@ import {
 } from 'recharts';
 
 export const VendorLorenzChart: React.FC = () => {
+  const navigate = useNavigate();
   const [metric, setMetric] = useState<'RECEIPTS' | 'DEPENDENCE'>('RECEIPTS');
 
   // Top executing contractors from verified 22,377 vendors
@@ -30,11 +32,20 @@ export const VendorLorenzChart: React.FC = () => {
     value: metric === 'RECEIPTS' ? v.receiptsCr : v.dependencePct,
   }));
 
+  const handleBarClick = (entry: any) => {
+    const item = entry?.activePayload?.[0]?.payload || entry;
+    if (item && item.fullName) {
+      navigate(`/vendors?search=${encodeURIComponent(item.name)}`);
+    } else {
+      navigate('/vendors');
+    }
+  };
+
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       const item = payload[0].payload;
       return (
-        <div className="bg-[#08102B] text-white p-3 rounded-xl border border-slate-700 shadow-2xl text-xs space-y-1 font-manrope min-w-[200px]">
+        <div className="bg-[#08102B] text-white p-3.5 rounded-2xl border border-slate-700 shadow-2xl text-xs space-y-1 font-manrope min-w-[210px]">
           <div className="font-extrabold text-blue-400 border-b border-slate-700/80 pb-1">
             {item.fullName}
           </div>
@@ -53,6 +64,9 @@ export const VendorLorenzChart: React.FC = () => {
           <div className="flex justify-between items-center text-slate-300 font-mono">
             <span className="text-slate-400 font-sans">Allocated Projects:</span>
             <span>{item.works} Works</span>
+          </div>
+          <div className="pt-1 text-[10px] text-blue-400 border-t border-slate-800 text-center font-bold">
+            👆 Click bar to inspect contractor profile &amp; works →
           </div>
         </div>
       );
@@ -91,9 +105,14 @@ export const VendorLorenzChart: React.FC = () => {
       </div>
 
       {/* Chart Canvas */}
-      <div className="w-full h-56 sm:h-64">
+      <div className="w-full h-56 sm:h-64 cursor-pointer">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} layout="vertical" margin={{ top: 5, right: 25, left: 35, bottom: 5 }}>
+          <BarChart
+            data={data}
+            layout="vertical"
+            margin={{ top: 5, right: 25, left: 35, bottom: 5 }}
+            onClick={handleBarClick}
+          >
             <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" horizontal={false} />
             <XAxis
               type="number"

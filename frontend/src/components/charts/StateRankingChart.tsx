@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   ResponsiveContainer,
   BarChart,
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export const StateRankingChart: React.FC<Props> = ({ states, onSelectState }) => {
+  const navigate = useNavigate();
   const [rankingMode, setRankingMode] = useState<'UTILIZATION' | 'EXPENDITURE' | 'WORKS'>('UTILIZATION');
 
   const sortedStates = [...states]
@@ -42,12 +44,23 @@ export const StateRankingChart: React.FC<Props> = ({ states, onSelectState }) =>
           : s.total_recommended_works,
     }));
 
+  const handleBarClick = (entry: any) => {
+    const item = entry?.activePayload?.[0]?.payload || entry;
+    if (item && item.fullName) {
+      if (onSelectState) {
+        onSelectState(item.fullName);
+      } else {
+        navigate(`/mps?state=${encodeURIComponent(item.fullName)}`);
+      }
+    }
+  };
+
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div className="bg-[#08102B] text-white p-4 rounded-2xl border border-slate-700 shadow-2xl text-xs space-y-1.5 font-manrope min-w-[210px]">
-          <div className="font-extrabold text-blue-400 border-b border-slate-700/80 pb-1 flex justify-between">
+        <div className="bg-[#08102B] text-white p-4 rounded-2xl border border-slate-700 shadow-2xl text-xs space-y-1.5 font-manrope min-w-[220px]">
+          <div className="font-extrabold text-blue-400 border-b border-slate-700/80 pb-1 flex justify-between items-center">
             <span>{data.fullName}</span>
             <span className="text-slate-400 font-mono text-[11px]">{data.mps} MPs</span>
           </div>
@@ -62,6 +75,9 @@ export const StateRankingChart: React.FC<Props> = ({ states, onSelectState }) =>
           <div className="flex justify-between items-center text-slate-300 font-mono">
             <span className="text-slate-400 font-sans">Total Works:</span>
             <strong>{data.works.toLocaleString()}</strong>
+          </div>
+          <div className="pt-1 text-[10px] text-blue-400 border-t border-slate-800 text-center font-bold">
+            👆 Click bar to explore {data.fullName} MPs &amp; Works →
           </div>
         </div>
       );
@@ -114,31 +130,27 @@ export const StateRankingChart: React.FC<Props> = ({ states, onSelectState }) =>
         </div>
 
         <span className="text-xs font-bold text-slate-500 font-manrope">
-          Top 10 Performing State Jurisdictions
+          Top 10 State Jurisdictions (36 Total)
         </span>
       </div>
 
       {/* Chart Canvas */}
-      <div className="w-full h-64 sm:h-72">
+      <div className="w-full h-72 sm:h-80 cursor-pointer">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={sortedStates}
             layout="vertical"
-            margin={{ top: 5, right: 30, left: 30, bottom: 5 }}
-            onClick={(data) => {
-              if (data && data.activePayload && data.activePayload.length && onSelectState) {
-                onSelectState(data.activePayload[0].payload.fullName);
-              }
-            }}
+            margin={{ top: 10, right: 30, left: 40, bottom: 5 }}
+            onClick={handleBarClick}
           >
             <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" horizontal={false} />
             <XAxis
               type="number"
               stroke="#94A3B8"
-              fontSize={10}
+              fontSize={11}
               tickLine={false}
               axisLine={false}
-              tickFormatter={(v) => (rankingMode === 'UTILIZATION' ? `${v}%` : rankingMode === 'EXPENDITURE' ? `₹${v}Cr` : v)}
+              tickFormatter={(v) => (rankingMode === 'UTILIZATION' ? `${v}%` : rankingMode === 'EXPENDITURE' ? `₹${v}Cr` : `${v}`)}
             />
             <YAxis
               type="category"
@@ -147,10 +159,10 @@ export const StateRankingChart: React.FC<Props> = ({ states, onSelectState }) =>
               fontSize={11}
               tickLine={false}
               axisLine={{ stroke: '#E2E8F0' }}
-              width={85}
+              width={100}
             />
             <Tooltip content={<CustomTooltip />} />
-            <Bar dataKey="value" radius={[0, 6, 6, 0]} barSize={16}>
+            <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={16}>
               {sortedStates.map((_, index) => (
                 <Cell key={`cell-${index}`} fill={getBarColor(index)} />
               ))}

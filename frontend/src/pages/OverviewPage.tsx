@@ -36,11 +36,12 @@ import { LoadingSkeleton } from '../components/common/LoadingSkeleton';
 import { ErrorDisplay } from '../components/common/ErrorDisplay';
 import { IndiaParliamentaryMap } from '../components/map/IndiaParliamentaryMap';
 import { AnalyticsSuite } from '../components/analytics/AnalyticsSuite';
+import { HeroTechIllustration } from '../components/common/HeroTechIllustration';
 import { FollowTheMoneyModal } from '../components/common/FollowTheMoneyModal';
 import { EntityDossierDrawer, DossierEntity } from '../components/common/EntityDossierDrawer';
 import { useCountUp } from '../hooks/useCountUp';
 
-// High-Resolution Iconic Public Infrastructure & National Releases
+// High-Resolution Iconic Public Infrastructure Photos for Portfolios
 import slideParliamentChamber from '../assets/images/slide_parliament_chamber.jpg';
 import slideChenab from '../assets/images/slide_chenab.jpg';
 import slideAtalSetu from '../assets/images/slide_atalsetu.jpg';
@@ -58,52 +59,6 @@ export const OverviewPage: React.FC = () => {
   const [followTheMoneyOpen, setFollowTheMoneyOpen] = useState(false);
   const [activeDossier, setActiveDossier] = useState<DossierEntity | null>(null);
   const [commandViewMode, setCommandViewMode] = useState<'GRAPHS' | 'MAP'>('GRAPHS');
-  const [heroSearchQuery, setHeroSearchQuery] = useState('');
-
-  // Background Ambient Carousel (5 Iconic High-Res Photos cycling in background)
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const SLIDE_DURATION = 6000;
-
-  const heroSlides = [
-    {
-      id: 0,
-      title: 'Sansad Bhavan (New Delhi)',
-      image: slideParliamentChamber,
-      meta: '778 Parliamentary Seats · ₹11,667.55 Cr Corpus',
-    },
-    {
-      id: 1,
-      title: 'Chenab Rail Bridge (J&K)',
-      image: slideChenab,
-      meta: '102,437 Public Works · 28 States & 8 UTs',
-    },
-    {
-      id: 2,
-      title: 'Atal Setu Sea Link (Maharashtra)',
-      image: slideAtalSetu,
-      meta: 'Double-Entry Reconciled · ₹0.00 Variance',
-    },
-    {
-      id: 3,
-      title: 'Vande Metro Rapid Transit',
-      image: slideVandeMetro,
-      meta: '82,296 Treasury Vouchers · ₹3,947.25 Cr Spend',
-    },
-    {
-      id: 4,
-      title: 'Pamban Vertical Lift Bridge (Tamil Nadu)',
-      image: slidePamban,
-      meta: '22,377 Executing Vendors · Open Civic Data',
-    },
-  ];
-
-  // Auto-advance ambient background carousel
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-    }, SLIDE_DURATION);
-    return () => clearInterval(timer);
-  }, [heroSlides.length]);
 
   useEffect(() => {
     async function loadData() {
@@ -127,13 +82,6 @@ export const OverviewPage: React.FC = () => {
     loadData();
   }, [selectedHouse]);
 
-  const handleHeroSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (heroSearchQuery.trim()) {
-      navigate(`/mps?search=${encodeURIComponent(heroSearchQuery.trim())}`);
-    }
-  };
-
   if (loading && !stats) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
@@ -154,261 +102,122 @@ export const OverviewPage: React.FC = () => {
     );
   }
 
-  const activeSlideData = heroSlides[currentSlide];
-
   return (
-    <div className="min-h-screen bg-[#F8FAFC] font-manrope">
-      {/* 01. ALLUXI-STYLE HERO SECTION WITH AMBIENT BACKGROUND CAROUSEL & LIVE CIVIC CONSOLE */}
-      <section className="relative overflow-hidden bg-[#F1F5F9] pt-8 md:pt-12 pb-10 border-b border-slate-200/80">
-        {/* Ambient Photographic Background Layer with Smooth Fade Transition */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeSlideData.id}
-              initial={{ opacity: 0, scale: 1.05 }}
-              animate={{ opacity: 0.12, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1.2, ease: 'easeInOut' }}
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${activeSlideData.image})` }}
-            />
-          </AnimatePresence>
-          {/* Frosted Gradient Masks */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#F1F5F9]/80 via-[#F1F5F9]/90 to-[#F1F5F9]" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#F1F5F9] via-transparent to-[#F1F5F9]/90" />
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-white font-manrope text-[#08102B]">
+      {/* ========================================================= */}
+      {/* 01. ALLUXI-IDENTICAL HERO SECTION                         */}
+      {/* ========================================================= */}
+      <section className="pt-8 sm:pt-14 pb-14 sm:pb-20 border-b border-slate-100 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            {/* Left Column: Alluxi Typography & Dual CTA */}
-            <div className="lg:col-span-6 text-center lg:text-left space-y-5">
-              {/* Category Pill Tag */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-slate-200 shadow-xs text-xs font-extrabold uppercase tracking-widest text-[#2563EB]">
-                <span className="flex h-2 w-2 relative">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2563EB]"></span>
-                </span>
-                <span>Civic Intelligence &amp; Fiscal Forensics</span>
-              </div>
+            {/* Left Column: Tech Graphic Illustration (Laptop + Phone) */}
+            <div className="lg:col-span-5 flex justify-center order-2 lg:order-1">
+              <HeroTechIllustration />
+            </div>
 
+            {/* Right Column: Alluxi Typography, Subtitle & Action Area */}
+            <div className="lg:col-span-7 order-1 lg:order-2 space-y-4 text-left">
               {/* Alluxi Signature Headline */}
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl text-[#08102B] font-extrabold leading-[1.12] tracking-tight">
-                Public finance is <span className="text-[#2563EB]">complex.</span> <br />
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#08102B] tracking-tight leading-[1.12]">
+                Public finance is <span className="text-[#08102B]">complex.</span> <br />
                 Your civic intelligence <span className="text-[#2563EB]">shouldn't be.</span>
               </h1>
 
               {/* Body Subtitle */}
-              <p className="text-slate-600 font-normal text-sm sm:text-base md:text-lg leading-relaxed max-w-xl mx-auto lg:mx-0">
+              <p className="text-slate-600 font-light text-base sm:text-lg leading-relaxed max-w-xl">
                 Tracking ₹11,667.55 Crore across 102,437 ground works and 82,296 treasury vouchers for 778 Parliamentarians in 28 States &amp; 8 UTs. Deterministically reconciled to ₹0.00 variance.
               </p>
 
-              {/* Action Buttons */}
-              <div className="pt-1 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5">
+              {/* Action Button & 3-Point Verified Bullets */}
+              <div className="pt-4 flex flex-col sm:flex-row sm:items-center gap-6">
                 <Link
                   to="/mps"
-                  className="w-full sm:w-auto alx-btn-primary text-center whitespace-nowrap cursor-pointer text-sm font-bold flex items-center justify-center gap-2"
+                  className="px-8 py-3.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-sm sm:text-base shadow-lg shadow-blue-500/25 transition-all text-center whitespace-nowrap hover:scale-[1.02] active:scale-[0.98]"
                 >
-                  <span>Explore All 778 MPs</span>
-                  <ArrowRight className="w-4 h-4" />
+                  Explore All 778 MPs
                 </Link>
 
-                <button
-                  type="button"
-                  onClick={() => setFollowTheMoneyOpen(true)}
-                  className="w-full sm:w-auto alx-btn-secondary text-center whitespace-nowrap cursor-pointer text-sm font-bold flex items-center justify-center gap-2"
-                >
-                  <Zap className="w-4 h-4 text-amber-500 fill-amber-500" />
-                  <span>Follow The Money</span>
-                </button>
-              </div>
-
-              {/* 3-Point Verified Assurance Checklist */}
-              <ul className="pt-2 space-y-2 text-slate-600 font-medium text-xs sm:text-sm text-left max-w-md mx-auto lg:mx-0">
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                  <span><strong>₹0.00 Reconciliation Variance:</strong> 100% matched to treasury vouchers</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                  <span><strong>100% Traceable Lineage:</strong> Official MoSPI &amp; eSAKSHI data</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-                  <span><strong>Explainable MAD Z-Scores:</strong> 1,831 non-accusatory analytical signals</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Right Column: Executive Live Civic Intelligence Console (Alluxi Bento Card) */}
-            <div className="lg:col-span-6 w-full">
-              <div className="rounded-3xl bg-white/95 backdrop-blur-md p-6 md:p-7 shadow-3xl border border-slate-200/90 space-y-5">
-                {/* Console Header */}
-                <div className="flex items-center justify-between gap-3 border-b border-slate-100 pb-4">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-xs font-mono font-bold text-slate-800 uppercase tracking-wider">
-                      Live Parliamentary Audit Console
-                    </span>
-                  </div>
-                  <span className="text-[11px] font-mono font-bold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200">
-                    26 Aug 2026 Snapshot
-                  </span>
-                </div>
-
-                {/* Zero Variance Shield Highlight */}
-                <div className="rounded-2xl bg-gradient-to-r from-emerald-50 via-teal-50/50 to-white p-4 border border-emerald-200/80 flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm shrink-0">
-                      <ShieldCheck className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <span className="text-[10px] font-extrabold uppercase font-mono tracking-wider text-emerald-700 block">
-                        Reconciliation Guarantee
-                      </span>
-                      <p className="text-lg font-extrabold text-slate-900 font-mono">
-                        ₹0.00 Variance
-                      </p>
-                    </div>
-                  </div>
-                  <span className="text-[11px] font-bold text-emerald-700 bg-white/90 px-2.5 py-1 rounded-full border border-emerald-200 shadow-xs">
-                    Double-Entry Validated
-                  </span>
-                </div>
-
-                {/* Statutory Corpus Progress Gauge */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-xs font-bold font-manrope">
-                    <span className="text-slate-500">Statutory Allocation (₹11,667.55 Cr)</span>
-                    <span className="text-[#2563EB] font-mono">₹3,947.25 Cr Disbursed (33.8%)</span>
-                  </div>
-                  <div className="w-full h-3 rounded-full bg-slate-100 overflow-hidden p-0.5 border border-slate-200/80">
-                    <div
-                      className="h-full rounded-full bg-gradient-to-r from-[#2563EB] to-[#10B981] transition-all duration-1000"
-                      style={{ width: '33.8%' }}
-                    />
-                  </div>
-                </div>
-
-                {/* 4-Metric Grid */}
-                <div className="grid grid-cols-2 gap-3 pt-1 text-xs">
-                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 space-y-0.5">
-                    <span className="text-slate-400 font-medium text-[11px]">Parliamentarians</span>
-                    <p className="text-base font-extrabold text-slate-900 font-mono">
-                      778 MPs
-                    </p>
-                    <span className="text-[10px] text-slate-500">543 Lok Sabha · 235 Rajya Sabha</span>
-                  </div>
-
-                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 space-y-0.5">
-                    <span className="text-slate-400 font-medium text-[11px]">Ground Works</span>
-                    <p className="text-base font-extrabold text-slate-900 font-mono">
-                      102,437 Works
-                    </p>
-                    <span className="text-[10px] text-emerald-600 font-semibold">49.0% Delivered</span>
-                  </div>
-
-                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 space-y-0.5">
-                    <span className="text-slate-400 font-medium text-[11px]">Disbursement Records</span>
-                    <p className="text-base font-extrabold text-slate-900 font-mono">
-                      82,296 Vouchers
-                    </p>
-                    <span className="text-[10px] text-slate-500">22,377 Vendors</span>
-                  </div>
-
-                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 space-y-0.5">
-                    <span className="text-slate-400 font-medium text-[11px]">Statistical Flags</span>
-                    <p className="text-base font-extrabold text-amber-600 font-mono">
-                      1,831 Signals
-                    </p>
-                    <span className="text-[10px] text-slate-500">21 Critical · 614 High</span>
-                  </div>
-                </div>
-
-                {/* Quick Constituency Search Input Bar */}
-                <form onSubmit={handleHeroSearch} className="relative pt-1">
-                  <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    value={heroSearchQuery}
-                    onChange={(e) => setHeroSearchQuery(e.target.value)}
-                    placeholder="Search by MP name or constituency..."
-                    className="w-full pl-10 pr-24 py-2.5 rounded-full border border-slate-200 bg-slate-50/70 text-xs font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] shadow-xs"
-                  />
-                  <button
-                    type="submit"
-                    className="absolute right-1.5 top-1/2 -translate-y-1/2 px-4 py-1.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-bold transition shadow-xs"
-                  >
-                    Inspect
-                  </button>
-                </form>
-
-                {/* Background Photo Credit Capsule */}
-                <div className="text-[11px] text-slate-400 flex items-center justify-between pt-1 border-t border-slate-100">
-                  <span>Background: <strong className="text-slate-600 font-semibold">{activeSlideData.title}</strong></span>
-                  <span className="font-mono text-slate-400">{activeSlideData.meta}</span>
-                </div>
+                <ul className="space-y-2 text-xs sm:text-sm text-slate-600 font-medium">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <span>₹0.00 Reconciliation Variance</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <span>100% Traceable Lineage (MoSPI &amp; eSAKSHI)</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <span>Explainable MAD Z-Scores (1,831 Signals)</span>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
         </div>
 
-        {/* COVERAGE & TRUST MARQUEE TICKER */}
-        <div className="pt-8 md:pt-10">
-          <div className="relative overflow-hidden group/carousel py-1">
-            <div className="flex gap-3 md:gap-4 animate-carousel-left group-hover/carousel:[animation-play-state:paused] w-max">
+        {/* TRUST STRIP (Alluxi "They already trust us" Style) */}
+        <div className="pt-16 sm:pt-20">
+          <p className="text-center text-xs font-extrabold text-slate-400 uppercase tracking-widest mb-6 font-manrope">
+            Official Data Registries &amp; Reconciled Sources
+          </p>
+          <div className="relative overflow-hidden group/carousel py-2">
+            <div className="flex gap-4 md:gap-6 animate-carousel-left group-hover/carousel:[animation-play-state:paused] w-max">
               {[
-                '🏛️ MoSPI Official Portal',
-                '🇮🇳 28 States & 8 UTs',
-                '👥 778 Parliamentarians',
-                '🏗️ 102,437 Physical Works',
+                '🏛️ MoSPI Official Central Portal',
+                '🇮🇳 28 States & 8 Union Territories',
+                '👥 778 Parliamentarians (543 LS / 235 RS)',
+                '🏗️ 102,437 Public Ground Works',
                 '📜 82,296 Treasury Vouchers',
-                '🏢 22,377 Contractors',
-                '🛡️ ₹0.00 Ledger Variance',
-                '⚡ 1,831 MAD Signals',
-                '📊 eSAKSHI Central Engine',
-                '🏛️ MoSPI Official Portal',
-                '🇮🇳 28 States & 8 UTs',
-                '👥 778 Parliamentarians',
-                '🏗️ 102,437 Physical Works',
+                '🏢 22,377 Procurement Contractors',
+                '🛡️ ₹0.00 Ledger Discrepancy Guaranteed',
+                '⚡ 1,831 Objective MAD Signals',
+                '📊 eSAKSHI Ministry Database',
+                '🏛️ MoSPI Official Central Portal',
+                '🇮🇳 28 States & 8 Union Territories',
+                '👥 778 Parliamentarians (543 LS / 235 RS)',
+                '🏗️ 102,437 Public Ground Works',
                 '📜 82,296 Treasury Vouchers',
-                '🏢 22,377 Contractors',
-                '🛡️ ₹0.00 Ledger Variance',
-                '⚡ 1,831 MAD Signals',
+                '🏢 22,377 Procurement Contractors',
+                '🛡️ ₹0.00 Ledger Discrepancy Guaranteed',
+                '⚡ 1,831 Objective MAD Signals',
               ].map((item, i) => (
                 <div
                   key={i}
-                  className="flex-shrink-0 px-3.5 py-1.5 rounded-full bg-white border border-slate-200/90 shadow-xs text-xs font-bold text-slate-700 whitespace-nowrap"
+                  className="flex-shrink-0 px-4 py-2 rounded-full bg-slate-50 border border-slate-200/80 shadow-xs text-xs font-bold text-slate-700 whitespace-nowrap"
                 >
                   {item}
                 </div>
               ))}
             </div>
-            <div className="absolute left-0 top-0 h-full w-12 bg-gradient-to-r from-[#F1F5F9] to-transparent pointer-events-none" />
-            <div className="absolute right-0 top-0 h-full w-12 bg-gradient-to-l from-[#F1F5F9] to-transparent pointer-events-none" />
+            <div className="absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-white to-transparent pointer-events-none" />
+            <div className="absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-white to-transparent pointer-events-none" />
           </div>
         </div>
       </section>
 
-      {/* 02. WHY CIVIC TEAMS PICK JANDRISHTI (3 Compact Bento Outcome Cards) */}
-      <section className="py-10 md:py-14 bg-[#F1F5F9]">
+      {/* ========================================================= */}
+      {/* 02. WHY CIVIC TEAMS PICK JANDRISHTI (3 Bento Outcome Cards)*/}
+      {/* ========================================================= */}
+      <section className="py-14 sm:py-20 bg-[#F1F5F9] border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Outcome Card 1: Zero Reconciliation Variance */}
-            <div className="flex flex-col h-full rounded-3xl bg-white p-5 md:p-6 shadow-3xl hover:shadow-4xl transition-all duration-300 border border-slate-200/80">
-              <p className="text-3xl sm:text-4xl font-extrabold leading-none tabular-nums bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] bg-clip-text text-transparent font-mono">
+            <div className="flex flex-col h-full rounded-3xl bg-white p-6 sm:p-8 shadow-3xl hover:shadow-4xl transition-all duration-300 border border-slate-200/80">
+              <p className="text-4xl sm:text-5xl font-extrabold leading-none tabular-nums bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] bg-clip-text text-transparent font-mono">
                 ₹0.00
               </p>
-              <p className="mt-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider">
+              <p className="mt-2 text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-wider">
                 Reconciliation Variance
               </p>
-              <h3 className="mt-3 pt-3 border-t border-slate-100 text-base md:text-lg text-[#08102B] font-extrabold">
+              <h3 className="mt-4 pt-4 border-t border-slate-100 text-lg sm:text-xl text-[#08102B] font-extrabold">
                 Zero rupee accounting discrepancy
               </h3>
-              <p className="mt-1 text-xs md:text-sm text-slate-600 font-light leading-relaxed">
+              <p className="mt-2 text-xs sm:text-sm text-slate-600 font-light leading-relaxed">
                 100% of ₹3,947.25 Cr disbursed funds mathematically validated against line-item treasury vouchers.
               </p>
-              <div className="mt-auto pt-4 flex items-center justify-between">
-                <span className="text-[11px] font-mono font-bold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+              <div className="mt-auto pt-6 flex items-center justify-between">
+                <span className="text-xs font-mono font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
                   Double-Entry Reconciled
                 </span>
                 <Link
@@ -422,21 +231,21 @@ export const OverviewPage: React.FC = () => {
             </div>
 
             {/* Outcome Card 2: 102,437 Ground Projects */}
-            <div className="flex flex-col h-full rounded-3xl bg-white p-5 md:p-6 shadow-3xl hover:shadow-4xl transition-all duration-300 border border-slate-200/80">
-              <p className="text-3xl sm:text-4xl font-extrabold leading-none tabular-nums bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] bg-clip-text text-transparent font-mono">
+            <div className="flex flex-col h-full rounded-3xl bg-white p-6 sm:p-8 shadow-3xl hover:shadow-4xl transition-all duration-300 border border-slate-200/80">
+              <p className="text-4xl sm:text-5xl font-extrabold leading-none tabular-nums bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] bg-clip-text text-transparent font-mono">
                 102,437
               </p>
-              <p className="mt-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider">
+              <p className="mt-2 text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-wider">
                 Physical Works Monitored
               </p>
-              <h3 className="mt-3 pt-3 border-t border-slate-100 text-base md:text-lg text-[#08102B] font-extrabold">
+              <h3 className="mt-4 pt-4 border-t border-slate-100 text-lg sm:text-xl text-[#08102B] font-extrabold">
                 Ground infrastructure tracked end-to-end
               </h3>
-              <p className="mt-1 text-xs md:text-sm text-slate-600 font-light leading-relaxed">
+              <p className="mt-2 text-xs sm:text-sm text-slate-600 font-light leading-relaxed">
                 Granular tracking of drinking water, roads, educational halls, and healthcare from recommendation to verified execution.
               </p>
-              <div className="mt-auto pt-4 flex items-center justify-between">
-                <span className="text-[11px] font-mono font-bold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200">
+              <div className="mt-auto pt-6 flex items-center justify-between">
+                <span className="text-xs font-mono font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
                   49.0% Delivery Rate
                 </span>
                 <Link
@@ -450,21 +259,21 @@ export const OverviewPage: React.FC = () => {
             </div>
 
             {/* Outcome Card 3: 1,831 Statistical Signals */}
-            <div className="flex flex-col h-full rounded-3xl bg-white p-5 md:p-6 shadow-3xl hover:shadow-4xl transition-all duration-300 border border-slate-200/80">
-              <p className="text-3xl sm:text-4xl font-extrabold leading-none tabular-nums bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] bg-clip-text text-transparent font-mono">
+            <div className="flex flex-col h-full rounded-3xl bg-white p-6 sm:p-8 shadow-3xl hover:shadow-4xl transition-all duration-300 border border-slate-200/80">
+              <p className="text-4xl sm:text-5xl font-extrabold leading-none tabular-nums bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] bg-clip-text text-transparent font-mono">
                 1,831
               </p>
-              <p className="mt-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider">
+              <p className="mt-2 text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-wider">
                 MAD Statistical Signals
               </p>
-              <h3 className="mt-3 pt-3 border-t border-slate-100 text-base md:text-lg text-[#08102B] font-extrabold">
+              <h3 className="mt-4 pt-4 border-t border-slate-100 text-lg sm:text-xl text-[#08102B] font-extrabold">
                 Objective audit signals, zero accusation
               </h3>
-              <p className="mt-1 text-xs md:text-sm text-slate-600 font-light leading-relaxed">
+              <p className="mt-2 text-xs sm:text-sm text-slate-600 font-light leading-relaxed">
                 Median Absolute Deviation robust Z-score flagging vendor concentration, budget variance, and fund stall without bias.
               </p>
-              <div className="mt-auto pt-4 flex items-center justify-between">
-                <span className="text-[11px] font-mono font-bold text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
+              <div className="mt-auto pt-6 flex items-center justify-between">
+                <span className="text-xs font-mono font-bold text-amber-600 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
                   21 Critical · 614 High
                 </span>
                 <Link
@@ -480,8 +289,10 @@ export const OverviewPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 03. INTERACTIVE ANALYTICAL & GEOSPATIAL COMMAND CENTER (High-Impact Graph Suite) */}
-      <section className="py-10 md:py-14 bg-white border-y border-slate-200/80">
+      {/* ========================================================= */}
+      {/* 03. INTERACTIVE ANALYTICAL & GEOSPATIAL COMMAND CENTER    */}
+      {/* ========================================================= */}
+      <section className="py-14 sm:py-20 bg-white border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
@@ -538,8 +349,10 @@ export const OverviewPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 04. STREAMLINED DIGITAL SOLUTIONS SHOWCASE */}
-      <section className="py-10 md:py-14 bg-[#F1F5F9]">
+      {/* ========================================================= */}
+      {/* 04. STREAMLINED DIGITAL SOLUTIONS SHOWCASE                */}
+      {/* ========================================================= */}
+      <section className="py-14 sm:py-20 bg-[#F1F5F9]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="text-center max-w-2xl mx-auto">
             <span className="text-xs font-extrabold uppercase tracking-widest text-[#2563EB]">
@@ -550,11 +363,11 @@ export const OverviewPage: React.FC = () => {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Portfolio 1: Parliamentarians */}
             <Link
               to="/mps"
-              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/11] flex flex-col justify-end p-5"
+              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/11] flex flex-col justify-end p-6"
             >
               <img
                 src={slideParliamentChamber}
@@ -571,7 +384,7 @@ export const OverviewPage: React.FC = () => {
                     Parliament
                   </span>
                 </div>
-                <h3 className="text-lg font-extrabold text-white">
+                <h3 className="text-xl font-extrabold text-white">
                   Parliamentary Profiles
                 </h3>
                 <p className="text-xs text-slate-200 font-light line-clamp-1">
@@ -583,7 +396,7 @@ export const OverviewPage: React.FC = () => {
             {/* Portfolio 2: Physical Works */}
             <Link
               to="/works"
-              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/11] flex flex-col justify-end p-5"
+              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/11] flex flex-col justify-end p-6"
             >
               <img
                 src={slideChenab}
@@ -600,7 +413,7 @@ export const OverviewPage: React.FC = () => {
                     Infrastructure
                   </span>
                 </div>
-                <h3 className="text-lg font-extrabold text-white">
+                <h3 className="text-xl font-extrabold text-white">
                   Physical Infrastructure
                 </h3>
                 <p className="text-xs text-slate-200 font-light line-clamp-1">
@@ -612,7 +425,7 @@ export const OverviewPage: React.FC = () => {
             {/* Portfolio 3: Treasury Disbursements */}
             <Link
               to="/transactions"
-              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/11] flex flex-col justify-end p-5"
+              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/11] flex flex-col justify-end p-6"
             >
               <img
                 src={slideVandeMetro}
@@ -629,7 +442,7 @@ export const OverviewPage: React.FC = () => {
                     Treasury
                   </span>
                 </div>
-                <h3 className="text-lg font-extrabold text-white">
+                <h3 className="text-xl font-extrabold text-white">
                   Treasury Disbursements
                 </h3>
                 <p className="text-xs text-slate-200 font-light line-clamp-1">
@@ -641,7 +454,7 @@ export const OverviewPage: React.FC = () => {
             {/* Portfolio 4: Contractor Intelligence */}
             <Link
               to="/vendors"
-              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/11] flex flex-col justify-end p-5"
+              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/11] flex flex-col justify-end p-6"
             >
               <img
                 src={slideAtalSetu}
@@ -658,7 +471,7 @@ export const OverviewPage: React.FC = () => {
                     Procurement
                   </span>
                 </div>
-                <h3 className="text-lg font-extrabold text-white">
+                <h3 className="text-xl font-extrabold text-white">
                   Contractor Footprints
                 </h3>
                 <p className="text-xs text-slate-200 font-light line-clamp-1">
@@ -670,7 +483,7 @@ export const OverviewPage: React.FC = () => {
             {/* Portfolio 5: 28 States & 8 UTs Atlas */}
             <Link
               to="/states"
-              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/11] flex flex-col justify-end p-5"
+              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/11] flex flex-col justify-end p-6"
             >
               <img
                 src={slidePamban}
@@ -687,7 +500,7 @@ export const OverviewPage: React.FC = () => {
                     Geospatial
                   </span>
                 </div>
-                <h3 className="text-lg font-extrabold text-white">
+                <h3 className="text-xl font-extrabold text-white">
                   Spatial State Atlas
                 </h3>
                 <p className="text-xs text-slate-200 font-light line-clamp-1">
@@ -699,7 +512,7 @@ export const OverviewPage: React.FC = () => {
             {/* Portfolio 6: Anomaly Signal Center */}
             <Link
               to="/anomalies"
-              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/11] flex flex-col justify-end p-5"
+              className="group relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200 shadow-3xl hover:shadow-4xl transition-all duration-300 aspect-[16/11] flex flex-col justify-end p-6"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-[#08102B] via-[#1E1B4B] to-[#BE123C]/80" />
               <div className="relative z-10 space-y-1.5">
@@ -711,7 +524,7 @@ export const OverviewPage: React.FC = () => {
                     Audit Engine
                   </span>
                 </div>
-                <h3 className="text-lg font-extrabold text-white">
+                <h3 className="text-xl font-extrabold text-white">
                   MAD Signal Center
                 </h3>
                 <p className="text-xs text-slate-200 font-light line-clamp-1">
@@ -723,8 +536,10 @@ export const OverviewPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 05. 4-STEP CIVIC DATA FORENSIC PIPELINE */}
-      <section className="py-10 md:py-14 bg-white border-t border-slate-200/80">
+      {/* ========================================================= */}
+      {/* 05. 4-STEP CIVIC DATA FORENSIC PIPELINE                   */}
+      {/* ========================================================= */}
+      <section className="py-14 sm:py-20 bg-white border-t border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="text-center max-w-2xl mx-auto">
             <span className="text-xs font-extrabold uppercase tracking-widest text-[#2563EB]">
@@ -735,8 +550,8 @@ export const OverviewPage: React.FC = () => {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="rounded-2xl bg-slate-50 p-5 border border-slate-200 shadow-xs space-y-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="rounded-3xl bg-slate-50 p-6 border border-slate-200 shadow-xs space-y-2">
               <span className="text-2xl font-extrabold text-[#2563EB] font-mono">01</span>
               <h3 className="text-base font-extrabold text-[#08102B]">Data Ingestion</h3>
               <p className="text-xs text-slate-600 font-light leading-relaxed">
@@ -744,7 +559,7 @@ export const OverviewPage: React.FC = () => {
               </p>
             </div>
 
-            <div className="rounded-2xl bg-slate-50 p-5 border border-slate-200 shadow-xs space-y-2">
+            <div className="rounded-3xl bg-slate-50 p-6 border border-slate-200 shadow-xs space-y-2">
               <span className="text-2xl font-extrabold text-[#2563EB] font-mono">02</span>
               <h3 className="text-base font-extrabold text-[#08102B]">Ledger Validation</h3>
               <p className="text-xs text-slate-600 font-light leading-relaxed">
@@ -752,7 +567,7 @@ export const OverviewPage: React.FC = () => {
               </p>
             </div>
 
-            <div className="rounded-2xl bg-slate-50 p-5 border border-slate-200 shadow-xs space-y-2">
+            <div className="rounded-3xl bg-slate-50 p-6 border border-slate-200 shadow-xs space-y-2">
               <span className="text-2xl font-extrabold text-[#2563EB] font-mono">03</span>
               <h3 className="text-base font-extrabold text-[#08102B]">MAD Robust Z-Scores</h3>
               <p className="text-xs text-slate-600 font-light leading-relaxed">
@@ -760,7 +575,7 @@ export const OverviewPage: React.FC = () => {
               </p>
             </div>
 
-            <div className="rounded-2xl bg-slate-50 p-5 border border-slate-200 shadow-xs space-y-2">
+            <div className="rounded-3xl bg-slate-50 p-6 border border-slate-200 shadow-xs space-y-2">
               <span className="text-2xl font-extrabold text-[#2563EB] font-mono">04</span>
               <h3 className="text-base font-extrabold text-[#08102B]">Citizen Dossiers</h3>
               <p className="text-xs text-slate-600 font-light leading-relaxed">
@@ -771,29 +586,31 @@ export const OverviewPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 06. COMPACT HIGH-CONVERSION CIVIC CALL-TO-ACTION */}
-      <section className="py-12 md:py-16 bg-[#08102B] text-white relative overflow-hidden">
+      {/* ========================================================= */}
+      {/* 06. COMPACT HIGH-CONVERSION CIVIC CALL-TO-ACTION          */}
+      {/* ========================================================= */}
+      <section className="py-14 sm:py-20 bg-[#08102B] text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 rounded-full bg-[#2563EB]/20 blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-[#1E3A8A]/30 blur-3xl pointer-events-none" />
 
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-5">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-extrabold uppercase tracking-widest">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-6">
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-extrabold uppercase tracking-widest">
             <Sparkles className="w-3.5 h-3.5 text-blue-400" />
             Empowering Democratic Transparency
           </span>
 
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight leading-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
             Ready to audit your constituency's public developmental funds?
           </h2>
 
-          <p className="text-slate-300 text-xs sm:text-sm max-w-xl mx-auto font-light leading-relaxed">
+          <p className="text-slate-300 text-sm sm:text-base max-w-xl mx-auto font-light leading-relaxed">
             Search any Member of Parliament, track local infrastructure delivery, and inspect treasury vouchers in real time.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
             <Link
               to="/mps"
-              className="w-full sm:w-auto alx-btn-primary px-6 py-3 text-sm font-bold"
+              className="w-full sm:w-auto alx-btn-primary px-8 py-3.5 text-base font-bold"
             >
               <span>Explore All 778 MPs</span>
               <ArrowRight className="w-4 h-4" />
@@ -802,7 +619,7 @@ export const OverviewPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setFollowTheMoneyOpen(true)}
-              className="w-full sm:w-auto px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold text-sm transition border border-white/20 flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold text-base transition border border-white/20 flex items-center justify-center gap-2"
             >
               <Zap className="w-4 h-4 text-amber-400 fill-amber-400" />
               <span>Launch Money Flow Tracer</span>

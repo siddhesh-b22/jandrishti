@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Menu,
   X,
   Search,
+  ChevronDown,
   ArrowRight,
   ShieldCheck,
   Zap,
   Layers,
   Sparkles,
+  Users,
+  Building2,
+  Receipt,
+  MapPin,
+  ShieldAlert,
+  FileText,
 } from 'lucide-react';
 import { useHouse } from '../../context/HouseContext';
 import { BrandLogo } from '../common/BrandLogo';
@@ -21,6 +28,7 @@ export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [followMoneyModalOpen, setFollowMoneyModalOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const { selectedHouse, setSelectedHouse } = useHouse();
   const location = useLocation();
 
@@ -46,222 +54,232 @@ export const Navbar: React.FC = () => {
 
   useEffect(() => {
     setMobileMenuOpen(false);
+    setDropdownOpen(false);
   }, [location.pathname]);
 
-  const navLinks = [
-    { to: '/', label: 'Overview', end: true },
-    { to: '/mps', label: 'Parliament' },
-    { to: '/states', label: 'States' },
-    { to: '/works', label: 'Works' },
-    { to: '/transactions', label: 'Treasury' },
-    { to: '/vendors', label: 'Contractors' },
-    { to: '/anomalies', label: 'Signals' },
-    { to: '/methodology', label: 'Methodology' },
+  const explorerLinks = [
+    { to: '/mps', label: '778 Parliamentarians', desc: 'Lok Sabha & Rajya Sabha MPs', icon: Users },
+    { to: '/states', label: '28 States & 8 UTs', desc: 'National Spatial Atlas', icon: MapPin },
+    { to: '/works', label: '102,437 Physical Works', desc: 'Ground Infrastructure', icon: Layers },
+    { to: '/transactions', label: '82,296 Vouchers', desc: 'Treasury Disbursements', icon: Receipt },
+    { to: '/vendors', label: '22,377 Contractors', desc: 'Vendor Intelligence', icon: Building2 },
   ];
 
   return (
     <>
-      <header className="sticky top-0 z-50 transition-all duration-300">
-        {/* Top Active Gradient Progress Glow Line */}
-        <div className="h-0.5 bg-gradient-to-r from-[#2563EB] via-[#60A5FA] to-[#08102B] w-full" />
+      <header className={`sticky top-0 z-50 bg-white/95 backdrop-blur-md transition-all duration-200 font-manrope ${scrolled ? 'shadow-xs border-b border-slate-200/80' : ''}`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20">
+            {/* Left: Brand Logo (Alluxi Asterisk Style) */}
+            <NavLink to="/" className="flex items-center gap-3 group">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#2563EB] to-[#60A5FA] flex items-center justify-center text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition">
+                <Sparkles className="w-5 h-5 fill-white" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xl font-extrabold tracking-tight text-[#08102B]">
+                  Jan<span className="text-[#2563EB]">Drishti</span>
+                </span>
+                <span className="text-[10px] font-bold text-slate-400 -mt-1 tracking-widest uppercase font-mono">
+                  Civic Intelligence
+                </span>
+              </div>
+            </NavLink>
 
-        <div className={`bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs transition-all duration-200 ${scrolled ? 'shadow-md bg-white/98' : ''}`}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className={`flex items-center justify-between gap-4 transition-all duration-200 ${scrolled ? 'py-2.5' : 'py-3.5'}`}>
-              {/* Left: Brand Mark */}
-              <NavLink to="/" className="flex items-center gap-3 group shrink-0">
-                <BrandLogo size="md" />
+            {/* Center: Clean Text Navigation Links (Exact Alluxi Style) */}
+            <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-700">
+              {/* Explorers Dropdown */}
+              <div
+                className="relative"
+                onMouseEnter={() => setDropdownOpen(true)}
+                onMouseLeave={() => setDropdownOpen(false)}
+              >
+                <button
+                  type="button"
+                  className="flex items-center gap-1 hover:text-[#2563EB] py-2 transition"
+                >
+                  <span>Explorers</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${dropdownOpen ? 'rotate-180 text-[#2563EB]' : 'text-slate-400'}`} />
+                </button>
+
+                <AnimatePresence>
+                  {dropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 4 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute top-full left-0 w-72 bg-white rounded-2xl p-2 shadow-2xl border border-slate-200/90 z-50"
+                    >
+                      <div className="space-y-0.5">
+                        {explorerLinks.map((item) => {
+                          const Icon = item.icon;
+                          return (
+                            <Link
+                              key={item.to}
+                              to={item.to}
+                              className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition group"
+                            >
+                              <div className="p-2 rounded-lg bg-blue-50 text-[#2563EB] group-hover:bg-[#2563EB] group-hover:text-white transition">
+                                <Icon className="w-4 h-4" />
+                              </div>
+                              <div>
+                                <div className="text-xs font-bold text-[#08102B] group-hover:text-[#2563EB] transition">
+                                  {item.label}
+                                </div>
+                                <div className="text-[11px] text-slate-500 font-light">
+                                  {item.desc}
+                                </div>
+                              </div>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <NavLink
+                to="/mps"
+                className={({ isActive }) =>
+                  `hover:text-[#2563EB] transition ${isActive ? 'text-[#2563EB] font-bold' : ''}`
+                }
+              >
+                Parliament
               </NavLink>
 
-              {/* Center: Navigation Links (Alluxi Capsule Navbar) */}
-              <nav className="hidden lg:flex items-center gap-1 font-manrope font-bold text-xs text-slate-600 bg-slate-100/90 px-2 py-1 rounded-full border border-slate-200/80 shrink-0">
-                {navLinks.map((link) => (
-                  <NavLink
-                    key={link.to}
-                    to={link.to}
-                    end={link.end}
-                    className={({ isActive }) =>
-                      `px-3.5 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap ${
-                        isActive
-                          ? 'bg-[#2563EB] text-white font-extrabold shadow-sm shadow-blue-500/30'
-                          : 'hover:text-[#08102B] hover:bg-white/90'
-                      }`
-                    }
-                  >
-                    {link.label}
-                  </NavLink>
-                ))}
-              </nav>
+              <NavLink
+                to="/works"
+                className={({ isActive }) =>
+                  `hover:text-[#2563EB] transition ${isActive ? 'text-[#2563EB] font-bold' : ''}`
+                }
+              >
+                Public Works
+              </NavLink>
 
-              {/* Right: Search, Chamber Switcher & High-Contrast CTA */}
-              <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
-                {/* Global Search Button */}
-                <button
-                  type="button"
-                  onClick={() => setSearchModalOpen(true)}
-                  className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200/80 border border-slate-200 text-slate-600 text-xs font-semibold transition shrink-0"
-                >
-                  <Search className="w-3.5 h-3.5 text-slate-400" />
-                  <span className="font-manrope">Search</span>
-                  <kbd className="px-1.5 py-0.5 rounded bg-white text-[10px] text-slate-400 border border-slate-200 font-mono font-bold">
-                    ⌘K
-                  </kbd>
-                </button>
+              <NavLink
+                to="/anomalies"
+                className={({ isActive }) =>
+                  `hover:text-[#2563EB] transition flex items-center gap-1.5 ${isActive ? 'text-[#2563EB] font-bold' : ''}`
+                }
+              >
+                <span>Signals</span>
+                <span className="px-1.5 py-0.2 rounded-full bg-rose-50 text-rose-600 text-[10px] font-mono font-bold border border-rose-200">
+                  1,831
+                </span>
+              </NavLink>
 
-                {/* Chamber Selector Segment */}
-                <div className="hidden sm:inline-flex items-center bg-slate-100/90 p-0.5 rounded-full border border-slate-200 text-xs font-manrope font-bold shrink-0">
-                  <button
-                    type="button"
-                    onClick={() => setSelectedHouse('ALL')}
-                    className={`px-2.5 py-1 rounded-full text-[11px] transition-all ${
-                      selectedHouse === 'ALL'
-                        ? 'bg-[#08102B] text-white shadow-xs'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    All
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedHouse('LOK_SABHA')}
-                    className={`px-2.5 py-1 rounded-full text-[11px] transition-all ${
-                      selectedHouse === 'LOK_SABHA'
-                        ? 'bg-[#2563EB] text-white shadow-xs'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    Lok Sabha
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedHouse('RAJYA_SABHA')}
-                    className={`px-2.5 py-1 rounded-full text-[11px] transition-all ${
-                      selectedHouse === 'RAJYA_SABHA'
-                        ? 'bg-[#1D4ED8] text-white shadow-xs'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    Rajya Sabha
-                  </button>
-                </div>
+              <NavLink
+                to="/methodology"
+                className={({ isActive }) =>
+                  `hover:text-[#2563EB] transition ${isActive ? 'text-[#2563EB] font-bold' : ''}`
+                }
+              >
+                Methodology
+              </NavLink>
+            </nav>
 
-                {/* Alluxi Signature High-Contrast CTA Pill */}
-                <button
-                  type="button"
-                  onClick={() => setFollowMoneyModalOpen(true)}
-                  className="hidden md:inline-flex alx-btn-cta cursor-pointer text-xs"
-                >
-                  <Zap className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                  <span className="font-manrope">Follow The Money</span>
-                </button>
+            {/* Right: Search + Alluxi Style CTA Button */}
+            <div className="flex items-center gap-3">
+              {/* Quick Search Shortcut */}
+              <button
+                type="button"
+                onClick={() => setSearchModalOpen(true)}
+                className="hidden sm:flex items-center gap-2 p-2.5 rounded-full hover:bg-slate-100 text-slate-500 transition"
+                title="Search (⌘K)"
+              >
+                <Search className="w-4 h-4 text-slate-600" />
+              </button>
 
-                {/* Mobile Menu Toggle */}
-                <button
-                  type="button"
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="lg:hidden p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition"
-                  aria-label="Toggle menu"
-                >
-                  {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-                </button>
-              </div>
+              {/* Alluxi Pill CTA Button */}
+              <button
+                type="button"
+                onClick={() => setFollowMoneyModalOpen(true)}
+                className="px-6 py-2.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-sm font-bold shadow-md shadow-blue-500/25 transition-all duration-200 flex items-center gap-2 hover:scale-[1.02] active:scale-[0.98]"
+              >
+                <Zap className="w-4 h-4 fill-white" />
+                <span>Follow The Money</span>
+              </button>
+
+              {/* Mobile Menu Toggle */}
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="md:hidden p-2 rounded-xl text-slate-700 hover:bg-slate-100 transition"
+                aria-label="Toggle Menu"
+              >
+                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Mobile Dropdown Menu */}
+        {/* Mobile Menu Dropdown */}
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden bg-white border-b border-slate-200 shadow-xl overflow-hidden"
+              className="md:hidden bg-white border-b border-slate-200 shadow-xl px-4 py-6 space-y-4"
             >
-              <div className="px-4 py-4 space-y-3 font-manrope">
-                {/* Search Bar Mobile */}
+              <div className="space-y-2">
+                <Link
+                  to="/mps"
+                  className="block px-4 py-2.5 rounded-xl font-bold text-slate-800 hover:bg-slate-50"
+                >
+                  Parliament (778 MPs)
+                </Link>
+                <Link
+                  to="/states"
+                  className="block px-4 py-2.5 rounded-xl font-bold text-slate-800 hover:bg-slate-50"
+                >
+                  28 States &amp; 8 UTs Atlas
+                </Link>
+                <Link
+                  to="/works"
+                  className="block px-4 py-2.5 rounded-xl font-bold text-slate-800 hover:bg-slate-50"
+                >
+                  102,437 Public Works
+                </Link>
+                <Link
+                  to="/transactions"
+                  className="block px-4 py-2.5 rounded-xl font-bold text-slate-800 hover:bg-slate-50"
+                >
+                  82,296 Treasury Vouchers
+                </Link>
+                <Link
+                  to="/vendors"
+                  className="block px-4 py-2.5 rounded-xl font-bold text-slate-800 hover:bg-slate-50"
+                >
+                  22,377 Contractors
+                </Link>
+                <Link
+                  to="/anomalies"
+                  className="block px-4 py-2.5 rounded-xl font-bold text-slate-800 hover:bg-slate-50"
+                >
+                  1,831 MAD Signals
+                </Link>
+                <Link
+                  to="/methodology"
+                  className="block px-4 py-2.5 rounded-xl font-bold text-slate-800 hover:bg-slate-50"
+                >
+                  Technical Methodology
+                </Link>
+              </div>
+
+              <div className="pt-2">
                 <button
                   type="button"
                   onClick={() => {
                     setMobileMenuOpen(false);
-                    setSearchModalOpen(true);
+                    setFollowMoneyModalOpen(true);
                   }}
-                  className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-500 text-xs font-semibold"
+                  className="w-full py-3 rounded-full bg-[#2563EB] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-md"
                 >
-                  <div className="flex items-center gap-2">
-                    <Search className="w-4 h-4 text-slate-400" />
-                    <span>Search MPs, Works, Vendors...</span>
-                  </div>
-                  <kbd className="px-1.5 py-0.5 rounded bg-white text-[10px] text-slate-400 border border-slate-200 font-mono">
-                    ⌘K
-                  </kbd>
+                  <Zap className="w-4 h-4 fill-white" />
+                  <span>Follow The Money</span>
                 </button>
-
-                {/* Chamber Switcher Mobile */}
-                <div className="flex items-center justify-between bg-slate-100 p-1 rounded-xl text-xs font-bold">
-                  <button
-                    type="button"
-                    onClick={() => setSelectedHouse('ALL')}
-                    className={`flex-1 py-1.5 text-center rounded-lg transition ${
-                      selectedHouse === 'ALL' ? 'bg-[#08102B] text-white shadow-xs' : 'text-slate-600'
-                    }`}
-                  >
-                    All Houses
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedHouse('LOK_SABHA')}
-                    className={`flex-1 py-1.5 text-center rounded-lg transition ${
-                      selectedHouse === 'LOK_SABHA' ? 'bg-[#2563EB] text-white shadow-xs' : 'text-slate-600'
-                    }`}
-                  >
-                    Lok Sabha
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedHouse('RAJYA_SABHA')}
-                    className={`flex-1 py-1.5 text-center rounded-lg transition ${
-                      selectedHouse === 'RAJYA_SABHA' ? 'bg-[#1D4ED8] text-white shadow-xs' : 'text-slate-600'
-                    }`}
-                  >
-                    Rajya Sabha
-                  </button>
-                </div>
-
-                {/* Navigation Links Mobile */}
-                <div className="grid grid-cols-2 gap-1.5 pt-2 border-t border-slate-100">
-                  {navLinks.map((link) => (
-                    <NavLink
-                      key={link.to}
-                      to={link.to}
-                      end={link.end}
-                      className={({ isActive }) =>
-                        `px-3 py-2 rounded-xl text-xs font-bold transition flex items-center justify-between ${
-                          isActive
-                            ? 'bg-[#2563EB] text-white'
-                            : 'text-slate-700 hover:bg-slate-100'
-                        }`
-                      }
-                    >
-                      <span>{link.label}</span>
-                      <ArrowRight className="w-3 h-3 opacity-60" />
-                    </NavLink>
-                  ))}
-                </div>
-
-                <div className="pt-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      setFollowMoneyModalOpen(true);
-                    }}
-                    className="w-full alx-btn-cta py-2.5 text-center text-xs flex items-center justify-center gap-2"
-                  >
-                    <Zap className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                    <span>Follow The Money</span>
-                  </button>
-                </div>
               </div>
             </motion.div>
           )}

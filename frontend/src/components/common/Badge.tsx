@@ -1,4 +1,12 @@
 import React from 'react';
+import {
+  AlertCircle,
+  AlertTriangle,
+  Clock,
+  CheckCircle2,
+  Layers,
+  ShieldAlert,
+} from 'lucide-react';
 
 interface SeverityBadgeProps {
   severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW' | string;
@@ -6,40 +14,52 @@ interface SeverityBadgeProps {
 }
 
 export const SeverityBadge: React.FC<SeverityBadgeProps> = ({ severity, size = 'md' }) => {
-  const styles: Record<string, { bg: string; text: string; border: string; dot: string }> = {
+  const norm = (severity || 'LOW').toUpperCase();
+
+  const config: Record<string, { bg: string; text: string; border: string; label: string; icon: React.ComponentType<{ className?: string }> }> = {
     CRITICAL: {
-      bg: 'bg-coral-500/10',
-      text: 'text-coral-600',
-      border: 'border-coral-500/30',
-      dot: 'bg-coral-600',
+      bg: 'bg-rose-50',
+      text: 'text-rose-700',
+      border: 'border-rose-200',
+      label: 'Critical Risk',
+      icon: AlertCircle,
     },
     HIGH: {
-      bg: 'bg-saffron-500/10',
-      text: 'text-saffron-700',
-      border: 'border-saffron-500/30',
-      dot: 'bg-saffron-600',
+      bg: 'bg-amber-50',
+      text: 'text-amber-800',
+      border: 'border-amber-200',
+      label: 'High Risk',
+      icon: AlertTriangle,
     },
     MEDIUM: {
-      bg: 'bg-sky-50',
-      text: 'text-sky-700',
-      border: 'border-sky-200',
-      dot: 'bg-sky-500',
+      bg: 'bg-blue-50',
+      text: 'text-[#2563EB]',
+      border: 'border-blue-200',
+      label: 'Medium Risk',
+      icon: Clock,
     },
     LOW: {
       bg: 'bg-slate-100',
-      text: 'text-slate-600',
+      text: 'text-slate-700',
       border: 'border-slate-200',
-      dot: 'bg-slate-400',
+      label: 'Low / Normal',
+      icon: CheckCircle2,
     },
   };
 
-  const current = styles[severity.toUpperCase()] || styles.LOW;
-  const padding = size === 'sm' ? 'px-2 py-0.5 text-[10px]' : 'px-2.5 py-0.5 text-xs font-semibold';
+  const current = config[norm] || config.LOW;
+  const Icon = current.icon;
+  const padding = size === 'sm' ? 'px-2 py-0.5 text-[10px]' : 'px-2.5 py-1 text-xs font-bold';
+  const iconSize = size === 'sm' ? 'w-3 h-3' : 'w-3.5 h-3.5';
 
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full border ${current.bg} ${current.text} ${current.border} ${padding}`}>
-      <span className={`w-1.5 h-1.5 rounded-full ${current.dot}`} />
-      <span className="font-mono uppercase tracking-wider">{severity}</span>
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full border font-manrope ${current.bg} ${current.text} ${current.border} ${padding}`}
+      role="status"
+      aria-label={`Severity: ${current.label}`}
+    >
+      <Icon className={`${iconSize} shrink-0`} />
+      <span className="font-semibold tracking-wide">{current.label}</span>
     </span>
   );
 };
@@ -49,26 +69,58 @@ interface LifecycleBadgeProps {
 }
 
 export const LifecycleBadge: React.FC<LifecycleBadgeProps> = ({ status }) => {
-  const map: Record<string, { label: string; style: string }> = {
+  const map: Record<string, { label: string; style: string; icon: React.ComponentType<{ className?: string }> }> = {
+    COMPLETED: {
+      label: 'Completed & Delivered',
+      style: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+      icon: CheckCircle2,
+    },
     FULL_LIFECYCLE_MATCH: {
       label: 'Completed & Reconciled',
-      style: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+      style: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+      icon: CheckCircle2,
+    },
+    IN_PROGRESS: {
+      label: 'Active Execution',
+      style: 'bg-blue-50 text-[#2563EB] border-blue-200',
+      icon: Clock,
+    },
+    SANCTIONED: {
+      label: 'Approved & Sanctioned',
+      style: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+      icon: Clock,
+    },
+    RECOMMENDED: {
+      label: 'MP Recommended',
+      style: 'bg-amber-50 text-amber-800 border-amber-200',
+      icon: Clock,
     },
     RECOMMENDED_IN_PROGRESS: {
       label: 'Recommended / In-Progress',
-      style: 'bg-brand-50 text-brand-700 border-brand-200',
+      style: 'bg-blue-50 text-blue-700 border-blue-200',
+      icon: Clock,
     },
     COMPLETED_ONLY: {
-      label: 'Completed Only',
+      label: 'Completed Milestone',
       style: 'bg-slate-100 text-slate-700 border-slate-200',
+      icon: CheckCircle2,
     },
   };
 
-  const item = map[status] || { label: status, style: 'bg-slate-100 text-slate-700 border-slate-200' };
+  const item = map[status] || {
+    label: status.replace(/_/g, ' '),
+    style: 'bg-slate-100 text-slate-700 border-slate-200',
+    icon: Clock,
+  };
+  const Icon = item.icon;
 
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${item.style}`}>
-      {item.label}
+    <span
+      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${item.style}`}
+      role="status"
+    >
+      <Icon className="w-3 h-3 shrink-0" />
+      <span>{item.label}</span>
     </span>
   );
 };
@@ -79,8 +131,9 @@ interface CategoryBadgeProps {
 
 export const CategoryBadge: React.FC<CategoryBadgeProps> = ({ category }) => {
   return (
-    <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-slate-100/90 text-slate-700 border border-slate-200">
-      {category}
+    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800 border border-slate-200">
+      <Layers className="w-3 h-3 text-slate-400 shrink-0" />
+      <span>{category}</span>
     </span>
   );
 };

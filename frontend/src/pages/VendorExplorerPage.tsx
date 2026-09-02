@@ -26,6 +26,7 @@ import { ErrorDisplay } from '../components/common/ErrorDisplay';
 import { EmptyState } from '../components/common/EmptyState';
 import { Pagination } from '../components/common/Pagination';
 import { Breadcrumbs } from '../components/common/Breadcrumbs';
+import { HelpTooltip } from '../components/common/HelpTooltip';
 
 export const VendorExplorerPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -144,7 +145,13 @@ export const VendorExplorerPage: React.FC = () => {
             <span className="text-[11px] text-slate-500 block">Treasury Records</span>
           </div>
           <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-1">
-            <span className="text-[10px] font-mono font-bold text-slate-400 uppercase block">High Reliance</span>
+            <div className="flex items-center gap-1">
+              <span className="text-[10px] font-mono font-bold text-slate-400 uppercase block">High Reliance</span>
+              <HelpTooltip
+                title="Single-Patron Reliance"
+                text="Proportion of a contractor's total MPLADS income originating from a single parliamentary constituency. High percentages flag lack of contractor diversification."
+              />
+            </div>
             <strong className="text-lg font-black font-mono text-amber-600">Single-Patron</strong>
             <span className="text-[11px] text-slate-500 block">≥85% Concentration</span>
           </div>
@@ -159,10 +166,10 @@ export const VendorExplorerPage: React.FC = () => {
             <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
-              placeholder="Search contractor name or ID..."
+              placeholder="Search by vendor name, GSTIN, or city..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-blue-600 transition"
+              className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 transition min-h-[44px]"
             />
           </form>
 
@@ -241,8 +248,79 @@ export const VendorExplorerPage: React.FC = () => {
           onReset={handleReset}
         />
       ) : (
-        <div className="space-y-4">
-          <div className="rounded-3xl border border-slate-200 bg-white shadow-xs overflow-hidden">
+        <div className="space-y-4 font-manrope">
+          {/* Mobile Responsive Cards (< md) */}
+          <div className="md:hidden space-y-3">
+            {vendors.map((v) => {
+              const reliancePct = v.single_mp_reliance_pct || 0;
+              const isHighReliance = reliancePct >= 85;
+
+              return (
+                <div
+                  key={v.internal_vendor_id}
+                  onClick={() => setSelectedVendor(v)}
+                  className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:border-blue-300 transition space-y-3 cursor-pointer"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono text-slate-400">Vendor #{v.internal_vendor_id}</span>
+                    <span className="text-xs font-medium text-slate-600">{v.primary_state || 'National Scope'}</span>
+                  </div>
+
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-900 line-clamp-1">
+                      {v.vendor_name_normalized}
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-slate-100">
+                    <div>
+                      <span className="text-[10px] text-slate-400 uppercase font-mono block">Cumulative Revenue</span>
+                      <span className="text-sm font-black font-mono text-emerald-700">
+                        ₹{(v.total_received_amount / 1e7).toFixed(2)} Cr
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-slate-400 uppercase font-mono block">Disbursements</span>
+                      <span className="text-sm font-bold font-mono text-slate-800">
+                        {v.total_transaction_count.toLocaleString()} vouchers
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Reliance Progress Meter */}
+                  <div className="space-y-1 pt-1">
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="text-slate-500">Single-Patron Reliance:</span>
+                      <span className="font-mono font-bold text-slate-900">{reliancePct.toFixed(1)}%</span>
+                    </div>
+                    <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                      <div
+                        style={{ width: `${Math.min(100, reliancePct)}%` }}
+                        className={`h-full rounded-full ${
+                          isHighReliance ? 'bg-rose-500' : reliancePct >= 50 ? 'bg-amber-500' : 'bg-blue-600'
+                        }`}
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedVendor(v);
+                    }}
+                    className="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-[#2563EB] hover:text-white text-slate-800 text-xs font-bold transition flex items-center justify-center gap-1.5 min-h-[44px]"
+                  >
+                    <span>Inspect Contractor Profile</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Desktop Table (>= md) */}
+          <div className="hidden md:block rounded-3xl border border-slate-200 bg-white shadow-xs overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse">
                 <thead className="bg-slate-50 text-slate-500 font-mono font-bold uppercase tracking-wider text-[10px] border-b border-slate-200 sticky top-0 z-10">
@@ -251,7 +329,15 @@ export const VendorExplorerPage: React.FC = () => {
                     <th className="py-3.5 px-4 min-w-[150px]">Primary Territory</th>
                     <th className="py-3.5 px-4 text-right min-w-[140px]">Cumulative Revenue</th>
                     <th className="py-3.5 px-4 text-center min-w-[110px]">Disbursements</th>
-                    <th className="py-3.5 px-4 min-w-[200px]">Single-Patron Reliance Index</th>
+                    <th className="py-3.5 px-4 min-w-[200px]">
+                      <div className="flex items-center gap-1">
+                        <span>Single-Patron Reliance Index</span>
+                        <HelpTooltip
+                          title="Single-Patron Reliance"
+                          text="Percentage of contracts won from one MP or district. Over 85% flags potential concentration."
+                        />
+                      </div>
+                    </th>
                     <th className="py-3.5 px-4 text-center w-24">Action</th>
                   </tr>
                 </thead>

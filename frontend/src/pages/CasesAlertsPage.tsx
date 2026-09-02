@@ -251,52 +251,134 @@ export const CasesAlertsPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="space-y-3">
-                {alerts.map((a) => (
-                  <div
-                    key={a.anomaly_id}
-                    className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-xs transition space-y-3"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
+              <div className="space-y-4">
+                {alerts.map((a) => {
+                  const insight = (() => {
+                    const type = a.anomaly_type;
+                    if (type === 'CONTRACTOR_CONCENTRATION') {
+                      return {
+                        what: 'A single contractor received an unusually large percentage of contracts in this constituency.',
+                        why: a.reason || 'Contractor reliance index deviates significantly from peer district distributions.',
+                        nextStep: 'Verify whether tenders followed open competitive bidding guidelines and check vendor tax compliance.',
+                        method: 'Statistical Gini & MAD Robust Analysis',
+                        confidence: 'High Confidence (Direct Tender Ledgers)',
+                      };
+                    } else if (type === 'PROGRESS_MISMATCH') {
+                      return {
+                        what: 'Financial expenditures are progressing significantly faster than verified physical work on the ground.',
+                        why: a.reason || 'Expenditure ratio exceeds reported milestone completion by more than 30 percentage points.',
+                        nextStep: 'Withhold subsequent tranche disbursements pending an on-site physical milestone inspection by district engineers.',
+                        method: 'Milestone Divergence Calculation',
+                        confidence: 'Critical Risk (Immediate Field Audit)',
+                      };
+                    } else if (type === 'DELAY_RISK') {
+                      return {
+                        what: 'Project duration on ground has exceeded twice the expected benchmark for this category of work.',
+                        why: a.reason || 'Duration is more than 2.0x the median timeline of similar completed works.',
+                        nextStep: 'Issue an administrative timeline show-cause inquiry to the nodal implementing authority.',
+                        method: 'Predictive Timeline Modeling',
+                        confidence: 'High Schedule Risk',
+                      };
+                    } else if (type === 'BUDGET_VARIANCE') {
+                      return {
+                        what: 'Sanctioned project cost is noticeably higher than median costs for comparable infrastructure in this region.',
+                        why: a.reason || 'Estimated outlay significantly exceeds regional median rates for this category.',
+                        nextStep: 'Cross-check the Detailed Project Report (DPR) line items and schedule of rates (SoR).',
+                        method: 'Peer Cost Distribution Outlier Detection',
+                        confidence: 'Moderate (Document Review Required)',
+                      };
+                    }
+                    return {
+                      what: `Unusual operational pattern detected in ${a.entity_type.toLowerCase()} record.`,
+                      why: a.reason || 'Diverges from expected peer baseline metrics.',
+                      nextStep: 'Examine supporting transaction vouchers and execution milestone proofs.',
+                      method: 'Statistical Comparison',
+                      confidence: 'Standard Verification',
+                    };
+                  })();
+
+                  return (
+                    <div
+                      key={a.anomaly_id}
+                      className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-xs transition space-y-4 font-manrope"
+                    >
+                      {/* Card Header */}
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                        <div className="flex items-center gap-2 flex-wrap">
                           <SeverityBadge severity={a.severity} />
-                          <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[10px] font-mono font-bold">
+                          <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 text-xs font-mono font-bold">
                             {a.entity_type} #{a.entity_id}
                           </span>
-                          <span className="text-xs font-mono font-bold text-slate-400">
-                            Score: {(a.anomaly_score * 100).toFixed(1)}/100
+                          <span className="text-xs font-mono text-slate-400">
+                            Score: {(a.anomaly_score * 100).toFixed(0)}/100
                           </span>
                         </div>
-                        <h3 className="text-base font-extrabold text-[#08102B]">
-                          {a.anomaly_type.replace(/_/g, ' ')}
-                        </h3>
-                        <p className="text-xs text-slate-600 font-light leading-relaxed">
-                          {a.reason}
-                        </p>
+
+                        <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto">
+                          {a.entity_type === 'WORK' && (
+                            <Link
+                              to={`/works/${a.entity_id}`}
+                              className="px-4 py-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition min-h-[38px] flex items-center"
+                            >
+                              Inspect Dossier
+                            </Link>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => handleCreateCaseFromAlert(a)}
+                            className="px-4 py-2 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs transition flex items-center gap-1.5 shadow-xs min-h-[38px] cursor-pointer"
+                          >
+                            <PlusCircle className="w-3.5 h-3.5" />
+                            <span>Initiate Review Case</span>
+                          </button>
+                        </div>
                       </div>
 
-                      <div className="flex items-center gap-2 shrink-0">
-                        {a.entity_type === 'WORK' && (
-                          <Link
-                            to={`/works/${a.entity_id}`}
-                            className="px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition"
-                          >
-                            Inspect Dossier
-                          </Link>
-                        )}
-                        <button
-                          type="button"
-                          onClick={() => handleCreateCaseFromAlert(a)}
-                          className="px-4 py-1.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs transition flex items-center gap-1.5 shadow-xs"
-                        >
-                          <PlusCircle className="w-3.5 h-3.5" />
-                          <span>Create Case</span>
-                        </button>
+                      <h3 className="text-base sm:text-lg font-extrabold text-[#08102B]">
+                        {a.anomaly_type.replace(/_/g, ' ')}
+                      </h3>
+
+                      {/* 4-Question Human Explanation Grid */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs bg-slate-50/80 p-4 rounded-2xl border border-slate-100">
+                        <div className="space-y-1">
+                          <span className="font-mono font-bold text-blue-700 uppercase tracking-wider text-[10px] block">
+                            1. What happened?
+                          </span>
+                          <p className="text-slate-700 font-medium leading-relaxed">
+                            {insight.what}
+                          </p>
+                        </div>
+
+                        <div className="space-y-1">
+                          <span className="font-mono font-bold text-amber-700 uppercase tracking-wider text-[10px] block">
+                            2. Why was it flagged?
+                          </span>
+                          <p className="text-slate-600 font-light leading-relaxed">
+                            {insight.why}
+                          </p>
+                        </div>
+
+                        <div className="space-y-1">
+                          <span className="font-mono font-bold text-emerald-700 uppercase tracking-wider text-[10px] block">
+                            3. Recommended Next Step
+                          </span>
+                          <p className="text-slate-700 font-medium leading-relaxed">
+                            {insight.nextStep}
+                          </p>
+                        </div>
+
+                        <div className="space-y-1">
+                          <span className="font-mono font-bold text-slate-500 uppercase tracking-wider text-[10px] block">
+                            4. Detection Method &amp; Confidence
+                          </span>
+                          <p className="text-slate-600 font-light leading-relaxed">
+                            <strong>{insight.method}</strong> · {insight.confidence}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
@@ -365,7 +447,7 @@ export const CasesAlertsPage: React.FC = () => {
                         )}
                       </div>
 
-                      <div className="flex items-center gap-2 shrink-0">
+                      <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto">
                         <button
                           type="button"
                           onClick={() => {
@@ -373,9 +455,9 @@ export const CasesAlertsPage: React.FC = () => {
                             setUpdateStatus(c.status);
                             setUpdateNotes('');
                           }}
-                          className="px-4 py-2 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs transition shadow-xs"
+                          className="px-5 py-2.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs transition shadow-xs min-h-[44px] cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
                         >
-                          Update Status / Action
+                          Review Case &amp; Record Action
                         </button>
                       </div>
                     </div>
@@ -448,26 +530,32 @@ export const CasesAlertsPage: React.FC = () => {
       {/* Case Status Update Modal */}
       <AnimatePresence>
         {selectedCase && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#08102B]/80 backdrop-blur-md">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="case-action-title"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#08102B]/80 backdrop-blur-md font-manrope"
+          >
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-lg bg-white rounded-3xl p-6 border border-slate-200 shadow-2xl space-y-4"
+              className="w-full max-w-lg bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-2xl space-y-4"
             >
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <div>
                   <span className="text-[10px] font-mono font-bold text-[#2563EB] uppercase tracking-wider block">
-                    Administrative Action Modal
+                    Administrative Action &amp; Audit Logger
                   </span>
-                  <h3 className="text-base font-extrabold text-[#08102B]">
-                    {selectedCase.case_id}: Update Lifecycle
+                  <h3 id="case-action-title" className="text-base sm:text-lg font-extrabold text-[#08102B]">
+                    {selectedCase.case_id}: Record Review Finding
                   </h3>
                 </div>
                 <button
                   type="button"
+                  aria-label="Close action modal"
                   onClick={() => setSelectedCase(null)}
-                  className="p-1 rounded-full text-slate-400 hover:text-slate-900"
+                  className="p-2 rounded-full text-slate-400 hover:text-slate-900 min-w-[36px] min-h-[36px] flex items-center justify-center cursor-pointer"
                 >
                   ✕
                 </button>
@@ -475,51 +563,57 @@ export const CasesAlertsPage: React.FC = () => {
 
               <form onSubmit={handleUpdateStatus} className="space-y-4 text-xs">
                 <div>
-                  <label className="font-bold text-slate-700 block mb-1">Select New Status:</label>
+                  <label htmlFor="new-status-select" className="font-bold text-slate-700 block mb-1">
+                    Select Updated Operational Status:
+                  </label>
                   <select
+                    id="new-status-select"
                     value={updateStatus}
                     onChange={(e) => setUpdateStatus(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-bold text-slate-800"
+                    className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200 bg-white font-bold text-slate-800 min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB]"
                   >
-                    <option value="NEW">New (Unverified)</option>
+                    <option value="NEW">New (Pending Field Review)</option>
                     <option value="UNDER_REVIEW">Under Review (Committee Assigned)</option>
-                    <option value="CLARIFICATION_REQUESTED">Clarification Requested (Notice Sent)</option>
-                    <option value="DETAILED_REVIEW">Detailed Review / Audit Hearing</option>
-                    <option value="RESOLVED">Resolved (Document/Asset Verified)</option>
+                    <option value="CLARIFICATION_REQUESTED">Clarification Requested (Official Notice Issued)</option>
+                    <option value="DETAILED_REVIEW">Detailed Review / Technical Audit</option>
+                    <option value="RESOLVED">Resolved (Document / Physical Asset Verified)</option>
                     <option value="ESCALATED">Escalated (Referred to Ministry / CAG)</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="font-bold text-slate-700 block mb-1">Official Resolution / Finding Notes:</label>
+                  <label htmlFor="resolution-notes" className="font-bold text-slate-700 block mb-1">
+                    Official Findings &amp; Ground Inspection Summary:
+                  </label>
                   <textarea
+                    id="resolution-notes"
                     rows={4}
                     required
                     value={updateNotes}
                     onChange={(e) => setUpdateNotes(e.target.value)}
-                    placeholder="Enter factual ground findings, inspection results, or clarification reference..."
-                    className="w-full p-3 rounded-xl border border-slate-200 text-slate-800 font-sans leading-relaxed"
+                    placeholder="Describe specific field verification, contractor replies, or engineering observations..."
+                    className="w-full p-3.5 rounded-2xl border border-slate-200 text-slate-800 font-sans leading-relaxed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB]"
                   />
                 </div>
 
-                <div className="p-3 rounded-xl bg-blue-50/60 border border-blue-200 text-[11px] text-slate-700">
-                  Logged by: <strong>{roleConfig.shortLabel}</strong>. This entry will be cryptographically appended to the public audit log.
+                <div className="p-3.5 rounded-2xl bg-blue-50/70 border border-blue-200 text-[11px] text-slate-700 leading-relaxed">
+                  Recorded by: <strong>{roleConfig.shortLabel}</strong>. This entry is automatically appended to the immutable public audit log.
                 </div>
 
-                <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+                <div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-100">
                   <button
                     type="button"
                     onClick={() => setSelectedCase(null)}
-                    className="px-4 py-2 rounded-full border border-slate-200 text-slate-700 font-bold"
+                    className="px-5 py-2.5 rounded-full border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 min-h-[44px] transition cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={updating || !updateNotes.trim()}
-                    className="px-5 py-2 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold disabled:opacity-50 transition shadow-xs"
+                    className="px-6 py-2.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold disabled:opacity-50 transition shadow-xs min-h-[44px] cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
                   >
-                    {updating ? 'Saving...' : 'Commit Action to Audit Trail'}
+                    {updating ? 'Saving...' : 'Commit to Public Audit Trail'}
                   </button>
                 </div>
               </form>

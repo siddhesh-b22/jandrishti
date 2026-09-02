@@ -18,6 +18,8 @@ import {
   FileCheck,
   PlusCircle,
   Copy,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 import { api } from '../api/client';
 import { WorkDetail, WorkIntelligenceProfile } from '../api/types';
@@ -27,6 +29,7 @@ import { ProvenanceBadge } from '../components/common/ProvenanceBadge';
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton';
 import { ErrorDisplay } from '../components/common/ErrorDisplay';
 import { Breadcrumbs } from '../components/common/Breadcrumbs';
+import { HelpTooltip } from '../components/common/HelpTooltip';
 
 export const WorkDetailPage: React.FC = () => {
   const { workId } = useParams<{ workId: string }>();
@@ -40,6 +43,7 @@ export const WorkDetailPage: React.FC = () => {
   // Case creation feedback
   const [caseCreated, setCaseCreated] = useState<string | null>(null);
   const [creatingCase, setCreatingCase] = useState(false);
+  const [showAdvancedTechnical, setShowAdvancedTechnical] = useState(false);
 
   const loadWorkData = async () => {
     if (!workId) return;
@@ -174,6 +178,56 @@ export const WorkDetailPage: React.FC = () => {
               <span>Agency: <strong>{work.ida_normalized || 'District Authority'}</strong></span>
             </div>
           </div>
+
+          {/* What Requires Attention Right Now? Priority Banner */}
+          {profile && (profile.progress.mismatch_detected || profile.risk_assessment.overall_score >= 60 || profile.delay_prediction.status === 'CRITICALLY_DELAYED') && (
+            <div className="mt-4 p-4 sm:p-5 rounded-2xl bg-rose-50/70 border border-rose-200/90 text-rose-950 space-y-3 font-manrope">
+              <div className="flex items-center justify-between gap-2 flex-wrap">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-rose-600 animate-pulse" />
+                  <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-rose-800">
+                    What Requires Attention on This Project?
+                  </span>
+                </div>
+                <span className="px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[10px] font-mono font-bold border border-rose-300">
+                  Immediate Oversight Recommended
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                <div className="p-3 rounded-xl bg-white border border-rose-100 space-y-1">
+                  <strong className="text-slate-800 block text-[10px] font-mono uppercase text-rose-600">
+                    1. What happened?
+                  </strong>
+                  <p className="text-slate-700 leading-relaxed font-light">
+                    {profile.progress.mismatch_detected
+                      ? `Fund expenditure leads physical delivery by ${profile.progress.divergence_index} points.`
+                      : profile.delay_prediction.status === 'CRITICALLY_DELAYED'
+                      ? `Project execution is running ${profile.delay_prediction.schedule_deviation}x past the category benchmark.`
+                      : 'Multi-factor risk score is elevated for this public scheme.'}
+                  </p>
+                </div>
+
+                <div className="p-3 rounded-xl bg-white border border-rose-100 space-y-1">
+                  <strong className="text-slate-800 block text-[10px] font-mono uppercase text-amber-600">
+                    2. Why was it flagged?
+                  </strong>
+                  <p className="text-slate-700 leading-relaxed font-light">
+                    {profile.risk_assessment.explainable_reasons[0] || 'Diverges from median category benchmarks for duration and expenditure.'}
+                  </p>
+                </div>
+
+                <div className="p-3 rounded-xl bg-white border border-rose-100 space-y-1">
+                  <strong className="text-slate-800 block text-[10px] font-mono uppercase text-emerald-600">
+                    3. What should you do?
+                  </strong>
+                  <p className="text-slate-700 leading-relaxed font-light">
+                    Initiate on-site inspection or issue an inquiry to {work.ida_normalized || 'the nodal agency'}.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Milestone Lifecycle Progress */}
@@ -424,7 +478,7 @@ export const WorkDetailPage: React.FC = () => {
                     type="button"
                     disabled={creatingCase}
                     onClick={handleInitiateCase}
-                    className="w-full py-2.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-bold transition flex items-center justify-center gap-2 shadow-xs disabled:opacity-50"
+                    className="w-full py-3 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-bold transition flex items-center justify-center gap-2 shadow-xs disabled:opacity-50 min-h-[44px] cursor-pointer hover:scale-[1.01] active:scale-[0.99]"
                   >
                     <PlusCircle className="w-4 h-4" />
                     <span>{creatingCase ? 'Registering...' : 'Initiate Administrative Review Case'}</span>
@@ -433,6 +487,65 @@ export const WorkDetailPage: React.FC = () => {
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Progressive Disclosure: Advanced Technical Details for Analysts */}
+      {profile && (
+        <div className="rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 shadow-xs space-y-4 font-manrope">
+          <button
+            type="button"
+            aria-expanded={showAdvancedTechnical}
+            onClick={() => setShowAdvancedTechnical(!showAdvancedTechnical)}
+            className="w-full flex items-center justify-between text-left group cursor-pointer"
+          >
+            <div>
+              <span className="text-[10px] font-mono font-bold text-[#2563EB] uppercase tracking-wider block">
+                Progressive Disclosure · Technical Deep-Dive
+              </span>
+              <h3 className="text-sm sm:text-base font-extrabold text-[#08102B] group-hover:text-[#2563EB] transition-colors">
+                Show Advanced Technical Calculations &amp; Model Parameters
+              </h3>
+            </div>
+            <div className="p-2 rounded-full bg-slate-100 group-hover:bg-blue-50 text-slate-500 group-hover:text-[#2563EB] transition">
+              {showAdvancedTechnical ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            </div>
+          </button>
+
+          {showAdvancedTechnical && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="space-y-4 pt-4 border-t border-slate-100 text-xs text-slate-700"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+                  <span className="font-mono font-bold text-slate-500 text-[10px] uppercase block">Divergence Index Formula</span>
+                  <p className="font-mono text-[#08102B] text-sm">Index = Fin% - Phys%</p>
+                  <p className="text-[11px] text-slate-500 font-light leading-relaxed">
+                    Observed: {profile.progress.financial_pct}% - {profile.progress.physical_pct}% = <strong>{profile.progress.divergence_index} pts</strong> (Trigger threshold: &ge; 30 pts).
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+                  <span className="font-mono font-bold text-slate-500 text-[10px] uppercase block">Delay Probability Function</span>
+                  <p className="font-mono text-[#08102B] text-sm">P = 1 / (1 + e^-k(ratio - 1))</p>
+                  <p className="text-[11px] text-slate-500 font-light leading-relaxed">
+                    Schedule Ratio: <strong>{profile.delay_prediction.schedule_deviation}x</strong> vs. category median of {profile.delay_prediction.category_median_days} days.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+                  <span className="font-mono font-bold text-slate-500 text-[10px] uppercase block">5-Point Compliance Matrix</span>
+                  <p className="font-mono text-[#08102B] text-sm">Score: {profile.compliance.score} / 100</p>
+                  <p className="text-[11px] text-slate-500 font-light leading-relaxed">
+                    5 statutory governance checks weighted at 20 points each. Status: <strong>{profile.compliance.status}</strong>.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          )}
         </div>
       )}
 

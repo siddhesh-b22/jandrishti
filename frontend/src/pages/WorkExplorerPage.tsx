@@ -138,10 +138,10 @@ export const WorkExplorerPage: React.FC = () => {
             <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
-              placeholder="Search works, description, ID..."
+              placeholder="Search by project name, work ID, district, or MP..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-600 transition"
+              className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 transition min-h-[44px]"
             />
           </form>
 
@@ -240,61 +240,112 @@ export const WorkExplorerPage: React.FC = () => {
           onReset={handleReset}
         />
       ) : (
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs font-sans">
-              <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase font-mono text-[10px] tracking-wider">
-                <tr>
-                  <th className="py-3 px-4 font-bold">Project / Description</th>
-                  <th className="py-3 px-4 font-bold">Sector</th>
-                  <th className="py-3 px-4 font-bold">Location / MP</th>
-                  <th className="py-3 px-4 font-bold text-right">Sanctioned Cost</th>
-                  <th className="py-3 px-4 font-bold text-center">Status</th>
-                  <th className="py-3 px-4 font-bold text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {works.map((w) => (
-                  <tr
-                    key={w.work_id}
-                    onClick={() => setActiveDossier({ type: 'WORK', data: w })}
-                    className="hover:bg-blue-50/40 cursor-pointer transition"
-                  >
-                    <td className="py-3.5 px-4 max-w-xs">
-                      <div className="font-bold text-slate-900 line-clamp-2">
-                        {w.work_description_normalized || `Project Work #${w.work_id}`}
-                      </div>
-                      <span className="text-[10px] text-slate-400 font-mono">ID: {w.work_id}</span>
-                    </td>
-                    <td className="py-3.5 px-4">
-                      <CategoryBadge category={w.category_normalized} />
-                    </td>
-                    <td className="py-3.5 px-4 text-slate-600">
-                      <div className="font-medium">{w.constituency_normalized || 'Constituency'}, {w.state_normalized}</div>
-                      <span className="text-[10px] text-slate-500 block">MP: {w.mp_name_normalized}</span>
-                    </td>
-                    <td className="py-3.5 px-4 font-mono font-bold text-slate-900 text-right">
+        <div className="space-y-4">
+          {/* Mobile Responsive Cards (< md) */}
+          <div className="md:hidden space-y-3">
+            {works.map((w) => (
+              <div
+                key={w.work_id}
+                onClick={() => setActiveDossier({ type: 'WORK', data: w })}
+                className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:border-blue-300 transition space-y-3 cursor-pointer"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <CategoryBadge category={w.category_normalized} />
+                  <LifecycleBadge status={w.lifecycle_status} />
+                </div>
+
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900 line-clamp-2 leading-snug">
+                    {w.work_description_normalized || `Project Work #${w.work_id}`}
+                  </h3>
+                  <span className="text-[10px] text-slate-400 font-mono">Work ID: #{w.work_id}</span>
+                </div>
+
+                <div className="flex items-center justify-between text-xs text-slate-600 pt-2 border-t border-slate-100">
+                  <div>
+                    <span className="block font-medium">{w.constituency_normalized || 'Constituency'}, {w.state_normalized}</span>
+                    <span className="text-[10px] text-slate-500">MP: {w.mp_name_normalized}</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[10px] text-slate-400 uppercase block font-mono">Cost</span>
+                    <span className="font-mono font-black text-slate-900 text-sm">
                       ₹{((w.sanctioned_amount || w.recommended_amount || 0) / 1e5).toFixed(2)} L
-                    </td>
-                    <td className="py-3.5 px-4 text-center">
-                      <LifecycleBadge status={w.lifecycle_status} />
-                    </td>
-                    <td className="py-3.5 px-4 text-center">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setActiveDossier({ type: 'WORK', data: w });
-                        }}
-                        className="px-3 py-1 rounded-full bg-slate-100 hover:bg-blue-600 hover:text-white text-slate-700 text-xs font-bold transition"
-                      >
-                        Details →
-                      </button>
-                    </td>
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveDossier({ type: 'WORK', data: w });
+                  }}
+                  className="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-[#2563EB] hover:text-white text-slate-800 text-xs font-bold transition flex items-center justify-center gap-1.5 min-h-[44px]"
+                >
+                  <span>View Project Dossier</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop Table (>= md) */}
+          <div className="hidden md:block bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs font-sans">
+                <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase font-mono text-[10px] tracking-wider">
+                  <tr>
+                    <th className="py-3 px-4 font-bold">Project / Description</th>
+                    <th className="py-3 px-4 font-bold">Sector</th>
+                    <th className="py-3 px-4 font-bold">Location / MP</th>
+                    <th className="py-3 px-4 font-bold text-right">Sanctioned Cost</th>
+                    <th className="py-3 px-4 font-bold text-center">Status</th>
+                    <th className="py-3 px-4 font-bold text-center">Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {works.map((w) => (
+                    <tr
+                      key={w.work_id}
+                      onClick={() => setActiveDossier({ type: 'WORK', data: w })}
+                      className="hover:bg-blue-50/40 cursor-pointer transition"
+                    >
+                      <td className="py-3.5 px-4 max-w-xs">
+                        <div className="font-bold text-slate-900 line-clamp-2">
+                          {w.work_description_normalized || `Project Work #${w.work_id}`}
+                        </div>
+                        <span className="text-[10px] text-slate-400 font-mono">ID: {w.work_id}</span>
+                      </td>
+                      <td className="py-3.5 px-4">
+                        <CategoryBadge category={w.category_normalized} />
+                      </td>
+                      <td className="py-3.5 px-4 text-slate-600">
+                        <div className="font-medium">{w.constituency_normalized || 'Constituency'}, {w.state_normalized}</div>
+                        <span className="text-[10px] text-slate-500 block">MP: {w.mp_name_normalized}</span>
+                      </td>
+                      <td className="py-3.5 px-4 font-mono font-bold text-slate-900 text-right">
+                        ₹{((w.sanctioned_amount || w.recommended_amount || 0) / 1e5).toFixed(2)} L
+                      </td>
+                      <td className="py-3.5 px-4 text-center">
+                        <LifecycleBadge status={w.lifecycle_status} />
+                      </td>
+                      <td className="py-3.5 px-4 text-center">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveDossier({ type: 'WORK', data: w });
+                          }}
+                          className="px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-blue-600 hover:text-white text-slate-700 text-xs font-bold transition min-h-[36px]"
+                        >
+                          Details →
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}

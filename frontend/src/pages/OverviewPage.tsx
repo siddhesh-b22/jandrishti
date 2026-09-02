@@ -43,6 +43,7 @@ import { HeroTechIllustration } from '../components/common/HeroTechIllustration'
 import { HowJanDrishtiWorks } from '../components/common/HowJanDrishtiWorks';
 import { FollowTheMoneyModal } from '../components/common/FollowTheMoneyModal';
 import { EntityDossierDrawer, DossierEntity } from '../components/common/EntityDossierDrawer';
+import { HelpTooltip } from '../components/common/HelpTooltip';
 import { useCountUp } from '../hooks/useCountUp';
 
 // High-Resolution Iconic Public Infrastructure Photos for Portfolios
@@ -201,83 +202,146 @@ export const OverviewPage: React.FC = () => {
       </section>
 
       {/* ========================================================= */}
-      {/* 01B. OPERATIONAL DECISION-SUPPORT & EARLY WARNING RADAR  */}
       {/* ========================================================= */}
-      <section className="py-6 bg-slate-900 text-white border-y border-slate-800 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#2563EB]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-800 pb-3">
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
-              <span className="text-xs font-mono font-extrabold uppercase tracking-widest text-blue-400">
-                Early Warning &amp; Operational Decision Support Radar
-              </span>
+      {/* 01B. WHAT NEEDS YOUR ATTENTION RIGHT NOW? PRIORITY CONSOLE */}
+      {/* ========================================================= */}
+      <section className="py-8 bg-[#08102B] text-white border-y border-slate-800 relative overflow-hidden font-manrope">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#2563EB]/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800 pb-4">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
+                <span className="text-xs font-mono font-bold uppercase tracking-widest text-rose-400">
+                  Priority Action Console
+                </span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+                What Needs Your Attention Right Now?
+              </h2>
+              <p className="text-xs text-slate-300 font-light max-w-2xl leading-relaxed">
+                Prioritized operational issues requiring review, field inspection, or administrative verification across MPLADS schemes.
+              </p>
             </div>
-            <div className="flex items-center gap-2 text-xs">
+
+            <div className="flex items-center gap-2 shrink-0">
               <Link
                 to="/cases"
-                className="px-3 py-1 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold transition flex items-center gap-1.5 shadow-xs"
+                className="px-5 py-2.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-bold transition flex items-center gap-2 shadow-md hover:scale-[1.02] active:scale-[0.98] min-h-[44px]"
               >
-                <span>Alerts &amp; Case Hub</span>
-                <ArrowRight className="w-3 h-3" />
-              </Link>
-              <Link
-                to="/duplicates"
-                className="px-3 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold transition flex items-center gap-1.5"
-              >
-                <Copy className="w-3 h-3 text-amber-400" />
-                <span>Duplicate Studio</span>
+                <span>View All Attention Items</span>
+                <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-            {/* Action Item 1 */}
-            <div className="p-4 rounded-2xl bg-slate-800/60 border border-slate-700/80 space-y-2 hover:border-blue-500/50 transition">
-              <div className="flex items-center justify-between">
-                <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 font-mono font-bold text-[10px]">
-                  CRITICAL · 21 Works
-                </span>
-                <span className="text-slate-400 font-mono text-[10px]">Action Required</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+            {/* Urgency 1: Critical Progress Mismatches */}
+            <div className="p-5 rounded-2xl bg-slate-900/90 border border-rose-500/30 hover:border-rose-500 transition-all flex flex-col justify-between space-y-3">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 font-mono font-bold text-[10px] border border-rose-500/30 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
+                    CRITICAL · 21 Works
+                  </span>
+                  <span className="text-slate-400 text-[10px] font-mono">Urgent</span>
+                </div>
+                <h3 className="font-extrabold text-white text-sm leading-snug">
+                  Severe Progress Mismatch
+                </h3>
+                <p className="text-slate-300 font-light leading-relaxed text-[11px]">
+                  21 projects have utilized $\ge 80\%$ funds while physical delivery remains $\le 30\%$. Withhold tranches pending inspection.
+                </p>
               </div>
-              <h4 className="font-extrabold text-white text-sm">
-                Severe Physical vs. Financial Mismatch
-              </h4>
-              <p className="text-slate-300 font-light leading-relaxed">
-                21 projects exhibit $\ge 80\%$ fund utilization with $\le 30\%$ physical milestone delivery. Recommended: Freeze tranche releases pending field inspection.
-              </p>
+
+              <Link
+                to="/cases?severity=CRITICAL"
+                className="inline-flex items-center justify-between pt-2 border-t border-slate-800 text-rose-300 font-bold hover:text-white transition group text-[11px]"
+              >
+                <span>Review Urgent Mismatches</span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </div>
 
-            {/* Action Item 2 */}
-            <div className="p-4 rounded-2xl bg-slate-800/60 border border-slate-700/80 space-y-2 hover:border-blue-500/50 transition">
-              <div className="flex items-center justify-between">
-                <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono font-bold text-[10px]">
-                  HIGH · 184 Schemes
-                </span>
-                <span className="text-slate-400 font-mono text-[10px]">Predictive Risk</span>
+            {/* Urgency 2: Project Delays */}
+            <div className="p-5 rounded-2xl bg-slate-900/90 border border-amber-500/30 hover:border-amber-500 transition-all flex flex-col justify-between space-y-3">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono font-bold text-[10px] border border-amber-500/30 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                    HIGH RISK · 184 Schemes
+                  </span>
+                  <span className="text-slate-400 text-[10px] font-mono">Timeline</span>
+                </div>
+                <h3 className="font-extrabold text-white text-sm leading-snug">
+                  Extended Milestone Delays
+                </h3>
+                <p className="text-slate-300 font-light leading-relaxed text-[11px]">
+                  184 ongoing projects are running past twice their expected category duration benchmark without milestone updates.
+                </p>
               </div>
-              <h4 className="font-extrabold text-white text-sm">
-                Milestone Inactivity &amp; Delay Forecast
-              </h4>
-              <p className="text-slate-300 font-light leading-relaxed">
-                Works exceeding 2.0x category duration medians without recent progress updates. Recommended: Issue timeline show-cause notices to nodal IDAs.
-              </p>
+
+              <Link
+                to="/cases?category=DELAY_RISK"
+                className="inline-flex items-center justify-between pt-2 border-t border-slate-800 text-amber-300 font-bold hover:text-white transition group text-[11px]"
+              >
+                <span>Inspect Stalled Works</span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </div>
 
-            {/* Action Item 3 */}
-            <div className="p-4 rounded-2xl bg-slate-800/60 border border-slate-700/80 space-y-2 hover:border-blue-500/50 transition">
-              <div className="flex items-center justify-between">
-                <span className="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-mono font-bold text-[10px]">
-                  REVIEW · 25 Clusters
-                </span>
-                <span className="text-slate-400 font-mono text-[10px]">AI De-duplication</span>
+            {/* Urgency 3: Duplicate Work Clusters */}
+            <div className="p-5 rounded-2xl bg-slate-900/90 border border-purple-500/30 hover:border-purple-500 transition-all flex flex-col justify-between space-y-3">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-mono font-bold text-[10px] border border-purple-500/30 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+                    REVIEW · 25 Clusters
+                  </span>
+                  <span className="text-slate-400 text-[10px] font-mono">De-dup</span>
+                </div>
+                <h3 className="font-extrabold text-white text-sm leading-snug">
+                  Potential Overlapping Works
+                </h3>
+                <p className="text-slate-300 font-light leading-relaxed text-[11px]">
+                  25 candidate clusters flagged with $\ge 70\%$ description overlap and matching expenditure in the same jurisdiction.
+                </p>
               </div>
-              <h4 className="font-extrabold text-white text-sm">
-                Potential Duplicate &amp; Overlapping Works
-              </h4>
-              <p className="text-slate-300 font-light leading-relaxed">
-                Jaccard similarity $\ge 70\%$ across adjacent wards with matched budgets. Recommended: Review comparative dossiers before final asset handover.
-              </p>
+
+              <Link
+                to="/duplicates"
+                className="inline-flex items-center justify-between pt-2 border-t border-slate-800 text-purple-300 font-bold hover:text-white transition group text-[11px]"
+              >
+                <span>Open Duplicate Studio</span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+
+            {/* Urgency 4: Reconciled & Verified Normal Outlays */}
+            <div className="p-5 rounded-2xl bg-slate-900/90 border border-emerald-500/30 hover:border-emerald-500 transition-all flex flex-col justify-between space-y-3">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono font-bold text-[10px] border border-emerald-500/30 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    VERIFIED · 96.4% Health
+                  </span>
+                  <span className="text-slate-400 text-[10px] font-mono">Reconciled</span>
+                </div>
+                <h3 className="font-extrabold text-white text-sm leading-snug">
+                  Double-Entry Treasury Proof
+                </h3>
+                <p className="text-slate-300 font-light leading-relaxed text-[11px]">
+                  100% of ₹3,947.25 Cr public fund outflows reconciled with zero rupee discrepancy across 82,296 vouchers.
+                </p>
+              </div>
+
+              <Link
+                to="/data-quality"
+                className="inline-flex items-center justify-between pt-2 border-t border-slate-800 text-emerald-300 font-bold hover:text-white transition group text-[11px]"
+              >
+                <span>Inspect Audit Proof</span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </div>
           </div>
         </div>
@@ -294,9 +358,15 @@ export const OverviewPage: React.FC = () => {
               <p className="text-3xl sm:text-4xl font-extrabold leading-none tabular-nums bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] bg-clip-text text-transparent font-mono">
                 ₹0.00
               </p>
-              <p className="mt-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider">
-                Reconciliation Variance
-              </p>
+              <div className="flex items-center gap-1.5 mt-1.5">
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                  Reconciliation Variance
+                </p>
+                <HelpTooltip
+                  title="Zero Reconciliation Variance"
+                  text="Double-entry accounting check confirming zero rupee difference between central sanction releases and audited ground vouchers."
+                />
+              </div>
               <h3 className="mt-3 pt-3 border-t border-slate-100 text-base sm:text-lg text-[#08102B] font-extrabold">
                 Zero rupee accounting discrepancy
               </h3>
@@ -322,9 +392,15 @@ export const OverviewPage: React.FC = () => {
               <p className="text-3xl sm:text-4xl font-extrabold leading-none tabular-nums bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] bg-clip-text text-transparent font-mono">
                 102,437
               </p>
-              <p className="mt-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider">
-                Physical Works Monitored
-              </p>
+              <div className="flex items-center gap-1.5 mt-1.5">
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                  Physical Works Monitored
+                </p>
+                <HelpTooltip
+                  title="Physical Works Monitored"
+                  text="Civic infrastructure schemes (drinking water, roads, community halls, health clinics) tracked from recommendation to ground completion."
+                />
+              </div>
               <h3 className="mt-3 pt-3 border-t border-slate-100 text-base sm:text-lg text-[#08102B] font-extrabold">
                 Ground infrastructure tracked end-to-end
               </h3>
@@ -350,14 +426,20 @@ export const OverviewPage: React.FC = () => {
               <p className="text-3xl sm:text-4xl font-extrabold leading-none tabular-nums bg-gradient-to-br from-[#2563EB] to-[#1E3A8A] bg-clip-text text-transparent font-mono">
                 1,831
               </p>
-              <p className="mt-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider">
-                MAD Statistical Signals
-              </p>
+              <div className="flex items-center gap-1.5 mt-1.5">
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                  Unusual Pattern Signals
+                </p>
+                <HelpTooltip
+                  title="Unusual Pattern Signals"
+                  text="Objective statistical indicators that highlight spending, vendor reliance, or milestone stalls deviating from peer averages, without making premature accusations."
+                />
+              </div>
               <h3 className="mt-3 pt-3 border-t border-slate-100 text-base sm:text-lg text-[#08102B] font-extrabold">
                 Objective audit signals, zero accusation
               </h3>
               <p className="mt-1 text-xs text-slate-600 font-light leading-relaxed">
-                Median Absolute Deviation robust Z-score flagging vendor concentration, budget variance, and fund stall without bias.
+                Median Absolute Deviation statistical comparisons flagging vendor concentration, budget variance, and fund stall without bias.
               </p>
               <div className="mt-auto pt-4 flex items-center justify-between">
                 <span className="text-[11px] font-mono font-bold text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">

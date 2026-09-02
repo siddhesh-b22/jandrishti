@@ -234,3 +234,140 @@ class CategoryItem(BaseModel):
     total_recommended_amount: float
     total_final_amount: float
     completed_works_count: int
+
+# --- Intelligence & AI/ML Analytics Schemas ---
+class DuplicateWorkDetail(BaseModel):
+    work_id: int
+    title: Optional[str] = None
+    mp_name: Optional[str] = None
+    constituency: Optional[str] = None
+    state: Optional[str] = None
+    category: Optional[str] = None
+    amount: float
+    lifecycle_status: str
+    year: Optional[int] = None
+    ida: Optional[str] = None
+
+class DuplicatePairItem(BaseModel):
+    pair_id: str
+    similarity_score: float
+    text_similarity: float
+    cost_similarity: float
+    status: str
+    work_a: DuplicateWorkDetail
+    work_b: DuplicateWorkDetail
+    reasons: List[str]
+    recommended_action: str
+
+class ProgressMismatchItem(BaseModel):
+    work_id: int
+    mp_name: Optional[str] = None
+    constituency: Optional[str] = None
+    state: Optional[str] = None
+    category: Optional[str] = None
+    title: Optional[str] = None
+    lifecycle_status: str
+    financial_progress_pct: float
+    physical_progress_pct: float
+    divergence_index: float
+    recommended_amount: float
+    expenditure_amount: float
+    duration_days: int
+    severity: str
+    reason: str
+    recommended_action: str
+
+class ProgressMismatchListResponse(BaseModel):
+    total: int
+    limit: int
+    offset: int
+    items: List[ProgressMismatchItem]
+
+class DelayPredictionItem(BaseModel):
+    work_id: int
+    mp_name: Optional[str] = None
+    constituency: Optional[str] = None
+    state: Optional[str] = None
+    category: Optional[str] = None
+    title: Optional[str] = None
+    lifecycle_status: str
+    current_duration_days: int
+    category_benchmark_days: int
+    delay_probability: float
+    schedule_deviation_ratio: float
+    estimated_delay_days: int
+    risk_level: str
+    confidence_pct: float
+    contributing_factors: List[str]
+    recommended_action: str
+
+class DelayPredictionListResponse(BaseModel):
+    total: int
+    limit: int
+    offset: int
+    items: List[DelayPredictionItem]
+
+class DataQualityResponse(BaseModel):
+    overall_health_score: float
+    status: str
+    metrics: Dict[str, Any]
+    provenance: Dict[str, Any]
+
+# --- Case Management & Audit Trail Schemas ---
+class AuditLogItem(BaseModel):
+    log_id: int
+    case_id: str
+    action: str
+    performed_by: str
+    role: str
+    timestamp: str
+    details: Optional[str] = ""
+    previous_state: Optional[str] = ""
+    new_state: Optional[str] = ""
+    case_title: Optional[str] = None
+    severity: Optional[str] = None
+    entity_type: Optional[str] = None
+    entity_id: Optional[str] = None
+
+class ReviewCaseResponse(BaseModel):
+    case_id: str
+    entity_type: str
+    entity_id: str
+    title: str
+    severity: str
+    risk_score: float
+    category: str
+    status: str
+    assigned_to: str
+    assigned_role: str
+    created_at: str
+    updated_at: str
+    resolution_notes: Optional[str] = ""
+    audit_trail: Optional[List[Dict[str, Any]]] = None
+
+class ReviewCaseListResponse(BaseModel):
+    total: int
+    limit: int
+    offset: int
+    items: List[ReviewCaseResponse]
+
+class ReviewCaseCreate(BaseModel):
+    entity_type: str
+    entity_id: str
+    title: str
+    severity: str = "HIGH"
+    risk_score: float = 75.0
+    category: str = "MANUAL_REVIEW"
+    assigned_to: Optional[str] = "Unassigned"
+    assigned_role: Optional[str] = "DISTRICT_AUTHORITY"
+    user: Optional[str] = "Authorized Official"
+    role: Optional[str] = "DISTRICT_AUTHORITY"
+    notes: Optional[str] = ""
+
+class ReviewCaseUpdate(BaseModel):
+    new_status: str
+    user: Optional[str] = "Authorized Official"
+    role: Optional[str] = "DISTRICT_AUTHORITY"
+    notes: Optional[str] = ""
+    assigned_to: Optional[str] = None
+

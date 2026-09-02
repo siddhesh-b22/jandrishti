@@ -30,8 +30,19 @@ from backend.schemas import (
     AnomalyListResponse,
     StateSummaryItem,
     ConstituencyItem,
-    CategoryItem
+    CategoryItem,
+    DuplicatePairItem,
+    ProgressMismatchListResponse,
+    DelayPredictionListResponse,
+    DataQualityResponse,
+    ReviewCaseResponse,
+    ReviewCaseListResponse,
+    ReviewCaseCreate,
+    ReviewCaseUpdate,
+    AuditLogItem
 )
+from backend.intelligence import intelligence_service
+from backend.cases import case_service
 
 logger = logging.getLogger("jandrishti.api")
 
@@ -54,7 +65,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
     allow_credentials=True,
-    allow_methods=["GET", "OPTIONS", "HEAD"],
+    allow_methods=["GET", "POST", "PATCH", "OPTIONS", "HEAD"],
     allow_headers=["*"],
 )
 
@@ -921,3 +932,149 @@ def get_work_categories(conn: sqlite3.Connection = Depends(get_db)):
         ORDER BY total_works DESC;
     """)
     return [dict(r) for r in cursor.fetchall()]
+
+# ====================================================================
+# ADVANCED INTELLIGENCE & AI/ML ANALYTICS ENDPOINTS
+# ====================================================================
+
+@app.get("/api/intelligence/duplicates", response_model=List[DuplicatePairItem], tags=["Intelligence"])
+def get_duplicate_works(
+    state: Optional[str] = Query(None, description="Filter by state"),
+    category: Optional[str] = Query(None, description="Filter by category"),
+    limit: int = Query(25, ge=1, le=100),
+    min_similarity: float = Query(0.60, ge=0.4, le=1.0)
+):
+    """
+    Detects potential duplicate and overlapping works across geographical clusters
+    using description token similarity, category matching, and cost scale parity.
+    """
+    return intelligence_service.detect_duplicates(
+        state=state,
+        category=category,
+        limit=limit,
+        min_similarity=min_similarity
+    )
+
+@app.get("/api/intelligence/progress-mismatch", response_model=ProgressMismatchListResponse, tags=["Intelligence"])
+def get_progress_mismatches(
+    state: Optional[str] = Query(None, description="Filter by state"),
+    min_severity: str = Query("HIGH", description="Filter by min severity (CRITICAL, HIGH, MEDIUM)"),
+    limit: int = Query(50, ge=1, le=200),
+    offset: int = Query(0, ge=0)
+):
+    """
+    Identifies severe divergences between financial utilization and physical milestone progress.
+    """
+    return intelligence_service.get_progress_mismatches(
+        state=state,
+        min_severity=min_severity,
+        limit=limit,
+        offset=offset
+    )
+
+@app.get("/api/intelligence/delay-predictions", response_model=DelayPredictionListResponse, tags=["Intelligence"])
+def get_delay_predictions(
+    category: Optional[str] = Query(None, description="Filter by category"),
+    state: Optional[str] = Query(None, description="Filter by state"),
+    limit: int = Query(50, ge=1, le=200),
+    offset: int = Query(0, ge=0)
+):
+    """
+    Computes empirical delay probabilities and schedule completion deviations
+    relative to regional category duration benchmarks.
+    """
+    return intelligence_service.get_delay_predictions(
+        category=category,
+        state=state,
+        limit=limit,
+        offset=offset
+    )
+
+@app.get("/api/intelligence/works/{work_id}/profile", tags=["Intelligence"])
+def get_work_intelligence_profile(work_id: int):
+    """
+    Generates a 360-degree comprehensive intelligence dossier for an individual project,
+    including physical vs financial progress, delay forecast, multi-factor risk score,
+    and 5-point compliance checklist.
+    """
+    profile = intelligence_service.get_work_intelligence_profile(work_id)
+    if not profile:
+        raise HTTPException(status_code=404, detail=f"Work #{work_id} not found")
+    return profile
+
+@app.get("/api/intelligence/data-quality", response_model=DataQualityResponse, tags=["Intelligence"])
+def get_data_quality_metrics():
+    """
+    Evaluates dataset integrity, field completeness, voucher linkage, and zero-variance proofs.
+    """
+    return intelligence_service.get_data_quality_metrics()
+
+# ====================================================================
+# HUMAN-IN-THE-LOOP CASE MANAGEMENT & AUDIT TRAIL ENDPOINTS
+# ====================================================================
+
+@app.get("/api/cases", response_model=ReviewCaseListResponse, tags=["Case Management"])
+def list_review_cases(
+    status: Optional[str] = Query(None, description="Filter by status (NEW, UNDER_REVIEW, CLARIFICATION_REQUESTED, DETAILED_REVIEW, RESOLVED, ESCALATED)"),
+    severity: Optional[str] = Query(None, description="Filter by severity (CRITICAL, HIGH, MEDIUM, LOW)"),
+    category: Optional[str] = Query(None, description="Filter by category"),
+    role: Optional[str] = Query(None, description="Filter by assigned stakeholder role"),
+    limit: int = Query(50, ge=1, le=100),
+    offset: int = Query(0, ge=0)
+):
+    """List operational review cases with risk scores and current investigation status."""
+    return case_service.list_cases(
+        status=status,
+        severity=severity,
+        category=category,
+        role=role,
+        limit=limit,
+        offset=offset
+    )
+
+@app.post("/api/cases", response_model=ReviewCaseResponse, status_code=status.HTTP_201_CREATED, tags=["Case Management"])
+def create_review_case(payload: ReviewCaseCreate):
+    """Initiate a formal administrative review case from a flagged anomaly or suspicious project."""
+    case = case_service.create_case(
+        entity_type=payload.entity_type,
+        entity_id=payload.entity_id,
+        title=payload.title,
+        severity=payload.severity,
+        risk_score=payload.risk_score,
+        category=payload.category,
+        assigned_to=payload.assigned_to or "Unassigned",
+        assigned_role=payload.assigned_role or "DISTRICT_AUTHORITY",
+        user=payload.user or "Authorized Official",
+        role=payload.role or "DISTRICT_AUTHORITY",
+        notes=payload.notes or ""
+    )
+    return case
+
+@app.get("/api/cases/audit-trail", response_model=List[AuditLogItem], tags=["Case Management"])
+def get_global_audit_trail(limit: int = Query(50, ge=1, le=100)):
+    """Retrieve immutable chronological audit trail log of all administrative reviews and actions."""
+    return case_service.get_global_audit_trail(limit=limit)
+
+@app.get("/api/cases/{case_id}", response_model=ReviewCaseResponse, tags=["Case Management"])
+def get_review_case(case_id: str):
+    """Retrieve case dossier including complete case-specific audit trail."""
+    case = case_service.get_case(case_id)
+    if not case:
+        raise HTTPException(status_code=404, detail=f"Case '{case_id}' not found")
+    return case
+
+@app.patch("/api/cases/{case_id}", response_model=ReviewCaseResponse, tags=["Case Management"])
+def update_case_status(case_id: str, payload: ReviewCaseUpdate):
+    """Update case status, assign officials, and append resolution notes with audit logging."""
+    updated = case_service.update_case_status(
+        case_id=case_id,
+        new_status=payload.new_status,
+        user=payload.user or "Authorized Official",
+        role=payload.role or "DISTRICT_AUTHORITY",
+        notes=payload.notes or "",
+        assigned_to=payload.assigned_to
+    )
+    if not updated:
+        raise HTTPException(status_code=404, detail=f"Case '{case_id}' not found")
+    return updated
+

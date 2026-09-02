@@ -17,11 +17,13 @@ import {
   MapPin,
   ShieldAlert,
   FileText,
+  Copy,
 } from 'lucide-react';
 import { useHouse } from '../../context/HouseContext';
 import { BrandLogo } from '../common/BrandLogo';
 import { GlobalSearchModal } from '../common/GlobalSearchModal';
 import { FollowTheMoneyModal } from '../common/FollowTheMoneyModal';
+import { RoleSwitcher } from './RoleSwitcher';
 
 export const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -63,6 +65,8 @@ export const Navbar: React.FC = () => {
     { to: '/works', label: '102,437 Physical Works', desc: 'Ground Infrastructure', icon: Layers },
     { to: '/transactions', label: '82,296 Vouchers', desc: 'Treasury Disbursements', icon: Receipt },
     { to: '/vendors', label: '22,377 Contractors', desc: 'Vendor Intelligence', icon: Building2 },
+    { to: '/duplicates', label: 'Duplicate Work Studio', desc: 'AI/ML Overlap & Similarity', icon: Copy },
+    { to: '/data-quality', label: 'Data Quality & Provenance', desc: 'Dataset Health & Proofs', icon: ShieldCheck },
   ];
 
   return (
@@ -148,6 +152,18 @@ export const Navbar: React.FC = () => {
               </NavLink>
 
               <NavLink
+                to="/cases"
+                className={({ isActive }) =>
+                  `hover:text-[#2563EB] transition flex items-center gap-1.5 ${isActive ? 'text-[#2563EB] font-bold' : ''}`
+                }
+              >
+                <span>Alerts &amp; Cases</span>
+                <span className="px-1.5 py-0.2 rounded-full bg-blue-50 text-[#2563EB] text-[10px] font-mono font-bold border border-blue-200">
+                  Live Hub
+                </span>
+              </NavLink>
+
+              <NavLink
                 to="/anomalies"
                 className={({ isActive }) =>
                   `hover:text-[#2563EB] transition flex items-center gap-1.5 ${isActive ? 'text-[#2563EB] font-bold' : ''}`
@@ -169,13 +185,16 @@ export const Navbar: React.FC = () => {
               </NavLink>
             </nav>
 
-            {/* Right: Search + Alluxi Style CTA Button */}
-            <div className="flex items-center gap-3">
+            {/* Right: Role Switcher + Search + Alluxi Style CTA Button */}
+            <div className="flex items-center gap-2.5">
+              {/* Stakeholder Role Switcher */}
+              <RoleSwitcher />
+
               {/* Quick Search Shortcut */}
               <button
                 type="button"
                 onClick={() => setSearchModalOpen(true)}
-                className="hidden sm:flex items-center gap-2 p-2.5 rounded-full hover:bg-slate-100 text-slate-500 transition"
+                className="hidden sm:flex items-center gap-2 p-2 rounded-full hover:bg-slate-100 text-slate-500 transition"
                 title="Search (⌘K)"
               >
                 <Search className="w-4 h-4 text-slate-600" />

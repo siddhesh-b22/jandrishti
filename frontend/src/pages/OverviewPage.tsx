@@ -28,6 +28,9 @@ import {
   Zap,
   BarChart3,
   Map as MapIcon,
+  AlertTriangle,
+  Clock,
+  Copy,
 } from 'lucide-react';
 import { api } from '../api/client';
 import { StatsResponse, StateSummary, WorkCategory } from '../api/types';
@@ -193,6 +196,89 @@ export const OverviewPage: React.FC = () => {
             </div>
             <div className="absolute left-0 top-0 h-full w-12 bg-gradient-to-r from-white to-transparent pointer-events-none" />
             <div className="absolute right-0 top-0 h-full w-12 bg-gradient-to-l from-white to-transparent pointer-events-none" />
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================= */}
+      {/* 01B. OPERATIONAL DECISION-SUPPORT & EARLY WARNING RADAR  */}
+      {/* ========================================================= */}
+      <section className="py-6 bg-slate-900 text-white border-y border-slate-800 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#2563EB]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-800 pb-3">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
+              <span className="text-xs font-mono font-extrabold uppercase tracking-widest text-blue-400">
+                Early Warning &amp; Operational Decision Support Radar
+              </span>
+            </div>
+            <div className="flex items-center gap-2 text-xs">
+              <Link
+                to="/cases"
+                className="px-3 py-1 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold transition flex items-center gap-1.5 shadow-xs"
+              >
+                <span>Alerts &amp; Case Hub</span>
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+              <Link
+                to="/duplicates"
+                className="px-3 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold transition flex items-center gap-1.5"
+              >
+                <Copy className="w-3 h-3 text-amber-400" />
+                <span>Duplicate Studio</span>
+              </Link>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            {/* Action Item 1 */}
+            <div className="p-4 rounded-2xl bg-slate-800/60 border border-slate-700/80 space-y-2 hover:border-blue-500/50 transition">
+              <div className="flex items-center justify-between">
+                <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 font-mono font-bold text-[10px]">
+                  CRITICAL · 21 Works
+                </span>
+                <span className="text-slate-400 font-mono text-[10px]">Action Required</span>
+              </div>
+              <h4 className="font-extrabold text-white text-sm">
+                Severe Physical vs. Financial Mismatch
+              </h4>
+              <p className="text-slate-300 font-light leading-relaxed">
+                21 projects exhibit $\ge 80\%$ fund utilization with $\le 30\%$ physical milestone delivery. Recommended: Freeze tranche releases pending field inspection.
+              </p>
+            </div>
+
+            {/* Action Item 2 */}
+            <div className="p-4 rounded-2xl bg-slate-800/60 border border-slate-700/80 space-y-2 hover:border-blue-500/50 transition">
+              <div className="flex items-center justify-between">
+                <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono font-bold text-[10px]">
+                  HIGH · 184 Schemes
+                </span>
+                <span className="text-slate-400 font-mono text-[10px]">Predictive Risk</span>
+              </div>
+              <h4 className="font-extrabold text-white text-sm">
+                Milestone Inactivity &amp; Delay Forecast
+              </h4>
+              <p className="text-slate-300 font-light leading-relaxed">
+                Works exceeding 2.0x category duration medians without recent progress updates. Recommended: Issue timeline show-cause notices to nodal IDAs.
+              </p>
+            </div>
+
+            {/* Action Item 3 */}
+            <div className="p-4 rounded-2xl bg-slate-800/60 border border-slate-700/80 space-y-2 hover:border-blue-500/50 transition">
+              <div className="flex items-center justify-between">
+                <span className="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-mono font-bold text-[10px]">
+                  REVIEW · 25 Clusters
+                </span>
+                <span className="text-slate-400 font-mono text-[10px]">AI De-duplication</span>
+              </div>
+              <h4 className="font-extrabold text-white text-sm">
+                Potential Duplicate &amp; Overlapping Works
+              </h4>
+              <p className="text-slate-300 font-light leading-relaxed">
+                Jaccard similarity $\ge 70\%$ across adjacent wards with matched budgets. Recommended: Review comparative dossiers before final asset handover.
+              </p>
+            </div>
           </div>
         </div>
       </section>

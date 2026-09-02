@@ -246,3 +246,174 @@ export interface WorkCategory {
   total_final_amount: number;
   completed_works_count: number;
 }
+
+// ====================================================================
+// Advanced Intelligence & AI/ML Analytics Types
+// ====================================================================
+
+export interface DuplicateWorkItem {
+  work_id: number;
+  title: string | null;
+  mp_name: string | null;
+  constituency: string | null;
+  state: string | null;
+  category: string | null;
+  amount: number;
+  lifecycle_status: string;
+  year: number | null;
+  ida: string | null;
+}
+
+export interface DuplicatePair {
+  pair_id: string;
+  similarity_score: number;
+  text_similarity: number;
+  cost_similarity: number;
+  status: string;
+  work_a: DuplicateWorkItem;
+  work_b: DuplicateWorkItem;
+  reasons: string[];
+  recommended_action: string;
+}
+
+export interface ProgressMismatch {
+  work_id: number;
+  mp_name: string | null;
+  constituency: string | null;
+  state: string | null;
+  category: string | null;
+  title: string | null;
+  lifecycle_status: string;
+  financial_progress_pct: number;
+  physical_progress_pct: number;
+  divergence_index: number;
+  recommended_amount: number;
+  expenditure_amount: number;
+  duration_days: number;
+  severity: 'CRITICAL' | 'HIGH' | 'MEDIUM';
+  reason: string;
+  recommended_action: string;
+}
+
+export interface DelayPrediction {
+  work_id: number;
+  mp_name: string | null;
+  constituency: string | null;
+  state: string | null;
+  category: string | null;
+  title: string | null;
+  lifecycle_status: string;
+  current_duration_days: number;
+  category_benchmark_days: number;
+  delay_probability: number;
+  schedule_deviation_ratio: number;
+  estimated_delay_days: number;
+  risk_level: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
+  confidence_pct: number;
+  contributing_factors: string[];
+  recommended_action: string;
+}
+
+export interface WorkIntelligenceProfile {
+  work_id: number;
+  title: string;
+  mp_name: string;
+  constituency: string;
+  state: string;
+  category: string;
+  lifecycle_status: string;
+  recommended_amount: number;
+  final_amount: number;
+  duration_days: number;
+  progress: {
+    physical_pct: number;
+    financial_pct: number;
+    divergence_index: number;
+    mismatch_detected: boolean;
+  };
+  delay_prediction: {
+    probability: number;
+    category_median_days: number;
+    schedule_deviation: number;
+    status: 'ON_TRACK' | 'SCHEDULE_RISK' | 'CRITICALLY_DELAYED';
+  };
+  compliance: {
+    score: number;
+    status: 'COMPLIANT' | 'ATTENTION_REQUIRED' | 'NON_COMPLIANT';
+    checks: Array<{
+      name: string;
+      status: 'PASS' | 'ATTENTION' | 'FAIL';
+      details: string;
+    }>;
+  };
+  risk_assessment: {
+    overall_score: number;
+    risk_level: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
+    factors: {
+      timeline_risk: number;
+      mismatch_risk: number;
+      cost_deviation_risk: number;
+      compliance_gap_risk: number;
+    };
+    explainable_reasons: string[];
+  };
+  anomalies: Anomaly[];
+}
+
+export interface DataQualityReport {
+  overall_health_score: number;
+  status: string;
+  metrics: {
+    total_works_audited: number;
+    total_vouchers_audited: number;
+    description_completeness_pct: number;
+    amount_integrity_pct: number;
+    timeline_chronology_pct: number;
+    vendor_entity_linkage_pct: number;
+    reconciliation_variance_inr: string;
+    double_entry_verified: boolean;
+  };
+  provenance: {
+    data_snapshot_date: string;
+    source_authorities: string[];
+    storage_architecture: string;
+  };
+}
+
+// ====================================================================
+// Case Management & Audit Trail Types
+// ====================================================================
+
+export interface AuditLog {
+  log_id: number;
+  case_id: string;
+  action: string;
+  performed_by: string;
+  role: string;
+  timestamp: string;
+  details?: string;
+  previous_state?: string;
+  new_state?: string;
+  case_title?: string;
+  severity?: string;
+  entity_type?: string;
+  entity_id?: string;
+}
+
+export interface ReviewCase {
+  case_id: string;
+  entity_type: string;
+  entity_id: string;
+  title: string;
+  severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
+  risk_score: number;
+  category: string;
+  status: 'NEW' | 'UNDER_REVIEW' | 'CLARIFICATION_REQUESTED' | 'DETAILED_REVIEW' | 'RESOLVED' | 'ESCALATED';
+  assigned_to: string;
+  assigned_role: string;
+  created_at: string;
+  updated_at: string;
+  resolution_notes?: string;
+  audit_trail?: AuditLog[];
+}
+

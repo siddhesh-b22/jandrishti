@@ -76,7 +76,7 @@ export const Navbar: React.FC = () => {
     <>
       <header className={`sticky top-0 z-50 bg-[#FAF8F5]/94 backdrop-blur-md transition-all duration-200 border-b ${scrolled ? 'border-[#E4E2DC] shadow-xs' : 'border-[#E4E2DC]/80'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-17">
+          <div className="flex items-center justify-between min-h-[4.75rem] py-2.5 sm:py-3.5">
             {/* Left: Brand Monogram & Name */}
             <Link to={homeRoute} className="flex items-center group">
               <BrandLogo size="md" />

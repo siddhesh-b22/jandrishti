@@ -43,7 +43,7 @@ export const StatesPage: React.FC = () => {
       const houseParam = selectedHouse === 'ALL' ? undefined : selectedHouse;
       const [statesData, statsData] = await Promise.all([
         api.getStates({ house: houseParam }),
-        api.getStats({ house: houseParam }),
+        api.getStats({ house: houseParam }).catch(() => null),
       ]);
       setStates(statesData);
       setStats(statsData);

@@ -61,11 +61,11 @@ def adapt_sql_for_postgres(sql: str) -> str:
         sql,
         flags=re.IGNORECASE,
     )
-    # Convert SQLite INSERT OR IGNORE INTO to Postgres INSERT INTO ... ON CONFLICT DO NOTHING
-    if re.search(r"\bINSERT\s+OR\s+IGNORE\s+INTO\b", sql, flags=re.IGNORECASE):
-        sql = re.sub(r"\bINSERT\s+OR\s+IGNORE\s+INTO\b", "INSERT INTO", sql, flags=re.IGNORECASE)
-        if "ON CONFLICT" not in sql.upper():
-            sql = sql.rstrip("; \t\n") + " ON CONFLICT DO NOTHING"
+    # Ensure subqueries in FROM clause have an alias for PostgreSQL compliance
+    sql = re.sub(r"\)\s+WHERE\b", ") _sub_alias WHERE", sql, flags=re.IGNORECASE)
+    sql = re.sub(r"\)\s+GROUP\s+BY\b", ") _sub_alias GROUP BY", sql, flags=re.IGNORECASE)
+    sql = re.sub(r"\)\s+ORDER\s+BY\b", ") _sub_alias ORDER BY", sql, flags=re.IGNORECASE)
+
     return _replace_qmark(sql)
 
 

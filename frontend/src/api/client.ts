@@ -118,7 +118,22 @@ function getAuthHeaders(): Record<string, string> {
   }
 }
 
+const API_RESPONSE_CACHE = new Map<string, { timestamp: number; data: any }>();
+const CACHE_LIFETIME_MS = 60 * 1000; // 60s memory cache for GET requests
+
 async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
+  const isGet = !options?.method || options.method.toUpperCase() === 'GET';
+  const role = typeof localStorage !== 'undefined' ? (localStorage.getItem('jandrishti_user_role') || 'CITIZEN') : 'CITIZEN';
+  const cacheKey = `${role}:${url}`;
+
+  // Serve immediately from memory cache if available and fresh (<1ms loading time)
+  if (isGet) {
+    const cached = API_RESPONSE_CACHE.get(cacheKey);
+    if (cached && Date.now() - cached.timestamp < CACHE_LIFETIME_MS) {
+      return cached.data as T;
+    }
+  }
+
   const authHeaders = getAuthHeaders();
   const mergedHeaders: Record<string, string> = {
     ...authHeaders,
@@ -142,7 +157,16 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
   if (contentType && !contentType.includes('application/json')) {
     throw new Error(`API returned non-JSON response (${contentType.split(';')[0]}). The service may be initializing.`);
   }
-  return response.json() as Promise<T>;
+  const data = await response.json() as T;
+
+  // Cache successful GET responses; invalidate on mutations
+  if (isGet) {
+    API_RESPONSE_CACHE.set(cacheKey, { timestamp: Date.now(), data });
+  } else {
+    API_RESPONSE_CACHE.clear();
+  }
+
+  return data;
 }
 
 function buildQuery(params: Record<string, any>): string {

@@ -58,13 +58,22 @@ export const CasesAlertsPage: React.FC = () => {
       setLoading(true);
       setError(null);
       const [anomRes, caseRes, auditRes] = await Promise.all([
-        api.getAnomalies({ severity: severityFilter || undefined, limit: 30 }),
-        api.getCases({ status: statusFilter || undefined, limit: 50 }),
-        api.getAuditTrail(40),
+        api.getAnomalies({ severity: severityFilter || undefined, limit: 30 }).catch((err) => {
+          console.warn('Anomalies feed error:', err);
+          return { total: 0, limit: 30, offset: 0, items: [] };
+        }),
+        api.getCases({ status: statusFilter || undefined, limit: 50 }).catch((err) => {
+          console.warn('Cases workflow error:', err);
+          return { total: 0, limit: 50, offset: 0, items: [] };
+        }),
+        api.getAuditTrail(40).catch((err) => {
+          console.warn('Audit trail error:', err);
+          return [];
+        }),
       ]);
-      setAlerts(anomRes.items);
-      setCases(caseRes.items);
-      setAuditLogs(auditRes);
+      setAlerts(anomRes.items || []);
+      setCases(caseRes.items || []);
+      setAuditLogs(auditRes || []);
     } catch (err: any) {
       setError(err.message || 'Failed to load governance alerts and cases');
     } finally {

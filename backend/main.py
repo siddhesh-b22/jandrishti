@@ -126,6 +126,10 @@ MAX_MUTATIONS_PER_MINUTE = int(os.environ.get("RATE_LIMIT_MUTATION_PER_MINUTE", 
 
 @app.middleware("http")
 async def security_and_rate_limit_middleware(request: Request, call_next):
+    # Completely exempt health checks and options from rate limits
+    if request.url.path in ["/health", "/api/health"] or request.method == "OPTIONS":
+        return await call_next(request)
+
     client_ip = request.client.host if request.client else "127.0.0.1"
     now = time.time()
 
@@ -201,7 +205,11 @@ def auth_me(current_user: AuthenticatedUser = Depends(verify_bearer_token)):
 # 1. HEALTH & MACRO STATISTICS
 # ---------------------------------------------------------
 
-@app.get("/health", response_model=HealthResponse, tags=["System"])
+@app.get("/health", tags=["System"])
+def get_liveness():
+    """Ultra-fast instant health check for Render/cloud load balancers."""
+    return {"status": "healthy", "version": API_VERSION}
+
 @app.get("/api/health", response_model=HealthResponse, tags=["System"])
 def get_health(conn: sqlite3.Connection = Depends(get_db)):
     """Health check endpoint confirming API availability and read-only database connectivity."""

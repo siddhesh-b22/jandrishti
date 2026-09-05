@@ -16,9 +16,10 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application backend package and database
+# Copy application backend package and migrations
 COPY backend/ ./backend/
 COPY database/ ./database/
+COPY migrations/ ./migrations/
 
 # Expose production port
 EXPOSE 8000

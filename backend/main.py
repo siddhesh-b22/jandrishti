@@ -1267,7 +1267,7 @@ def get_state_summaries(house: Optional[str] = Query(None, description="Optional
             SELECT state, COUNT(*) as anomalies_count FROM (
                 SELECT m2.state_normalized as state FROM anomalies a2 JOIN mps m2 ON a2.entity_id = m2.internal_mp_id WHERE a2.entity_type = 'MP'
                 UNION ALL
-                SELECT w2.state_normalized as state FROM anomalies a2 JOIN works w2 ON a2.entity_id = w2.work_id WHERE a2.entity_type = 'WORK'
+                SELECT w2.state_normalized as state FROM anomalies a2 JOIN works w2 ON CAST(a2.entity_id AS TEXT) = CAST(w2.work_id AS TEXT) WHERE a2.entity_type = 'WORK'
                 UNION ALL
                 SELECT t2.state_normalized as state FROM anomalies a2 JOIN transactions t2 ON a2.entity_id = t2.internal_transaction_id WHERE a2.entity_type = 'TRANSACTION'
                 UNION ALL
@@ -1276,10 +1276,27 @@ def get_state_summaries(house: Optional[str] = Query(None, description="Optional
         ) a ON m.state_normalized = a.state
         ORDER BY m.total_allocated_amount DESC;
     """
-    cursor.execute(query, state_params)
-    results = [dict(r) for r in cursor.fetchall()]
-    _MACRO_CACHE[cache_key] = results
-    _MACRO_CACHE_EXPIRY[cache_key] = now + 60.0
+    results: List[Dict[str, Any]] = []
+    try:
+        cursor.execute(query, state_params)
+        results = [dict(r) for r in cursor.fetchall()]
+    except Exception as exc:
+        logger.warning(f"get_state_summaries: primary database query failed ({exc}), falling back to SQLite", exc_info=True)
+        try:
+            import os, sqlite3
+            db_path = os.path.join(os.path.dirname(__file__), "..", "database", "mplads.db")
+            if os.path.exists(db_path):
+                with sqlite3.connect(db_path) as s_conn:
+                    s_conn.row_factory = sqlite3.Row
+                    s_cur = s_conn.cursor()
+                    s_cur.execute(query, state_params)
+                    results = [dict(r) for r in s_cur.fetchall()]
+        except Exception as fb_err:
+            logger.error(f"get_state_summaries fallback also failed: {fb_err}")
+
+    if results:
+        _MACRO_CACHE[cache_key] = results
+        _MACRO_CACHE_EXPIRY[cache_key] = now + 60.0
     return results
 
 
@@ -1289,17 +1306,40 @@ def get_districts(
     conn: sqlite3.Connection = Depends(get_db)
 ):
     """Retrieve distinct LGD districts for cascading filters."""
-    cursor = conn.cursor()
-    if state and state.strip():
-        cursor.execute(
-            "SELECT district_name, state_name, lgd_district_code FROM lgd_districts_master WHERE state_name = ? ORDER BY district_name ASC;",
-            (state.strip().upper(),)
-        )
-    else:
-        cursor.execute(
-            "SELECT district_name, state_name, lgd_district_code FROM lgd_districts_master ORDER BY state_name, district_name ASC;"
-        )
-    return [dict(r) for r in cursor.fetchall()]
+    try:
+        cursor = conn.cursor()
+        if state and state.strip():
+            cursor.execute(
+                "SELECT district_name, state_name, lgd_district_code FROM lgd_districts_master WHERE state_name = ? ORDER BY district_name ASC;",
+                (state.strip().upper(),)
+            )
+        else:
+            cursor.execute(
+                "SELECT district_name, state_name, lgd_district_code FROM lgd_districts_master ORDER BY state_name, district_name ASC;"
+            )
+        return [dict(r) for r in cursor.fetchall()]
+    except Exception as exc:
+        logger.warning(f"get_districts: primary query failed ({exc}), falling back to SQLite", exc_info=True)
+        try:
+            import os, sqlite3
+            db_path = os.path.join(os.path.dirname(__file__), "..", "database", "mplads.db")
+            if os.path.exists(db_path):
+                with sqlite3.connect(db_path) as s_conn:
+                    s_conn.row_factory = sqlite3.Row
+                    s_cur = s_conn.cursor()
+                    if state and state.strip():
+                        s_cur.execute(
+                            "SELECT district_name, state_name, lgd_district_code FROM lgd_districts_master WHERE state_name = ? ORDER BY district_name ASC;",
+                            (state.strip().upper(),)
+                        )
+                    else:
+                        s_cur.execute(
+                            "SELECT district_name, state_name, lgd_district_code FROM lgd_districts_master ORDER BY state_name, district_name ASC;"
+                        )
+                    return [dict(r) for r in s_cur.fetchall()]
+        except Exception:
+            pass
+        return []
 
 @app.get("/api/constituencies", response_model=List[ConstituencyItem], tags=["Aggregations"])
 def get_constituency_summaries(

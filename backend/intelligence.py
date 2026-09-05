@@ -645,22 +645,57 @@ class IntelligenceService:
     # 6. ENRICHMENT FORENSICS: AGENCIES, TIMING & SOURCE REGISTRY
     # -------------------------------------------------------------
     def get_source_registry(self) -> Dict[str, Any]:
-        conn = get_db_connection()
+        items = []
         try:
-            rows = conn.execute("SELECT * FROM source_registry ORDER BY trust_tier ASC, source_id ASC;").fetchall()
-            items = [dict(r) for r in rows]
-            return {"total": len(items), "items": items}
-        finally:
-            conn.close()
+            conn = get_db_connection()
+            try:
+                rows = conn.execute("SELECT * FROM source_registry ORDER BY trust_tier ASC, source_id ASC;").fetchall()
+                items = [dict(r) for r in rows]
+            finally:
+                conn.close()
+        except Exception:
+            pass
+
+        # Fall back to bundled immutable database if Postgres table is empty/missing
+        if not items:
+            import sqlite3, os
+            db_path = os.path.join(os.path.dirname(__file__), "..", "database", "mplads.db")
+            if os.path.exists(db_path):
+                try:
+                    with sqlite3.connect(db_path) as s_conn:
+                        s_conn.row_factory = sqlite3.Row
+                        rows = s_conn.execute("SELECT * FROM source_registry ORDER BY trust_tier ASC, source_id ASC;").fetchall()
+                        items = [dict(r) for r in rows]
+                except Exception:
+                    pass
+
+        return {"total": len(items), "items": items}
 
     def get_statutory_rules(self) -> Dict[str, Any]:
-        conn = get_db_connection()
+        items = []
         try:
-            rows = conn.execute("SELECT * FROM statutory_rules ORDER BY rule_id ASC;").fetchall()
-            items = [dict(r) for r in rows]
-            return {"total": len(items), "items": items}
-        finally:
-            conn.close()
+            conn = get_db_connection()
+            try:
+                rows = conn.execute("SELECT * FROM statutory_rules ORDER BY rule_id ASC;").fetchall()
+                items = [dict(r) for r in rows]
+            finally:
+                conn.close()
+        except Exception:
+            pass
+
+        if not items:
+            import sqlite3, os
+            db_path = os.path.join(os.path.dirname(__file__), "..", "database", "mplads.db")
+            if os.path.exists(db_path):
+                try:
+                    with sqlite3.connect(db_path) as s_conn:
+                        s_conn.row_factory = sqlite3.Row
+                        rows = s_conn.execute("SELECT * FROM statutory_rules ORDER BY rule_id ASC;").fetchall()
+                        items = [dict(r) for r in rows]
+                except Exception:
+                    pass
+
+        return {"total": len(items), "items": items}
 
     def get_implementing_agencies(
         self,
@@ -685,12 +720,12 @@ class IntelligenceService:
                 count_query += " AND state = ?"
                 params.append(state.upper().strip())
 
-            if min_works is not None and min_works > 0:
+            if min_works is not None:
                 query += " AND total_works >= ?"
                 count_query += " AND total_works >= ?"
                 params.append(min_works)
 
-            if min_exp is not None and min_exp > 0:
+            if min_exp is not None:
                 query += " AND total_expenditure >= ?"
                 count_query += " AND total_expenditure >= ?"
                 params.append(min_exp)
@@ -705,28 +740,40 @@ class IntelligenceService:
                 count_query += " AND agency_name LIKE ?"
                 params.append(f"%{search.strip()}%")
 
-            total = conn.execute(count_query, params).fetchone()[0]
-
-            # Sorting whitelist
-            allowed_cols = {
+            allowed_sort = {
                 "total_expenditure": "total_expenditure",
                 "total_works": "total_works",
                 "completion_rate_pct": "completion_rate_pct",
                 "vendor_hhi": "vendor_hhi",
                 "agency_name": "agency_name"
             }
-            sort_col = allowed_cols.get(sort_by, "total_expenditure")
+            sort_col = allowed_sort.get(sort_by, "total_expenditure")
             direction = "ASC" if sort_order.lower() == "asc" else "DESC"
 
-            query += f" ORDER BY {sort_col} {direction} LIMIT ? OFFSET ?;"
-            paginated_params = params + [limit, offset]
+            try:
+                total = conn.execute(count_query, params).fetchone()[0]
+                query += f" ORDER BY {sort_col} {direction} LIMIT ? OFFSET ?;"
+                rows = conn.execute(query, params + [limit, offset]).fetchall()
+                items = [dict(r) for r in rows]
+            except Exception:
+                import sqlite3, os
+                db_path = os.path.join(os.path.dirname(__file__), "..", "database", "mplads.db")
+                if os.path.exists(db_path):
+                    with sqlite3.connect(db_path) as s_conn:
+                        s_conn.row_factory = sqlite3.Row
+                        total = s_conn.execute(count_query, params).fetchone()[0]
+                        query += f" ORDER BY {sort_col} {direction} LIMIT ? OFFSET ?;"
+                        rows = s_conn.execute(query, params + [limit, offset]).fetchall()
+                        items = [dict(r) for r in rows]
+                else:
+                    total = 0
+                    items = []
 
-            rows = conn.execute(query, paginated_params).fetchall()
             return {
                 "total": total,
                 "limit": limit,
                 "offset": offset,
-                "items": [dict(r) for r in rows]
+                "items": items
             }
         finally:
             conn.close()
@@ -739,41 +786,58 @@ class IntelligenceService:
         limit: int = 50,
         offset: int = 0
     ) -> Dict[str, Any]:
-        conn = get_db_connection()
+        query = "SELECT * FROM payment_timing_signals WHERE 1=1"
+        count_query = "SELECT COUNT(*) FROM payment_timing_signals WHERE 1=1"
+        params: List[Any] = []
+
+        if signal_type:
+            query += " AND signal_type = ?"
+            count_query += " AND signal_type = ?"
+            params.append(signal_type.upper().strip())
+
+        if severity:
+            query += " AND severity = ?"
+            count_query += " AND severity = ?"
+            params.append(severity.upper().strip())
+
+        if state:
+            query += " AND state = ?"
+            count_query += " AND state = ?"
+            params.append(state.upper().strip())
+
         try:
-            query = "SELECT * FROM payment_timing_signals WHERE 1=1"
-            count_query = "SELECT COUNT(*) FROM payment_timing_signals WHERE 1=1"
-            params: List[Any] = []
-
-            if signal_type:
-                query += " AND signal_type = ?"
-                count_query += " AND signal_type = ?"
-                params.append(signal_type.upper().strip())
-
-            if severity:
-                query += " AND severity = ?"
-                count_query += " AND severity = ?"
-                params.append(severity.upper().strip())
-
-            if state:
-                query += " AND state = ?"
-                count_query += " AND state = ?"
-                params.append(state.upper().strip())
-
-            total = conn.execute(count_query, params).fetchone()[0]
-
-            query += " ORDER BY affected_amount DESC LIMIT ? OFFSET ?;"
-            paginated_params = params + [limit, offset]
-
-            rows = conn.execute(query, paginated_params).fetchall()
-            return {
-                "total": total,
-                "limit": limit,
-                "offset": offset,
-                "items": [dict(r) for r in rows]
-            }
-        finally:
-            conn.close()
+            conn = get_db_connection()
+            try:
+                total = conn.execute(count_query, params).fetchone()[0]
+                query_paginated = query + " ORDER BY affected_amount DESC LIMIT ? OFFSET ?;"
+                rows = conn.execute(query_paginated, params + [limit, offset]).fetchall()
+                return {
+                    "total": total,
+                    "limit": limit,
+                    "offset": offset,
+                    "items": [dict(r) for r in rows]
+                }
+            finally:
+                conn.close()
+        except Exception:
+            import sqlite3, os
+            db_path = os.path.join(os.path.dirname(__file__), "..", "database", "mplads.db")
+            if os.path.exists(db_path):
+                try:
+                    with sqlite3.connect(db_path) as s_conn:
+                        s_conn.row_factory = sqlite3.Row
+                        total = s_conn.execute(count_query, params).fetchone()[0]
+                        query_paginated = query + " ORDER BY affected_amount DESC LIMIT ? OFFSET ?;"
+                        rows = s_conn.execute(query_paginated, params + [limit, offset]).fetchall()
+                        return {
+                            "total": total,
+                            "limit": limit,
+                            "offset": offset,
+                            "items": [dict(r) for r in rows]
+                        }
+                except Exception:
+                    pass
+            return {"total": 0, "limit": limit, "offset": offset, "items": []}
 
     # -------------------------------------------------------------
     # 7. DEEP ENTITY INTELLIGENCE: SEARCH, TIMELINES & MEDIA

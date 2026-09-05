@@ -8,15 +8,25 @@ Fulfills MPLADS Specification Req 14 & Req 15:
 - Time-Series Trend Analysis (Expenditure, Completion, Delays, Risk Levels, Alerts)
 """
 
+import os
 import sqlite3
+import logging
 from typing import Dict, Any, List, Optional
 from backend.database import get_db_connection
 from backend.alerts_service import alerts_service
 
-class DashboardService:
-    def get_national_dashboard(self) -> Dict[str, Any]:
-        conn = get_db_connection()
+logger = logging.getLogger("jandrishti.dashboards")
 
+def _get_sqlite_fallback_conn():
+    db_path = os.path.join(os.path.dirname(__file__), "..", "database", "mplads.db")
+    if os.path.exists(db_path):
+        conn = sqlite3.connect(db_path, timeout=30.0)
+        conn.row_factory = sqlite3.Row
+        return conn
+    return None
+
+class DashboardService:
+    def _execute_national(self, conn) -> Dict[str, Any]:
         # 1. Macro KPIs
         total_works = conn.execute("SELECT COUNT(*) FROM works").fetchone()[0]
         comp_works = conn.execute("SELECT COUNT(*) FROM works WHERE lifecycle_status = 'COMPLETED'").fetchone()[0]
@@ -26,7 +36,7 @@ class DashboardService:
             SELECT SUM(allocated_amount) as total_sanctioned,
                    SUM(total_expenditure) as total_expenditure,
                    SUM(unspent_amount) as total_unspent,
-                   ROUND((SUM(total_expenditure) / SUM(allocated_amount)) * 100.0, 2) as national_utilization
+                   ROUND(CAST((SUM(total_expenditure) / NULLIF(SUM(allocated_amount), 0)) * 100.0 AS NUMERIC), 2) as national_utilization
             FROM mps
         """).fetchone()
 
@@ -37,13 +47,13 @@ class DashboardService:
             SELECT COUNT(DISTINCT entity_id) FROM anomalies WHERE entity_type = 'WORK' AND severity IN ('CRITICAL', 'HIGH')
         """).fetchone()[0]
 
-        # 3. State-by-State Comparison (Top 10)
+        # 3. State-by-State Comparison (Top 12)
         state_rows = conn.execute("""
             SELECT state_normalized as state,
                    COUNT(DISTINCT internal_mp_id) as total_mps,
                    SUM(allocated_amount) as allocated_amount,
                    SUM(total_expenditure) as total_expenditure,
-                   ROUND((SUM(total_expenditure) / SUM(allocated_amount)) * 100.0, 1) as utilization_pct,
+                   ROUND(CAST((SUM(total_expenditure) / NULLIF(SUM(allocated_amount), 0)) * 100.0 AS NUMERIC), 1) as utilization_pct,
                    SUM(completed_works_count) as completed_works,
                    SUM(recommended_works_count) as total_works
             FROM mps
@@ -72,7 +82,7 @@ class DashboardService:
             SELECT category_normalized as category,
                    COUNT(*) as works_count,
                    SUM(COALESCE(final_amount, recommended_amount, 0)) as total_cost,
-                   ROUND(AVG(duration_days), 0) as avg_duration_days
+                   ROUND(CAST(AVG(duration_days) AS NUMERIC), 0) as avg_duration_days
             FROM works
             WHERE category_normalized IS NOT NULL
             GROUP BY category_normalized
@@ -90,8 +100,6 @@ class DashboardService:
             ORDER BY month_period ASC
             LIMIT 24
         """).fetchall()
-
-        conn.close()
 
         return {
             "scope": "NATIONAL_MOSPI",
@@ -115,8 +123,24 @@ class DashboardService:
             "alert_summary": alert_summary
         }
 
-    def get_state_dashboard(self, state_name: str) -> Dict[str, Any]:
-        conn = get_db_connection()
+    def get_national_dashboard(self) -> Dict[str, Any]:
+        try:
+            conn = get_db_connection()
+            try:
+                return self._execute_national(conn)
+            finally:
+                conn.close()
+        except Exception as exc:
+            logger.warning("Primary DB failed for national dashboard (%s), using SQLite fallback", exc)
+            fallback = _get_sqlite_fallback_conn()
+            if fallback:
+                try:
+                    return self._execute_national(fallback)
+                finally:
+                    fallback.close()
+            raise exc
+
+    def _execute_state(self, conn, state_name: str) -> Dict[str, Any]:
         state_clean = state_name.strip().upper()
 
         # 1. State Macro Totals
@@ -125,7 +149,7 @@ class DashboardService:
                    SUM(allocated_amount) as allocated_amount,
                    SUM(total_expenditure) as total_expenditure,
                    SUM(unspent_amount) as unspent_amount,
-                   ROUND((SUM(total_expenditure) / SUM(allocated_amount)) * 100.0, 2) as utilization_pct,
+                   ROUND(CAST((SUM(total_expenditure) / NULLIF(SUM(allocated_amount), 0)) * 100.0 AS NUMERIC), 2) as utilization_pct,
                    SUM(recommended_works_count) as total_works,
                    SUM(completed_works_count) as completed_works
             FROM mps
@@ -140,7 +164,7 @@ class DashboardService:
                        SUM(allocated_amount) as allocated_amount,
                        SUM(total_expenditure) as total_expenditure,
                        SUM(unspent_amount) as unspent_amount,
-                       ROUND((SUM(total_expenditure) / SUM(allocated_amount)) * 100.0, 2) as utilization_pct,
+                       ROUND(CAST((SUM(total_expenditure) / NULLIF(SUM(allocated_amount), 0)) * 100.0 AS NUMERIC), 2) as utilization_pct,
                        SUM(recommended_works_count) as total_works,
                        SUM(completed_works_count) as completed_works
                 FROM mps
@@ -157,7 +181,7 @@ class DashboardService:
                    utilization_pct,
                    completed_works_count,
                    recommended_works_count,
-                   ROUND((CAST(completed_works_count AS REAL) / NULLIF(recommended_works_count, 0)) * 100.0, 1) as completion_rate_pct
+                   ROUND(CAST((CAST(completed_works_count AS REAL) / NULLIF(recommended_works_count, 0)) * 100.0 AS NUMERIC), 1) as completion_rate_pct
             FROM mps
             WHERE state_normalized = ?
             ORDER BY total_expenditure DESC
@@ -181,7 +205,7 @@ class DashboardService:
             SELECT ida_normalized as agency_name,
                    COUNT(*) as works_count,
                    SUM(CASE WHEN lifecycle_status = 'COMPLETED' THEN 1 ELSE 0 END) as completed_count,
-                   ROUND(AVG(duration_days), 0) as avg_duration,
+                   ROUND(CAST(AVG(duration_days) AS NUMERIC), 0) as avg_duration,
                    SUM(COALESCE(final_amount, recommended_amount, 0)) as total_funds
             FROM works
             WHERE state_normalized = ? AND ida_normalized IS NOT NULL
@@ -198,8 +222,6 @@ class DashboardService:
 
         # 6. State Alerts
         state_alerts = alerts_service.list_alerts(state=state_clean, limit=15)
-
-        conn.close()
 
         return {
             "scope": "STATE_NODAL_AUTHORITY",
@@ -221,6 +243,23 @@ class DashboardService:
             "alerts": state_alerts["items"],
             "alert_total": state_alerts["total"]
         }
+
+    def get_state_dashboard(self, state_name: str) -> Dict[str, Any]:
+        try:
+            conn = get_db_connection()
+            try:
+                return self._execute_state(conn, state_name)
+            finally:
+                conn.close()
+        except Exception as exc:
+            logger.warning("Primary DB failed for state dashboard (%s), using SQLite fallback", exc)
+            fallback = _get_sqlite_fallback_conn()
+            if fallback:
+                try:
+                    return self._execute_state(fallback, state_name)
+                finally:
+                    fallback.close()
+            raise exc
 
     def get_district_dashboard(self, district_name: str, state_name: Optional[str] = None) -> Dict[str, Any]:
         conn = get_db_connection()

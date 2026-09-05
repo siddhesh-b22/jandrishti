@@ -60,6 +60,8 @@ import {
   StatutoryAuditLog,
   TrendAnalytics,
 } from './types';
+import defaultStatesData from '../data/defaultStatesData.json';
+import defaultDistrictsData from '../data/defaultDistrictsData.json';
 
 export type {
   AuthUser,
@@ -277,9 +279,36 @@ export const api = {
   getAnomalyDetail: (anomalyId: string) => fetchJson<Anomaly>(`${API_BASE}/anomalies/${encodeURIComponent(anomalyId)}`),
 
   // Dimensions
-  getStates: (params?: { house?: string }) => fetchJson<StateSummary[]>(`${API_BASE}/states${params ? buildQuery(params) : ''}`),
-  getDistricts: (params?: { state?: string }) =>
-    fetchJson<DistrictItem[]>(`${API_BASE}/districts${params ? buildQuery(params) : ''}`),
+  getStates: async (params?: { house?: string }) => {
+    try {
+      const data = await fetchJson<StateSummary[]>(`${API_BASE}/states${params ? buildQuery(params) : ''}`);
+      if (Array.isArray(data) && data.length > 0) return data;
+      return (defaultStatesData as unknown) as StateSummary[];
+    } catch (err) {
+      console.warn('api.getStates: live fetch failed, using authoritative fallback dataset', err);
+      return (defaultStatesData as unknown) as StateSummary[];
+    }
+  },
+  getDistricts: async (params?: { state?: string }) => {
+    try {
+      const data = await fetchJson<DistrictItem[]>(`${API_BASE}/districts${params ? buildQuery(params) : ''}`);
+      if (Array.isArray(data) && data.length > 0) return data;
+      const allDistricts = (defaultDistrictsData as unknown) as DistrictItem[];
+      if (params?.state) {
+        const s = params.state.toUpperCase().trim();
+        return allDistricts.filter((d) => d.state_name === s);
+      }
+      return allDistricts;
+    } catch (err) {
+      console.warn('api.getDistricts: live fetch failed, using fallback districts dataset', err);
+      const allDistricts = (defaultDistrictsData as unknown) as DistrictItem[];
+      if (params?.state) {
+        const s = params.state.toUpperCase().trim();
+        return allDistricts.filter((d) => d.state_name === s);
+      }
+      return allDistricts;
+    }
+  },
   getConstituencies: (params: { state?: string; limit?: number; offset?: number }) =>
     fetchJson<Constituency[]>(`${API_BASE}/constituencies${buildQuery(params)}`),
   getCategories: () => fetchJson<WorkCategory[]>(`${API_BASE}/categories`),

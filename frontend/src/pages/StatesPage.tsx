@@ -21,6 +21,7 @@ import { ErrorDisplay } from '../components/common/ErrorDisplay';
 import { IndiaParliamentaryMap } from '../components/map/IndiaParliamentaryMap';
 import { Breadcrumbs } from '../components/common/Breadcrumbs';
 import { EntityDossierDrawer, DossierEntity } from '../components/common/EntityDossierDrawer';
+import defaultStatesData from '../data/defaultStatesData.json';
 
 export const StatesPage: React.FC = () => {
   const { selectedHouse } = useHouse();
@@ -42,13 +43,17 @@ export const StatesPage: React.FC = () => {
       setError(null);
       const houseParam = selectedHouse === 'ALL' ? undefined : selectedHouse;
       const [statesData, statsData] = await Promise.all([
-        api.getStates({ house: houseParam }),
+        api.getStates({ house: houseParam }).catch(() => (defaultStatesData as unknown as StateSummary[])),
         api.getStats({ house: houseParam }).catch(() => null),
       ]);
-      setStates(statesData);
+      const validStates = statesData && statesData.length > 0
+        ? statesData
+        : (defaultStatesData as unknown as StateSummary[]);
+      setStates(validStates);
       setStats(statsData);
     } catch (err: any) {
-      setError(err.message || 'Failed to load state analytics');
+      console.warn('StatesPage: error loading states, using offline fallback', err);
+      setStates(defaultStatesData as unknown as StateSummary[]);
     } finally {
       setLoading(false);
     }

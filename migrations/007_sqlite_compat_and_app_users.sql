@@ -515,3 +515,27 @@ SELECT
     r.legal_text AS description,
     'NATIONAL'::text AS enforcement_level
 FROM gov.statutory_rules r;
+
+-- SPLIT
+CREATE OR REPLACE VIEW compat.lgd_districts_master AS
+SELECT
+    COALESCE('LGD_' || d.state_id::text || '_' || d.district_id::text, d.district_id::text) AS lgd_district_code,
+    d.state_id::text AS lgd_state_code,
+    UPPER(s.name_en) AS state_name,
+    UPPER(d.district_name) AS district_name,
+    d.district_id::text AS census2011_code,
+    d.created_at::text AS created_at
+FROM public.districts d
+JOIN public.states s ON s.state_id = d.state_id;
+
+-- SPLIT
+CREATE OR REPLACE FUNCTION compat.round(val double precision, places integer)
+RETURNS numeric AS $$
+    SELECT pg_catalog.round(val::numeric, places);
+$$ LANGUAGE sql IMMUTABLE;
+
+-- SPLIT
+CREATE OR REPLACE FUNCTION compat.round(val real, places integer)
+RETURNS numeric AS $$
+    SELECT pg_catalog.round(val::numeric, places);
+$$ LANGUAGE sql IMMUTABLE;

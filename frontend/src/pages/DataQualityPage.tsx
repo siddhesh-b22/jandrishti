@@ -68,9 +68,22 @@ export const DataQualityPage: React.FC = () => {
         api.getReconciliationRecords().catch(() => ({ items: [], total: 0, matched_count: 0, review_count: 0, gap_count: 0 })),
       ]);
       setReport(dqData);
-      setSources(srcData.items || []);
+      const initialSources: SourceRegistryItem[] = (srcData.items && srcData.items.length > 0)
+        ? srcData.items
+        : (discSrc.sources || []).map((d: any) => ({
+            source_id: d.source_id,
+            source_name: d.source_name,
+            organization: d.organization,
+            trust_tier: d.trust_tier,
+            status: d.health_status === 'HEALTHY' ? 'INTEGRATED' : 'DISCOVERED',
+            url: d.api_endpoint_or_portal,
+            data_type: d.format_support || 'API / JSON',
+            update_frequency: 'Continuous',
+            license_or_access_note: `${d.description} (Access: ${d.access_type})`,
+          }));
+      setSources(initialSources);
       setTimingSignals(timingData.items || []);
-      setTimingTotal(timingData.total || 0);
+      setTimingTotal(timingData.total || (timingData.items ? timingData.items.length : 0));
       setDiscoveredSources(discSrc.sources || []);
       setSnapshots(snapData.items || []);
       setChangeEvents(chgData.items || []);

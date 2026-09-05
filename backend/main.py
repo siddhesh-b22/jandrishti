@@ -203,6 +203,29 @@ def auth_me(current_user: AuthenticatedUser = Depends(verify_bearer_token)):
 # 1. HEALTH & MACRO STATISTICS
 # ---------------------------------------------------------
 
+@app.get("/", tags=["System"])
+def get_root():
+    """Root landing endpoint providing API status and quick links."""
+    return {
+        "platform": "JanDrishti — AI-Powered MPLADS Monitoring & Anti-Corruption Intelligence Platform",
+        "version": API_VERSION,
+        "status": "healthy",
+        "docs_url": "/docs",
+        "health_check": "/health",
+        "api_health": "/api/health",
+        "db_health": "/api/health/db"
+    }
+
+@app.get("/api", tags=["System"])
+def get_api_root():
+    """API namespace root endpoint."""
+    return {
+        "platform": "JanDrishti API",
+        "version": API_VERSION,
+        "status": "healthy",
+        "docs_url": "/docs"
+    }
+
 @app.get("/health", tags=["System"])
 def get_liveness():
     """Ultra-fast instant health check for Render/cloud load balancers."""

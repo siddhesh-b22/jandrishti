@@ -201,6 +201,7 @@ def auth_me(current_user: AuthenticatedUser = Depends(verify_bearer_token)):
 # 1. HEALTH & MACRO STATISTICS
 # ---------------------------------------------------------
 
+@app.get("/health", response_model=HealthResponse, tags=["System"])
 @app.get("/api/health", response_model=HealthResponse, tags=["System"])
 def get_health(conn: sqlite3.Connection = Depends(get_db)):
     """Health check endpoint confirming API availability and read-only database connectivity."""

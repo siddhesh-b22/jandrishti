@@ -160,7 +160,10 @@ def _connect_postgres():
 def get_db_connection():
     """Uses Supabase PostgreSQL when DATABASE_URL is set; otherwise SQLite."""
     if USING_POSTGRES:
-        return _connect_postgres()
+        try:
+            return _connect_postgres()
+        except Exception as exc:
+            logger.error("Supabase PostgreSQL connection failed; falling back to local SQLite: %s", exc)
 
     db_path_abs = os.path.abspath(DATABASE_PATH)
     conn = sqlite3.connect(
@@ -178,7 +181,10 @@ def get_db_connection():
 
 def get_db_write_connection():
     if USING_POSTGRES:
-        return _connect_postgres()
+        try:
+            return _connect_postgres()
+        except Exception as exc:
+            logger.error("Supabase PostgreSQL write connection failed; falling back to local SQLite: %s", exc)
     db_path_abs = os.path.abspath(DATABASE_PATH)
     conn = sqlite3.connect(
         db_path_abs,

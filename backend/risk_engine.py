@@ -17,9 +17,7 @@ import math
 import json
 import re
 import datetime
-import numpy as np
 from typing import List, Dict, Any, Optional, Tuple
-from sklearn.ensemble import IsolationForest
 from backend.database import get_db_connection
 
 # Common Indian infrastructure stopwords for fuzzy token matching

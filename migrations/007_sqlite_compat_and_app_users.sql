@@ -54,13 +54,13 @@ SELECT
     COALESCE(vouch.total_expenditure, 0)::double precision AS total_expenditure,
     GREATEST(0, COALESCE(alloc.allocated_amount, 0) - COALESCE(vouch.total_expenditure, 0))::double precision AS unspent_amount,
     CASE WHEN COALESCE(alloc.allocated_amount, 0) > 0
-        THEN ROUND((COALESCE(vouch.total_expenditure, 0) / alloc.allocated_amount) * 100, 2)::double precision
+        THEN ROUND(((COALESCE(vouch.total_expenditure, 0) / alloc.allocated_amount) * 100)::numeric, 2)::double precision
         ELSE 0
     END AS utilization_pct,
     COALESCE(wrk.recommended_works_count, 0)::integer AS recommended_works_count,
     COALESCE(wrk.completed_works_count, 0)::integer AS completed_works_count,
     CASE WHEN COALESCE(wrk.recommended_works_count, 0) > 0
-        THEN ROUND((COALESCE(wrk.completed_works_count, 0)::numeric / wrk.recommended_works_count) * 100, 2)::double precision
+        THEN ROUND(((COALESCE(wrk.completed_works_count, 0)::numeric / wrk.recommended_works_count) * 100)::numeric, 2)::double precision
         ELSE 0
     END AS completion_rate_pct,
     COALESCE(vouch.transaction_count, 0)::integer AS transaction_count,
@@ -153,7 +153,7 @@ SELECT
     END::integer AS duration_days,
     (COALESCE(w.final_disbursed_amount, 0) - COALESCE(w.recommended_amount, 0))::double precision AS cost_variance_amount,
     CASE WHEN COALESCE(w.recommended_amount, 0) > 0
-        THEN ROUND(((COALESCE(w.final_disbursed_amount, 0) - w.recommended_amount) / w.recommended_amount) * 100, 2)::double precision
+        THEN ROUND((((COALESCE(w.final_disbursed_amount, 0) - w.recommended_amount) / w.recommended_amount) * 100)::numeric, 2)::double precision
         ELSE 0
     END AS cost_variance_pct,
     CASE WHEN w.has_geo_photos THEN 1 ELSE 0 END AS has_images,
@@ -287,19 +287,21 @@ LEFT JOIN LATERAL (
         ) AS primary_mp_name,
         CASE WHEN SUM(tv.disbursement_amount) > 0 THEN ROUND((
             (
-                SELECT SUM(tv3.disbursement_amount)
-                FROM public.treasury_vouchers tv3
-                WHERE tv3.contractor_id = ct.contractor_id
-                  AND tv3.representative_id = (
-                      SELECT tv4.representative_id
-                      FROM public.treasury_vouchers tv4
-                      WHERE tv4.contractor_id = ct.contractor_id
-                      GROUP BY tv4.representative_id
-                      ORDER BY SUM(tv4.disbursement_amount) DESC
-                      LIMIT 1
-                  )
-            ) / SUM(tv.disbursement_amount)
-        ) * 100, 2) ELSE 0 END AS single_mp_reliance_pct
+                (
+                    SELECT SUM(tv3.disbursement_amount)
+                    FROM public.treasury_vouchers tv3
+                    WHERE tv3.contractor_id = ct.contractor_id
+                      AND tv3.representative_id = (
+                          SELECT tv4.representative_id
+                          FROM public.treasury_vouchers tv4
+                          WHERE tv4.contractor_id = ct.contractor_id
+                          GROUP BY tv4.representative_id
+                          ORDER BY SUM(tv4.disbursement_amount) DESC
+                          LIMIT 1
+                      )
+                ) / SUM(tv.disbursement_amount) * 100
+            )::numeric
+        ), 2) ELSE 0 END AS single_mp_reliance_pct
     FROM public.treasury_vouchers tv
     LEFT JOIN public.representative_terms t ON t.representative_id = tv.representative_id AND t.is_sitting = TRUE
     WHERE tv.contractor_id = ct.contractor_id
@@ -438,10 +440,10 @@ SELECT
     SUM(allocated_amount) AS total_allocated_amount,
     SUM(total_expenditure) AS total_expenditure,
     SUM(unspent_amount) AS total_unspent_amount,
-    ROUND((SUM(total_expenditure) / NULLIF(SUM(allocated_amount), 0)) * 100.0, 2) AS state_utilization_pct,
+    ROUND(((SUM(total_expenditure) / NULLIF(SUM(allocated_amount), 0)) * 100.0)::numeric, 2) AS state_utilization_pct,
     SUM(recommended_works_count) AS total_recommended_works,
     SUM(completed_works_count) AS total_completed_works,
-    ROUND((SUM(completed_works_count)::numeric / NULLIF(SUM(recommended_works_count), 0)) * 100.0, 2) AS state_completion_rate_pct,
+    ROUND(((SUM(completed_works_count)::numeric / NULLIF(SUM(recommended_works_count), 0)) * 100.0)::numeric, 2) AS state_completion_rate_pct,
     SUM(transaction_count) AS total_transactions,
     SUM(successful_payments_count) AS total_successful_payments,
     SUM(pending_payments_count) AS total_pending_payments

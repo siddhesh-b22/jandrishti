@@ -177,24 +177,24 @@ def init_alerts_db():
                 "reviewer_comment": "Missing signed sanction letter uploaded to eSAKSHI repository by district engineer. Verified and closed."
             }
         ]
-        for a in seed_alerts:
+            for a in seed_alerts:
+                conn.execute("""
+                    INSERT INTO alerts (alert_id, project_id, severity, alert_type, description, evidence, status, assigned_to, assigned_role, created_at, resolved_at, reviewer_comment)
+                    VALUES (:alert_id, :project_id, :severity, :alert_type, :description, :evidence, :status, :assigned_to, :assigned_role, :created_at, :resolved_at, :reviewer_comment)
+                """, a)
+
+            # Log seed actions in audit trail
             conn.execute("""
-                INSERT INTO alerts (alert_id, project_id, severity, alert_type, description, evidence, status, assigned_to, assigned_role, created_at, resolved_at, reviewer_comment)
-                VALUES (:alert_id, :project_id, :severity, :alert_type, :description, :evidence, :status, :assigned_to, :assigned_role, :created_at, :resolved_at, :reviewer_comment)
-            """, a)
+                INSERT INTO audit_trail (case_id, action, performed_by, role, timestamp, details, previous_state, new_state)
+                VALUES 
+                ('ALT-2026-0001', 'ALERT_CREATED', 'AI Analytics Engine', 'SYSTEM', '2026-08-28T09:30:00Z', 'Identified +57.5% progress mismatch.', '', 'NEW'),
+                ('ALT-2026-0001', 'ACKNOWLEDGED', 'Director (MPLADS)', 'MINISTRY_ADMIN', '2026-08-28T10:00:00Z', 'Assigned to District Magistrate for on-site inquiry.', 'NEW', 'UNDER_INVESTIGATION'),
+                ('ALT-2026-0002', 'ALERT_CREATED', 'AI Analytics Engine', 'SYSTEM', '2026-08-27T11:15:00Z', 'Duplicate detection engine identified 88% similarity with Work #101290.', '', 'NEW'),
+                ('ALT-2026-0002', 'ACKNOWLEDGED', 'Dr. V. Rao', 'DISTRICT_AUTHORITY', '2026-08-28T16:45:00Z', 'Issued formal GPS boundary clarification to GP.', 'NEW', 'ACKNOWLEDGED'),
+                ('ALT-2026-0005', 'RESOLVED', 'Auditor S. Kulkarni', 'DISTRICT_AUTHORITY', '2026-08-30T15:30:00Z', 'Sanction letter uploaded and verified.', 'UNDER_INVESTIGATION', 'RESOLVED')
+            """)
 
-        # Log seed actions in audit trail
-        conn.execute("""
-            INSERT INTO audit_trail (case_id, action, performed_by, role, timestamp, details, previous_state, new_state)
-            VALUES 
-            ('ALT-2026-0001', 'ALERT_CREATED', 'AI Analytics Engine', 'SYSTEM', '2026-08-28T09:30:00Z', 'Identified +57.5% progress mismatch.', '', 'NEW'),
-            ('ALT-2026-0001', 'ACKNOWLEDGED', 'Director (MPLADS)', 'MINISTRY_ADMIN', '2026-08-28T10:00:00Z', 'Assigned to District Magistrate for on-site inquiry.', 'NEW', 'UNDER_INVESTIGATION'),
-            ('ALT-2026-0002', 'ALERT_CREATED', 'AI Analytics Engine', 'SYSTEM', '2026-08-27T11:15:00Z', 'Duplicate detection engine identified 88% similarity with Work #101290.', '', 'NEW'),
-            ('ALT-2026-0002', 'ACKNOWLEDGED', 'Dr. V. Rao', 'DISTRICT_AUTHORITY', '2026-08-28T16:45:00Z', 'Issued formal GPS boundary clarification to GP.', 'NEW', 'ACKNOWLEDGED'),
-            ('ALT-2026-0005', 'RESOLVED', 'Auditor S. Kulkarni', 'DISTRICT_AUTHORITY', '2026-08-30T15:30:00Z', 'Sanction letter uploaded and verified.', 'UNDER_INVESTIGATION', 'RESOLVED')
-        """)
-
-        conn.commit()
+            conn.commit()
         conn.close()
     except Exception as exc:
         logger.warning("Local alerts database init skipped or deferred: %s", exc)

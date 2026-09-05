@@ -21,7 +21,6 @@ import csv
 import json
 import datetime
 from typing import List, Dict, Any, Tuple, Optional
-import pandas as pd
 from backend.database import get_db_write_connection, get_db_connection
 from backend.risk_engine import risk_engine
 from backend.alerts_service import alerts_service

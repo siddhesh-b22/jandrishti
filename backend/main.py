@@ -126,35 +126,33 @@ MAX_MUTATIONS_PER_MINUTE = int(os.environ.get("RATE_LIMIT_MUTATION_PER_MINUTE", 
 
 @app.middleware("http")
 async def security_and_rate_limit_middleware(request: Request, call_next):
-    # Completely exempt health checks and options from rate limits
-    if request.url.path in ["/health", "/api/health"] or request.method == "OPTIONS":
-        return await call_next(request)
+    # Only enforce rate limiting on non-health and non-options endpoints
+    if request.url.path not in ["/health", "/api/health"] and request.method != "OPTIONS":
+        client_ip = request.client.host if request.client else "127.0.0.1"
+        now = time.time()
 
-    client_ip = request.client.host if request.client else "127.0.0.1"
-    now = time.time()
-
-    # Rate limiting for general endpoints
-    window = RATE_LIMIT_STORE[client_ip]
-    while window and window[0] < now - 60:
-        window.popleft()
-    if len(window) >= MAX_REQUESTS_PER_MINUTE:
-        return JSONResponse(
-            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-            content={"detail": "API rate limit exceeded. Too many requests in 60s window. Please retry shortly."}
-        )
-    window.append(now)
-
-    # Stricter rate limiting for state-mutating requests
-    if request.method in ["POST", "PATCH", "DELETE"]:
-        m_window = RATE_LIMIT_MUTATION_STORE[client_ip]
-        while m_window and m_window[0] < now - 60:
-            m_window.popleft()
-        if len(m_window) >= MAX_MUTATIONS_PER_MINUTE:
+        # Rate limiting for general endpoints
+        window = RATE_LIMIT_STORE[client_ip]
+        while window and window[0] < now - 60:
+            window.popleft()
+        if len(window) >= MAX_REQUESTS_PER_MINUTE:
             return JSONResponse(
                 status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-                content={"detail": "Mutation rate limit exceeded. Too many case updates in 60s window."}
+                content={"detail": "API rate limit exceeded. Too many requests in 60s window. Please retry shortly."}
             )
-        m_window.append(now)
+        window.append(now)
+
+        # Stricter rate limiting for state-mutating requests
+        if request.method in ["POST", "PATCH", "DELETE"]:
+            m_window = RATE_LIMIT_MUTATION_STORE[client_ip]
+            while m_window and m_window[0] < now - 60:
+                m_window.popleft()
+            if len(m_window) >= MAX_MUTATIONS_PER_MINUTE:
+                return JSONResponse(
+                    status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                    content={"detail": "Mutation rate limit exceeded. Too many case updates in 60s window."}
+                )
+            m_window.append(now)
 
     response = await call_next(request)
 

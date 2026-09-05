@@ -12,44 +12,51 @@ import os
 import json
 import sqlite3
 import datetime
+import logging
 from typing import List, Dict, Any, Optional
+from backend.config import USING_POSTGRES
 from backend.database import get_db_write_connection, get_db_connection
 
-def init_alerts_db():
-    conn = get_db_write_connection()
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS alerts (
-            alert_id TEXT PRIMARY KEY,
-            project_id TEXT NOT NULL,
-            severity TEXT NOT NULL,          -- 'CRITICAL', 'HIGH', 'MEDIUM', 'LOW'
-            alert_type TEXT NOT NULL,        -- 'EXPENDITURE_PROGRESS_MISMATCH', 'PROJECT_DELAY', etc.
-            description TEXT NOT NULL,
-            evidence TEXT NOT NULL,          -- JSON string of metrics & comparisons
-            status TEXT NOT NULL DEFAULT 'NEW', -- 'NEW', 'ACKNOWLEDGED', 'UNDER_INVESTIGATION', 'RESOLVED', 'DISMISSED'
-            assigned_to TEXT DEFAULT 'Unassigned',
-            assigned_role TEXT DEFAULT 'DISTRICT_AUTHORITY',
-            created_at TEXT NOT NULL,
-            resolved_at TEXT,
-            reviewer_comment TEXT DEFAULT ''
-        )
-    """)
-    conn.execute("""
-        CREATE INDEX IF NOT EXISTS idx_alerts_project ON alerts(project_id);
-    """)
-    conn.execute("""
-        CREATE INDEX IF NOT EXISTS idx_alerts_severity ON alerts(severity);
-    """)
-    conn.execute("""
-        CREATE INDEX IF NOT EXISTS idx_alerts_status ON alerts(status);
-    """)
-    conn.execute("""
-        CREATE INDEX IF NOT EXISTS idx_alerts_type ON alerts(alert_type);
-    """)
+logger = logging.getLogger("jandrishti.alerts")
 
-    # Seed initial alerts if table is empty
-    cur = conn.execute("SELECT COUNT(*) FROM alerts")
-    if cur.fetchone()[0] == 0:
-        seed_alerts = [
+def init_alerts_db():
+    if USING_POSTGRES:
+        return
+    try:
+        conn = get_db_write_connection()
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS alerts (
+                alert_id TEXT PRIMARY KEY,
+                project_id TEXT NOT NULL,
+                severity TEXT NOT NULL,          -- 'CRITICAL', 'HIGH', 'MEDIUM', 'LOW'
+                alert_type TEXT NOT NULL,        -- 'EXPENDITURE_PROGRESS_MISMATCH', 'PROJECT_DELAY', etc.
+                description TEXT NOT NULL,
+                evidence TEXT NOT NULL,          -- JSON string of metrics & comparisons
+                status TEXT NOT NULL DEFAULT 'NEW', -- 'NEW', 'ACKNOWLEDGED', 'UNDER_INVESTIGATION', 'RESOLVED', 'DISMISSED'
+                assigned_to TEXT DEFAULT 'Unassigned',
+                assigned_role TEXT DEFAULT 'DISTRICT_AUTHORITY',
+                created_at TEXT NOT NULL,
+                resolved_at TEXT,
+                reviewer_comment TEXT DEFAULT ''
+            )
+        """)
+        conn.execute("""
+            CREATE INDEX IF NOT EXISTS idx_alerts_project ON alerts(project_id);
+        """)
+        conn.execute("""
+            CREATE INDEX IF NOT EXISTS idx_alerts_severity ON alerts(severity);
+        """)
+        conn.execute("""
+            CREATE INDEX IF NOT EXISTS idx_alerts_status ON alerts(status);
+        """)
+        conn.execute("""
+            CREATE INDEX IF NOT EXISTS idx_alerts_type ON alerts(alert_type);
+        """)
+
+        # Seed initial alerts if table is empty
+        cur = conn.execute("SELECT COUNT(*) FROM alerts")
+        if cur.fetchone()[0] == 0:
+            seed_alerts = [
             {
                 "alert_id": "ALT-2026-0001",
                 "project_id": "100482",
@@ -187,11 +194,16 @@ def init_alerts_db():
             ('ALT-2026-0005', 'RESOLVED', 'Auditor S. Kulkarni', 'DISTRICT_AUTHORITY', '2026-08-30T15:30:00Z', 'Sanction letter uploaded and verified.', 'UNDER_INVESTIGATION', 'RESOLVED')
         """)
 
-    conn.commit()
-    conn.close()
+        conn.commit()
+        conn.close()
+    except Exception as exc:
+        logger.warning("Local alerts database init skipped or deferred: %s", exc)
 
-# Initialize on import
-init_alerts_db()
+# Initialize on import safely
+try:
+    init_alerts_db()
+except Exception as exc:
+    logger.warning("Alerts DB init failed on import: %s", exc)
 
 class AlertsService:
     def list_alerts(

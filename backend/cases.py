@@ -13,155 +13,163 @@ import datetime
 from typing import List, Dict, Any, Optional
 from backend.config import USING_POSTGRES
 from backend.database import get_db_write_connection
+import logging
+
+logger = logging.getLogger("jandrishti.cases")
 
 def get_audit_db_conn():
     return get_db_write_connection()
 
 def init_audit_db():
-    conn = get_audit_db_conn()
     if USING_POSTGRES:
-        conn.close()
         return
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS review_cases (
-            case_id TEXT PRIMARY KEY,
-            entity_type TEXT NOT NULL,
-            entity_id TEXT NOT NULL,
-            title TEXT NOT NULL,
-            severity TEXT NOT NULL,
-            risk_score REAL NOT NULL,
-            category TEXT NOT NULL,
-            status TEXT NOT NULL DEFAULT 'NEW',
-            assigned_to TEXT DEFAULT 'Unassigned',
-            assigned_role TEXT DEFAULT 'DISTRICT_AUTHORITY',
-            created_at TEXT NOT NULL,
-            updated_at TEXT NOT NULL,
-            resolution_notes TEXT DEFAULT ''
-        )
-    """)
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS audit_trail (
-            log_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            case_id TEXT NOT NULL,
-            action TEXT NOT NULL,
-            performed_by TEXT NOT NULL,
-            role TEXT NOT NULL,
-            timestamp TEXT NOT NULL,
-            details TEXT DEFAULT '',
-            previous_state TEXT DEFAULT '',
-            new_state TEXT DEFAULT ''
-        )
-    """)
-    conn.commit()
-
-    # Seed initial cases if empty
-    cur = conn.execute("SELECT COUNT(*) FROM review_cases")
-    if cur.fetchone()[0] == 0:
-        seed_cases = [
-            {
-                "case_id": "CASE-2026-001",
-                "entity_type": "WORK",
-                "entity_id": "100482",
-                "title": "Severe Progress Divergence: CC Road & Drainage",
-                "severity": "CRITICAL",
-                "risk_score": 92.5,
-                "category": "PROGRESS_MISMATCH",
-                "status": "UNDER_REVIEW",
-                "assigned_to": "Shri R. Sharma (District Magistrate)",
-                "assigned_role": "DISTRICT_AUTHORITY",
-                "created_at": "2026-08-28T09:30:00Z",
-                "updated_at": "2026-08-29T14:20:00Z",
-                "resolution_notes": "Physical verification committee dispatched to verify road surface layers. Tranche #3 payment frozen."
-            },
-            {
-                "case_id": "CASE-2026-002",
-                "entity_type": "WORK",
-                "entity_id": "102391",
-                "title": "Potential Duplicate Sanction: Drinking Water Tank",
-                "severity": "HIGH",
-                "risk_score": 78.4,
-                "category": "DUPLICATE_WORK",
-                "status": "CLARIFICATION_REQUESTED",
-                "assigned_to": "Dr. V. Rao (Nodal Executive Engineer)",
-                "assigned_role": "DISTRICT_AUTHORITY",
-                "created_at": "2026-08-27T11:15:00Z",
-                "updated_at": "2026-08-28T16:45:00Z",
-                "resolution_notes": "Notice issued to GP Sarpanch to confirm GPS coordinates relative to 2024 scheme."
-            },
-            {
-                "case_id": "CASE-2026-003",
-                "entity_type": "VENDOR",
-                "entity_id": "VEND_00281",
-                "title": "Single-Patron Concentration Anomaly (94.2% Reliance)",
-                "severity": "CRITICAL",
-                "risk_score": 88.0,
-                "category": "CONTRACTOR_CONCENTRATION",
-                "status": "NEW",
-                "assigned_to": "Chief Audit Officer (MoSPI/CAG)",
-                "assigned_role": "MINISTRY_OFFICIAL",
-                "created_at": "2026-08-29T10:00:00Z",
-                "updated_at": "2026-08-29T10:00:00Z",
-                "resolution_notes": ""
-            },
-            {
-                "case_id": "CASE-2026-004",
-                "entity_type": "WORK",
-                "entity_id": "101844",
-                "title": "Project Stalled > 420 Days: Community Health Center",
-                "severity": "HIGH",
-                "risk_score": 74.0,
-                "category": "PROJECT_DELAY",
-                "status": "DETAILED_REVIEW",
-                "assigned_to": "Smt. P. Verma (District Planning Officer)",
-                "assigned_role": "DISTRICT_AUTHORITY",
-                "created_at": "2026-08-26T08:00:00Z",
-                "updated_at": "2026-08-30T11:00:00Z",
-                "resolution_notes": "Contractor issued show-cause notice for non-performance. Sub-contractor dispute under arbitration."
-            },
-            {
-                "case_id": "CASE-2026-005",
-                "entity_type": "WORK",
-                "entity_id": "100115",
-                "title": "Missing Administrative Sanction Records",
-                "severity": "MEDIUM",
-                "risk_score": 52.0,
-                "category": "COMPLIANCE_DEFICIT",
-                "status": "RESOLVED",
-                "assigned_to": "Auditor S. Kulkarni",
-                "assigned_role": "AUDITOR",
-                "created_at": "2026-08-25T14:00:00Z",
-                "updated_at": "2026-08-30T15:30:00Z",
-                "resolution_notes": "Missing signed sanction letter uploaded to eSAKSHI repository by district engineer. Closed."
-            }
-        ]
-
-        seed_logs = [
-            ("CASE-2026-001", "CASE_CREATED", "System Engine", "AI_ANALYTICS_SERVICE", "2026-08-28T09:30:00Z", "AI engine flagged 82% expenditure with only 25% physical progress.", "", "NEW"),
-            ("CASE-2026-001", "ASSIGNED", "Director (MPLADS)", "MINISTRY_OFFICIAL", "2026-08-28T10:00:00Z", "Assigned to District Magistrate for on-site inquiry.", "NEW", "UNDER_REVIEW"),
-            ("CASE-2026-001", "STATUS_CHANGE", "Shri R. Sharma", "DISTRICT_AUTHORITY", "2026-08-29T14:20:00Z", "Dispatched physical verification committee. Payment freeze enacted.", "UNDER_REVIEW", "UNDER_REVIEW"),
-            ("CASE-2026-002", "CASE_CREATED", "System Engine", "AI_ANALYTICS_SERVICE", "2026-08-27T11:15:00Z", "Duplicate detection engine identified 88% text similarity with Work #101290.", "", "NEW"),
-            ("CASE-2026-002", "CLARIFICATION_SENT", "Dr. V. Rao", "DISTRICT_AUTHORITY", "2026-08-28T16:45:00Z", "Issued formal GPS boundary clarification to GP.", "NEW", "CLARIFICATION_REQUESTED"),
-            ("CASE-2026-005", "CASE_CREATED", "System Engine", "AI_ANALYTICS_SERVICE", "2026-08-25T14:00:00Z", "Compliance scanner detected missing sanction document.", "", "NEW"),
-            ("CASE-2026-005", "RESOLVED", "Auditor S. Kulkarni", "AUDITOR", "2026-08-30T15:30:00Z", "Verification completed. Signed document verified in nodal records.", "UNDER_REVIEW", "RESOLVED"),
-        ]
-
-        for sc in seed_cases:
-            conn.execute("""
-                INSERT INTO review_cases (case_id, entity_type, entity_id, title, severity, risk_score, category, status, assigned_to, assigned_role, created_at, updated_at, resolution_notes)
-                VALUES (:case_id, :entity_type, :entity_id, :title, :severity, :risk_score, :category, :status, :assigned_to, :assigned_role, :created_at, :updated_at, :resolution_notes)
-            """, sc)
-
-        for sl in seed_logs:
-            conn.execute("""
-                INSERT INTO audit_trail (case_id, action, performed_by, role, timestamp, details, previous_state, new_state)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            """, sl)
-
+    try:
+        conn = get_audit_db_conn()
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS review_cases (
+                case_id TEXT PRIMARY KEY,
+                entity_type TEXT NOT NULL,
+                entity_id TEXT NOT NULL,
+                title TEXT NOT NULL,
+                severity TEXT NOT NULL,
+                risk_score REAL NOT NULL,
+                category TEXT NOT NULL,
+                status TEXT NOT NULL DEFAULT 'NEW',
+                assigned_to TEXT DEFAULT 'Unassigned',
+                assigned_role TEXT DEFAULT 'DISTRICT_AUTHORITY',
+                created_at TEXT NOT NULL,
+                updated_at TEXT NOT NULL,
+                resolution_notes TEXT DEFAULT ''
+            )
+        """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS audit_trail (
+                log_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                case_id TEXT NOT NULL,
+                action TEXT NOT NULL,
+                performed_by TEXT NOT NULL,
+                role TEXT NOT NULL,
+                timestamp TEXT NOT NULL,
+                details TEXT DEFAULT '',
+                previous_state TEXT DEFAULT '',
+                new_state TEXT DEFAULT ''
+            )
+        """)
         conn.commit()
-    conn.close()
 
-# Initialize DB on module import
-init_audit_db()
+        # Seed initial cases if empty
+        cur = conn.execute("SELECT COUNT(*) FROM review_cases")
+        if cur.fetchone()[0] == 0:
+            seed_cases = [
+                {
+                    "case_id": "CASE-2026-001",
+                    "entity_type": "WORK",
+                    "entity_id": "100482",
+                    "title": "Severe Progress Divergence: CC Road & Drainage",
+                    "severity": "CRITICAL",
+                    "risk_score": 92.5,
+                    "category": "PROGRESS_MISMATCH",
+                    "status": "UNDER_REVIEW",
+                    "assigned_to": "Shri R. Sharma (District Magistrate)",
+                    "assigned_role": "DISTRICT_AUTHORITY",
+                    "created_at": "2026-08-28T09:30:00Z",
+                    "updated_at": "2026-08-29T14:20:00Z",
+                    "resolution_notes": "Physical verification committee dispatched to verify road surface layers. Tranche #3 payment frozen."
+                },
+                {
+                    "case_id": "CASE-2026-002",
+                    "entity_type": "WORK",
+                    "entity_id": "102391",
+                    "title": "Potential Duplicate Sanction: Drinking Water Tank",
+                    "severity": "HIGH",
+                    "risk_score": 78.4,
+                    "category": "DUPLICATE_WORK",
+                    "status": "CLARIFICATION_REQUESTED",
+                    "assigned_to": "Dr. V. Rao (Nodal Executive Engineer)",
+                    "assigned_role": "DISTRICT_AUTHORITY",
+                    "created_at": "2026-08-27T11:15:00Z",
+                    "updated_at": "2026-08-28T16:45:00Z",
+                    "resolution_notes": "Notice issued to GP Sarpanch to confirm GPS coordinates relative to 2024 scheme."
+                },
+                {
+                    "case_id": "CASE-2026-003",
+                    "entity_type": "VENDOR",
+                    "entity_id": "VEND_00281",
+                    "title": "Single-Patron Concentration Anomaly (94.2% Reliance)",
+                    "severity": "CRITICAL",
+                    "risk_score": 88.0,
+                    "category": "CONTRACTOR_CONCENTRATION",
+                    "status": "NEW",
+                    "assigned_to": "Chief Audit Officer (MoSPI/CAG)",
+                    "assigned_role": "MINISTRY_OFFICIAL",
+                    "created_at": "2026-08-29T10:00:00Z",
+                    "updated_at": "2026-08-29T10:00:00Z",
+                    "resolution_notes": ""
+                },
+                {
+                    "case_id": "CASE-2026-004",
+                    "entity_type": "WORK",
+                    "entity_id": "101844",
+                    "title": "Project Stalled > 420 Days: Community Health Center",
+                    "severity": "HIGH",
+                    "risk_score": 74.0,
+                    "category": "PROJECT_DELAY",
+                    "status": "DETAILED_REVIEW",
+                    "assigned_to": "Smt. P. Verma (District Planning Officer)",
+                    "assigned_role": "DISTRICT_AUTHORITY",
+                    "created_at": "2026-08-26T08:00:00Z",
+                    "updated_at": "2026-08-30T11:00:00Z",
+                    "resolution_notes": "Contractor issued show-cause notice for non-performance. Sub-contractor dispute under arbitration."
+                },
+                {
+                    "case_id": "CASE-2026-005",
+                    "entity_type": "WORK",
+                    "entity_id": "100115",
+                    "title": "Missing Administrative Sanction Records",
+                    "severity": "MEDIUM",
+                    "risk_score": 52.0,
+                    "category": "COMPLIANCE_DEFICIT",
+                    "status": "RESOLVED",
+                    "assigned_to": "Auditor S. Kulkarni",
+                    "assigned_role": "AUDITOR",
+                    "created_at": "2026-08-25T14:00:00Z",
+                    "updated_at": "2026-08-30T15:30:00Z",
+                    "resolution_notes": "Missing signed sanction letter uploaded to eSAKSHI repository by district engineer. Closed."
+                }
+            ]
+
+            seed_logs = [
+                ("CASE-2026-001", "CASE_CREATED", "System Engine", "AI_ANALYTICS_SERVICE", "2026-08-28T09:30:00Z", "AI engine flagged 82% expenditure with only 25% physical progress.", "", "NEW"),
+                ("CASE-2026-001", "ASSIGNED", "Director (MPLADS)", "MINISTRY_OFFICIAL", "2026-08-28T10:00:00Z", "Assigned to District Magistrate for on-site inquiry.", "NEW", "UNDER_REVIEW"),
+                ("CASE-2026-001", "STATUS_CHANGE", "Shri R. Sharma", "DISTRICT_AUTHORITY", "2026-08-29T14:20:00Z", "Dispatched physical verification committee. Payment freeze enacted.", "UNDER_REVIEW", "UNDER_REVIEW"),
+                ("CASE-2026-002", "CASE_CREATED", "System Engine", "AI_ANALYTICS_SERVICE", "2026-08-27T11:15:00Z", "Duplicate detection engine identified 88% text similarity with Work #101290.", "", "NEW"),
+                ("CASE-2026-002", "CLARIFICATION_SENT", "Dr. V. Rao", "DISTRICT_AUTHORITY", "2026-08-28T16:45:00Z", "Issued formal GPS boundary clarification to GP.", "NEW", "CLARIFICATION_REQUESTED"),
+                ("CASE-2026-005", "CASE_CREATED", "System Engine", "AI_ANALYTICS_SERVICE", "2026-08-25T14:00:00Z", "Compliance scanner detected missing sanction document.", "", "NEW"),
+                ("CASE-2026-005", "RESOLVED", "Auditor S. Kulkarni", "AUDITOR", "2026-08-30T15:30:00Z", "Verification completed. Signed document verified in nodal records.", "UNDER_REVIEW", "RESOLVED"),
+            ]
+
+            for sc in seed_cases:
+                conn.execute("""
+                    INSERT INTO review_cases (case_id, entity_type, entity_id, title, severity, risk_score, category, status, assigned_to, assigned_role, created_at, updated_at, resolution_notes)
+                    VALUES (:case_id, :entity_type, :entity_id, :title, :severity, :risk_score, :category, :status, :assigned_to, :assigned_role, :created_at, :updated_at, :resolution_notes)
+                """, sc)
+
+            for sl in seed_logs:
+                conn.execute("""
+                    INSERT INTO audit_trail (case_id, action, performed_by, role, timestamp, details, previous_state, new_state)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """, sl)
+
+            conn.commit()
+        conn.close()
+    except Exception as exc:
+        logger.warning("Local audit DB init skipped or deferred: %s", exc)
+
+# Initialize DB on module import safely
+try:
+    init_audit_db()
+except Exception as exc:
+    logger.warning("Audit DB init failed on import: %s", exc)
 
 
 class CaseManagementService:

@@ -36,10 +36,24 @@ def _build_database_url():
         return None
     explicit = os.environ.get("DATABASE_URL") or os.environ.get("SUPABASE_DB_URL")
     if explicit:
+        explicit = explicit.strip().strip("'\"")
+        # Normalize postgres:// to postgresql://
+        if explicit.startswith("postgres://"):
+            explicit = "postgresql://" + explicit[len("postgres://"):]
+        # Remove literal brackets if user copied [YOUR-PASSWORD] with brackets: :[pass]@ -> :pass@
+        import re
+        explicit = re.sub(r":\[([^\]]+)\]@", r":\1@", explicit)
+        # Ensure sslmode is present for remote Supabase connections
+        if "supabase" in explicit and "sslmode" not in explicit:
+            sep = "&" if "?" in explicit else "?"
+            explicit = f"{explicit}{sep}sslmode=require"
         return explicit
     password = os.environ.get("SUPABASE_DB_PASSWORD") or os.environ.get("PGPASSWORD")
     if not password:
         return None
+    password = password.strip().strip("'\"")
+    if password.startswith("[") and password.endswith("]"):
+        password = password[1:-1]
     host = os.environ.get("SUPABASE_DB_HOST", "aws-0-ap-northeast-1.pooler.supabase.com")
     port = os.environ.get("SUPABASE_DB_PORT", "5432")
     user = os.environ.get("SUPABASE_DB_USER", "postgres.dvbqjjwudtbkzjmlcvgo")

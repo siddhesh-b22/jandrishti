@@ -22,10 +22,19 @@ services:
 
     envVars:
       - key: PYTHON_VERSION
-        value: 3.13.0
+        value: 3.11.9
 
-      - key: DATABASE_PATH
-        value: database/mplads.db
+      - key: JANDRISHTI_USE_SQLITE
+        value: "0"
+
+      - key: DATABASE_URL
+        sync: false
+
+      - key: SUPABASE_URL
+        value: https://dvbqjjwudtbkzjmlcvgo.supabase.co
+
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
 
       - key: CORS_ORIGINS
         value: "*"

@@ -101,22 +101,37 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
-# Production CORS Configuration (Spec-compliant: credentials=False when origins='*')
-cors_env = os.environ.get("CORS_ORIGINS", "*")
-if cors_env.strip() == "*":
-    allowed_origins = ["*"]
-    cors_credentials = False
+# Production CORS Configuration (Supports Vercel deployments, credentials, and local dev)
+cors_env = os.environ.get("CORS_ORIGINS", "").strip()
+if cors_env == "*":
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=False,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 else:
-    allowed_origins = [o.strip() for o in cors_env.split(",") if o.strip()]
-    cors_credentials = True
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=allowed_origins,
-    allow_credentials=cors_credentials,
-    allow_methods=["GET", "POST", "PATCH", "OPTIONS", "HEAD"],
-    allow_headers=["*"],
-)
+    known_origins = [
+        "https://jandrishti-rust.vercel.app",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:3000",
+        "http://localhost:8000",
+    ]
+    if cors_env:
+        for o in cors_env.split(","):
+            if o.strip() and o.strip() not in known_origins:
+                known_origins.append(o.strip())
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=known_origins,
+        allow_origin_regex=r"^https:\/\/.*\.vercel\.app$",
+        allow_credentials=True,
+        allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"],
+        allow_headers=["*"],
+        expose_headers=["*"],
+    )
 
 # In-Memory Rate Limiting & Security Headers Middleware
 RATE_LIMIT_STORE: Dict[str, deque] = defaultdict(deque)

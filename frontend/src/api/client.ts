@@ -74,7 +74,20 @@ export type {
   StatutoryAuditLog,
 };
 
-const RAW_BASE_URL = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
+const PRODUCTION_BACKEND_URL = 'https://jandrishti-production.up.railway.app';
+const rawEnvUrl = (import.meta.env.VITE_API_URL || '').trim().replace(/\/+$/, '');
+const isLocalhostEnv = typeof window !== 'undefined' && (
+  window.location.hostname === 'localhost' ||
+  window.location.hostname === '127.0.0.1' ||
+  window.location.hostname.endsWith('.local')
+);
+
+// If in production browser (e.g. Vercel) and VITE_API_URL is unset or points to localhost,
+// fall back automatically to the live Railway backend.
+const RAW_BASE_URL = rawEnvUrl && (!rawEnvUrl.includes('localhost') && !rawEnvUrl.includes('127.0.0.1') || isLocalhostEnv)
+  ? rawEnvUrl
+  : (isLocalhostEnv ? 'http://127.0.0.1:8000' : PRODUCTION_BACKEND_URL);
+
 const API_BASE = RAW_BASE_URL ? `${RAW_BASE_URL}/api` : '/api';
 
 function getAuthHeaders(): Record<string, string> {
@@ -124,6 +137,10 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
       // ignore
     }
     throw new Error(errorDetail);
+  }
+  const contentType = response.headers.get('content-type') || '';
+  if (contentType && !contentType.includes('application/json')) {
+    throw new Error(`API returned non-JSON response (${contentType.split(';')[0]}). The service may be initializing.`);
   }
   return response.json() as Promise<T>;
 }

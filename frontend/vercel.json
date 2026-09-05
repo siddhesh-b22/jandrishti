@@ -4,6 +4,14 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
+      "source": "/api/:match*",
+      "destination": "https://jandrishti-production.up.railway.app/api/:match*"
+    },
+    {
+      "source": "/health",
+      "destination": "https://jandrishti-production.up.railway.app/health"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

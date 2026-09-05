@@ -87,7 +87,7 @@ STORAGE_BUCKET_EVIDENCE = os.environ.get("STORAGE_BUCKET_EVIDENCE", "audit-evide
 
 # Application Metadata (No SIH branding — Pure JanDrishti Civic Data Intelligence)
 API_TITLE = "JanDrishti — Civic Data Intelligence REST API"
-API_VERSION = "1.0.0"
+API_VERSION = "1.0.1"
 DATA_SNAPSHOT_DATE = "26 August 2026"
 
 API_DESCRIPTION = """

@@ -180,13 +180,16 @@ async def security_and_rate_limit_middleware(request: Request, call_next):
 
     return response
 
-# Production Error Handler (Prevents stack trace / path leakage)
+# Production Error Handler
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     logger.error(f"Internal API error on {request.url.path}: {str(exc)}", exc_info=True)
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        content={"detail": "An internal server error occurred while processing this public data query. Please try again."}
+        content={
+            "detail": f"Internal API error: {str(exc)}",
+            "error_type": exc.__class__.__name__
+        }
     )
 
 # ---------------------------------------------------------

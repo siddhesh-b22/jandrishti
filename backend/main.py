@@ -1909,7 +1909,8 @@ from pydantic import BaseModel, Field
 
 @app.on_event("startup")
 def on_startup_governance():
-    init_governance_schema()
+    import threading
+    threading.Thread(target=init_governance_schema, daemon=True).start()
 
 class RecommendationCreatePayload(BaseModel):
     proposed_title: str

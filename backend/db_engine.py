@@ -148,7 +148,7 @@ def _connect_postgres():
     import psycopg2
     from psycopg2.extras import RealDictCursor
 
-    raw = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
+    raw = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor, connect_timeout=10)
     raw.autocommit = False
     _apply_compat_schema(raw)
     cur = raw.cursor()

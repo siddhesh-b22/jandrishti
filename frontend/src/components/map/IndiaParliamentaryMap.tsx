@@ -190,7 +190,7 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
           val = s.total_mps;
           break;
         case 'ANOMALIES':
-          val = s.total_mps * 2.35;
+          val = s.anomalies_count || 0;
           break;
       }
       if (val < min) min = val;
@@ -210,6 +210,7 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
         if (selectedMetric === 'ALLOCATION') return b.total_allocated_amount - a.total_allocated_amount;
         if (selectedMetric === 'EXPENDITURE') return b.total_expenditure - a.total_expenditure;
         if (selectedMetric === 'COMPLETED_WORKS') return b.total_completed_works - a.total_completed_works;
+        if (selectedMetric === 'ANOMALIES') return (b.anomalies_count || 0) - (a.anomalies_count || 0);
         return b.total_mps - a.total_mps;
       })
       .slice(0, 5);
@@ -243,7 +244,7 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
         val = data.total_mps;
         break;
       case 'ANOMALIES':
-        val = data.total_mps * 2.35;
+        val = data.anomalies_count || 0;
         break;
     }
 
@@ -898,6 +899,8 @@ export const IndiaParliamentaryMap: React.FC<IndiaParliamentaryMapProps> = ({
                           ? `₹${(st.total_expenditure / 1e7).toFixed(0)} Cr`
                           : selectedMetric === 'COMPLETED_WORKS'
                           ? `${st.total_completed_works.toLocaleString()} wks`
+                          : selectedMetric === 'ANOMALIES'
+                          ? `${(st.anomalies_count || 0).toLocaleString()} signals`
                           : `${st.total_mps} MPs`}
                       </div>
                     </div>

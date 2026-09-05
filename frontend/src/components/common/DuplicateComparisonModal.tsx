@@ -84,26 +84,25 @@ export const DuplicateComparisonModal: React.FC<DuplicateComparisonModalProps> =
       role="dialog"
       aria-modal="true"
       aria-labelledby="duplicate-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-[#08102B]/80 backdrop-blur-md animate-fade-in font-manrope"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-[#121316]/60 backdrop-blur-xs animate-fade-in font-sans"
     >
-      <div className="relative w-full max-w-5xl bg-white rounded-3xl border border-slate-200/90 shadow-4xl overflow-hidden flex flex-col max-h-[92vh]">
+      <div className="relative w-full max-w-5xl bg-[#FAF8F5] rounded-2xl border border-[#E4E2DC] shadow-2xl overflow-hidden flex flex-col max-h-[92vh] text-[#121316]">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-white">
-          <div className="space-y-0.5">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#E4E2DC] bg-[#FAF8F5]">
+          <div className="space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 text-[10px] font-extrabold uppercase tracking-widest border border-amber-200">
-                <Copy className="w-3 h-3 text-amber-600" />
-                AI Overlap Detection
+              <span className="font-mono text-[10px] tracking-widest text-[#C85A32] bg-[#FAF0EB] px-2.5 py-1 rounded-md border border-[#E8C5B6] uppercase font-bold">
+                [FILE NO. DUP-{pair.work_a.work_id}-{pair.work_b.work_id}]
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 text-[10px] font-mono font-bold border border-rose-200">
+              <span className="px-2.5 py-1 rounded-md bg-[#F0EFEA] text-[#121316] text-[10px] font-mono font-bold border border-[#E4E2DC]">
                 {Math.round(pair.similarity_score * 100)}% Mathematical Overlap
               </span>
             </div>
-            <h2 id="duplicate-modal-title" className="text-lg sm:text-xl font-extrabold text-[#08102B] tracking-tight">
-              Project A vs Project B: Duplicate Work Comparison
+            <h2 id="duplicate-modal-title" className="text-xl font-serif font-bold text-[#121316] tracking-tight">
+              Project Record A vs Record B: Spatial &amp; Textual Overlap
             </h2>
-            <p className="text-xs text-slate-500 font-light">
-              These two projects have similar descriptions, comparable budgets, and are located within the same district jurisdiction.
+            <p className="text-xs text-[#4A4D53] font-light">
+              These two project entries share correlated textual tokens, comparable budgets, and co-located district jurisdictions.
             </p>
           </div>
 
@@ -111,120 +110,120 @@ export const DuplicateComparisonModal: React.FC<DuplicateComparisonModalProps> =
             type="button"
             aria-label="Close comparison modal"
             onClick={onClose}
-            className="p-2.5 rounded-full text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer"
+            className="p-2 rounded-md text-[#71717A] hover:text-[#121316] hover:bg-[#F0EFEA] transition min-w-[40px] min-h-[40px] flex items-center justify-center cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Responsible AI Disclaimer Banner */}
-        <div className="px-6 py-2.5 bg-amber-50/70 border-b border-amber-200/80 text-amber-900 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div className="px-6 py-2.5 bg-[#FAF0EB] border-b border-[#E8C5B6] text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0" />
-            <span className="text-[11px] leading-snug">
-              <strong>Objective Review Notice:</strong> Mathematical similarity indicators do not imply fraud. Final determination of distinct civic utility is conducted by authorized district engineers.
+            <AlertTriangle className="w-4 h-4 text-[#C85A32] shrink-0" />
+            <span className="text-[11px] leading-snug text-[#4A4D53]">
+              <strong className="text-[#121316]">Objective Audit Notice:</strong> Statistical similarity indicators do not imply wrongdoing. Final determination of distinct civic utility requires field verification by designated district engineers.
             </span>
           </div>
-          <span className="px-2.5 py-0.5 rounded-full bg-white border border-amber-300 font-mono text-[10px] font-bold text-amber-800 shrink-0 self-start sm:self-auto">
-            Status: Requires Review
+          <span className="px-2.5 py-0.5 rounded-md bg-[#FAF8F5] border border-[#E8C5B6] font-mono text-[10px] font-bold text-[#C85A32] shrink-0 self-start sm:self-auto">
+            Status: Human Review Required
           </span>
         </div>
 
         {/* Modal Main Content */}
         <div className="flex-1 p-6 overflow-y-auto space-y-6">
-          {/* Side-by-Side Projects Grid (Stacks vertically on mobile) */}
+          {/* Side-by-Side Projects Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
             {/* Project A */}
-            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between space-y-4">
+            <div className="p-5 rounded-xl bg-[#F0EFEA] border border-[#E4E2DC] flex flex-col justify-between space-y-4">
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="px-2.5 py-0.5 rounded-full bg-blue-100 text-[#2563EB] text-[10px] font-mono font-bold">
+                  <span className="px-2 py-0.5 rounded-md bg-[#FAF8F5] text-[#121316] text-[10px] font-mono font-bold border border-[#E4E2DC]">
                     RECORD A · WORK #{pair.work_a.work_id}
                   </span>
-                  <span className="text-xs font-mono font-bold text-slate-500">
+                  <span className="text-xs font-mono font-bold text-[#71717A]">
                     {pair.work_a.lifecycle_status}
                   </span>
                 </div>
 
-                <h3 className="text-base font-extrabold text-[#08102B] leading-snug">
+                <h3 className="text-base font-serif font-bold text-[#121316] leading-snug">
                   {pair.work_a.title || `Public Infrastructure Scheme #${pair.work_a.work_id}`}
                 </h3>
 
-                <div className="space-y-2 text-xs pt-2 border-t border-slate-200">
-                  <div className="flex items-center justify-between text-slate-600">
-                    <span className="flex items-center gap-1.5"><Layers className="w-3.5 h-3.5 text-slate-400" /> Sector:</span>
-                    <strong className="text-slate-900">{pair.work_a.category || 'General'}</strong>
+                <div className="space-y-2 text-xs pt-2 border-t border-[#E4E2DC] font-mono">
+                  <div className="flex items-center justify-between text-[#4A4D53]">
+                    <span className="flex items-center gap-1.5"><Layers className="w-3.5 h-3.5 text-[#71717A]" /> Sector:</span>
+                    <strong className="text-[#121316]">{pair.work_a.category || 'General'}</strong>
                   </div>
-                  <div className="flex items-center justify-between text-slate-600">
-                    <span className="flex items-center gap-1.5"><Users className="w-3.5 h-3.5 text-slate-400" /> Parliamentarian:</span>
-                    <strong className="text-slate-900">{pair.work_a.mp_name || 'N/A'}</strong>
+                  <div className="flex items-center justify-between text-[#4A4D53]">
+                    <span className="flex items-center gap-1.5"><Users className="w-3.5 h-3.5 text-[#71717A]" /> Representative:</span>
+                    <strong className="text-[#121316]">{pair.work_a.mp_name || 'N/A'}</strong>
                   </div>
-                  <div className="flex items-center justify-between text-slate-600">
-                    <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-slate-400" /> Location:</span>
-                    <strong className="text-slate-900">{pair.work_a.constituency}, {pair.work_a.state}</strong>
+                  <div className="flex items-center justify-between text-[#4A4D53]">
+                    <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-[#71717A]" /> Jurisdiction:</span>
+                    <strong className="text-[#121316]">{pair.work_a.constituency}, {pair.work_a.state}</strong>
                   </div>
-                  <div className="flex items-center justify-between text-slate-600">
-                    <span className="flex items-center gap-1.5"><Building2 className="w-3.5 h-3.5 text-slate-400" /> Agency (IDA):</span>
-                    <strong className="text-slate-900 truncate max-w-[180px]">{pair.work_a.ida || 'District Administration'}</strong>
+                  <div className="flex items-center justify-between text-[#4A4D53]">
+                    <span className="flex items-center gap-1.5"><Building2 className="w-3.5 h-3.5 text-[#71717A]" /> Agency (IDA):</span>
+                    <strong className="text-[#121316] truncate max-w-[180px]">{pair.work_a.ida || 'District Administration'}</strong>
                   </div>
-                  <div className="flex items-center justify-between text-slate-600">
+                  <div className="flex items-center justify-between text-[#4A4D53]">
                     <span>Fiscal Year:</span>
-                    <strong className="text-slate-900">{pair.work_a.year || '2024-25'}</strong>
+                    <strong className="text-[#121316]">{pair.work_a.year || '2024-25'}</strong>
                   </div>
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-slate-200 flex items-center justify-between">
-                <span className="text-xs text-slate-500 uppercase font-mono font-bold">Estimated Cost</span>
-                <span className="text-lg font-black font-mono text-[#08102B]">
+              <div className="pt-3 border-t border-[#E4E2DC] flex items-center justify-between">
+                <span className="text-xs text-[#71717A] uppercase font-mono font-bold">Estimated Cost</span>
+                <span className="text-lg font-serif font-bold text-[#121316]">
                   ₹{pair.work_a.amount.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
                 </span>
               </div>
             </div>
 
             {/* Project B */}
-            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between space-y-4">
+            <div className="p-5 rounded-xl bg-[#F0EFEA] border border-[#E4E2DC] flex flex-col justify-between space-y-4">
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="px-2.5 py-0.5 rounded-full bg-blue-100 text-[#2563EB] text-[10px] font-mono font-bold">
+                  <span className="px-2 py-0.5 rounded-md bg-[#FAF8F5] text-[#C85A32] text-[10px] font-mono font-bold border border-[#E8C5B6]">
                     RECORD B · WORK #{pair.work_b.work_id}
                   </span>
-                  <span className="text-xs font-mono font-bold text-slate-500">
+                  <span className="text-xs font-mono font-bold text-[#71717A]">
                     {pair.work_b.lifecycle_status}
                   </span>
                 </div>
 
-                <h3 className="text-base font-extrabold text-[#08102B] leading-snug">
+                <h3 className="text-base font-serif font-bold text-[#121316] leading-snug">
                   {pair.work_b.title || `Public Infrastructure Scheme #${pair.work_b.work_id}`}
                 </h3>
 
-                <div className="space-y-2 text-xs pt-2 border-t border-slate-200">
-                  <div className="flex items-center justify-between text-slate-600">
-                    <span className="flex items-center gap-1.5"><Layers className="w-3.5 h-3.5 text-slate-400" /> Sector:</span>
-                    <strong className="text-slate-900">{pair.work_b.category || 'General'}</strong>
+                <div className="space-y-2 text-xs pt-2 border-t border-[#E4E2DC] font-mono">
+                  <div className="flex items-center justify-between text-[#4A4D53]">
+                    <span className="flex items-center gap-1.5"><Layers className="w-3.5 h-3.5 text-[#71717A]" /> Sector:</span>
+                    <strong className="text-[#121316]">{pair.work_b.category || 'General'}</strong>
                   </div>
-                  <div className="flex items-center justify-between text-slate-600">
-                    <span className="flex items-center gap-1.5"><Users className="w-3.5 h-3.5 text-slate-400" /> Parliamentarian:</span>
-                    <strong className="text-slate-900">{pair.work_b.mp_name || 'N/A'}</strong>
+                  <div className="flex items-center justify-between text-[#4A4D53]">
+                    <span className="flex items-center gap-1.5"><Users className="w-3.5 h-3.5 text-[#71717A]" /> Representative:</span>
+                    <strong className="text-[#121316]">{pair.work_b.mp_name || 'N/A'}</strong>
                   </div>
-                  <div className="flex items-center justify-between text-slate-600">
-                    <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-slate-400" /> Location:</span>
-                    <strong className="text-slate-900">{pair.work_b.constituency}, {pair.work_b.state}</strong>
+                  <div className="flex items-center justify-between text-[#4A4D53]">
+                    <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-[#71717A]" /> Jurisdiction:</span>
+                    <strong className="text-[#121316]">{pair.work_b.constituency}, {pair.work_b.state}</strong>
                   </div>
-                  <div className="flex items-center justify-between text-slate-600">
-                    <span className="flex items-center gap-1.5"><Building2 className="w-3.5 h-3.5 text-slate-400" /> Agency (IDA):</span>
-                    <strong className="text-slate-900 truncate max-w-[180px]">{pair.work_b.ida || 'District Administration'}</strong>
+                  <div className="flex items-center justify-between text-[#4A4D53]">
+                    <span className="flex items-center gap-1.5"><Building2 className="w-3.5 h-3.5 text-[#71717A]" /> Agency (IDA):</span>
+                    <strong className="text-[#121316] truncate max-w-[180px]">{pair.work_b.ida || 'District Administration'}</strong>
                   </div>
-                  <div className="flex items-center justify-between text-slate-600">
+                  <div className="flex items-center justify-between text-[#4A4D53]">
                     <span>Fiscal Year:</span>
-                    <strong className="text-slate-900">{pair.work_b.year || '2024-25'}</strong>
+                    <strong className="text-[#121316]">{pair.work_b.year || '2024-25'}</strong>
                   </div>
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-slate-200 flex items-center justify-between">
-                <span className="text-xs text-slate-500 uppercase font-mono font-bold">Estimated Cost</span>
-                <span className="text-lg font-black font-mono text-[#08102B]">
+              <div className="pt-3 border-t border-[#E4E2DC] flex items-center justify-between">
+                <span className="text-xs text-[#71717A] uppercase font-mono font-bold">Estimated Cost</span>
+                <span className="text-lg font-serif font-bold text-[#121316]">
                   ₹{pair.work_b.amount.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
                 </span>
               </div>
@@ -232,22 +231,22 @@ export const DuplicateComparisonModal: React.FC<DuplicateComparisonModalProps> =
           </div>
 
           {/* Similarities & Contributory Overlap Breakdown */}
-          <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200 space-y-3">
+          <div className="p-4 rounded-xl bg-[#FAF8F5] border border-[#E4E2DC] space-y-3">
             <div className="flex items-center justify-between flex-wrap gap-2">
-              <span className="text-[10px] font-mono font-bold text-[#2563EB] uppercase tracking-wider">
-                Objective Similarity Indicators
+              <span className="text-[10px] font-mono font-bold text-[#C85A32] uppercase tracking-wider">
+                Contributory Overlap Vectors
               </span>
               <div className="flex items-center gap-3 text-xs font-mono">
-                <span>Description Overlap: <strong>{Math.round(pair.text_similarity * 100)}%</strong></span>
-                <span>·</span>
-                <span>Cost Parity: <strong>{Math.round(pair.cost_similarity * 100)}%</strong></span>
+                <span>Description Overlap: <strong className="text-[#121316]">{Math.round(pair.text_similarity * 100)}%</strong></span>
+                <span className="text-[#71717A]">·</span>
+                <span>Cost Parity: <strong className="text-[#121316]">{Math.round(pair.cost_similarity * 100)}%</strong></span>
               </div>
             </div>
 
-            <ul className="space-y-1.5 text-xs text-slate-700">
+            <ul className="space-y-1.5 text-xs text-[#4A4D53]">
               {pair.reasons.map((r, i) => (
                 <li key={i} className="flex items-center gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#2563EB] shrink-0" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#C85A32] shrink-0" />
                   <span>{r}</span>
                 </li>
               ))}
@@ -256,20 +255,20 @@ export const DuplicateComparisonModal: React.FC<DuplicateComparisonModalProps> =
         </div>
 
         {/* Footer Actions */}
-        <div className="px-6 py-4 border-t border-slate-100 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-          <div className="text-slate-500">
+        <div className="px-6 py-4 border-t border-[#E4E2DC] bg-[#F0EFEA] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+          <div className="text-[#4A4D53] font-mono">
             {caseSuccess ? (
-              <span className="text-emerald-700 font-bold flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              <span className="text-[#2E7D32] font-bold flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-[#2E7D32]" />
                 Case Registered: {caseSuccess} (Logged to Audit Trail)
               </span>
             ) : distinctMarked ? (
-              <span className="text-blue-700 font-bold flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-blue-600" />
+              <span className="text-[#121316] font-bold flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-[#2E7D32]" />
                 Marked as Distinct Physical Works
               </span>
             ) : (
-              <span>Recommended: {pair.recommended_action}</span>
+              <span>Recommended Action: {pair.recommended_action}</span>
             )}
           </div>
 
@@ -280,7 +279,7 @@ export const DuplicateComparisonModal: React.FC<DuplicateComparisonModalProps> =
                 setDistinctMarked(true);
                 setTimeout(onClose, 1200);
               }}
-              className="px-4 py-2.5 rounded-full bg-white border border-slate-200 text-slate-700 font-bold hover:bg-slate-100 transition min-h-[44px] cursor-pointer"
+              className="px-4 py-2 rounded-lg bg-[#FAF8F5] border border-[#E4E2DC] text-[#121316] font-semibold hover:bg-[#F0EFEA] transition min-h-[38px] cursor-pointer"
             >
               Mark as Distinct
             </button>
@@ -289,7 +288,7 @@ export const DuplicateComparisonModal: React.FC<DuplicateComparisonModalProps> =
               type="button"
               disabled={creatingCase || !!caseSuccess}
               onClick={handleInitiateCase}
-              className="px-5 py-2.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold transition flex items-center gap-2 shadow-xs disabled:opacity-50 min-h-[44px] cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+              className="px-5 py-2 rounded-lg bg-[#121316] hover:bg-[#2A2C32] text-[#FAF8F5] font-semibold transition flex items-center gap-2 shadow-xs disabled:opacity-50 min-h-[38px] cursor-pointer"
             >
               {creatingCase ? 'Registering...' : caseSuccess ? 'Case Active' : 'Initiate Review Case →'}
             </button>

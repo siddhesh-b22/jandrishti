@@ -3,11 +3,26 @@
 @tailwind utilities;
 
 :root {
-  --color-primary: #2563EB;
-  --color-primary-dark: #08102B;
-  --color-accent-blue: #3B82F6;
+  --color-primary: #C85A32;
+  --color-primary-dark: #121316;
+  --color-accent-blue: #2563EB;
   --color-accent-emerald: #10B981;
-  --color-accent-amber: #F59E0B;
+  --color-accent-amber: #D97706;
+
+  /* GetCasework Design Tokens */
+  --cw-bg: #FAF8F5;
+  --cw-paper: #F7F5F0;
+  --cw-canvas: #F1EFEA;
+  --cw-card: #FFFFFF;
+  --cw-ink: #121316;
+  --cw-ink-2: #4A4D53;
+  --cw-muted: #71717A;
+  --cw-rule: #E4E2DC;
+  --cw-rule-soft: #F0EFEA;
+  --cw-accent: #C85A32;
+  --cw-accent-hover: #B54C26;
+  --cw-accent-soft: #FAF0EB;
+  --cw-accent-border: #E8C5B6;
 }
 
 /* ========================================================= */
@@ -34,29 +49,130 @@ body,
 
 @layer base {
   body {
-    background-color: #F8FAFC;
-    color: #08102B;
+    background-color: #FAF8F5;
+    color: #121316;
     min-height: 100vh;
-    font-family: 'Manrope', 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
-    letter-spacing: -0.018em;
+    letter-spacing: -0.011em;
   }
 
   ::selection {
-    background-color: #2563EB;
+    background-color: #C85A32;
     color: #FFFFFF;
   }
 
-  h1, h2, h3, h4, .font-display, .font-manrope {
-    font-family: 'Manrope', sans-serif;
-    letter-spacing: -0.03em;
+  h1, h2, h3, h4 {
+    font-family: 'Newsreader', Georgia, serif;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+  }
+
+  .font-serif {
+    font-family: 'Newsreader', Georgia, serif;
+  }
+
+  .font-sans {
+    font-family: 'IBM Plex Sans', sans-serif;
   }
 
   .font-mono {
+    font-family: 'IBM Plex Mono', monospace;
     font-feature-settings: 'tnum' on, 'lnum' on, 'zero' on;
   }
+}
+
+/* GetCasework Editorial Components */
+.cw-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #C85A32;
+  color: #FFFFFF;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 9999px;
+  border: 1px solid #B54C26;
+  box-shadow: 0 1px 2px rgba(200, 90, 50, 0.2);
+  transition: all 0.2s ease;
+}
+
+.cw-btn-primary:hover {
+  background-color: #B54C26;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(200, 90, 50, 0.25);
+}
+
+.cw-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #FFFFFF;
+  color: #121316;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 9999px;
+  border: 1px solid #E4E2DC;
+  box-shadow: 0 1px 2px rgba(18, 19, 22, 0.04);
+  transition: all 0.2s ease;
+}
+
+.cw-btn-secondary:hover {
+  background-color: #F7F5F0;
+  border-color: #D5D2C8;
+  transform: translateY(-1px);
+}
+
+.cw-badge-section {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #71717A;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  background: #F0EFEA;
+  border: 1px solid #E4E2DC;
+}
+
+.cw-badge-section::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #C85A32;
+  display: inline-block;
+}
+
+.cw-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E4E2DC;
+  border-radius: 1rem;
+  transition: all 0.25s ease;
+}
+
+.cw-card:hover {
+  border-color: #D5D2C8;
+  box-shadow: 0 8px 24px -8px rgba(18, 19, 22, 0.06);
+}
+
+.cw-stamp {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #71717A;
 }
 
 /* Alluxi Button System */

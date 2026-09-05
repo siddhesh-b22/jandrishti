@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import {
   Search,
   Users,
@@ -15,6 +15,7 @@ import {
   ArrowRight,
   LayoutGrid,
   List,
+  Scale,
 } from 'lucide-react';
 import { api } from '../api/client';
 import { MP, StateSummary } from '../api/types';
@@ -107,31 +108,31 @@ export const MpExplorerPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 animate-fade-in text-[#08102B] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 font-manrope">
+    <div className="space-y-6 animate-fade-in text-[#121316] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 font-sans">
       <Breadcrumbs items={[{ label: 'Parliamentary Directory', to: '/mps', icon: Users }]} />
 
-      {/* Alluxi Modern Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200/80 pb-6">
+      {/* GetCasework Editorial Header */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-[#E4E2DC] pb-6">
         <div>
-          <span className="text-xs font-extrabold uppercase tracking-widest text-[#2563EB] block mb-1">
-            PARLIAMENTARY DIRECTORY · {selectedHouse === 'ALL' ? '778 MEMBERS' : selectedHouse === 'LOK_SABHA' ? '543 LOK SABHA' : '235 RAJYA SABHA'}
-          </span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#08102B] tracking-tight">
-            Parliamentary Representatives
+          <div className="cw-badge-section mb-2">
+            § II · PARLIAMENTARY DIRECTORY · {selectedHouse === 'ALL' ? '778 MEMBERS' : selectedHouse === 'LOK_SABHA' ? '543 LOK SABHA' : '235 RAJYA SABHA'}
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-serif text-[#121316] tracking-tight">
+            Parliamentary <span className="italic font-normal">Representatives</span>
           </h1>
-          <p className="text-sm text-slate-600 font-light mt-1">
-            Statutory allocation balances, expenditure tracking, and ground project recommendations for all 778 Parliamentarians.
+          <p className="text-xs sm:text-sm text-[#71717A] font-light mt-1">
+            Statutory allocation balances, expenditure velocity, and ground project recommendations for all 778 Parliamentarians.
           </p>
         </div>
 
         {/* View Mode & Chamber Switcher */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1 p-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold shrink-0">
+          <div className="flex items-center gap-1 p-1 rounded-full bg-[#FAF8F5] border border-[#E4E2DC] text-xs font-medium shrink-0">
             <button
               type="button"
               onClick={() => setViewMode('TABLE')}
               className={`px-3.5 py-1.5 rounded-full transition flex items-center gap-1.5 ${
-                viewMode === 'TABLE' ? 'bg-[#2563EB] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                viewMode === 'TABLE' ? 'bg-[#121316] text-white shadow-xs' : 'text-[#71717A] hover:text-[#121316]'
               }`}
             >
               <List className="w-3.5 h-3.5" />
@@ -141,7 +142,7 @@ export const MpExplorerPage: React.FC = () => {
               type="button"
               onClick={() => setViewMode('CARDS')}
               className={`px-3.5 py-1.5 rounded-full transition flex items-center gap-1.5 ${
-                viewMode === 'CARDS' ? 'bg-[#2563EB] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                viewMode === 'CARDS' ? 'bg-[#121316] text-white shadow-xs' : 'text-[#71717A] hover:text-[#121316]'
               }`}
             >
               <LayoutGrid className="w-3.5 h-3.5" />
@@ -151,24 +152,93 @@ export const MpExplorerPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Filter & Search Bar (Alluxi Rounded Capsule) */}
-      <div className="bg-white rounded-3xl p-5 shadow-3xl border border-slate-200/80 space-y-4">
-        <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4">
+      {/* Bento Summary Metrics (/ 01, / 02, / 03) */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="cw-card p-5">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-[10px] font-mono text-[#C85A32] uppercase tracking-widest font-semibold">/ 01 Representatives</span>
+            <span className="text-[10px] font-mono text-[#71717A]">Both Houses</span>
+          </div>
+          <div className="text-2xl font-mono font-semibold text-[#121316]">
+            {total.toLocaleString()} MPs
+          </div>
+          <div className="text-xs text-[#71717A] mt-1 font-light">
+            543 Lok Sabha single-member seats + 235 Rajya Sabha states representatives
+          </div>
+        </div>
+
+        <div className="cw-card p-5">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-[10px] font-mono text-[#C85A32] uppercase tracking-widest font-semibold">/ 02 Annual Allocation</span>
+            <span className="text-[10px] font-mono text-[#71717A]">MoSPI Quota</span>
+          </div>
+          <div className="text-2xl font-mono font-semibold text-[#121316]">
+            ₹5.00 Cr / Year
+          </div>
+          <div className="text-xs text-[#71717A] mt-1 font-light">
+            ₹2.50 Cr per tranche transferred by District Nodal Authority
+          </div>
+        </div>
+
+        <div className="cw-card p-5">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-[10px] font-mono text-[#C85A32] uppercase tracking-widest font-semibold">/ 03 Average Velocity</span>
+            <span className="text-[10px] font-mono text-[#71717A]">National Baseline</span>
+          </div>
+          <div className="text-2xl font-mono font-semibold text-[#121316]">
+            89.2%
+          </div>
+          <div className="text-xs text-[#71717A] mt-1 font-light">
+            Reconciled drawdown against recommended work orders
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Chamber Filter Chips */}
+      <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-1">
+        {[
+          { label: 'All 778 MPs', house: 'ALL' },
+          { label: 'Lok Sabha (543)', house: 'LOK_SABHA' },
+          { label: 'Rajya Sabha (235)', house: 'RAJYA_SABHA' },
+        ].map((chip) => (
+          <button
+            key={chip.label}
+            type="button"
+            onClick={() => {
+              setSelectedHouse(chip.house as any);
+              const next = new URLSearchParams(searchParams);
+              next.set('offset', '0');
+              setSearchParams(next);
+            }}
+            className={`px-4 py-1.5 rounded-full text-xs font-mono font-medium transition whitespace-nowrap border ${
+              selectedHouse === chip.house
+                ? 'bg-[#121316] text-white border-[#121316] shadow-xs'
+                : 'bg-[#FAF8F5] text-[#71717A] border-[#E4E2DC] hover:border-[#121316] hover:text-[#121316]'
+            }`}
+          >
+            {chip.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Filter & Search Bar */}
+      <div className="cw-card p-4 space-y-3">
+        <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3">
           <form onSubmit={handleSearchSubmit} className="relative flex-1">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[#71717A] absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               placeholder="Search by representative name, constituency, or ID..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-full border border-slate-200 bg-slate-50/50 text-xs font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] shadow-xs min-h-[44px]"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E4E2DC] bg-[#FAF8F5] text-xs font-medium text-[#121316] placeholder-[#71717A] focus:outline-none focus:ring-1 focus:ring-[#C85A32] focus:border-[#C85A32] shadow-2xs min-h-[44px]"
             />
           </form>
 
           <select
             value={state}
             onChange={(e) => updateParam('state', e.target.value || null)}
-            className="px-4 py-2.5 rounded-full border border-slate-200 bg-slate-50/50 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 shadow-xs"
+            className="px-4 py-2.5 rounded-xl border border-[#E4E2DC] bg-[#FAF8F5] text-xs font-medium text-[#121316] focus:outline-none focus:ring-1 focus:ring-[#C85A32] shadow-2xs min-h-[44px]"
           >
             <option value="">All 28 States &amp; UTs ({states.length})</option>
             {states.map((s) => (
@@ -188,7 +258,7 @@ export const MpExplorerPage: React.FC = () => {
               next.set('offset', '0');
               setSearchParams(next);
             }}
-            className="px-4 py-2.5 rounded-full border border-slate-200 bg-slate-50/50 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 shadow-xs"
+            className="px-4 py-2.5 rounded-xl border border-[#E4E2DC] bg-[#FAF8F5] text-xs font-medium text-[#121316] focus:outline-none focus:ring-1 focus:ring-[#C85A32] shadow-2xs min-h-[44px]"
           >
             <option value="allocated_amount-desc">Allocation (High → Low)</option>
             <option value="allocated_amount-asc">Allocation (Low → High)</option>
@@ -205,7 +275,7 @@ export const MpExplorerPage: React.FC = () => {
                 setSearchInput('');
                 setSearchParams(new URLSearchParams());
               }}
-              className="px-4 py-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold transition flex items-center gap-1.5"
+              className="px-4 py-2.5 rounded-xl bg-[#FAF8F5] border border-[#E4E2DC] hover:bg-[#F0EFEA] text-[#71717A] text-xs font-medium transition flex items-center gap-1.5 min-h-[44px]"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Reset</span>
@@ -215,27 +285,27 @@ export const MpExplorerPage: React.FC = () => {
 
         {/* Active Filters Pill Bar */}
         {(search || state || selectedHouse !== 'ALL') && (
-          <div className="flex items-center gap-2 pt-2 border-t border-slate-100 text-xs text-slate-500 flex-wrap">
-            <span className="text-[10px] font-bold uppercase font-mono text-slate-400">ACTIVE:</span>
+          <div className="flex items-center gap-2 pt-2 border-t border-[#E4E2DC] text-xs text-[#71717A] flex-wrap">
+            <span className="text-[10px] font-semibold uppercase font-mono text-[#71717A]">ACTIVE:</span>
             {selectedHouse !== 'ALL' && (
-              <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 font-bold text-[11px]">
+              <span className="px-2.5 py-0.5 rounded-full bg-[#FAF0EB] text-[#C85A32] font-semibold text-[11px] border border-[#E8C5B6]">
                 {houseLabel}
               </span>
             )}
             {search && (
-              <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800 font-bold text-[11px]">
+              <span className="px-2.5 py-0.5 rounded-full bg-[#FAF0EB] text-[#C85A32] font-semibold text-[11px] border border-[#E8C5B6]">
                 Search: "{search}"
               </span>
             )}
             {state && (
-              <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800 font-bold text-[11px]">
+              <span className="px-2.5 py-0.5 rounded-full bg-[#F0EFEA] text-[#121316] font-semibold text-[11px] border border-[#E4E2DC]">
                 State: {state}
               </span>
             )}
             <button
               type="button"
               onClick={handleReset}
-              className="text-blue-600 hover:text-blue-800 font-bold ml-auto flex items-center gap-1 hover:underline text-[11px]"
+              className="text-[#C85A32] hover:text-[#9E3E1C] font-semibold ml-auto flex items-center gap-1 hover:underline text-[11px]"
             >
               <RotateCcw className="w-3 h-3" />
               <span>Reset Filters</span>
@@ -244,7 +314,7 @@ export const MpExplorerPage: React.FC = () => {
         )}
       </div>
 
-      {/* 4. Results List / Grid */}
+      {/* Results List / Grid */}
       {loading ? (
         <LoadingSkeleton rows={8} height="h-14" />
       ) : error ? (
@@ -263,68 +333,92 @@ export const MpExplorerPage: React.FC = () => {
               <div
                 key={mp.internal_mp_id}
                 onClick={() => setActiveDossier({ type: 'MP', data: mp })}
-                className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:border-blue-300 transition space-y-3 cursor-pointer"
+                className="cw-card p-4 hover:border-[#C85A32]/40 transition space-y-3 cursor-pointer"
               >
                 <div className="flex items-center justify-between">
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                    mp.house === 'LOK_SABHA' ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-800'
-                  }`}>
-                    {mp.house === 'LOK_SABHA' ? 'Lok Sabha' : 'Rajya Sabha'}
-                  </span>
-                  <span className="text-xs font-mono font-bold text-slate-700">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#FAF0EB] text-[#C85A32] border border-[#E8C5B6]">
+                      {mp.house === 'LOK_SABHA' ? 'Lok Sabha' : 'Rajya Sabha'}
+                    </span>
+                    {mp.party && (
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#F0EFEA] text-[#121316] border border-[#E4E2DC]">
+                        {mp.party}
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-xs font-mono font-semibold text-[#121316]">
                     {mp.utilization_pct?.toFixed(1) || '0.0'}% Utilized
                   </span>
                 </div>
 
-                <div>
-                  <h3 className="text-sm font-bold text-slate-900">{mp.mp_name_normalized}</h3>
-                  <p className="text-xs text-slate-600 mt-0.5">
-                    {mp.constituency_normalized || 'Council of States'}, {mp.state_normalized}
-                  </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-14 rounded-xl overflow-hidden bg-[#F0EFEA] border border-[#E4E2DC] shrink-0 flex items-center justify-center">
+                    {mp.photo_url ? (
+                      <img src={mp.photo_url} alt={mp.mp_name_normalized} className="w-full h-full object-cover object-top" onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} />
+                    ) : (
+                      <span className="font-serif font-normal text-[#71717A] text-sm">{mp.mp_name_normalized[0]}</span>
+                    )}
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-serif font-normal text-[#121316] line-clamp-1">{mp.mp_name_normalized}</h3>
+                    <p className="text-xs text-[#71717A] mt-0.5">
+                      {mp.constituency_normalized || 'Council of States'}, {mp.state_normalized}
+                    </p>
+                    {mp.profession && <span className="text-[10px] text-[#71717A] block mt-0.5">{mp.profession}</span>}
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-slate-100">
+                <div className="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-[#E4E2DC]">
                   <div>
-                    <span className="text-[10px] text-slate-400 uppercase font-mono block">Allocated</span>
-                    <span className="text-sm font-black font-mono text-slate-900">
+                    <span className="text-[10px] text-[#71717A] uppercase font-mono block">Allocated</span>
+                    <span className="text-sm font-semibold font-mono text-[#121316]">
                       ₹{((mp.allocated_amount || 0) / 1e7).toFixed(2)} Cr
                     </span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-400 uppercase font-mono block">Disbursed</span>
-                    <span className="text-sm font-black font-mono text-emerald-600">
+                    <span className="text-[10px] text-[#71717A] uppercase font-mono block">Disbursed</span>
+                    <span className="text-sm font-semibold font-mono text-[#121316]">
                       ₹{((mp.total_expenditure || 0) / 1e7).toFixed(2)} Cr
                     </span>
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setActiveDossier({ type: 'MP', data: mp });
-                  }}
-                  className="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-[#2563EB] hover:text-white text-slate-800 text-xs font-bold transition flex items-center justify-center gap-1.5 min-h-[44px]"
-                >
-                  <span>Inspect Representative Dossier</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
+                <div className="flex items-center gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveDossier({ type: 'MP', data: mp });
+                    }}
+                    className="flex-1 cw-btn-secondary text-xs py-2 justify-center"
+                  >
+                    <span>Quick Preview</span>
+                  </button>
+                  <Link
+                    to={`/mps/${mp.internal_mp_id}`}
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex-1 cw-btn-primary text-xs py-2 justify-center gap-1.5"
+                  >
+                    <span>Full Profile</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
               </div>
             ))}
           </div>
 
           {/* Desktop Table (>= md) */}
-          <div className="hidden md:block bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+          <div className="hidden md:block bg-[#FAF8F5] rounded-2xl border border-[#E4E2DC] shadow-xs overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs font-sans">
-                <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase font-mono text-[10px] tracking-wider">
+                <thead className="bg-[#F0EFEA] border-b border-[#E4E2DC] text-[#71717A] uppercase font-mono text-[10px] tracking-wider">
                   <tr>
-                    <th className="py-3 px-4 font-bold">Representative</th>
-                    <th className="py-3 px-4 font-bold">House / Constituency</th>
-                    <th className="py-3 px-4 font-bold">State</th>
-                    <th className="py-3 px-4 font-bold text-right">Allocated</th>
-                    <th className="py-3 px-4 font-bold text-right">Disbursed</th>
-                    <th className="py-3 px-4 font-bold text-center">
+                    <th className="py-3.5 px-4 font-semibold">Representative</th>
+                    <th className="py-3.5 px-4 font-semibold">Party / House</th>
+                    <th className="py-3.5 px-4 font-semibold">State / Constituency</th>
+                    <th className="py-3.5 px-4 font-semibold text-right">Allocated</th>
+                    <th className="py-3.5 px-4 font-semibold text-right">Disbursed</th>
+                    <th className="py-3.5 px-4 font-semibold text-center">
                       <div className="flex items-center justify-center gap-1">
                         <span>Utilization</span>
                         <HelpTooltip
@@ -333,111 +427,163 @@ export const MpExplorerPage: React.FC = () => {
                         />
                       </div>
                     </th>
-                    <th className="py-3 px-4 font-bold text-right">Works</th>
-                    <th className="py-3 px-4 font-bold text-center">Action</th>
+                    <th className="py-3.5 px-4 font-semibold text-right">Works</th>
+                    <th className="py-3.5 px-4 font-semibold text-center">Action</th>
                   </tr>
                 </thead>
-              <tbody className="divide-y divide-slate-100">
-                {mps.map((mp) => (
-                  <tr
-                    key={mp.internal_mp_id}
-                    onClick={() => setActiveDossier({ type: 'MP', data: mp })}
-                    className="hover:bg-blue-50/40 cursor-pointer transition"
-                  >
-                    <td className="py-3.5 px-4">
-                      <div className="font-bold text-slate-900">{mp.mp_name_normalized}</div>
-                      <span className="text-[10px] text-slate-400 font-mono">{mp.internal_mp_id}</span>
-                    </td>
-                    <td className="py-3.5 px-4 text-slate-600">
-                      <div className="font-medium">{mp.constituency_normalized || 'Council of States'}</div>
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full inline-block mt-0.5 ${
-                        mp.house === 'LOK_SABHA' ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-800'
-                      }`}>
-                        {mp.house === 'LOK_SABHA' ? 'Lok Sabha' : 'Rajya Sabha'}
-                      </span>
-                    </td>
-                    <td className="py-3.5 px-4 font-medium text-slate-700">{mp.state_normalized}</td>
-                    <td className="py-3.5 px-4 font-mono font-bold text-slate-900 text-right">
-                      ₹{((mp.allocated_amount || 0) / 1e7).toFixed(2)} Cr
-                    </td>
-                    <td className="py-3.5 px-4 font-mono font-bold text-emerald-600 text-right">
-                      ₹{((mp.total_expenditure || 0) / 1e7).toFixed(2)} Cr
-                    </td>
-                    <td className="py-3.5 px-4 text-center">
-                      <span className="font-mono font-bold text-slate-800">
-                        {mp.utilization_pct?.toFixed(1) || '0.0'}%
-                      </span>
-                    </td>
-                    <td className="py-3.5 px-4 font-mono text-right text-slate-700">
-                      <span className="text-slate-900 font-bold">{mp.completed_works_count || 0}</span>
-                      <span className="text-slate-400 text-[10px]"> / {mp.recommended_works_count || 0}</span>
-                    </td>
-                    <td className="py-3.5 px-4 text-center">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setActiveDossier({ type: 'MP', data: mp });
-                        }}
-                        className="px-3 py-1 rounded-full bg-slate-100 hover:bg-blue-600 hover:text-white text-slate-700 text-xs font-bold transition"
-                      >
-                        Inspect →
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                <tbody className="divide-y divide-[#E4E2DC]">
+                  {mps.map((mp) => (
+                    <tr
+                      key={mp.internal_mp_id}
+                      onClick={() => setActiveDossier({ type: 'MP', data: mp })}
+                      className="hover:bg-[#F0EFEA] cursor-pointer transition group"
+                    >
+                      <td className="py-3.5 px-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-11 rounded-lg overflow-hidden bg-[#F0EFEA] border border-[#E4E2DC] shrink-0 flex items-center justify-center">
+                            {mp.photo_url ? (
+                              <img src={mp.photo_url} alt={mp.mp_name_normalized} className="w-full h-full object-cover object-top" onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} />
+                            ) : (
+                              <span className="font-serif font-normal text-[#71717A] text-xs">{mp.mp_name_normalized[0]}</span>
+                            )}
+                          </div>
+                          <div>
+                            <Link to={`/mps/${mp.internal_mp_id}`} onClick={(e) => e.stopPropagation()} className="font-serif font-normal text-[#121316] group-hover:text-[#C85A32] transition hover:underline">
+                              {mp.mp_name_normalized}
+                            </Link>
+                            <span className="text-[10px] text-[#71717A] font-mono block">ID: {mp.internal_mp_id}</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-3.5 px-4">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          {mp.party && (
+                            <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-[#F0EFEA] text-[#121316] border border-[#E4E2DC]">
+                              {mp.party}
+                            </span>
+                          )}
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#FAF0EB] text-[#C85A32] border border-[#E8C5B6]">
+                            {mp.house === 'LOK_SABHA' ? 'Lok Sabha' : 'Rajya Sabha'}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="py-3.5 px-4 text-[#71717A]">
+                        <div className="font-medium text-[#121316]">{mp.state_normalized}</div>
+                        <span className="text-[11px] text-[#71717A]">{mp.constituency_normalized || 'Council of States'}</span>
+                      </td>
+                      <td className="py-3.5 px-4 font-mono font-semibold text-[#121316] text-right">
+                        ₹{((mp.allocated_amount || 0) / 1e7).toFixed(2)} Cr
+                      </td>
+                      <td className="py-3.5 px-4 font-mono font-semibold text-[#121316] text-right">
+                        ₹{((mp.total_expenditure || 0) / 1e7).toFixed(2)} Cr
+                      </td>
+                      <td className="py-3.5 px-4 text-center">
+                        <span className="font-mono font-semibold text-[#121316]">
+                          {mp.utilization_pct?.toFixed(1) || '0.0'}%
+                        </span>
+                      </td>
+                      <td className="py-3.5 px-4 font-mono text-right text-[#71717A]">
+                        <span className="text-[#121316] font-semibold">{mp.completed_works_count || 0}</span>
+                        <span className="text-[#71717A] text-[10px]"> / {mp.recommended_works_count || 0}</span>
+                      </td>
+                      <td className="py-3.5 px-4 text-center">
+                        <div className="flex items-center justify-center gap-2" onClick={(e) => e.stopPropagation()}>
+                          <button
+                            type="button"
+                            onClick={() => setActiveDossier({ type: 'MP', data: mp })}
+                            className="px-2.5 py-1.5 rounded-lg bg-[#FAF8F5] border border-[#E4E2DC] hover:bg-[#F0EFEA] text-[#121316] text-xs font-medium transition"
+                            title="Quick Preview"
+                          >
+                            Preview
+                          </button>
+                          <Link
+                            to={`/mps/${mp.internal_mp_id}`}
+                            className="px-3 py-1.5 rounded-lg bg-[#121316] hover:bg-[#C85A32] text-white text-xs font-semibold transition flex items-center gap-1"
+                          >
+                            <span>Profile</span>
+                            <ArrowRight className="w-3 h-3" />
+                          </Link>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
       ) : (
-        /* Compact Card Grid */
+        /* Cards Grid View (>= md) */
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {mps.map((mp) => (
             <div
               key={mp.internal_mp_id}
               onClick={() => setActiveDossier({ type: 'MP', data: mp })}
-              className="card-executive p-5 rounded-2xl cursor-pointer flex flex-col justify-between space-y-4 hover:border-blue-300"
+              className="cw-card p-5 hover:border-[#C85A32]/40 transition space-y-4 cursor-pointer"
             >
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                    mp.house === 'LOK_SABHA' ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-800'
-                  }`}>
-                    {mp.house === 'LOK_SABHA' ? '18th Lok Sabha' : 'Rajya Sabha'}
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#FAF0EB] text-[#C85A32] border border-[#E8C5B6]">
+                  {mp.house === 'LOK_SABHA' ? 'Lok Sabha' : 'Rajya Sabha'}
+                </span>
+                <span className="text-xs font-mono font-semibold text-[#121316]">
+                  {mp.utilization_pct?.toFixed(1) || '0.0'}% Utilized
+                </span>
+              </div>
+
+              <div className="flex items-center gap-3.5">
+                <div className="w-14 h-16 rounded-xl overflow-hidden bg-[#F0EFEA] border border-[#E4E2DC] shrink-0 flex items-center justify-center">
+                  {mp.photo_url ? (
+                    <img src={mp.photo_url} alt={mp.mp_name_normalized} className="w-full h-full object-cover object-top" onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} />
+                  ) : (
+                    <span className="font-serif font-normal text-[#71717A] text-base">{mp.mp_name_normalized[0]}</span>
+                  )}
+                </div>
+                <div>
+                  <h3 className="text-base font-serif font-normal text-[#121316] line-clamp-1">{mp.mp_name_normalized}</h3>
+                  <p className="text-xs text-[#71717A] mt-0.5">
+                    {mp.constituency_normalized || 'Council of States'}, {mp.state_normalized}
+                  </p>
+                  {mp.party && (
+                    <span className="text-[10px] font-mono text-[#71717A] block mt-0.5">Party: {mp.party}</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 text-xs pt-3 border-t border-[#E4E2DC]">
+                <div>
+                  <span className="text-[10px] text-[#71717A] uppercase font-mono block">Allocated</span>
+                  <span className="text-sm font-semibold font-mono text-[#121316]">
+                    ₹{((mp.allocated_amount || 0) / 1e7).toFixed(2)} Cr
                   </span>
-                  <span className="text-[10px] text-slate-400 font-mono">{mp.internal_mp_id}</span>
                 </div>
-
-                <h3 className="text-base font-bold text-slate-900 mt-2 line-clamp-1">{mp.mp_name_normalized}</h3>
-                <p className="text-xs text-slate-500 font-medium">
-                  {mp.constituency_normalized ? `${mp.constituency_normalized}, ` : ''}{mp.state_normalized}
-                </p>
-              </div>
-
-              <div className="space-y-2 pt-2 border-t border-slate-100 text-xs font-mono">
-                <div className="flex justify-between">
-                  <span className="text-slate-500">Allocated:</span>
-                  <strong className="text-slate-900">₹{((mp.allocated_amount || 0) / 1e7).toFixed(2)} Cr</strong>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500">Disbursed:</span>
-                  <strong className="text-emerald-600">₹{((mp.total_expenditure || 0) / 1e7).toFixed(2)} Cr</strong>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500">Works Built:</span>
-                  <strong className="text-slate-900">{mp.completed_works_count || 0} / {mp.recommended_works_count || 0}</strong>
+                <div>
+                  <span className="text-[10px] text-[#71717A] uppercase font-mono block">Disbursed</span>
+                  <span className="text-sm font-semibold font-mono text-[#121316]">
+                    ₹{((mp.total_expenditure || 0) / 1e7).toFixed(2)} Cr
+                  </span>
                 </div>
               </div>
 
-              <button
-                type="button"
-                className="w-full py-2 rounded-xl bg-slate-50 hover:bg-blue-600 hover:text-white text-slate-800 text-xs font-bold transition flex items-center justify-center gap-1"
-              >
-                <span>View MP Dossier</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
+              <div className="flex items-center gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveDossier({ type: 'MP', data: mp });
+                  }}
+                  className="flex-1 cw-btn-secondary text-xs py-2 justify-center"
+                >
+                  <span>Quick Preview</span>
+                </button>
+                <Link
+                  to={`/mps/${mp.internal_mp_id}`}
+                  onClick={(e) => e.stopPropagation()}
+                  className="flex-1 cw-btn-primary text-xs py-2 justify-center gap-1.5"
+                >
+                  <span>Full Profile</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
             </div>
           ))}
         </div>

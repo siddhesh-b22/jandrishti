@@ -71,45 +71,48 @@ export const StatesPage: React.FC = () => {
   );
 
   return (
-    <div className="space-y-8 text-[#08102B] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 font-manrope">
+    <div className="space-y-8 text-[#121316] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans pb-24">
       <Breadcrumbs items={[{ label: 'National Spatial Atlas', to: '/states', icon: MapPin }]} />
 
-      {/* Alluxi Modern Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/80 pb-6">
-        <div>
-          <span className="text-xs font-extrabold uppercase tracking-widest text-[#2563EB] block mb-1">
-            28 STATES &amp; 8 UNION TERRITORIES
-          </span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#08102B] tracking-tight">
-            National Spatial Atlas
-          </h1>
-          <p className="text-sm text-slate-600 font-light mt-1">
-            Macro-level fiscal velocity and ground implementation comparisons across all 28 States and 8 Union Territories.
-          </p>
-        </div>
+      {/* Editorial Header */}
+      <div className="space-y-4 border-b border-[#E4E2DC] pb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1.5">
+            <span className="cw-badge-section">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C85A32]" />
+              § VII · NATIONAL SPATIAL DISPARITY ATLAS
+            </span>
+            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-medium tracking-tight text-[#121316]">
+              National Spatial Atlas &amp; <em className="font-serif italic font-normal text-[#C85A32]">Territorial Velocity</em>
+            </h1>
+            <p className="text-sm sm:text-base text-[#6E706E] max-w-2xl leading-relaxed font-normal">
+              Macro-level fiscal velocity and ground implementation comparisons across all 28 States and 8 Union Territories.
+            </p>
+          </div>
 
-        {/* View Mode Toggle */}
-        <div className="flex items-center gap-1 p-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold shrink-0">
-          <button
-            type="button"
-            onClick={() => setViewMode('MAP')}
-            className={`px-4 py-2 rounded-full transition flex items-center gap-1.5 ${
-              viewMode === 'MAP' ? 'bg-[#2563EB] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <MapIcon className="w-4 h-4" />
-            <span>Interactive Map</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setViewMode('TABLE')}
-            className={`px-4 py-2 rounded-full transition flex items-center gap-1.5 ${
-              viewMode === 'TABLE' ? 'bg-[#2563EB] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <TableProperties className="w-4 h-4" />
-            <span>Comparative Table</span>
-          </button>
+          {/* View Mode Toggle */}
+          <div className="flex items-center gap-1 p-1 rounded-full bg-[#FAF8F5] border border-[#E4E2DC] text-xs font-medium shrink-0">
+            <button
+              type="button"
+              onClick={() => setViewMode('MAP')}
+              className={`px-4 py-1.5 rounded-full transition flex items-center gap-1.5 ${
+                viewMode === 'MAP' ? 'bg-[#121316] text-[#FAF8F5] shadow-xs' : 'text-[#6E706E] hover:text-[#121316]'
+              }`}
+            >
+              <MapIcon className="w-3.5 h-3.5" />
+              <span>Interactive Map</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('TABLE')}
+              className={`px-4 py-1.5 rounded-full transition flex items-center gap-1.5 ${
+                viewMode === 'TABLE' ? 'bg-[#121316] text-[#FAF8F5] shadow-xs' : 'text-[#6E706E] hover:text-[#121316]'
+              }`}
+            >
+              <TableProperties className="w-3.5 h-3.5" />
+              <span>Territory Index</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -123,7 +126,7 @@ export const StatesPage: React.FC = () => {
       ) : (
         <>
           {viewMode === 'MAP' ? (
-            <div className="bg-white rounded-3xl p-4 md:p-6 shadow-3xl border border-slate-200/80">
+            <div className="bg-[#FAF8F5] rounded-2xl p-4 md:p-6 border border-[#E4E2DC]">
               <IndiaParliamentaryMap
                 states={states}
                 stats={stats}
@@ -132,19 +135,19 @@ export const StatesPage: React.FC = () => {
           ) : (
             <div className="space-y-6">
               {/* Search Bar */}
-              <div className="flex items-center justify-between gap-4">
-                <form onSubmit={handleSearchSubmit} className="relative flex-1 max-w-md">
-                  <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-[#FAF8F5] border border-[#E4E2DC]">
+                <form onSubmit={handleSearchSubmit} className="relative flex-1 max-w-md w-full">
+                  <Search className="w-4 h-4 text-[#6E706E] absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
                     placeholder="Filter by State or Union Territory..."
-                    className="w-full pl-10 pr-4 py-2.5 rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] shadow-xs"
+                    className="w-full pl-9 pr-4 py-2 rounded-xl border border-[#E4E2DC] bg-white text-xs font-medium text-[#121316] placeholder-[#6E706E] focus:outline-none focus:border-[#121316]"
                   />
                 </form>
-                <div className="text-xs text-slate-500 font-bold">
-                  Showing <strong className="text-[#08102B] font-mono">{filteredStates.length}</strong> of 36 Territories
+                <div className="text-xs text-[#6E706E] font-mono">
+                  Showing <strong className="text-[#121316]">{filteredStates.length}</strong> of 36 Territories
                 </div>
               </div>
 
@@ -153,51 +156,51 @@ export const StatesPage: React.FC = () => {
                 {filteredStates.map((st) => (
                   <div
                     key={st.state}
-                    className="rounded-3xl bg-white p-6 shadow-3xl hover:shadow-4xl transition-all duration-300 border border-slate-200/80 flex flex-col justify-between"
+                    className="rounded-2xl bg-[#FAF8F5] p-6 border border-[#E4E2DC] hover:border-[#121316] transition-all duration-200 flex flex-col justify-between space-y-4"
                   >
                     <div>
-                      <div className="flex items-center justify-between gap-2 mb-3">
-                        <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                          Territory
+                      <div className="flex items-center justify-between gap-2 mb-2">
+                        <span className="text-[10px] font-mono font-medium text-[#6E706E] uppercase tracking-wider">
+                          / TERRITORY
                         </span>
-                        <span className="text-xs font-mono font-bold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200">
+                        <span className="text-xs font-mono font-medium text-[#C85A32] bg-[#FAF0EB] px-2.5 py-0.5 rounded-full border border-[#C85A32]/20">
                           {st.total_mps} MPs
                         </span>
                       </div>
 
-                      <h3 className="text-xl font-extrabold text-[#08102B] mb-4">
+                      <h3 className="font-serif text-xl font-medium text-[#121316] mb-4">
                         {st.state}
                       </h3>
 
-                      <div className="grid grid-cols-2 gap-3 py-3 border-y border-slate-100 text-xs">
+                      <div className="grid grid-cols-2 gap-3 py-3 border-y border-[#E4E2DC] text-xs">
                         <div>
-                          <span className="text-slate-500 font-medium">Allocated:</span>
-                          <p className="font-mono font-bold text-slate-900 mt-0.5">
+                          <span className="text-[#6E706E] font-mono text-[11px] block">Allocated</span>
+                          <p className="font-mono font-medium text-[#121316] mt-0.5">
                             ₹{(st.total_allocated_amount / 10000000).toFixed(2)} Cr
                           </p>
                         </div>
                         <div>
-                          <span className="text-slate-500 font-medium">Disbursed:</span>
-                          <p className="font-mono font-bold text-slate-900 mt-0.5">
+                          <span className="text-[#6E706E] font-mono text-[11px] block">Disbursed</span>
+                          <p className="font-mono font-medium text-[#121316] mt-0.5">
                             ₹{(st.total_expenditure / 10000000).toFixed(2)} Cr
                           </p>
                         </div>
                         <div>
-                          <span className="text-slate-500 font-medium">Utilization:</span>
-                          <p className="font-mono font-bold text-emerald-600 mt-0.5">
+                          <span className="text-[#6E706E] font-mono text-[11px] block">Utilization</span>
+                          <p className="font-mono font-medium text-[#2E7D32] mt-0.5">
                             {st.state_utilization_pct.toFixed(1)}%
                           </p>
                         </div>
                         <div>
-                          <span className="text-slate-500 font-medium">Delivered:</span>
-                          <p className="font-mono font-bold text-slate-900 mt-0.5">
+                          <span className="text-[#6E706E] font-mono text-[11px] block">Completion</span>
+                          <p className="font-mono font-medium text-[#121316] mt-0.5">
                             {st.total_completed_works.toLocaleString()} / {st.total_recommended_works.toLocaleString()}
                           </p>
                         </div>
                       </div>
                     </div>
 
-                    <div className="pt-4 flex items-center justify-between">
+                    <div className="pt-2 flex items-center justify-between text-xs">
                       <button
                         type="button"
                         onClick={() =>
@@ -206,14 +209,14 @@ export const StatesPage: React.FC = () => {
                             data: st,
                           })
                         }
-                        className="text-xs font-bold text-[#2563EB] hover:underline"
+                        className="text-[#C85A32] hover:underline font-medium"
                       >
                         View State Dossier
                       </button>
 
                       <Link
                         to={`/mps?state=${encodeURIComponent(st.state)}`}
-                        className="inline-flex items-center gap-1 text-xs font-bold text-slate-700 hover:text-[#2563EB] transition"
+                        className="inline-flex items-center gap-1 text-[#121316] hover:text-[#C85A32] font-medium transition"
                       >
                         <span>Explore MPs</span>
                         <ArrowRight className="w-3.5 h-3.5" />

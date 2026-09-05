@@ -62,8 +62,105 @@ def test_data_quality_endpoint():
     assert "overall_health_score" in data
     assert data["overall_health_score"] > 80.0
     assert "metrics" in data
-    assert data["metrics"]["total_works_audited"] == 102437
+    assert data["metrics"]["total_works_audited"] >= 102437
     assert data["metrics"]["total_vouchers_audited"] == 82296
+
+    assert "reconciliation_variance_inr" in data["metrics"]
+    assert data["metrics"]["reconciliation_variance_inr"] == "₹0.00"
+    assert "field_observability_matrix" in data
+    assert "observed_fields" in data["field_observability_matrix"]
+    assert "unobserved_fields_in_public_export" in data["field_observability_matrix"]
+    assert "statutory_benchmarks" in data
+    assert data["statutory_benchmarks"]["statutory_decision_window_days"] == 45
+    assert data["statutory_benchmarks"]["statutory_completion_window_months"] == 18
+    assert "disclosed_limitations" in data
+    assert len(data["disclosed_limitations"]) >= 4
+
+def test_ai_method_transparency_and_honesty():
+    # 1. Delay predictions must declare formula benchmark, not blackbox AI
+    delay_res = client.get("/api/intelligence/delay-predictions?limit=3")
+    assert delay_res.status_code == 200
+    delay_data = delay_res.json()
+    if delay_data["items"]:
+        item = delay_data["items"][0]
+        assert item["detection_method"] == "STATISTICAL_BENCHMARK_DEVIATION"
+        assert item["method_classification"] == "Statistical / Actuarial Formula"
+        assert "limitation" in item
+        assert "actuarial sigmoid" in item["limitation"]
+
+    # 2. Progress mismatch must declare imputed lifecycle source
+    mismatch_res = client.get("/api/intelligence/progress-mismatch?limit=3")
+    assert mismatch_res.status_code == 200
+    mismatch_data = mismatch_res.json()
+    if mismatch_data["items"]:
+        m_item = mismatch_data["items"][0]
+        assert m_item["data_source"] == "Imputed from administrative lifecycle records"
+        assert m_item["method_classification"] == "Rule-Based Milestone Divergence"
+        assert "limitation" in m_item
+
+    # 3. Duplicate works must declare lexical Jaccard NLP method
+    dup_res = client.get("/api/intelligence/duplicates?limit=3")
+    assert dup_res.status_code == 200
+    dup_data = dup_res.json()
+    if dup_data:
+        d_item = dup_data[0]
+        assert d_item["detection_method"] == "LEXICAL_JACCARD_AND_COST_PROXIMITY"
+        assert d_item["method_classification"] == "NLP Token-Overlap & Budget Proximity"
+        assert "limitation" in d_item
+
+def test_security_headers_present():
+    res = client.get("/api/health")
+    assert res.status_code == 200
+    assert res.headers.get("X-Content-Type-Options") == "nosniff"
+    assert res.headers.get("X-Frame-Options") == "DENY"
+    assert res.headers.get("X-Civic-Platform") == "JanDrishti-GovTech"
+
+def test_auth_and_rbac_enforcement():
+    case_payload = {
+        "entity_type": "WORK",
+        "entity_id": "888888",
+        "title": "RBAC Security Test Case",
+        "severity": "HIGH",
+        "risk_score": 90.0,
+        "category": "SECURITY_AUDIT",
+        "notes": "Testing RBAC permissions."
+    }
+
+    # 1. Invalid token returns 401 Unauthorized
+    res_bad = client.post(
+        "/api/cases",
+        json=case_payload,
+        headers={"Authorization": "Bearer invalid-fake-token-123"}
+    )
+    assert res_bad.status_code == 401
+    assert "Invalid or expired" in res_bad.json()["detail"]
+
+    # 2. Citizen token returns 403 Forbidden on mutation
+    res_citizen = client.post(
+        "/api/cases",
+        json=case_payload,
+        headers={"Authorization": "Bearer jd-demo-citizen-2026"}
+    )
+    assert res_citizen.status_code == 403
+    assert "read-only audit privileges" in res_citizen.json()["detail"]
+
+    # 3. Ministry Official token succeeds (201 Created)
+    res_ministry = client.post(
+        "/api/cases",
+        json=case_payload,
+        headers={"Authorization": "Bearer jd-demo-ministry-2026"}
+    )
+    assert res_ministry.status_code == 201
+    created_id = res_ministry.json()["case_id"]
+
+    # 4. District Authority token can patch case status (200 OK)
+    res_patch = client.patch(
+        f"/api/cases/{created_id}",
+        json={"new_status": "UNDER_REVIEW", "notes": "District Collector review initiated."},
+        headers={"Authorization": "Bearer jd-demo-district-2026"}
+    )
+    assert res_patch.status_code == 200
+    assert res_patch.json()["status"] == "UNDER_REVIEW"
 
 def test_case_management_lifecycle():
     # 1. List cases

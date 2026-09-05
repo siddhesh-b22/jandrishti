@@ -3,25 +3,25 @@ JanDrishti — Case Management & Immutable Audit Trail Service
 Operationalizes the governance cycle:
 DATA -> ANALYSIS -> AI/ML DETECTION -> RISK ASSESSMENT -> ALERT -> HUMAN REVIEW -> ACTION -> AUDIT TRAIL
 
-Stores dynamic review cases and audit actions in database/audit_cases.db
-preserving the 156.84 MB mplads.db as 100% read-only.
+Stores dynamic review cases and audit actions in database/mplads.db
+as part of JanDrishti's Unified Single Ultimate Database.
 """
 
 import os
 import sqlite3
 import datetime
 from typing import List, Dict, Any, Optional
-from backend.config import BASE_DIR
+from backend.config import USING_POSTGRES
+from backend.database import get_db_write_connection
 
-AUDIT_DB_PATH = os.path.join(BASE_DIR, "database", "audit_cases.db")
-
-def get_audit_db_conn() -> sqlite3.Connection:
-    conn = sqlite3.connect(AUDIT_DB_PATH, timeout=30.0)
-    conn.row_factory = sqlite3.Row
-    return conn
+def get_audit_db_conn():
+    return get_db_write_connection()
 
 def init_audit_db():
     conn = get_audit_db_conn()
+    if USING_POSTGRES:
+        conn.close()
+        return
     conn.execute("""
         CREATE TABLE IF NOT EXISTS review_cases (
             case_id TEXT PRIMARY KEY,

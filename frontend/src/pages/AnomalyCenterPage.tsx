@@ -26,8 +26,9 @@ import {
   FileCheck,
 } from 'lucide-react';
 import { api } from '../api/client';
-import { Anomaly, StatsResponse } from '../api/types';
+import { Anomaly, StatsResponse, StateSummary } from '../api/types';
 import { useHouse } from '../context/HouseContext';
+import { useRole } from '../context/RoleContext';
 import { SeverityBadge } from '../components/common/Badge';
 import { ProvenanceBadge } from '../components/common/ProvenanceBadge';
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton';
@@ -39,9 +40,13 @@ import { EntityDossierDrawer, DossierEntity } from '../components/common/EntityD
 
 export const AnomalyCenterPage: React.FC = () => {
   const { selectedHouse } = useHouse();
+  const { user, currentRole } = useRole();
+  const isStateLocked = currentRole === 'STATE_NODAL_AUTHORITY' && !!user?.state;
+
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [anomalies, setAnomalies] = useState<Anomaly[]>([]);
+  const [states, setStates] = useState<StateSummary[]>([]);
   const [stats, setStats] = useState<StatsResponse | null>(null);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -51,6 +56,7 @@ export const AnomalyCenterPage: React.FC = () => {
   const [activeDossier, setActiveDossier] = useState<DossierEntity | null>(null);
 
   // URL Parameters
+  const state = searchParams.get('state') || (isStateLocked ? user?.state || '' : '');
   const entityType = searchParams.get('entity_type') || '';
   const severity = searchParams.get('severity') || '';
   const entityId = searchParams.get('entity_id') || '';
@@ -61,12 +67,17 @@ export const AnomalyCenterPage: React.FC = () => {
 
   const [entityIdInput, setEntityIdInput] = useState(entityId);
 
+  useEffect(() => {
+    api.getStates().then(setStates).catch(() => {});
+  }, []);
+
   const loadAnomalies = async () => {
     try {
       setLoading(true);
       setError(null);
       const [anomData, statsData] = await Promise.all([
         api.getAnomalies({
+          state: state || undefined,
           entity_type: entityType || undefined,
           severity: severity || undefined,
           entity_id: entityId || undefined,
@@ -89,7 +100,7 @@ export const AnomalyCenterPage: React.FC = () => {
 
   useEffect(() => {
     loadAnomalies();
-  }, [entityType, severity, entityId, sortBy, sortOrder, offset]);
+  }, [state, entityType, severity, entityId, sortBy, sortOrder, offset]);
 
   const updateParam = (key: string, val: string | null) => {
     const next = new URLSearchParams(searchParams);
@@ -109,7 +120,11 @@ export const AnomalyCenterPage: React.FC = () => {
 
   const handleReset = () => {
     setEntityIdInput('');
-    setSearchParams(new URLSearchParams());
+    const next = new URLSearchParams();
+    if (isStateLocked && user?.state) {
+      next.set('state', user.state);
+    }
+    setSearchParams(next);
   };
 
   const toggleMathExpand = (id: string) => {
@@ -166,24 +181,21 @@ export const AnomalyCenterPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 animate-fade-in text-[#0F172A] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-24">
+    <div className="space-y-6 animate-fade-in text-[#121316] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-24 font-sans">
       {/* 1. Global Breadcrumbs */}
       <Breadcrumbs items={[{ label: 'Signal Center', to: '/anomalies', icon: ShieldAlert }]} />
 
       {/* 2. Header & Overview */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-[#E4E2DC] pb-6">
         <div className="space-y-1">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-50 border border-rose-200">
-            <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
-            <span className="text-[11px] font-mono font-bold text-rose-700 uppercase tracking-widest">
-              PUBLIC TRANSPARENCY &amp; AUDIT INTELLIGENCE
-            </span>
+          <div className="cw-badge-section mb-2">
+            § III · EMPIRICAL SIGNALS &amp; AUDIT INTELLIGENCE
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-display">
-            Analytical Signal Center
+          <h1 className="text-3xl sm:text-4xl font-serif text-[#121316] tracking-tight">
+            Statistical Anomaly <span className="italic font-normal">Signals</span>
           </h1>
-          <p className="text-xs sm:text-sm text-slate-600 font-medium max-w-3xl">
-            Signals are automated statistical alerts that highlight unusual patterns in public spending (such as contractor concentration or project delays).
+          <p className="text-xs sm:text-sm text-[#71717A] font-light max-w-3xl mt-1">
+            Empirical statistical flags derived via Median Absolute Deviation (MAD). Highlight unusual variance patterns requiring human administrative review without automated accusations.
           </p>
         </div>
 
@@ -191,19 +203,19 @@ export const AnomalyCenterPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setShowGuide((prev) => !prev)}
-            className="px-3.5 py-1.5 rounded-full bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold transition flex items-center gap-1.5 border border-blue-200"
+            className="cw-btn-secondary text-xs py-2 px-3.5"
           >
-            <HelpCircle className="w-4 h-4" />
-            <span>{showGuide ? 'Hide Guide' : 'How Signals Work'}</span>
+            <HelpCircle className="w-4 h-4 text-[#C85A32]" />
+            <span>{showGuide ? 'Hide Methodology Guide' : 'How Signals Work'}</span>
           </button>
 
-          <span className="px-3.5 py-1.5 rounded-full bg-slate-900 text-white text-xs font-mono font-bold">
+          <span className="px-3.5 py-1.5 rounded-full bg-[#FAF8F5] border border-[#E4E2DC] text-[#121316] text-xs font-mono font-semibold shadow-2xs">
             {total.toLocaleString()} Signals Verified
           </span>
         </div>
       </div>
 
-      {/* 3. Plain-English Educational Guide Banner (Collapsible) */}
+      {/* 3. Educational Guide Banner (Collapsible) */}
       <AnimatePresence>
         {showGuide && (
           <motion.div
@@ -212,51 +224,45 @@ export const AnomalyCenterPage: React.FC = () => {
             exit={{ opacity: 0, height: 0 }}
             className="overflow-hidden"
           >
-            <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-br from-blue-50/90 via-indigo-50/40 to-slate-50 border border-blue-200/80 shadow-xs space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-blue-900 font-bold text-sm">
-                  <Info className="w-4 h-4 text-blue-600" />
+            <div className="cw-card p-5 sm:p-6 space-y-4">
+              <div className="flex items-center justify-between border-b border-[#E4E2DC] pb-3">
+                <div className="flex items-center gap-2 text-[#121316] font-serif text-base">
+                  <Info className="w-4 h-4 text-[#C85A32]" />
                   <span>Understanding JanDrishti Signals (In Plain English)</span>
                 </div>
-                <span className="text-[10px] font-mono font-bold text-blue-600 bg-white px-2.5 py-0.5 rounded-full border border-blue-200">
-                  Citizen Guide
+                <span className="text-[10px] font-mono text-[#C85A32] bg-[#FAF0EB] px-2.5 py-0.5 rounded-full border border-[#E8C5B6]">
+                  Citizen Disclosure
                 </span>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                <div className="p-4 rounded-2xl bg-white/80 border border-blue-100 space-y-1.5">
-                  <div className="flex items-center gap-2 font-bold text-slate-900">
-                    <span className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center font-mono text-[10px]">
-                      1
-                    </span>
+                <div className="p-4 rounded-xl bg-[#F0EFEA] border border-[#E4E2DC] space-y-1.5">
+                  <div className="flex items-center gap-2 font-mono text-[#121316] font-semibold">
+                    <span className="text-[#C85A32]">/ 01</span>
                     <span>What is a Signal?</span>
                   </div>
-                  <p className="text-slate-600 leading-relaxed font-sans">
-                    A Signal is triggered when a project, representative, or contractor deviates mathematically from peer averages across 28 States and 8 Union Territories.
+                  <p className="text-[#4A4D53] leading-relaxed font-light">
+                    A Signal is flagged when a project, parliamentarian, or contractor deviates mathematically from peer distributions across 28 States and 8 Union Territories.
                   </p>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-white/80 border border-blue-100 space-y-1.5">
-                  <div className="flex items-center gap-2 font-bold text-slate-900">
-                    <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center font-mono text-[10px]">
-                      2
-                    </span>
-                    <span>Does It Mean Wrongdoing?</span>
+                <div className="p-4 rounded-xl bg-[#F0EFEA] border border-[#E4E2DC] space-y-1.5">
+                  <div className="flex items-center gap-2 font-mono text-[#121316] font-semibold">
+                    <span className="text-[#C85A32]">/ 02</span>
+                    <span>Does It Mean Irregularity?</span>
                   </div>
-                  <p className="text-slate-600 leading-relaxed font-sans">
-                    <strong>No.</strong> Signals are objective markers for administrative review (e.g. emergency flood relief works can trigger high spending signals naturally).
+                  <p className="text-[#4A4D53] leading-relaxed font-light">
+                    <strong>No.</strong> Signals are objective prompts for human audit review (e.g. disaster recovery works can naturally generate high spending velocity).
                   </p>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-white/80 border border-blue-100 space-y-1.5">
-                  <div className="flex items-center gap-2 font-bold text-slate-900">
-                    <span className="w-5 h-5 rounded-full bg-purple-600 text-white flex items-center justify-center font-mono text-[10px]">
-                      3
-                    </span>
+                <div className="p-4 rounded-xl bg-[#F0EFEA] border border-[#E4E2DC] space-y-1.5">
+                  <div className="flex items-center gap-2 font-mono text-[#121316] font-semibold">
+                    <span className="text-[#C85A32]">/ 03</span>
                     <span>How Is It Calculated?</span>
                   </div>
-                  <p className="text-slate-600 leading-relaxed font-sans">
-                    We use <strong>Median Absolute Deviation (MAD)</strong>, which compares data against true medians instead of easily skewed averages.
+                  <p className="text-[#4A4D53] leading-relaxed font-light">
+                    We evaluate with <strong>Median Absolute Deviation (MAD)</strong>, comparing against empirical medians instead of fragile averages that are skewed by outliers.
                   </p>
                 </div>
               </div>
@@ -265,16 +271,16 @@ export const AnomalyCenterPage: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* 4. Priority Level Selector Cards */}
+      {/* 4. Priority Level Selector Bento Cards */}
       {stats && (
         <div className="space-y-2">
-          <div className="flex items-center justify-between text-xs text-slate-500 font-medium px-1">
+          <div className="flex items-center justify-between text-xs text-[#71717A] font-medium px-1">
             <span>Filter By Review Priority Level:</span>
             {severity && (
               <button
                 type="button"
                 onClick={() => updateParam('severity', null)}
-                className="text-blue-600 hover:underline font-bold"
+                className="text-[#C85A32] hover:underline font-semibold"
               >
                 Clear Level Filter
               </button>
@@ -288,18 +294,18 @@ export const AnomalyCenterPage: React.FC = () => {
               onClick={() => updateParam('severity', severity === 'CRITICAL' ? null : 'CRITICAL')}
               className={`p-4 rounded-2xl text-left transition border cursor-pointer ${
                 severity === 'CRITICAL'
-                  ? 'bg-rose-50 border-rose-500 ring-2 ring-rose-500 shadow-xs'
-                  : 'bg-white border-slate-200 hover:border-rose-300'
+                  ? 'bg-[#FAF0EB] border-[#C85A32] ring-1 ring-[#C85A32] shadow-xs'
+                  : 'bg-[#FAF8F5] border-[#E4E2DC] hover:border-[#C85A32]/40'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold text-rose-700 uppercase font-mono">CRITICAL PRIORITY</span>
-                <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
+                <span className="text-[10px] font-mono text-[#C85A32] uppercase tracking-widest font-semibold">CRITICAL PRIORITY</span>
+                <span className="w-2 h-2 rounded-full bg-[#C85A32]" />
               </div>
-              <strong className="text-2xl font-black text-rose-900 font-mono mt-1 block">
+              <strong className="text-2xl font-mono font-semibold text-[#121316] mt-1 block">
                 {stats.critical_anomalies}
               </strong>
-              <span className="text-[11px] text-slate-500 font-medium">Highest statistical deviation</span>
+              <span className="text-[11px] text-[#71717A] font-light">Highest statistical variance</span>
             </button>
 
             {/* High */}
@@ -308,18 +314,18 @@ export const AnomalyCenterPage: React.FC = () => {
               onClick={() => updateParam('severity', severity === 'HIGH' ? null : 'HIGH')}
               className={`p-4 rounded-2xl text-left transition border cursor-pointer ${
                 severity === 'HIGH'
-                  ? 'bg-amber-50 border-amber-500 ring-2 ring-amber-500 shadow-xs'
-                  : 'bg-white border-slate-200 hover:border-amber-300'
+                  ? 'bg-[#FDF6E2] border-[#946200] ring-1 ring-[#946200] shadow-xs'
+                  : 'bg-[#FAF8F5] border-[#E4E2DC] hover:border-[#946200]/40'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold text-amber-700 uppercase font-mono">HIGH PRIORITY</span>
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+                <span className="text-[10px] font-mono text-[#946200] uppercase tracking-widest font-semibold">HIGH PRIORITY</span>
+                <span className="w-2 h-2 rounded-full bg-[#946200]" />
               </div>
-              <strong className="text-2xl font-black text-amber-900 font-mono mt-1 block">
+              <strong className="text-2xl font-mono font-semibold text-[#121316] mt-1 block">
                 {stats.high_anomalies}
               </strong>
-              <span className="text-[11px] text-slate-500 font-medium">Elevated variation</span>
+              <span className="text-[11px] text-[#71717A] font-light">Elevated divergence</span>
             </button>
 
             {/* Medium */}
@@ -328,18 +334,18 @@ export const AnomalyCenterPage: React.FC = () => {
               onClick={() => updateParam('severity', severity === 'MEDIUM' ? null : 'MEDIUM')}
               className={`p-4 rounded-2xl text-left transition border cursor-pointer ${
                 severity === 'MEDIUM'
-                  ? 'bg-blue-50 border-blue-500 ring-2 ring-blue-500 shadow-xs'
-                  : 'bg-white border-slate-200 hover:border-blue-300'
+                  ? 'bg-[#F0EFEA] border-[#121316] ring-1 ring-[#121316] shadow-xs'
+                  : 'bg-[#FAF8F5] border-[#E4E2DC] hover:border-[#121316]/40'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold text-blue-700 uppercase font-mono">MEDIUM PRIORITY</span>
-                <span className="w-2.5 h-2.5 rounded-full bg-blue-500" />
+                <span className="text-[10px] font-mono text-[#121316] uppercase tracking-widest font-semibold">MEDIUM PRIORITY</span>
+                <span className="w-2 h-2 rounded-full bg-[#121316]" />
               </div>
-              <strong className="text-2xl font-black text-blue-900 font-mono mt-1 block">
+              <strong className="text-2xl font-mono font-semibold text-[#121316] mt-1 block">
                 {stats.medium_anomalies}
               </strong>
-              <span className="text-[11px] text-slate-500 font-medium">Moderate divergence</span>
+              <span className="text-[11px] text-[#71717A] font-light">Moderate variation</span>
             </button>
 
             {/* Low */}
@@ -348,33 +354,33 @@ export const AnomalyCenterPage: React.FC = () => {
               onClick={() => updateParam('severity', severity === 'LOW' ? null : 'LOW')}
               className={`p-4 rounded-2xl text-left transition border cursor-pointer ${
                 severity === 'LOW'
-                  ? 'bg-slate-100 border-slate-500 ring-2 ring-slate-500 shadow-xs'
-                  : 'bg-white border-slate-200 hover:border-slate-300'
+                  ? 'bg-[#F0EFEA] border-[#71717A] ring-1 ring-[#71717A] shadow-xs'
+                  : 'bg-[#FAF8F5] border-[#E4E2DC] hover:border-[#71717A]/40'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold text-slate-600 uppercase font-mono">LOW PRIORITY</span>
-                <span className="w-2.5 h-2.5 rounded-full bg-slate-400" />
+                <span className="text-[10px] font-mono text-[#71717A] uppercase tracking-widest font-semibold">LOW PRIORITY</span>
+                <span className="w-2 h-2 rounded-full bg-[#71717A]" />
               </div>
-              <strong className="text-2xl font-black text-slate-900 font-mono mt-1 block">
+              <strong className="text-2xl font-mono font-semibold text-[#121316] mt-1 block">
                 {stats.low_anomalies}
               </strong>
-              <span className="text-[11px] text-slate-500 font-medium">Minor baseline variation</span>
+              <span className="text-[11px] text-[#71717A] font-light">Baseline fluctuation</span>
             </button>
           </div>
         </div>
       )}
 
-      {/* 5. Entity Filter Tabs & Search Bar */}
-      <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-3">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      {/* 5. Entity Filter Tabs, State Selector & Search Bar */}
+      <div className="cw-card p-4 space-y-3">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center">
           {/* Entity Type Filter Tabs */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+          <div className="lg:col-span-5 flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
             {[
               { id: '', label: 'All Signals' },
               { id: 'VENDOR', label: 'Contractors' },
-              { id: 'WORK', label: 'Work Projects' },
-              { id: 'MP', label: 'Parliamentarians' },
+              { id: 'WORK', label: 'Work Schemes' },
+              { id: 'MP', label: 'MPs' },
               { id: 'TRANSACTION', label: 'Vouchers' },
             ].map((tab) => {
               const isActive = entityType === tab.id;
@@ -383,10 +389,10 @@ export const AnomalyCenterPage: React.FC = () => {
                   key={tab.id}
                   type="button"
                   onClick={() => updateParam('entity_type', tab.id || null)}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition whitespace-nowrap cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-full text-xs font-mono font-medium transition whitespace-nowrap cursor-pointer border ${
                     isActive
-                      ? 'bg-blue-600 text-white shadow-xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
+                      ? 'bg-[#121316] text-white border-[#121316] shadow-xs'
+                      : 'bg-[#FAF8F5] text-[#71717A] border-[#E4E2DC] hover:text-[#121316] hover:border-[#121316]'
                   }`}
                 >
                   {tab.label}
@@ -395,42 +401,64 @@ export const AnomalyCenterPage: React.FC = () => {
             })}
           </div>
 
+          {/* State Filter */}
+          <div className="lg:col-span-4">
+            <select
+              value={state}
+              disabled={isStateLocked}
+              onChange={(e) => updateParam('state', e.target.value || null)}
+              className="w-full px-3 py-2 bg-[#FAF8F5] border border-[#E4E2DC] rounded-xl text-xs font-medium text-[#121316] focus:outline-none focus:ring-1 focus:ring-[#C85A32] transition font-sans disabled:opacity-75"
+            >
+              <option value="">All States &amp; UTs</option>
+              {states.map((s) => (
+                <option key={s.state} value={s.state}>
+                  {s.state} {isStateLocked && s.state.toUpperCase() === user?.state?.toUpperCase() ? '(Mandate Scope)' : ''}
+                </option>
+              ))}
+            </select>
+          </div>
+
           {/* Quick Search */}
-          <form onSubmit={handleIdSearch} className="relative sm:w-80">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <form onSubmit={handleIdSearch} className="lg:col-span-3 relative">
+            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#71717A]" />
             <input
               type="text"
-              placeholder="Search by ID, keyword, or name..."
+              placeholder="Search by ID, keyword..."
               value={entityIdInput}
               onChange={(e) => setEntityIdInput(e.target.value)}
-              className="w-full pl-9 pr-4 py-1.5 bg-slate-50 border border-slate-200 rounded-full text-xs text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-1 focus:ring-blue-600 transition font-sans"
+              className="w-full pl-9 pr-4 py-2 bg-[#FAF8F5] border border-[#E4E2DC] rounded-xl text-xs text-[#121316] placeholder-[#71717A] focus:outline-none focus:ring-1 focus:ring-[#C85A32] transition font-sans"
             />
           </form>
         </div>
 
         {/* Active Filter Pills Bar */}
-        {(entityId || entityType || severity) && (
-          <div className="flex items-center gap-2 pt-2 border-t border-slate-100 text-xs text-slate-500 flex-wrap">
-            <span className="text-[10px] font-bold uppercase font-mono text-slate-400">ACTIVE:</span>
+        {(entityId || entityType || severity || state) && (
+          <div className="flex items-center gap-2 pt-2 border-t border-[#E4E2DC] text-xs text-[#71717A] flex-wrap">
+            <span className="text-[10px] font-semibold uppercase font-mono text-[#71717A]">ACTIVE:</span>
+            {state && (
+              <span className="px-2.5 py-0.5 rounded-full bg-[#F0EFEA] text-[#121316] font-semibold text-[11px] border border-[#E4E2DC]">
+                State: {state}
+              </span>
+            )}
             {entityId && (
-              <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-800 font-bold text-[11px]">
+              <span className="px-2.5 py-0.5 rounded-full bg-[#FAF0EB] text-[#C85A32] font-semibold text-[11px] border border-[#E8C5B6]">
                 Search: {entityId}
               </span>
             )}
             {entityType && (
-              <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-800 font-bold text-[11px]">
+              <span className="px-2.5 py-0.5 rounded-full bg-[#F0EFEA] text-[#121316] font-semibold text-[11px] border border-[#E4E2DC]">
                 Target: {entityType}
               </span>
             )}
             {severity && (
-              <span className="px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-800 font-bold text-[11px]">
+              <span className="px-2.5 py-0.5 rounded-full bg-[#FAF0EB] text-[#C85A32] font-semibold text-[11px] border border-[#E8C5B6]">
                 Level: {severity}
               </span>
             )}
             <button
               type="button"
               onClick={handleReset}
-              className="text-blue-600 hover:text-blue-800 font-bold ml-auto flex items-center gap-1 hover:underline text-[11px] cursor-pointer"
+              className="text-[#C85A32] hover:text-[#9E3E1C] font-semibold ml-auto flex items-center gap-1 hover:underline text-[11px] cursor-pointer"
             >
               <RotateCcw className="w-3 h-3" />
               <span>Reset All Filters</span>
@@ -460,7 +488,7 @@ export const AnomalyCenterPage: React.FC = () => {
             return (
               <div
                 key={anom.anomaly_id}
-                className="bg-white rounded-3xl border border-slate-200/90 shadow-xs hover:border-blue-300 transition p-5 sm:p-6 space-y-4"
+                className="cw-card p-5 sm:p-6 space-y-4 hover:border-[#C85A32]/40 transition"
               >
                 {/* Top Row: Type, Severity, and Action */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -468,12 +496,12 @@ export const AnomalyCenterPage: React.FC = () => {
                     <SeverityBadge severity={anom.severity} />
 
                     {/* Friendly Category Badge */}
-                    <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-bold ${typeInfo.color}`}>
-                      <TypeIcon className="w-3.5 h-3.5" />
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#E4E2DC] bg-[#FAF8F5] text-xs font-mono text-[#121316]">
+                      <TypeIcon className="w-3.5 h-3.5 text-[#C85A32]" />
                       <span>{typeInfo.label}</span>
                     </div>
 
-                    <span className="text-[11px] font-mono text-slate-400">
+                    <span className="text-[11px] font-mono text-[#71717A]">
                       ID: #{anom.anomaly_id}
                     </span>
                   </div>
@@ -481,7 +509,7 @@ export const AnomalyCenterPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setActiveDossier({ type: 'SIGNAL', data: anom })}
-                    className="px-4 py-1.5 rounded-full bg-slate-900 hover:bg-blue-600 text-white text-xs font-bold transition inline-flex items-center gap-1.5 self-start sm:self-auto cursor-pointer"
+                    className="cw-btn-primary text-xs py-1.5 px-4 self-start sm:self-auto cursor-pointer"
                   >
                     <span>Inspect Target Dossier</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -490,48 +518,48 @@ export const AnomalyCenterPage: React.FC = () => {
 
                 {/* Plain-Language Reason */}
                 <div className="space-y-1">
-                  <h3 className="text-sm sm:text-base font-bold text-slate-900 font-sans leading-snug">
+                  <h3 className="text-base sm:text-lg font-serif font-normal text-[#121316] leading-snug">
                     {anom.reason}
                   </h3>
-                  <p className="text-xs text-slate-500 font-medium">
+                  <p className="text-xs text-[#71717A] font-light">
                     {typeInfo.desc}
                   </p>
                 </div>
 
                 {/* Context Strip: Target Entity, Observed vs Normal Peer Baseline */}
-                <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                <div className="p-4 rounded-xl bg-[#F0EFEA] border border-[#E4E2DC] grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
                   <div>
-                    <span className="text-[10px] uppercase font-mono font-bold text-slate-400 block">
+                    <span className="text-[10px] uppercase font-mono text-[#71717A] block">
                       Target Entity
                     </span>
-                    <strong className="font-bold text-slate-900 truncate block">
+                    <strong className="font-mono text-[#121316] truncate block font-semibold">
                       {anom.entity_type} · #{anom.entity_id}
                     </strong>
                   </div>
 
                   <div>
-                    <span className="text-[10px] uppercase font-mono font-bold text-slate-400 block">
+                    <span className="text-[10px] uppercase font-mono text-[#71717A] block">
                       Actual Observed Value
                     </span>
-                    <strong className="font-mono font-bold text-rose-700 block">
+                    <strong className="font-mono font-semibold text-[#C85A32] block">
                       {anom.observed_value !== undefined ? String(anom.observed_value) : 'N/A'}
                     </strong>
                   </div>
 
                   <div>
-                    <span className="text-[10px] uppercase font-mono font-bold text-slate-400 block">
+                    <span className="text-[10px] uppercase font-mono text-[#71717A] block">
                       Peer Group Median
                     </span>
-                    <strong className="font-mono font-bold text-slate-700 block truncate">
+                    <strong className="font-mono font-semibold text-[#121316] block truncate">
                       {anom.baseline_reference || anom.threshold_value || 'National Baseline'}
                     </strong>
                   </div>
 
                   <div>
-                    <span className="text-[10px] uppercase font-mono font-bold text-slate-400 block">
+                    <span className="text-[10px] uppercase font-mono text-[#71717A] block">
                       Deviation Distance
                     </span>
-                    <strong className="font-mono font-bold text-blue-700 block">
+                    <strong className="font-mono font-semibold text-[#121316] block">
                       {anom.robust_zscore ? `${anom.robust_zscore.toFixed(1)}x Peer Spread` : 'Standard Distance'}
                     </strong>
                   </div>
@@ -542,10 +570,10 @@ export const AnomalyCenterPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => toggleMathExpand(anom.anomaly_id)}
-                    className="text-[11px] font-bold text-slate-500 hover:text-blue-600 inline-flex items-center gap-1 cursor-pointer transition"
+                    className="text-[11px] font-mono text-[#71717A] hover:text-[#C85A32] inline-flex items-center gap-1.5 cursor-pointer transition"
                   >
-                    <Calculator className="w-3.5 h-3.5" />
-                    <span>{isMathExpanded ? 'Hide Calculation Details' : 'View Mathematical Formula (MAD Z-Score)'}</span>
+                    <Calculator className="w-3.5 h-3.5 text-[#C85A32]" />
+                    <span>{isMathExpanded ? 'Hide Calculation Details' : 'View Mathematical Formula (MAD Robust Z-Score)'}</span>
                     {isMathExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                   </button>
 
@@ -557,13 +585,13 @@ export const AnomalyCenterPage: React.FC = () => {
                         exit={{ opacity: 0, height: 0 }}
                         className="overflow-hidden pt-2"
                       >
-                        <div className="p-3 rounded-xl bg-slate-900 text-slate-200 text-xs font-mono space-y-2">
-                          <div className="flex items-center justify-between text-[10px] text-slate-400 border-b border-slate-800 pb-1">
+                        <div className="p-3.5 rounded-xl bg-[#121316] text-[#FAF8F5] text-xs font-mono space-y-2 border border-[#E4E2DC]">
+                          <div className="flex items-center justify-between text-[10px] text-[#A1A1AA] border-b border-[#2A2B30] pb-1.5">
                             <span>FORMULA: Z = 0.6745 × (x - median) / MAD</span>
-                            <span>ROBUST Z-SCORE: {anom.robust_zscore?.toFixed(3) || 'N/A'}σ</span>
+                            <span className="text-[#C85A32]">ROBUST Z-SCORE: {anom.robust_zscore?.toFixed(3) || 'N/A'}σ</span>
                           </div>
-                          <p className="text-[11px] text-slate-300">
-                            Calculation: (Observed: {anom.observed_value} vs Baseline: {anom.baseline_reference || anom.threshold_value || 'Peer Group'}) evaluated against empirical peer dispersion across 102,437 physical works and 778 parliamentary seats.
+                          <p className="text-[11px] text-[#D4D2CD] font-light leading-relaxed">
+                            Calculation: (Observed: {anom.observed_value} vs Baseline: {anom.baseline_reference || anom.threshold_value || 'Peer Group'}) evaluated against empirical peer dispersion across 102,437 physical works and 778 parliamentary seats. Does NOT assert irregularity.
                           </p>
                         </div>
                       </motion.div>

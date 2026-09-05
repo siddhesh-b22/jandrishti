@@ -31,7 +31,7 @@ import { LoadingSkeleton } from '../components/common/LoadingSkeleton';
 import { ErrorDisplay } from '../components/common/ErrorDisplay';
 
 export const CasesAlertsPage: React.FC = () => {
-  const { currentRole, roleConfig } = useRole();
+  const { currentRole, roleConfig, canEdit } = useRole();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [activeTab, setActiveTab] = useState<'ALERTS' | 'CASES' | 'AUDIT'>('ALERTS');
@@ -77,6 +77,10 @@ export const CasesAlertsPage: React.FC = () => {
   }, [severityFilter, statusFilter]);
 
   const handleCreateCaseFromAlert = async (anomalyItem: Anomaly) => {
+    if (!canEdit()) {
+      alert("Read-Only Civic Mode: Your active role does not have statutory privileges to register administrative cases. Please sign in with an authorized role from the top-right menu.");
+      return;
+    }
     try {
       const res = await api.createCase({
         entity_type: anomalyItem.entity_type,
@@ -131,7 +135,7 @@ export const CasesAlertsPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fade-in font-manrope">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fade-in font-sans">
       {/* Breadcrumbs */}
       <Breadcrumbs
         items={[
@@ -141,35 +145,34 @@ export const CasesAlertsPage: React.FC = () => {
       />
 
       {/* Header & Governance Banner */}
-      <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-100 pb-5">
+      <div className="rounded-2xl border border-[#E4E2DC] bg-white p-6 sm:p-8 shadow-xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#E4E2DC] pb-5">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-50 text-[#2563EB] text-[10px] font-mono font-bold uppercase tracking-widest border border-blue-200">
-                <Sparkles className="w-3 h-3 text-[#2563EB]" />
-                Human-in-the-Loop Governance Suite
+              <span className="cw-badge-section">
+                HUMAN-IN-THE-LOOP GOVERNANCE
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-mono font-bold">
+              <span className="px-2.5 py-0.5 rounded bg-[#F0EFEA] text-[#71717A] text-[10px] font-mono border border-[#E4E2DC]">
                 Active Perspective: {roleConfig.shortLabel}
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#08102B] tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-serif text-[#121316] tracking-tight">
               Risk-Based Alerts &amp; Case Management Command Center
             </h1>
-            <p className="text-xs text-slate-500 max-w-3xl font-light leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#71717A] max-w-3xl font-light leading-relaxed">
               Traces public funds and project anomalies through a structured administrative lifecycle: 
               <strong> Data → AI Detection → Risk Scoring → Alert → Human Review → Action → Audit Trail</strong>.
             </p>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
-            <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-center min-w-[110px]">
-              <span className="text-[10px] uppercase font-bold text-slate-400 block font-mono">Active Cases</span>
-              <span className="text-2xl font-black font-mono text-[#08102B]">{cases.length}</span>
+          <div className="flex items-center gap-2 shrink-0 font-mono">
+            <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#E4E2DC] text-center min-w-[110px]">
+              <span className="text-[10px] uppercase text-[#71717A] block">Active Cases</span>
+              <span className="text-2xl font-bold text-[#121316]">{cases.length}</span>
             </div>
-            <div className="p-3 rounded-2xl bg-rose-50 border border-rose-200 text-center min-w-[110px]">
-              <span className="text-[10px] uppercase font-bold text-rose-600 block font-mono">Critical Flags</span>
-              <span className="text-2xl font-black font-mono text-rose-700">21</span>
+            <div className="p-3 rounded-xl bg-[#FAF0EB] border border-[#E8C5B6] text-center min-w-[110px]">
+              <span className="text-[10px] uppercase text-[#C85A32] block font-semibold">Critical Flags</span>
+              <span className="text-2xl font-bold text-[#C85A32]">21</span>
             </div>
           </div>
         </div>
@@ -179,10 +182,10 @@ export const CasesAlertsPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setActiveTab('ALERTS')}
-            className={`flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold transition ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium transition cursor-pointer ${
               activeTab === 'ALERTS'
-                ? 'bg-[#08102B] text-white shadow-xs'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                ? 'bg-[#121316] text-[#FAF8F5] shadow-xs'
+                : 'bg-[#F0EFEA] text-[#71717A] hover:text-[#121316]'
             }`}
           >
             <ShieldAlert className="w-3.5 h-3.5" />
@@ -192,10 +195,10 @@ export const CasesAlertsPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setActiveTab('CASES')}
-            className={`flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold transition ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium transition cursor-pointer ${
               activeTab === 'CASES'
-                ? 'bg-[#08102B] text-white shadow-xs'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                ? 'bg-[#121316] text-[#FAF8F5] shadow-xs'
+                : 'bg-[#F0EFEA] text-[#71717A] hover:text-[#121316]'
             }`}
           >
             <FileText className="w-3.5 h-3.5" />
@@ -205,10 +208,10 @@ export const CasesAlertsPage: React.FC = () => {
           <button
             type="button"
             onClick={() => setActiveTab('AUDIT')}
-            className={`flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold transition ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium transition cursor-pointer ${
               activeTab === 'AUDIT'
-                ? 'bg-[#08102B] text-white shadow-xs'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                ? 'bg-[#121316] text-[#FAF8F5] shadow-xs'
+                : 'bg-[#F0EFEA] text-[#71717A] hover:text-[#121316]'
             }`}
           >
             <History className="w-3.5 h-3.5" />
@@ -315,22 +318,45 @@ export const CasesAlertsPage: React.FC = () => {
                         </div>
 
                         <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto">
-                          {a.entity_type === 'WORK' && (
+                          {a.entity_type === 'WORK' ? (
                             <Link
                               to={`/works/${a.entity_id}`}
                               className="px-4 py-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition min-h-[38px] flex items-center"
                             >
-                              Inspect Dossier
+                              Inspect Work
+                            </Link>
+                          ) : a.entity_type === 'MP' ? (
+                            <Link
+                              to={`/mps/${a.entity_id}`}
+                              className="px-4 py-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition min-h-[38px] flex items-center"
+                            >
+                              Inspect MP Dossier
+                            </Link>
+                          ) : a.entity_type === 'TRANSACTION' ? (
+                            <Link
+                              to={`/transactions?search=${a.entity_id}`}
+                              className="px-4 py-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition min-h-[38px] flex items-center"
+                            >
+                              Inspect Voucher
+                            </Link>
+                          ) : (
+                            <Link
+                              to={`/vendors?search=${encodeURIComponent(a.entity_id)}`}
+                              className="px-4 py-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition min-h-[38px] flex items-center"
+                            >
+                              Inspect Entity
                             </Link>
                           )}
-                          <button
-                            type="button"
-                            onClick={() => handleCreateCaseFromAlert(a)}
-                            className="px-4 py-2 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs transition flex items-center gap-1.5 shadow-xs min-h-[38px] cursor-pointer"
-                          >
-                            <PlusCircle className="w-3.5 h-3.5" />
-                            <span>Initiate Review Case</span>
-                          </button>
+                          {canEdit() && (
+                            <button
+                              type="button"
+                              onClick={() => handleCreateCaseFromAlert(a)}
+                              className="px-4 py-2 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs transition flex items-center gap-1.5 shadow-xs min-h-[38px] cursor-pointer"
+                            >
+                              <PlusCircle className="w-3.5 h-3.5" />
+                              <span>Initiate Review Case</span>
+                            </button>
+                          )}
                         </div>
                       </div>
 
@@ -447,19 +473,21 @@ export const CasesAlertsPage: React.FC = () => {
                         )}
                       </div>
 
-                      <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setSelectedCase(c);
-                            setUpdateStatus(c.status);
-                            setUpdateNotes('');
-                          }}
-                          className="px-5 py-2.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs transition shadow-xs min-h-[44px] cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
-                        >
-                          Review Case &amp; Record Action
-                        </button>
-                      </div>
+                      {canEdit() && (
+                        <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setSelectedCase(c);
+                              setUpdateStatus(c.status);
+                              setUpdateNotes('');
+                            }}
+                            className="px-5 py-2.5 rounded-full font-bold text-xs transition shadow-xs min-h-[44px] bg-[#2563EB] hover:bg-[#1D4ED8] text-white cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+                          >
+                            Review Case &amp; Record Action
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}

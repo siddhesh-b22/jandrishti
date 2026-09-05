@@ -10,7 +10,6 @@ import {
   ShieldCheck,
   Zap,
   Layers,
-  Sparkles,
   Users,
   Building2,
   Receipt,
@@ -18,20 +17,31 @@ import {
   ShieldAlert,
   FileText,
   Copy,
+  Scale,
+  LayoutDashboard,
+  UploadCloud,
+  Landmark,
+  Compass,
+  FileCheck,
+  LogIn,
+  LogOut,
+  Sparkles,
+  Sliders
 } from 'lucide-react';
-import { useHouse } from '../../context/HouseContext';
 import { BrandLogo } from '../common/BrandLogo';
 import { GlobalSearchModal } from '../common/GlobalSearchModal';
 import { FollowTheMoneyModal } from '../common/FollowTheMoneyModal';
-import { RoleSwitcher } from './RoleSwitcher';
+import { useRole } from '../../context/RoleContext';
+import { getRoleHomeRoute, getNavStructureForRole } from '../../utils/roleRoutes';
 
 export const Navbar: React.FC = () => {
+  const { isAuthenticated, user, logout, roleConfig } = useRole();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [followMoneyModalOpen, setFollowMoneyModalOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const { selectedHouse, setSelectedHouse } = useHouse();
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -56,317 +66,320 @@ export const Navbar: React.FC = () => {
 
   useEffect(() => {
     setMobileMenuOpen(false);
-    setDropdownOpen(false);
+    setActiveDropdown(null);
   }, [location.pathname]);
 
-  const explorerLinks = [
-    { to: '/mps', label: '778 Parliamentarians', desc: 'Lok Sabha & Rajya Sabha MPs', icon: Users },
-    { to: '/states', label: '28 States & 8 UTs', desc: 'National Spatial Atlas', icon: MapPin },
-    { to: '/works', label: '102,437 Physical Works', desc: 'Ground Infrastructure', icon: Layers },
-    { to: '/transactions', label: '82,296 Vouchers', desc: 'Treasury Disbursements', icon: Receipt },
-    { to: '/vendors', label: '22,377 Contractors', desc: 'Vendor Intelligence', icon: Building2 },
-    { to: '/duplicates', label: 'Duplicate Work Studio', desc: 'AI/ML Overlap & Similarity', icon: Copy },
-    { to: '/data-quality', label: 'Data Quality & Provenance', desc: 'Dataset Health & Proofs', icon: ShieldCheck },
-  ];
+  const navStructure = getNavStructureForRole(user?.role);
+  const homeRoute = getRoleHomeRoute(user?.role);
 
   return (
     <>
-      <header className={`sticky top-0 z-50 bg-white/95 backdrop-blur-md transition-all duration-200 font-manrope ${scrolled ? 'shadow-xs border-b border-slate-200/80' : ''}`}>
+      <header className={`sticky top-0 z-50 bg-[#FAF8F5]/94 backdrop-blur-md transition-all duration-200 border-b ${scrolled ? 'border-[#E4E2DC] shadow-xs' : 'border-[#E4E2DC]/80'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
-            {/* Left: Brand Logo */}
-            <NavLink to="/" className="flex items-center group">
+          <div className="flex items-center justify-between h-17">
+            {/* Left: Brand Monogram & Name */}
+            <Link to={homeRoute} className="flex items-center group">
               <BrandLogo size="md" />
-            </NavLink>
+            </Link>
 
-            {/* Center: Clean Text Navigation Links (Exact Alluxi Style) */}
-            <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-700">
-              {/* Explorers Dropdown */}
-              <div
-                className="relative"
-                onMouseEnter={() => setDropdownOpen(true)}
-                onMouseLeave={() => setDropdownOpen(false)}
-              >
-                <button
-                  type="button"
-                  className="flex items-center gap-1 hover:text-[#2563EB] py-2 transition"
+            {/* Center: Truly Role-Adaptive Navigation Links (Strictly No Locked Items) */}
+            <nav className="hidden lg:flex items-center gap-6 text-xs font-medium text-[#4A4D53] tracking-[0.04em] uppercase font-sans">
+              {/* Primary Links Permitted for This Role */}
+              {navStructure.primaryLinks.map((link) => (
+                <NavLink
+                  key={link.to}
+                  to={link.to}
+                  className={({ isActive }) =>
+                    `hover:text-[#121316] transition ${isActive ? 'text-[#C85A32] font-semibold' : ''}`
+                  }
                 >
-                  <span>Explorers</span>
-                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${dropdownOpen ? 'rotate-180 text-[#2563EB]' : 'text-slate-400'}`} />
-                </button>
+                  <span>{link.label}</span>
+                </NavLink>
+              ))}
 
-                <AnimatePresence>
-                  {dropdownOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 4 }}
-                      transition={{ duration: 0.15 }}
-                      className="absolute top-full left-0 w-72 bg-white rounded-2xl p-2 shadow-2xl border border-slate-200/90 z-50"
-                    >
-                      <div className="space-y-0.5">
-                        {explorerLinks.map((item) => {
-                          const Icon = item.icon;
-                          return (
+              {/* Dynamic Dropdowns Permitted for This Role */}
+              {navStructure.dropdowns?.map((dropdown) => (
+                <div
+                  key={dropdown.key}
+                  className="relative"
+                  onMouseEnter={() => setActiveDropdown(dropdown.key)}
+                  onMouseLeave={() => setActiveDropdown(null)}
+                >
+                  <button
+                    type="button"
+                    className={`flex items-center gap-1.5 py-2 hover:text-[#121316] transition cursor-pointer ${
+                      dropdown.items.some((item) => location.pathname.startsWith(item.to))
+                        ? 'text-[#C85A32] font-semibold'
+                        : ''
+                    }`}
+                  >
+                    <span>{dropdown.title}</span>
+                    <ChevronDown
+                      className={`w-3 h-3 transition-transform duration-200 ${
+                        activeDropdown === dropdown.key ? 'rotate-180 text-[#C85A32]' : 'text-[#71717A]'
+                      }`}
+                    />
+                  </button>
+
+                  <AnimatePresence>
+                    {activeDropdown === dropdown.key && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 4 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute top-full left-0 w-80 bg-[#FAF8F5] rounded-2xl p-2 shadow-xl border border-[#E4E2DC] z-50 normal-case"
+                      >
+                        <div className="px-3 py-1.5 border-b border-[#E4E2DC] mb-1 flex items-center justify-between">
+                          <span className="text-[10px] font-mono uppercase tracking-widest text-[#C85A32] font-semibold">
+                            {dropdown.title}
+                          </span>
+                          <span className="text-[9px] font-mono text-[#71717A]">Role Permitted</span>
+                        </div>
+                        <div className="space-y-0.5">
+                          {dropdown.items.map((item) => (
                             <Link
                               key={item.to}
                               to={item.to}
-                              className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition group"
+                              className="flex items-start gap-3 p-2 rounded-xl hover:bg-[#F0EFEA] transition group"
                             >
-                              <div className="p-2 rounded-lg bg-blue-50 text-[#2563EB] group-hover:bg-[#2563EB] group-hover:text-white transition">
-                                <Icon className="w-4 h-4" />
-                              </div>
-                              <div>
-                                <div className="text-xs font-bold text-[#08102B] group-hover:text-[#2563EB] transition">
-                                  {item.label}
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-xs font-semibold text-[#121316] group-hover:text-[#C85A32] transition">
+                                    {item.label}
+                                  </span>
+                                  {item.badge && (
+                                    <span className="px-1.5 py-0.2 rounded bg-[#FAF0EB] text-[#C85A32] text-[9px] font-mono border border-[#E8C5B6]">
+                                      {item.badge}
+                                    </span>
+                                  )}
                                 </div>
-                                <div className="text-[11px] text-slate-500 font-light">
-                                  {item.desc}
-                                </div>
+                                {item.desc && (
+                                  <div className="text-[11px] text-[#71717A] font-light truncate">
+                                    {item.desc}
+                                  </div>
+                                )}
                               </div>
                             </Link>
-                          );
-                        })}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              <NavLink
-                to="/mps"
-                className={({ isActive }) =>
-                  `hover:text-[#2563EB] transition ${isActive ? 'text-[#2563EB] font-bold' : ''}`
-                }
-              >
-                Parliament
-              </NavLink>
-
-              <NavLink
-                to="/works"
-                className={({ isActive }) =>
-                  `hover:text-[#2563EB] transition ${isActive ? 'text-[#2563EB] font-bold' : ''}`
-                }
-              >
-                Public Works
-              </NavLink>
-
-              <NavLink
-                to="/cases"
-                className={({ isActive }) =>
-                  `hover:text-[#2563EB] transition flex items-center gap-1.5 ${isActive ? 'text-[#2563EB] font-bold' : ''}`
-                }
-              >
-                <span>Alerts &amp; Cases</span>
-                <span className="px-1.5 py-0.2 rounded-full bg-blue-50 text-[#2563EB] text-[10px] font-mono font-bold border border-blue-200">
-                  Live Hub
-                </span>
-              </NavLink>
-
-              <NavLink
-                to="/anomalies"
-                className={({ isActive }) =>
-                  `hover:text-[#2563EB] transition flex items-center gap-1.5 ${isActive ? 'text-[#2563EB] font-bold' : ''}`
-                }
-              >
-                <span>Signals</span>
-                <span className="px-1.5 py-0.2 rounded-full bg-rose-50 text-rose-600 text-[10px] font-mono font-bold border border-rose-200">
-                  1,831
-                </span>
-              </NavLink>
-
-              <NavLink
-                to="/methodology"
-                className={({ isActive }) =>
-                  `hover:text-[#2563EB] transition ${isActive ? 'text-[#2563EB] font-bold' : ''}`
-                }
-              >
-                Methodology
-              </NavLink>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ))}
             </nav>
 
-            {/* Right: Role Switcher + Search + Alluxi Style CTA Button */}
+            {/* Right: Role Identity Badge or Official Login */}
             <div className="flex items-center gap-2.5">
-              {/* Stakeholder Role Switcher */}
-              <RoleSwitcher />
-
-              {/* Quick Search Shortcut */}
+              {/* Quick Search Trigger */}
               <button
                 type="button"
                 onClick={() => setSearchModalOpen(true)}
-                className="hidden sm:flex items-center gap-2 p-2 rounded-full hover:bg-slate-100 text-slate-500 transition"
+                className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-full hover:bg-[#F0EFEA] text-[#71717A] transition border border-[#E4E2DC] text-xs font-mono cursor-pointer"
                 title="Search (⌘K)"
               >
-                <Search className="w-4 h-4 text-slate-600" />
+                <Search className="w-3.5 h-3.5" />
+                <span className="text-[11px]">⌘K</span>
               </button>
 
-              {/* Alluxi Pill CTA Button */}
+              {/* Follow The Money Modal Trigger */}
               <button
                 type="button"
                 onClick={() => setFollowMoneyModalOpen(true)}
-                className="px-6 py-2.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-sm font-bold shadow-md shadow-blue-500/25 transition-all duration-200 flex items-center gap-2 hover:scale-[1.02] active:scale-[0.98]"
+                className="hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white hover:bg-[#FAF8F5] text-xs text-[#121316] border border-[#E4E2DC] hover:border-[#C85A32] transition cursor-pointer font-sans"
               >
-                <Zap className="w-4 h-4 fill-white" />
-                <span>Follow The Money</span>
+                <Sparkles className="w-3.5 h-3.5 text-[#C85A32]" />
+                <span className="font-medium text-xs">Trace Money</span>
               </button>
 
-              {/* Mobile Menu Toggle */}
+              {/* Login / Auth Identity Badge */}
+              {isAuthenticated && user ? (
+                <div className="relative font-sans">
+                  <button
+                    type="button"
+                    onClick={() => setUserMenuOpen(!userMenuOpen)}
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FAF0EB] hover:bg-[#F3E5DE] border border-[#E8C5B6] text-xs transition cursor-pointer min-h-[38px]"
+                    title={`Logged in as ${user.display_name} (${user.role})`}
+                  >
+                    <div className="w-5 h-5 rounded-full bg-[#C85A32] text-white flex items-center justify-center text-[10px] font-bold">
+                      {user.display_name.charAt(0)}
+                    </div>
+                    <span className="hidden xl:inline text-[#121316] font-medium max-w-[130px] truncate">
+                      {user.display_name}
+                    </span>
+                    <span className="hidden md:inline px-1.5 py-0.2 rounded bg-white text-[#C85A32] text-[9px] font-mono uppercase border border-[#E8C5B6]">
+                      {user.jurisdiction}
+                    </span>
+                    <ChevronDown className="w-3 h-3 text-[#71717A]" />
+                  </button>
+
+                  <AnimatePresence>
+                    {userMenuOpen && (
+                      <>
+                        <div
+                          className="fixed inset-0 z-40"
+                          onClick={() => setUserMenuOpen(false)}
+                          aria-hidden="true"
+                        />
+                        <motion.div
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 4 }}
+                          transition={{ duration: 0.15 }}
+                          className="absolute right-0 top-full mt-2 w-72 bg-[#FAF8F5] rounded-2xl p-3 shadow-xl border border-[#E4E2DC] z-50 normal-case space-y-2.5"
+                        >
+                          <div className="border-b border-[#E4E2DC] pb-2 px-1">
+                            <div className="text-xs font-semibold text-[#121316]">{user.display_name}</div>
+                            <div className="text-[10px] font-mono text-[#71717A] mt-0.5">
+                              Role: <span className="text-[#C85A32] font-semibold">{user.role}</span>
+                            </div>
+                            <div className="text-[10px] font-mono text-[#71717A]">
+                              Scope: <span className="text-[#121316] font-medium">{user.jurisdiction_type} ({user.jurisdiction})</span>
+                            </div>
+                            <div className="mt-1.5">
+                              <span className="inline-block px-1.5 py-0.5 rounded text-[9px] font-mono bg-[#EBF5EE] text-[#1E7E34] border border-[#BCE2C5]">
+                                ✓ Statutory Official Mandate
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="space-y-1">
+                            <Link
+                              to={homeRoute}
+                              onClick={() => setUserMenuOpen(false)}
+                              className="flex items-center justify-between p-2 rounded-xl text-xs hover:bg-[#F0EFEA] text-[#121316] transition"
+                            >
+                              <span>Open Role Workspace</span>
+                              <ArrowRight className="w-3.5 h-3.5 text-[#71717A]" />
+                            </Link>
+                            <Link
+                              to="/login"
+                              onClick={() => setUserMenuOpen(false)}
+                              className="flex items-center justify-between p-2 rounded-xl text-xs hover:bg-[#F0EFEA] text-[#121316] transition"
+                            >
+                              <span>Switch Official Identity</span>
+                              <ArrowRight className="w-3.5 h-3.5 text-[#71717A]" />
+                            </Link>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                logout();
+                                setUserMenuOpen(false);
+                              }}
+                              className="w-full flex items-center justify-between p-2 rounded-xl text-xs hover:bg-[#FAF0EB] text-[#C85A32] transition cursor-pointer font-medium"
+                            >
+                              <span>Sign Out to Citizen Mode</span>
+                              <LogOut className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </motion.div>
+                      </>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <Link
+                  to="/login"
+                  className="flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#E4E2DC] hover:border-[#C85A32] bg-[#FAF8F5] hover:bg-white text-xs text-[#121316] transition min-h-[38px] shadow-2xs group"
+                >
+                  <LogIn className="w-3.5 h-3.5 text-[#C85A32] group-hover:translate-x-0.5 transition-transform" />
+                  <span className="font-semibold tracking-wide">Official Login</span>
+                  <span className="hidden md:inline text-[10px] text-[#71717A] font-mono border-l border-[#E4E2DC] pl-2">Authorities</span>
+                </Link>
+              )}
+
+              {/* Mobile menu toggle */}
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 rounded-xl text-slate-700 hover:bg-slate-100 transition"
-                aria-label="Toggle Menu"
+                className="lg:hidden p-2 rounded-xl text-[#4A4D53] hover:text-[#121316] hover:bg-[#F0EFEA] transition"
+                aria-label="Toggle navigation"
               >
-                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
             </div>
           </div>
         </div>
 
-        {/* Mobile Menu Dropdown */}
+        {/* Mobile Navigation Drawer */}
         <AnimatePresence>
           {mobileMenuOpen && (
-            <>
-              <div
-                className="fixed inset-0 top-20 z-40 bg-slate-900/40 backdrop-blur-xs md:hidden"
-                onClick={() => setMobileMenuOpen(false)}
-                aria-hidden="true"
-              />
-              <motion.div
-                id="mobile-navigation"
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.15 }}
-                className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-slate-200 shadow-2xl px-4 py-5 space-y-4 max-h-[80vh] overflow-y-auto z-50"
-              >
-                <div className="space-y-1">
-                  <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest px-3 block mb-1">
-                    Risk &amp; Governance Command
-                  </span>
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.15 }}
+              className="lg:hidden bg-[#FAF8F5] border-b border-[#E4E2DC] shadow-2xl px-4 py-5 space-y-4 max-h-[80vh] overflow-y-auto font-sans"
+            >
+              {/* Primary Links */}
+              <div className="space-y-1">
+                <span className="text-[10px] font-mono font-medium text-[#71717A] uppercase tracking-widest px-3 block mb-1">
+                  Permitted Modules
+                </span>
+                {navStructure.primaryLinks.map((link) => (
                   <Link
-                    to="/cases"
+                    key={link.to}
+                    to={link.to}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-between px-3.5 py-2.5 rounded-2xl font-bold text-slate-800 hover:bg-blue-50/70 hover:text-[#2563EB] min-h-[44px] transition"
+                    className="flex items-center justify-between px-3.5 py-2.5 rounded-xl font-medium text-[#121316] hover:bg-[#F0EFEA] transition text-xs uppercase"
                   >
-                    <div className="flex items-center gap-2.5">
-                      <ShieldAlert className="w-4 h-4 text-[#2563EB]" />
-                      <span>Alerts &amp; Review Cases</span>
-                    </div>
-                    <span className="px-2 py-0.5 rounded-full bg-blue-50 text-[#2563EB] text-[10px] font-mono font-bold border border-blue-200">
-                      Live Hub
-                    </span>
+                    <span>{link.label}</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-[#71717A]" />
                   </Link>
-                  <Link
-                    to="/duplicates"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-between px-3.5 py-2.5 rounded-2xl font-bold text-slate-800 hover:bg-slate-50 min-h-[44px] transition"
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <Copy className="w-4 h-4 text-amber-600" />
-                      <span>Duplicate Work Studio</span>
-                    </div>
-                    <span className="px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 text-[10px] font-bold border border-amber-200">
-                      AI Scope
-                    </span>
-                  </Link>
-                  <Link
-                    to="/anomalies"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-between px-3.5 py-2.5 rounded-2xl font-bold text-slate-800 hover:bg-slate-50 min-h-[44px] transition"
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <Zap className="w-4 h-4 text-rose-500" />
-                      <span>Statistical Signals</span>
-                    </div>
-                    <span className="px-2 py-0.5 rounded-full bg-rose-50 text-rose-600 text-[10px] font-mono font-bold border border-rose-200">
-                      1,831
-                    </span>
-                  </Link>
-                  <Link
-                    to="/data-quality"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-between px-3.5 py-2.5 rounded-2xl font-bold text-slate-800 hover:bg-slate-50 min-h-[44px] transition"
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                      <span>Data Quality &amp; Provenance</span>
-                    </div>
-                    <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-mono font-bold border border-emerald-200">
-                      96.4%
-                    </span>
-                  </Link>
-                </div>
+                ))}
+              </div>
 
-                <div className="space-y-1 pt-2 border-t border-slate-100">
-                  <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest px-3 block mb-1">
-                    Public Explorers
+              {/* Dropdowns on Mobile */}
+              {navStructure.dropdowns?.map((dropdown) => (
+                <div key={dropdown.key} className="space-y-1 pt-2 border-t border-[#E4E2DC]">
+                  <span className="text-[10px] font-mono font-medium text-[#71717A] uppercase tracking-widest px-3 block mb-1">
+                    {dropdown.title}
                   </span>
-                  <Link
-                    to="/works"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl font-bold text-slate-800 hover:bg-slate-50 min-h-[44px] transition"
-                  >
-                    <Layers className="w-4 h-4 text-slate-500" />
-                    <span>102,437 Public Works</span>
-                  </Link>
-                  <Link
-                    to="/transactions"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl font-bold text-slate-800 hover:bg-slate-50 min-h-[44px] transition"
-                  >
-                    <Receipt className="w-4 h-4 text-slate-500" />
-                    <span>82,296 Treasury Vouchers</span>
-                  </Link>
-                  <Link
-                    to="/vendors"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl font-bold text-slate-800 hover:bg-slate-50 min-h-[44px] transition"
-                  >
-                    <Building2 className="w-4 h-4 text-slate-500" />
-                    <span>22,377 Contractors</span>
-                  </Link>
-                  <Link
-                    to="/mps"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl font-bold text-slate-800 hover:bg-slate-50 min-h-[44px] transition"
-                  >
-                    <Users className="w-4 h-4 text-slate-500" />
-                    <span>778 Parliamentarians</span>
-                  </Link>
-                  <Link
-                    to="/states"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl font-bold text-slate-800 hover:bg-slate-50 min-h-[44px] transition"
-                  >
-                    <MapPin className="w-4 h-4 text-slate-500" />
-                    <span>28 States &amp; 8 UTs Atlas</span>
-                  </Link>
-                  <Link
-                    to="/methodology"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl font-bold text-slate-800 hover:bg-slate-50 min-h-[44px] transition"
-                  >
-                    <FileText className="w-4 h-4 text-slate-500" />
-                    <span>Technical Methodology</span>
-                  </Link>
+                  {dropdown.items.map((item) => (
+                    <Link
+                      key={item.to}
+                      to={item.to}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center justify-between px-3.5 py-2 rounded-xl text-xs text-[#121316] hover:bg-[#F0EFEA] transition"
+                    >
+                      <span>{item.label}</span>
+                      {item.badge && (
+                        <span className="px-1.5 py-0.2 rounded bg-[#FAF0EB] text-[#C85A32] text-[9px] font-mono">
+                          {item.badge}
+                        </span>
+                      )}
+                    </Link>
+                  ))}
                 </div>
+              ))}
 
-                <div className="pt-2">
+              {/* Login or Sign out on Mobile */}
+              <div className="pt-2 border-t border-[#E4E2DC]">
+                {!isAuthenticated ? (
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full cw-btn-primary py-2.5 text-xs text-center justify-center flex items-center gap-2"
+                  >
+                    <LogIn className="w-4 h-4" />
+                    <span>Official Authority Sign In</span>
+                  </Link>
+                ) : (
                   <button
                     type="button"
                     onClick={() => {
+                      logout();
                       setMobileMenuOpen(false);
-                      setFollowMoneyModalOpen(true);
                     }}
-                    className="w-full py-3 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md min-h-[44px] cursor-pointer"
+                    className="w-full py-2.5 rounded-xl bg-white border border-[#E4E2DC] text-xs text-[#C85A32] font-semibold text-center justify-center flex items-center gap-2"
                   >
-                    <Zap className="w-4 h-4 fill-white" />
-                    <span>Follow The Money Tracker</span>
+                    <LogOut className="w-4 h-4" />
+                    <span>Sign Out to Citizen Mode</span>
                   </button>
-                </div>
-              </motion.div>
-            </>
+                )}
+              </div>
+            </motion.div>
           )}
         </AnimatePresence>
       </header>

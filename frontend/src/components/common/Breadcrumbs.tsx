@@ -61,17 +61,17 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, customCurrent, 
   return (
     <nav
       aria-label="Breadcrumb"
-      className={`flex items-center justify-between gap-3 text-xs py-2 px-3.5 bg-slate-50/80 rounded-2xl border border-slate-200/80 shadow-xs mb-6 overflow-x-auto ${className}`}
+      className={`flex items-center justify-between gap-3 text-xs py-2 px-4 bg-[#FAF8F5] rounded-full border border-[#E4E2DC] shadow-2xs mb-6 overflow-x-auto font-sans ${className}`}
     >
-      <ol className="flex items-center gap-1.5 shrink-0">
+      <ol className="flex items-center gap-2 shrink-0">
         <li>
           <Link
             to="/"
-            className="flex items-center gap-1 text-slate-500 hover:text-navy-950 font-medium transition active:scale-[0.98]"
+            className="flex items-center gap-1.5 text-[#71717A] hover:text-[#121316] font-medium transition active:scale-[0.98]"
             title="Overview Home"
           >
-            <Home className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">India Overview</span>
+            <Home className="w-3.5 h-3.5 text-[#71717A]" />
+            <span className="hidden sm:inline font-mono text-[11px] uppercase tracking-wider">India Overview</span>
           </Link>
         </li>
 
@@ -80,14 +80,14 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, customCurrent, 
           const Icon = item.icon;
 
           return (
-            <li key={index} className="flex items-center gap-1.5">
-              <ChevronRight className="w-3 h-3 text-slate-400 shrink-0" />
+            <li key={index} className="flex items-center gap-2">
+              <ChevronRight className="w-3 h-3 text-[#A1A1AA] shrink-0" />
               {isLast || !item.to ? (
-                <span className="flex items-center gap-1 font-bold text-navy-950 truncate max-w-[200px] sm:max-w-xs">
-                  {Icon && <Icon className="w-3.5 h-3.5 text-brand-600 shrink-0" />}
+                <span className="flex items-center gap-1.5 font-semibold text-[#121316] truncate max-w-[220px] sm:max-w-xs">
+                  {Icon && <Icon className="w-3.5 h-3.5 text-[#C85A32] shrink-0" />}
                   <span className="truncate">{item.label}</span>
                   {item.badge && (
-                    <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold bg-coral-500 text-white shadow-xs ml-1">
+                    <span className="px-2 py-0.2 rounded-full text-[9px] font-mono font-bold bg-[#FAF0EB] text-[#C85A32] border border-[#E8C5B6] ml-1">
                       {item.badge}
                     </span>
                   )}
@@ -95,9 +95,9 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, customCurrent, 
               ) : (
                 <Link
                   to={item.to}
-                  className="flex items-center gap-1 text-slate-500 hover:text-navy-950 font-medium transition active:scale-[0.98]"
+                  className="flex items-center gap-1.5 text-[#71717A] hover:text-[#121316] font-medium transition active:scale-[0.98]"
                 >
-                  {Icon && <Icon className="w-3.5 h-3.5 text-slate-400 shrink-0" />}
+                  {Icon && <Icon className="w-3.5 h-3.5 text-[#A1A1AA] shrink-0" />}
                   <span>{item.label}</span>
                 </Link>
               )}
@@ -107,9 +107,9 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, customCurrent, 
       </ol>
 
       {/* Viewing Scope Context Pill */}
-      <div className="hidden md:flex items-center gap-1.5 text-[11px] font-mono text-slate-500 shrink-0">
+      <div className="hidden md:flex items-center gap-2 text-[11px] font-mono text-[#71717A] shrink-0">
         <span>Active Scope:</span>
-        <span className="px-2 py-0.5 rounded-lg bg-white border border-slate-200 text-navy-950 font-bold shadow-xs">
+        <span className="px-2.5 py-0.5 rounded-full bg-[#F0EFEA] border border-[#E4E2DC] text-[#121316] font-semibold">
           {houseLabel}
         </span>
       </div>

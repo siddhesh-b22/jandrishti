@@ -280,3 +280,204 @@ SELECT
     completion_rate_pct,
     transaction_count
 FROM mps;
+
+-- ====================================================================
+-- 8. ENRICHMENT TABLES (INTELLIGENCE & FORENSIC EXTENSIONS)
+-- ====================================================================
+
+-- 8.1 Source Registry (Tier 1 to Tier 4)
+CREATE TABLE IF NOT EXISTS source_registry (
+    source_id TEXT PRIMARY KEY,
+    source_name TEXT NOT NULL,
+    organization TEXT NOT NULL,
+    url TEXT NOT NULL,
+    data_type TEXT NOT NULL,
+    update_frequency TEXT NOT NULL,
+    trust_tier TEXT NOT NULL,
+    status TEXT NOT NULL,
+    license_or_access_note TEXT NOT NULL
+);
+
+-- 8.2 Statutory Rules & Benchmarks (MPLADS Guidelines 2023)
+CREATE TABLE IF NOT EXISTS statutory_rules (
+    rule_id TEXT PRIMARY KEY,
+    rule_code TEXT NOT NULL UNIQUE,
+    title TEXT NOT NULL,
+    governing_document TEXT NOT NULL,
+    clause_reference TEXT NOT NULL,
+    statutory_threshold TEXT NOT NULL,
+    description TEXT NOT NULL,
+    enforcement_level TEXT NOT NULL
+);
+
+-- 8.3 Implementing Agencies Forensics
+CREATE TABLE IF NOT EXISTS implementing_agencies (
+    agency_id TEXT PRIMARY KEY,
+    agency_name TEXT NOT NULL,
+    state TEXT NOT NULL,
+    total_works INTEGER NOT NULL,
+    completed_works INTEGER NOT NULL,
+    in_progress_works INTEGER NOT NULL,
+    completion_rate_pct REAL NOT NULL,
+    total_expenditure REAL NOT NULL,
+    total_transactions INTEGER NOT NULL,
+    unique_vendors INTEGER NOT NULL,
+    vendor_hhi REAL NOT NULL,
+    top_vendor_name TEXT,
+    top_vendor_share_pct REAL NOT NULL,
+    avg_duration_days REAL,
+    risk_level TEXT NOT NULL,
+    generated_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_agency_state ON implementing_agencies(state);
+CREATE INDEX IF NOT EXISTS idx_agency_exp ON implementing_agencies(total_expenditure);
+CREATE INDEX IF NOT EXISTS idx_agency_hhi ON implementing_agencies(vendor_hhi);
+CREATE INDEX IF NOT EXISTS idx_agency_risk ON implementing_agencies(risk_level);
+
+-- 8.4 Payment Timing & Velocity Signals
+CREATE TABLE IF NOT EXISTS payment_timing_signals (
+    signal_id TEXT PRIMARY KEY,
+    signal_type TEXT NOT NULL, -- 'MARCH_RUSH', 'RAPID_BUNCHING', 'REPEATED_AMOUNT'
+    entity_type TEXT NOT NULL, -- 'MP', 'AGENCY', 'VENDOR', 'TRANSACTION'
+    entity_id TEXT NOT NULL,
+    entity_name TEXT NOT NULL,
+    state TEXT NOT NULL,
+    metric_value REAL NOT NULL,
+    threshold_value REAL NOT NULL,
+    affected_amount REAL NOT NULL,
+    affected_vouchers INTEGER NOT NULL,
+    severity TEXT NOT NULL, -- 'CRITICAL', 'HIGH', 'MEDIUM', 'LOW'
+    reason TEXT NOT NULL,
+    recommended_action TEXT NOT NULL,
+    generated_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_timing_type ON payment_timing_signals(signal_type);
+CREATE INDEX IF NOT EXISTS idx_timing_sev ON payment_timing_signals(severity);
+CREATE INDEX IF NOT EXISTS idx_timing_state ON payment_timing_signals(state);
+
+-- ====================================================================
+-- 9. DEEP ENTITY INTELLIGENCE & MEDIA REPOSITORY
+-- ====================================================================
+
+-- 9.1 Authoritative Entity Media (Official Portraits, Public Images, Asset Documents)
+CREATE TABLE IF NOT EXISTS entity_media (
+    media_id TEXT PRIMARY KEY,
+    entity_type TEXT NOT NULL, -- 'MP', 'WORK', 'AGENCY', 'VENDOR'
+    entity_id TEXT NOT NULL,
+    media_type TEXT NOT NULL, -- 'OFFICIAL_PORTRAIT', 'PROJECT_PHOTO', 'ASSET_PHOTO'
+    source_url TEXT NOT NULL,
+    source_name TEXT NOT NULL,
+    attribution TEXT NOT NULL,
+    license_note TEXT NOT NULL,
+    verification_status TEXT NOT NULL DEFAULT 'OFFICIAL', -- 'OFFICIAL', 'VERIFIED_PUBLIC', 'UNVERIFIED'
+    created_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_media_entity ON entity_media(entity_type, entity_id);
+CREATE INDEX IF NOT EXISTS idx_media_status ON entity_media(verification_status);
+
+-- 9.2 Entity Biographical & Institutional Dossier Profiles
+CREATE TABLE IF NOT EXISTS entity_profiles (
+    profile_id TEXT PRIMARY KEY,
+    entity_type TEXT NOT NULL, -- 'MP', 'AGENCY', 'VENDOR'
+    entity_id TEXT NOT NULL UNIQUE,
+    canonical_name TEXT NOT NULL,
+    biography_summary TEXT,
+    official_website TEXT,
+    nodal_address TEXT,
+    contact_email TEXT,
+    party_affiliation TEXT,
+    term_label TEXT,
+    source_provenance TEXT NOT NULL,
+    last_verified_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_profile_entity ON entity_profiles(entity_type, entity_id);
+
+-- ====================================================================
+-- 10. HISTORICAL SNAPSHOTS, CHANGE DETECTION & RECONCILIATION
+-- ====================================================================
+
+-- 10.1 Historical Snapshots
+CREATE TABLE IF NOT EXISTS historical_snapshots (
+    snapshot_id TEXT PRIMARY KEY,
+    source_id TEXT NOT NULL,
+    snapshot_date TEXT NOT NULL,
+    entity_type TEXT NOT NULL, -- 'WORK', 'MP', 'FINANCIAL', 'MACRO'
+    record_count INTEGER NOT NULL,
+    checksum_sha256 TEXT NOT NULL,
+    notes TEXT,
+    created_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_snap_type ON historical_snapshots(entity_type);
+CREATE INDEX IF NOT EXISTS idx_snap_date ON historical_snapshots(snapshot_date);
+
+-- 10.2 Detected Granular Change Events Between Snapshots
+CREATE TABLE IF NOT EXISTS change_events (
+    event_id TEXT PRIMARY KEY,
+    snapshot_id TEXT NOT NULL,
+    entity_type TEXT NOT NULL,
+    entity_id TEXT NOT NULL,
+    entity_name TEXT NOT NULL,
+    change_type TEXT NOT NULL, -- 'COST_REVISED', 'PROGRESS_UPDATED', 'STATUS_ADVANCED', 'DATE_EXTENDED', 'DISCREPANCY'
+    field_name TEXT NOT NULL,
+    old_value TEXT,
+    new_value TEXT,
+    change_magnitude REAL,
+    severity TEXT NOT NULL, -- 'CRITICAL', 'HIGH', 'MEDIUM', 'INFO'
+    finding_summary TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (snapshot_id) REFERENCES historical_snapshots(snapshot_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_change_entity ON change_events(entity_type, entity_id);
+CREATE INDEX IF NOT EXISTS idx_change_type ON change_events(change_type);
+CREATE INDEX IF NOT EXISTS idx_change_sev ON change_events(severity);
+
+-- 10.3 Official Data Reconciliation Ledger
+CREATE TABLE IF NOT EXISTS reconciliation_records (
+    reconciliation_id TEXT PRIMARY KEY,
+    entity_type TEXT NOT NULL,
+    entity_id TEXT NOT NULL,
+    entity_name TEXT NOT NULL,
+    status TEXT NOT NULL, -- 'MATCHED', 'DIFFERENT_VALUE', 'MISSING_IN_EXISTING_DATA', 'MISSING_IN_OFFICIAL_SOURCE', 'REQUIRES_REVIEW'
+    existing_value TEXT,
+    official_value TEXT,
+    variance_summary TEXT,
+    reconciled_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_rec_status ON reconciliation_records(status);
+CREATE INDEX IF NOT EXISTS idx_rec_entity ON reconciliation_records(entity_type, entity_id);
+
+-- ====================================================================
+-- 11. LOCAL GOVERNMENT DIRECTORY & OFFICIAL CROSSWALK
+-- ====================================================================
+
+CREATE TABLE IF NOT EXISTS lgd_districts_master (
+    lgd_district_code TEXT PRIMARY KEY,
+    lgd_state_code TEXT NOT NULL,
+    state_name TEXT NOT NULL,
+    district_name TEXT NOT NULL,
+    census2011_code TEXT,
+    created_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS official_mp_crosswalk (
+    crosswalk_id TEXT PRIMARY KEY,
+    internal_mp_id TEXT NOT NULL,
+    mospi_internal_id TEXT NOT NULL,
+    official_caption TEXT NOT NULL,
+    tenure_range TEXT,
+    state_id INTEGER NOT NULL,
+    house_code INTEGER NOT NULL,
+    verified_source TEXT NOT NULL,
+    verified_at TEXT NOT NULL,
+    FOREIGN KEY (internal_mp_id) REFERENCES mps(internal_mp_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_crosswalk_mp ON official_mp_crosswalk(internal_mp_id);
+CREATE INDEX IF NOT EXISTS idx_crosswalk_mospi ON official_mp_crosswalk(mospi_internal_id);

@@ -12,4 +12,17 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    chunkSizeWarningLimit: 1200,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-charts': ['recharts', 'd3-geo', 'topojson-client'],
+          'vendor-icons': ['lucide-react'],
+          'vendor-motion': ['motion'],
+        },
+      },
+    },
+  },
 });

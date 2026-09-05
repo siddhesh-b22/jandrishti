@@ -100,30 +100,32 @@ export const FinancialFlow: React.FC<FinancialFlowProps> = ({
   return (
     <div
       ref={ref}
-      className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-card transition-all duration-300 space-y-6"
+      className="rounded-2xl border border-[#E4E2DC] bg-[#FAF8F5] p-6 sm:p-8 shadow-xs transition-all duration-300 space-y-6 text-[#121316]"
     >
       {/* Header with Provenance Reconciliation */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E4E2DC] pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-brand-600 animate-pulse" />
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
-              NATIONAL TREASURY LIFECYCLE
+            <span className="font-mono text-[10px] tracking-widest text-[#C85A32] bg-[#FAF0EB] px-2.5 py-0.5 rounded-md border border-[#E8C5B6] uppercase font-bold">
+              [FILE NO. TRE-FLOW-01]
+            </span>
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#71717A]">
+              · NATIONAL TREASURY LIFECYCLE
             </span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-black text-navy-950 tracking-tight mt-0.5">
+          <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#121316] tracking-tight mt-1">
             Follow The Money: Capital Flow Journey
           </h2>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-[#4A4D53] font-light mt-1">
             Tracking public funds from Parliamentary allocation to physical infrastructure completion.
           </p>
         </div>
 
         {/* Double-Entry Zero Variance Badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-mono">
-          <ShieldCheck className="w-4 h-4 text-emerald-600" />
-          <span className="text-slate-600">Reconciliation Variance:</span>
-          <strong className="text-emerald-700 font-bold">₹0.00 (Double-Entry Match)</strong>
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#F0EFEA] border border-[#E4E2DC] text-xs font-mono">
+          <ShieldCheck className="w-4 h-4 text-[#2E7D32]" />
+          <span className="text-[#4A4D53]">Reconciliation Variance:</span>
+          <strong className="text-[#2E7D32] font-bold">₹0.00 (Double-Entry Match)</strong>
         </div>
       </div>
 
@@ -146,39 +148,39 @@ export const FinancialFlow: React.FC<FinancialFlowProps> = ({
               transition={{ duration: 0.2 }}
               className={`p-4 rounded-xl border transition-all duration-200 flex flex-col justify-between space-y-3 cursor-pointer ${
                 isHovered
-                  ? 'bg-slate-50/90 border-navy-950 shadow-md ring-1 ring-navy-950'
-                  : 'bg-white border-slate-200 hover:border-slate-300 shadow-xs'
+                  ? 'bg-[#FAF0EB] border-[#E8C5B6] shadow-sm ring-1 ring-[#C85A32]'
+                  : 'bg-[#F0EFEA] border-[#E4E2DC] hover:border-[#71717A] shadow-xs'
               }`}
             >
               {/* Stage Number & Icon */}
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold text-slate-400">
+                <span className="text-[10px] font-mono font-bold text-[#71717A]">
                   {st.stageNum}
                 </span>
-                <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-700">
+                <div className="w-8 h-8 rounded-lg bg-[#FAF8F5] border border-[#E4E2DC] flex items-center justify-center text-[#121316]">
                   <Icon className="w-4 h-4" />
                 </div>
               </div>
 
               {/* Title & Value */}
               <div>
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#71717A] block">
                   {st.title}
                 </span>
-                <div className={`text-base sm:text-lg font-black font-mono mt-0.5 tracking-tight ${st.accentColor}`}>
+                <div className="text-base sm:text-lg font-serif font-bold mt-0.5 tracking-tight text-[#121316]">
                   {st.value}
                 </div>
-                <div className="text-[11px] text-slate-500 font-medium mt-0.5 truncate">
+                <div className="text-[11px] text-[#4A4D53] font-light mt-0.5 truncate">
                   {st.subtitle}
                 </div>
               </div>
 
               {/* Metric Pill & Description */}
-              <div className="space-y-1.5 pt-2 border-t border-slate-100">
-                <span className={`inline-block px-2 py-0.5 rounded text-[10px] ${st.pillColor}`}>
+              <div className="space-y-1.5 pt-2 border-t border-[#E4E2DC]">
+                <span className="inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#FAF8F5] text-[#C85A32] border border-[#E8C5B6]">
                   {st.metric}
                 </span>
-                <p className="text-[11px] text-slate-500 leading-tight">
+                <p className="text-[11px] text-[#4A4D53] font-light leading-tight">
                   {st.desc}
                 </p>
               </div>
@@ -188,34 +190,34 @@ export const FinancialFlow: React.FC<FinancialFlowProps> = ({
       </div>
 
       {/* Progress Bar Visualization */}
-      <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-        <div className="flex items-center justify-between text-xs">
-          <span className="font-mono font-bold text-navy-950">
+      <div className="p-4 rounded-xl bg-[#F0EFEA] border border-[#E4E2DC] space-y-2">
+        <div className="flex items-center justify-between text-xs font-mono">
+          <span className="font-bold text-[#121316]">
             Treasury Fund Utilization Ratio
           </span>
-          <span className="font-mono font-bold text-brand-700">
+          <span className="font-bold text-[#C85A32]">
             {utilizationPct.toFixed(2)}% Disbursed (₹{expenditureCr.toFixed(2)} Cr)
           </span>
         </div>
-        <div className="w-full h-3 rounded-full bg-slate-200 overflow-hidden flex">
+        <div className="w-full h-2.5 rounded-full bg-[#E4E2DC] overflow-hidden flex">
           <div
             style={{ width: `${utilizationPct}%` }}
-            className="bg-gradient-to-r from-brand-600 to-brand-500 h-full rounded-l-full transition-all duration-500"
+            className="bg-[#C85A32] h-full rounded-l-full transition-all duration-500"
             title={`Disbursed: ${utilizationPct.toFixed(2)}%`}
           />
           <div
             style={{ width: `${100 - utilizationPct}%` }}
-            className="bg-amber-400/80 h-full rounded-r-full transition-all duration-500"
+            className="bg-[#D1CDC7] h-full rounded-r-full transition-all duration-500"
             title={`Exchequer Surplus: ${(100 - utilizationPct).toFixed(2)}%`}
           />
         </div>
-        <div className="flex items-center justify-between text-[10px] text-slate-500 font-mono">
+        <div className="flex items-center justify-between text-[10px] text-[#71717A] font-mono">
           <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-brand-600" />
+            <span className="w-2 h-2 rounded-full bg-[#C85A32]" />
             Disbursed Expenditure: ₹{expenditureCr.toFixed(2)} Cr
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-amber-400" />
+            <span className="w-2 h-2 rounded-full bg-[#D1CDC7]" />
             Unspent Exchequer Balance: ₹{unspentCr.toFixed(2)} Cr
           </span>
         </div>

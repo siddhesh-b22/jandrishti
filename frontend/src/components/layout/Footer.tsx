@@ -14,103 +14,107 @@ import { BrandLogo } from '../common/BrandLogo';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-[#08102B] text-white border-t border-slate-800 text-xs font-manrope">
+    <footer className="bg-[#121316] text-[#FAF8F5] border-t border-[#2A2C32] text-xs font-sans">
       {/* Top Reconciled Trust & Integrity Strip */}
-      <div className="bg-[#040817] text-slate-300 py-3 border-b border-slate-800/80">
+      <div className="bg-[#0C0D0F] text-[#A1A1AA] py-3 border-b border-[#2A2C32]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-2 font-bold text-white text-xs">
+          <div className="flex items-center gap-2 text-xs font-mono">
             <span className="flex h-2 w-2 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C85A32] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C85A32]"></span>
             </span>
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span>
-              Democratic Transparency &amp; Citizens' Rights:{' '}
-              <strong className="text-emerald-400 font-mono font-extrabold">₹0.00 Variance Guaranteed</strong>
-            </span>
+            <span className="text-[#FAF8F5] font-semibold">Statutory Compliance Monitor:</span>
+            <span className="text-[#C85A32]">Article 9 Norms &amp; ₹0.00 Variance Guaranteed</span>
           </div>
 
-          <div className="flex items-center gap-3 sm:gap-4 text-slate-400 text-[11px] font-mono">
-            <span className="text-white font-extrabold">28 States &amp; 8 UTs</span>
+          <div className="flex items-center gap-3 sm:gap-4 text-stone-400 text-[11px] font-mono">
+            <span className="text-[#FAF8F5]">28 States &amp; 8 UTs</span>
             <span>•</span>
             <span>778 MPs</span>
             <span>•</span>
             <span>102,437 Works</span>
             <span>•</span>
-            <span>82,296 Vouchers</span>
-            <span>•</span>
-            <span className="text-emerald-400">Data Snapshot: 26 Aug 2026</span>
+            <span className="text-[#C85A32]">Snapshot: Aug 2026</span>
           </div>
         </div>
       </div>
 
-      {/* Main 4-Column Directory */}
+      {/* Main 4-Column Directory with Roman Numerals (GetCasework style) */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
-        {/* Col 1: Brand & Purpose */}
-        <div className="space-y-3.5 md:col-span-1">
-          <div className="inline-flex items-center">
+        {/* Col 1: i · Engagement & Intake */}
+        <div className="space-y-3 md:col-span-1">
+          <span className="font-mono text-[10px] text-[#C85A32] tracking-widest uppercase block">
+            i · Intake &amp; Governance
+          </span>
+          <div className="inline-flex items-center pt-1">
             <BrandLogo size="md" theme="dark" />
           </div>
-          <p className="text-slate-400 text-xs leading-relaxed font-light">
-            Protecting public wealth and empowering citizens' rights. JanDrishti transforms complex parliamentary finance into transparent, double-entry verified civic intelligence.
+          <p className="text-stone-400 text-xs leading-relaxed font-light">
+            AI-powered statutory monitoring and decision-support for MPLADS works. Grounded in MoSPI guidelines, CAG norms, and double-entry treasury reconciliation.
           </p>
           <div className="pt-1">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[11px] font-bold">
-              <Activity className="w-3 h-3 text-emerald-400 animate-pulse" />
-              API Online · Read-Only Immutable Dataset
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#1A1B1F] border border-[#2A2C32] text-stone-300 text-[10px] font-mono">
+              <Activity className="w-3 h-3 text-[#C85A32]" />
+              Immutable Audit Pipeline Active
             </span>
           </div>
         </div>
 
-        {/* Col 2: National Registries */}
+        {/* Col 2: ii · Four User Roles */}
         <div className="space-y-2.5">
-          <h4 className="text-xs font-extrabold uppercase tracking-wider text-white font-manrope">National Registries</h4>
-          <ul className="space-y-2 text-slate-400 text-xs">
-            <li><Link to="/mps" className="hover:text-[#3B82F6] transition font-medium">Parliamentarians (778 MPs)</Link></li>
-            <li><Link to="/states" className="hover:text-[#3B82F6] transition font-medium">Spatial Atlas (28 States &amp; 8 UTs)</Link></li>
-            <li><Link to="/works" className="hover:text-[#3B82F6] transition font-medium">Physical Infrastructure (102,437 Works)</Link></li>
-            <li><Link to="/transactions" className="hover:text-[#3B82F6] transition font-medium">Disbursement Vouchers (82,296)</Link></li>
-            <li><Link to="/vendors" className="hover:text-[#3B82F6] transition font-medium">Contractor Footprints (22,377)</Link></li>
+          <span className="font-mono text-[10px] text-[#C85A32] tracking-widest uppercase block">
+            ii · Four Statutory Roles
+          </span>
+          <ul className="space-y-2 text-stone-400 text-xs">
+            <li><Link to="/dashboards?role=MINISTRY_ADMIN" className="hover:text-[#FAF8F5] transition">MoSPI Administrator (Policy &amp; Weights)</Link></li>
+            <li><Link to="/dashboards?role=STATE_NODAL_AUTHORITY" className="hover:text-[#FAF8F5] transition">State Nodal Authority (Inter-District Audit)</Link></li>
+            <li><Link to="/dashboards?role=DISTRICT_AUTHORITY" className="hover:text-[#FAF8F5] transition">District Authority (Collector / DM)</Link></li>
+            <li><Link to="/dashboards?role=MP" className="hover:text-[#FAF8F5] transition">Member of Parliament (₹5 Cr Quota)</Link></li>
+            <li><Link to="/dashboards?role=CITIZEN" className="hover:text-[#FAF8F5] transition">Citizen Transparency Watch</Link></li>
           </ul>
         </div>
 
-        {/* Col 3: Analytical Systems */}
+        {/* Col 3: iii · Analytical Engines */}
         <div className="space-y-2.5">
-          <h4 className="text-xs font-extrabold uppercase tracking-wider text-white font-manrope">Analytical Systems</h4>
-          <ul className="space-y-2 text-slate-400 text-xs">
-            <li><Link to="/anomalies" className="hover:text-rose-400 transition font-medium">Signal Center (1,831 MAD Signals)</Link></li>
-            <li><Link to="/anomalies?severity=CRITICAL" className="hover:text-rose-400 transition font-medium">21 Critical Priority Signals</Link></li>
-            <li><Link to="/methodology" className="hover:text-blue-400 transition font-medium">Deterministic Double-Entry Ledger</Link></li>
-            <li><Link to="/methodology#mad-framework" className="hover:text-blue-400 transition font-medium">MAD Z-Score Framework</Link></li>
-            <li><a href="http://127.0.0.1:8000/docs" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition font-medium inline-flex items-center gap-1">FastAPI Swagger Specs <ExternalLink className="w-3 h-3" /></a></li>
+          <span className="font-mono text-[10px] text-[#C85A32] tracking-widest uppercase block">
+            iii · Analytical Engines
+          </span>
+          <ul className="space-y-2 text-stone-400 text-xs">
+            <li><Link to="/cases" className="hover:text-[#FAF8F5] transition">Cases &amp; Anomaly Docket</Link></li>
+            <li><Link to="/ingest" className="hover:text-[#FAF8F5] transition">Data Ingestion Pipeline (CSV/Excel)</Link></li>
+            <li><Link to="/duplicates" className="hover:text-[#FAF8F5] transition">TF-IDF Duplicate Detection</Link></li>
+            <li><Link to="/anomalies" className="hover:text-[#FAF8F5] transition">IsolationForest &amp; Statistical Outliers</Link></li>
+            <li><Link to="/data-quality" className="hover:text-[#FAF8F5] transition">SHA-256 Provenance Ledger</Link></li>
           </ul>
         </div>
 
-        {/* Col 4: Public Audit & Integrity */}
+        {/* Col 4: iv · Statutory Disclosures */}
         <div className="space-y-2.5">
-          <h4 className="text-xs font-extrabold uppercase tracking-wider text-white font-manrope">Public Audit &amp; Rights</h4>
-          <p className="text-slate-400 text-xs leading-relaxed font-light">
-            All analytical figures are deterministically computed without political or subjective bias, empowering democratic transparency.
-          </p>
-          <div className="pt-2 text-slate-500 text-[11px] font-mono">
-            <div>Engine: SQLite3 Immutable Read-Only</div>
-            <div>Snapshot: 26 August 2026</div>
+          <span className="font-mono text-[10px] text-[#C85A32] tracking-widest uppercase block">
+            iv · Statutory Disclosures
+          </span>
+          <div className="p-3 rounded-lg bg-[#1A1B1F] border border-[#2A2C32] text-[11px] text-stone-400 leading-relaxed font-light">
+            <strong className="text-stone-200 block mb-1 font-sans">Non-Accusatory Principle</strong>
+            JanDrishti is a decision-support and audit platform. Flags represent potential risk indicators requiring field verification; they do not constitute proof of irregularity.
+          </div>
+          <div className="text-stone-500 text-[10px] font-mono pt-1">
+            Demo Environment · Synthetic Data Reconciled
           </div>
         </div>
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-slate-800/80 bg-[#040817] py-4 text-center text-slate-400 text-[11px]">
+      <div className="border-t border-[#2A2C32] bg-[#0C0D0F] py-4 text-center text-stone-400 text-[11px]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2">
           <div>
-            &copy; 2026 JanDrishti Civic Intelligence Platform. Empowering Democratic Transparency &amp; Citizens' Rights.
+            &copy; 2026 JanDrishti Civic Intelligence Platform. Aligned with MoSPI MPLADS Guidelines.
           </div>
-          <div className="flex items-center gap-4 text-slate-400">
-            <Link to="/methodology" className="hover:text-white transition">Data Methodology</Link>
+          <div className="flex items-center gap-4 text-stone-400 font-mono text-[10px]">
+            <Link to="/methodology" className="hover:text-white transition">Audit Methodology</Link>
             <span>•</span>
-            <Link to="/anomalies" className="hover:text-white transition">Audit Signals</Link>
+            <Link to="/data-quality" className="hover:text-white transition">Data Provenance</Link>
             <span>•</span>
-            <span className="text-emerald-400">₹0.00 Variance Guaranteed</span>
+            <span className="text-[#C85A32]">Decision-Support Only</span>
           </div>
         </div>
       </div>

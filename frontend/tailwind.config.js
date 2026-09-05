@@ -7,6 +7,25 @@ export default {
   theme: {
     extend: {
       colors: {
+        // GetCasework Editorial Design Palette
+        cw: {
+          bg: '#FAF8F5',
+          paper: '#F7F5F0',
+          canvas: '#F1EFEA',
+          card: '#FFFFFF',
+          ink: '#121316',
+          ink2: '#4A4D53',
+          muted: '#71717A',
+          rule: '#E4E2DC',
+          rulesoft: '#F0EFEA',
+          accent: '#C85A32',
+          accentHover: '#B54C26',
+          accentSoft: '#FAF0EB',
+          accentBorder: '#E8C5B6',
+          dark: '#121316',
+          darkCard: '#1A1B1F',
+          darkBorder: '#2A2C32',
+        },
         // Alluxi Signature Palette
         ablue: {
           50: '#EFF6FF',
@@ -82,12 +101,12 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['"Manrope"', '"Plus Jakarta Sans"', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        manrope: ['"Manrope"', 'sans-serif'],
-        display: ['"Manrope"', '"Outfit"', '"Plus Jakarta Sans"', 'sans-serif'],
-        serif: ['"DM Serif Display"', 'Georgia', 'serif'],
-        mono: ['"JetBrains Mono"', 'Fira Code', 'SFMono-Regular', 'Menlo', 'monospace'],
-        heading: ['"Manrope"', '"Space Grotesk"', '"Outfit"', 'sans-serif'],
+        sans: ['"IBM Plex Sans"', '"Inter"', 'system-ui', '-apple-system', 'sans-serif'],
+        serif: ['"Newsreader"', 'Georgia', 'serif'],
+        mono: ['"IBM Plex Mono"', '"JetBrains Mono"', 'Fira Code', 'Menlo', 'monospace'],
+        display: ['"Newsreader"', 'Georgia', 'serif'],
+        manrope: ['"IBM Plex Sans"', '"Manrope"', 'sans-serif'],
+        heading: ['"Newsreader"', 'Georgia', 'serif'],
       },
       boxShadow: {
         'card': '0 1px 3px 0 rgba(8, 16, 43, 0.04), 0 1px 2px -1px rgba(8, 16, 43, 0.04)',

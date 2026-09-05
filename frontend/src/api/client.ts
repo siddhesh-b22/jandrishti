@@ -13,6 +13,7 @@ import {
   PaginatedResponse,
   StateSummary,
   Constituency,
+  DistrictItem,
   WorkCategory,
   DuplicatePair,
   ProgressMismatch,
@@ -20,14 +21,100 @@ import {
   WorkIntelligenceProfile,
   DataQualityReport,
   ReviewCase,
-  AuditLog
+  AuditLog,
+  SourceRegistryResponse,
+  StatutoryRuleResponse,
+  ImplementingAgencyListResponse,
+  PaymentTimingSignalListResponse,
+  GlobalSearchResponse,
+  EntityMediaListResponse,
+  EntityProfile,
+  EntityTimelineResponse,
+  DiscoveredSourceListResponse,
+  HistoricalSnapshotListResponse,
+  ChangeEventListResponse,
+  ReconciliationListResponse,
+  WorkRiskSummary,
+  LgdDistrictListResponse,
+  MpCrosswalkResponse,
+  SnapshotSyncResponse,
+  AreaTrackResponse,
+  IngestValidateResponse,
+  IngestConfirmResponse,
+  RiskWeightsConfig,
+  AlertItem,
+  AlertListResponse,
+  NationalDashboard,
+  StateDashboard,
+  DistrictDashboard,
+  MpDashboard,
+  AuthUser,
+  DemoAccount,
+  LoginPayload,
+  LoginResult,
+  RbacIdentity,
+  Recommendation,
+  CorrectionRequest,
+  AuditInvestigationCase,
+  CitizenReport,
+  StatutoryAuditLog,
+  TrendAnalytics,
 } from './types';
+
+export type {
+  AuthUser,
+  DemoAccount,
+  LoginPayload,
+  LoginResult,
+  RbacIdentity,
+  Recommendation,
+  CorrectionRequest,
+  AuditInvestigationCase,
+  CitizenReport,
+  StatutoryAuditLog,
+};
 
 const RAW_BASE_URL = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
 const API_BASE = RAW_BASE_URL ? `${RAW_BASE_URL}/api` : '/api';
 
+function getAuthHeaders(): Record<string, string> {
+  try {
+    const savedToken = localStorage.getItem('jandrishti_token');
+    const role = localStorage.getItem('jandrishti_user_role') || 'CITIZEN';
+    const tokenMap: Record<string, string> = {
+      MINISTRY_ADMIN: 'jd-demo-ministry-2026',
+      MINISTRY_OFFICIAL: 'jd-demo-ministry-2026',
+      STATE_NODAL_AUTHORITY: 'jd-demo-state-2026',
+      STATE_AUTHORITY: 'jd-demo-state-2026',
+      DISTRICT_AUTHORITY: 'jd-demo-district-2026',
+      MP: 'jd-demo-mp-2026',
+      AUDITOR: 'jd-demo-auditor-2026',
+      ANALYST: 'jd-demo-analyst-2026',
+      CITIZEN: 'jd-demo-citizen-2026',
+    };
+    const token = savedToken || tokenMap[role] || 'jd-demo-citizen-2026';
+    return {
+      'Authorization': `Bearer ${token}`,
+      'X-Demo-Role': role,
+    };
+  } catch {
+    return {
+      'Authorization': 'Bearer jd-demo-district-2026',
+      'X-Demo-Role': 'DISTRICT_AUTHORITY',
+    };
+  }
+}
+
 async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
-  const response = await fetch(url, options);
+  const authHeaders = getAuthHeaders();
+  const mergedHeaders: Record<string, string> = {
+    ...authHeaders,
+    ...((options?.headers as Record<string, string>) || {}),
+  };
+  const response = await fetch(url, {
+    ...options,
+    headers: mergedHeaders,
+  });
   if (!response.ok) {
     let errorDetail = `HTTP ${response.status} ${response.statusText}`;
     try {
@@ -77,6 +164,7 @@ export const api = {
   getWorks: (params: {
     house?: string;
     state?: string;
+    district?: string;
     constituency?: string;
     mp_id?: string;
     category?: string;
@@ -132,6 +220,7 @@ export const api = {
   // Anomalies
   getAnomalies: (params: {
     house?: string;
+    state?: string;
     entity_type?: string;
     severity?: string;
     anomaly_type?: string;
@@ -148,6 +237,8 @@ export const api = {
 
   // Dimensions
   getStates: (params?: { house?: string }) => fetchJson<StateSummary[]>(`${API_BASE}/states${params ? buildQuery(params) : ''}`),
+  getDistricts: (params?: { state?: string }) =>
+    fetchJson<DistrictItem[]>(`${API_BASE}/districts${params ? buildQuery(params) : ''}`),
   getConstituencies: (params: { state?: string; limit?: number; offset?: number }) =>
     fetchJson<Constituency[]>(`${API_BASE}/constituencies${buildQuery(params)}`),
   getCategories: () => fetchJson<WorkCategory[]>(`${API_BASE}/categories`),
@@ -207,4 +298,300 @@ export const api = {
 
   getAuditTrail: (limit: number = 50) =>
     fetchJson<AuditLog[]>(`${API_BASE}/cases/audit-trail?limit=${limit}`),
+
+  // Enrichment & Secondary Forensic Intelligence
+  getSources: () =>
+    fetchJson<SourceRegistryResponse>(`${API_BASE}/sources`),
+
+  getRules: () =>
+    fetchJson<StatutoryRuleResponse>(`${API_BASE}/rules`),
+
+  getAgencies: (params?: {
+    state?: string;
+    min_works?: number;
+    min_exp?: number;
+    risk_level?: string;
+    search?: string;
+    sort_by?: string;
+    sort_order?: string;
+    limit?: number;
+    offset?: number;
+  }) => fetchJson<ImplementingAgencyListResponse>(
+    `${API_BASE}/intelligence/agencies${params ? buildQuery(params) : ''}`
+  ),
+
+  getPaymentTimingSignals: (params?: {
+    signal_type?: string;
+    severity?: string;
+    state?: string;
+    limit?: number;
+    offset?: number;
+  }) => fetchJson<PaymentTimingSignalListResponse>(
+    `${API_BASE}/intelligence/payment-timing${params ? buildQuery(params) : ''}`
+  ),
+
+  // Deep Entity Intelligence & Search
+  globalSearch: (q: string, limit: number = 5) =>
+    fetchJson<GlobalSearchResponse>(`${API_BASE}/search?q=${encodeURIComponent(q)}&limit=${limit}`),
+
+  getEntityMedia: (entityType: string, entityId: string) =>
+    fetchJson<EntityMediaListResponse>(`${API_BASE}/media/${encodeURIComponent(entityType)}/${encodeURIComponent(entityId)}`),
+
+  getEntityProfile: (entityType: string, entityId: string) =>
+    fetchJson<EntityProfile>(`${API_BASE}/profiles/${encodeURIComponent(entityType)}/${encodeURIComponent(entityId)}`),
+
+  getMpTimeline: (mpId: string) =>
+    fetchJson<EntityTimelineResponse>(`${API_BASE}/mps/${encodeURIComponent(mpId)}/timeline`),
+
+  getWorkTimeline: (workId: number | string) =>
+    fetchJson<EntityTimelineResponse>(`${API_BASE}/works/${encodeURIComponent(workId)}/timeline`),
+
+  // Universal Data Discovery & Change Intelligence
+  getDiscoveredSources: (params?: { tier?: string; reliability?: string }) =>
+    fetchJson<DiscoveredSourceListResponse>(`${API_BASE}/sources/discovered${params ? buildQuery(params) : ''}`),
+
+  getHistoricalSnapshots: () =>
+    fetchJson<HistoricalSnapshotListResponse>(`${API_BASE}/snapshots`),
+
+  getChangeEvents: (params?: { entity_id?: string; change_type?: string; severity?: string; limit?: number; offset?: number }) =>
+    fetchJson<ChangeEventListResponse>(`${API_BASE}/changes${params ? buildQuery(params) : ''}`),
+
+  getReconciliationRecords: () =>
+    fetchJson<ReconciliationListResponse>(`${API_BASE}/reconciliation`),
+
+  getWorkRiskSummary: (workId: number | string) =>
+    fetchJson<WorkRiskSummary>(`${API_BASE}/works/${encodeURIComponent(workId)}/risk-summary`),
+
+  getLgdDistricts: (params?: { state?: string; limit?: number; offset?: number }) =>
+    fetchJson<LgdDistrictListResponse>(`${API_BASE}/lgd/districts${params ? buildQuery(params) : ''}`),
+
+  getMpCrosswalk: (mpId: string) =>
+    fetchJson<MpCrosswalkResponse>(`${API_BASE}/mps/${encodeURIComponent(mpId)}/crosswalk`),
+
+  syncLiveSnapshot: () =>
+    fetchJson<SnapshotSyncResponse>(`${API_BASE}/snapshots/sync`, { method: 'POST' }),
+
+  getAreaTrack: (state: string, constituency: string) =>
+    fetchJson<AreaTrackResponse>(`${API_BASE}/area/track?state=${encodeURIComponent(state)}&constituency=${encodeURIComponent(constituency)}`),
+
+  // Ingestion & Validation Studio
+  downloadTemplateUrl: `${API_BASE}/ingest/template`,
+
+  uploadDatasetFile: async (file: File): Promise<IngestValidateResponse> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const authHeaders = getAuthHeaders();
+    const res = await fetch(`${API_BASE}/ingest/upload`, {
+      method: 'POST',
+      headers: {
+        ...authHeaders
+      },
+      body: formData
+    });
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.detail || `Upload failed with status ${res.status}`);
+    }
+    return res.json();
+  },
+
+  validateDatasetJson: (rows: Record<string, any>[]) =>
+    fetchJson<IngestValidateResponse>(`${API_BASE}/ingest/validate-json`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(rows)
+    }),
+
+  loadSampleDemoBatch: () =>
+    fetchJson<IngestValidateResponse>(`${API_BASE}/ingest/sample-demo`, {
+      method: 'POST'
+    }),
+
+  confirmDatasetImport: (batchId: string) =>
+    fetchJson<IngestConfirmResponse>(`${API_BASE}/ingest/confirm`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ batch_id: batchId })
+    }),
+
+  // Risk Engine Configuration
+  getRiskWeights: () =>
+    fetchJson<RiskWeightsConfig>(`${API_BASE}/config/risk-weights`),
+
+  updateRiskWeights: (weights?: Record<string, number>, thresholds?: Record<string, any>) =>
+    fetchJson<RiskWeightsConfig>(`${API_BASE}/config/risk-weights`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ weights, thresholds })
+    }),
+
+  assessWorkRiskOnDemand: (workId: number | string) =>
+    fetchJson<any>(`${API_BASE}/works/${encodeURIComponent(workId)}/assess-risk`, {
+      method: 'POST'
+    }),
+
+  // Alert System
+  getAlerts: (params?: {
+    state?: string;
+    district?: string;
+    mp_id?: string;
+    agency?: string;
+    project_id?: string;
+    severity?: string;
+    alert_type?: string;
+    status?: string;
+    date_from?: string;
+    date_to?: string;
+    limit?: number;
+    offset?: number;
+  }) => fetchJson<AlertListResponse>(`${API_BASE}/alerts${params ? buildQuery(params) : ''}`),
+
+  getAlertDetail: (alertId: string) =>
+    fetchJson<AlertItem>(`${API_BASE}/alerts/${encodeURIComponent(alertId)}`),
+
+  updateAlert: (alertId: string, payload: {
+    status?: string;
+    assigned_to?: string;
+    assigned_role?: string;
+    reviewer_comment?: string;
+  }) => fetchJson<AlertItem>(`${API_BASE}/alerts/${encodeURIComponent(alertId)}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }),
+
+  getAlertsSummary: (params?: { state?: string; district?: string }) =>
+    fetchJson<{
+      total_alerts: number;
+      by_severity: Record<string, number>;
+      by_status: Record<string, number>;
+      by_type: Record<string, number>;
+    }>(`${API_BASE}/alerts/summary${params ? buildQuery(params) : ''}`),
+
+  // Role-Tailored Dashboards
+  getNationalDashboard: () =>
+    fetchJson<NationalDashboard>(`${API_BASE}/dashboards/national`),
+
+  getStateDashboard: (stateName: string) =>
+    fetchJson<StateDashboard>(`${API_BASE}/dashboards/state/${encodeURIComponent(stateName)}`),
+
+  getDistrictDashboard: (districtName: string, stateName?: string) =>
+    fetchJson<DistrictDashboard>(
+      `${API_BASE}/dashboards/district/${encodeURIComponent(districtName)}${stateName ? `?state=${encodeURIComponent(stateName)}` : ''}`
+    ),
+
+  getMpDashboard: (mpId: string) =>
+    fetchJson<MpDashboard>(`${API_BASE}/dashboards/mp/${encodeURIComponent(mpId)}`),
+
+  getTrendAnalytics: (period: string = 'monthly') =>
+    fetchJson<TrendAnalytics>(`${API_BASE}/dashboards/trends?period=${encodeURIComponent(period)}`),
+
+  // Authentication & Demo Accounts
+  getDemoAccounts: () =>
+    fetchJson<DemoAccount[]>(`${API_BASE}/auth/demo-accounts`),
+
+  login: (payload: LoginPayload) =>
+    fetchJson<LoginResult>(`${API_BASE}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }),
+
+  getMe: () =>
+    fetchJson<AuthUser>(`${API_BASE}/auth/me`),
+
+  getSupabaseStatus: () =>
+    fetchJson<any>(`${API_BASE}/supabase/status`),
+
+  // Statutory Governance & RBAC/ABAC Methods
+  getRbacIdentity: () =>
+    fetchJson<RbacIdentity>(`${API_BASE}/rbac/me`),
+
+  listRecommendations: (params?: { status?: string; limit?: number; offset?: number }) =>
+    fetchJson<Recommendation[]>(`${API_BASE}/recommendations${params ? buildQuery(params) : ''}`),
+
+  createRecommendation: (data: Partial<Recommendation>) =>
+    fetchJson<Recommendation>(`${API_BASE}/recommendations`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }),
+
+  updateRecommendation: (id: string, data: Partial<Recommendation>) =>
+    fetchJson<Recommendation>(`${API_BASE}/recommendations/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }),
+
+  submitRecommendation: (id: string) =>
+    fetchJson<Recommendation>(`${API_BASE}/recommendations/${id}/submit`, {
+      method: 'POST'
+    }),
+
+  advanceRecommendationWorkflow: (id: string, target_status: string, remarks?: string) =>
+    fetchJson<Recommendation>(`${API_BASE}/recommendations/${id}/workflow`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ target_status, remarks })
+    }),
+
+  updateWorkExecution: (workId: number, data: any) =>
+    fetchJson<Work>(`${API_BASE}/works/${workId}/execution`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }),
+
+  listCorrectionRequests: () =>
+    fetchJson<CorrectionRequest[]>(`${API_BASE}/financial/correction-requests`),
+
+  createCorrectionRequest: (data: any) =>
+    fetchJson<CorrectionRequest>(`${API_BASE}/financial/correction-requests`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }),
+
+  reviewCorrectionRequest: (id: string, action: string, comments?: string) =>
+    fetchJson<CorrectionRequest>(`${API_BASE}/financial/correction-requests/${id}/review`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action, comments })
+    }),
+
+  listAuditInvestigations: () =>
+    fetchJson<AuditInvestigationCase[]>(`${API_BASE}/audit-investigations`),
+
+  createAuditInvestigation: (data: any) =>
+    fetchJson<AuditInvestigationCase>(`${API_BASE}/audit-investigations`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }),
+
+  updateAuditInvestigation: (id: string, data: any) =>
+    fetchJson<AuditInvestigationCase>(`${API_BASE}/audit-investigations/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }),
+
+  submitCitizenReport: (data: any) =>
+    fetchJson<CitizenReport>(`${API_BASE}/citizen-reports`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }),
+
+  listCitizenReports: () =>
+    fetchJson<CitizenReport[]>(`${API_BASE}/citizen-reports`),
+
+  getAuditLogs: (limit: number = 50, entityType?: string) =>
+    fetchJson<StatutoryAuditLog[]>(`${API_BASE}/audit-logs?limit=${limit}${entityType ? `&entity_type=${entityType}` : ''}`),
 };
+
+
+
+
+

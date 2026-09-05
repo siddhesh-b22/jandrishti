@@ -21,6 +21,10 @@ files_to_hash = [
     ("data/raw/mplads_completed_works_2026-08-26.csv", "Raw Completed Works Export"),
     ("data/raw/mplads_expenditures_2026-08-26.csv", "Raw Financial Expenditures Export"),
     ("data/raw/json_2026-08-26.json", "Raw Portal Summary API JSON"),
+    ("data/raw/empowered_indian/sync_info.json", "EmpoweredIndian Sync Metadata JSON"),
+    ("data/raw/empowered_indian/overview.json", "EmpoweredIndian Macro Overview JSON"),
+    ("data/raw/empowered_indian/categories.json", "EmpoweredIndian Categories JSON"),
+    ("data/raw/empowered_indian/terms.json", "EmpoweredIndian Terms Breakdown JSON"),
     
     # Processed Normalized Master Tables
     ("data/processed/mp_master.csv", "Processed MP Master (543 rows)"),

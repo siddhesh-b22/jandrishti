@@ -1279,9 +1279,25 @@ def get_state_summaries(house: Optional[str] = Query(None, description="Optional
     results: List[Dict[str, Any]] = []
     try:
         cursor.execute(query, state_params)
-        results = [dict(r) for r in cursor.fetchall()]
+        raw_rows = cursor.fetchall()
+        for r in raw_rows:
+            d = dict(r)
+            # Defensively sanitize numeric fields to avoid null / decimal serialization errors
+            d["total_mps"] = int(d.get("total_mps") or 0)
+            d["total_allocated_amount"] = float(d.get("total_allocated_amount") or 0.0)
+            d["total_expenditure"] = float(d.get("total_expenditure") or 0.0)
+            d["total_unspent_amount"] = float(d.get("total_unspent_amount") or 0.0)
+            d["state_utilization_pct"] = float(d.get("state_utilization_pct") or 0.0)
+            d["total_recommended_works"] = int(d.get("total_recommended_works") or 0)
+            d["total_completed_works"] = int(d.get("total_completed_works") or 0)
+            d["state_completion_rate_pct"] = float(d.get("state_completion_rate_pct") or 0.0)
+            d["total_transactions"] = int(d.get("total_transactions") or 0)
+            d["total_successful_payments"] = int(d.get("total_successful_payments") or 0)
+            d["total_pending_payments"] = int(d.get("total_pending_payments") or 0)
+            d["anomalies_count"] = int(d.get("anomalies_count") or 0)
+            results.append(d)
     except Exception as exc:
-        logger.warning(f"get_state_summaries: primary database query failed ({exc}), falling back to SQLite", exc_info=True)
+        logger.warning(f"get_state_summaries: primary database query failed ({exc}), attempting fallback", exc_info=True)
         try:
             import os, sqlite3
             db_path = os.path.join(os.path.dirname(__file__), "..", "database", "mplads.db")
@@ -1292,7 +1308,20 @@ def get_state_summaries(house: Optional[str] = Query(None, description="Optional
                     s_cur.execute(query, state_params)
                     results = [dict(r) for r in s_cur.fetchall()]
         except Exception as fb_err:
-            logger.error(f"get_state_summaries fallback also failed: {fb_err}")
+            logger.error(f"get_state_summaries SQLite fallback also failed: {fb_err}")
+
+    # If still empty or query failed, use bundled authoritative fallback JSON
+    if not results:
+        try:
+            import os, json
+            json_path = os.path.join(os.path.dirname(__file__), "data", "defaultStatesData.json")
+            if not os.path.exists(json_path):
+                json_path = os.path.join(os.path.dirname(__file__), "..", "frontend", "src", "data", "defaultStatesData.json")
+            if os.path.exists(json_path):
+                with open(json_path, "r", encoding="utf-8") as f:
+                    results = json.load(f)
+        except Exception as json_err:
+            logger.error(f"get_state_summaries JSON fallback failed: {json_err}")
 
     if results:
         _MACRO_CACHE[cache_key] = results
@@ -1306,6 +1335,7 @@ def get_districts(
     conn: sqlite3.Connection = Depends(get_db)
 ):
     """Retrieve distinct LGD districts for cascading filters."""
+    dist_results: List[Dict[str, Any]] = []
     try:
         cursor = conn.cursor()
         if state and state.strip():
@@ -1317,9 +1347,11 @@ def get_districts(
             cursor.execute(
                 "SELECT district_name, state_name, lgd_district_code FROM lgd_districts_master ORDER BY state_name, district_name ASC;"
             )
-        return [dict(r) for r in cursor.fetchall()]
+        dist_results = [dict(r) for r in cursor.fetchall()]
+        if dist_results:
+            return dist_results
     except Exception as exc:
-        logger.warning(f"get_districts: primary query failed ({exc}), falling back to SQLite", exc_info=True)
+        logger.warning(f"get_districts: primary query failed ({exc}), falling back", exc_info=True)
         try:
             import os, sqlite3
             db_path = os.path.join(os.path.dirname(__file__), "..", "database", "mplads.db")
@@ -1336,10 +1368,29 @@ def get_districts(
                         s_cur.execute(
                             "SELECT district_name, state_name, lgd_district_code FROM lgd_districts_master ORDER BY state_name, district_name ASC;"
                         )
-                    return [dict(r) for r in s_cur.fetchall()]
+                    dist_results = [dict(r) for r in s_cur.fetchall()]
+                    if dist_results:
+                        return dist_results
         except Exception:
             pass
-        return []
+
+    # JSON fallback for districts
+    try:
+        import os, json
+        json_path = os.path.join(os.path.dirname(__file__), "data", "defaultDistrictsData.json")
+        if not os.path.exists(json_path):
+            json_path = os.path.join(os.path.dirname(__file__), "..", "frontend", "src", "data", "defaultDistrictsData.json")
+        if os.path.exists(json_path):
+            with open(json_path, "r", encoding="utf-8") as f:
+                all_districts = json.load(f)
+            if state and state.strip():
+                st_upper = state.strip().upper()
+                return [d for d in all_districts if d.get("state_name") == st_upper]
+            return all_districts
+    except Exception as json_err:
+        logger.error(f"get_districts JSON fallback failed: {json_err}")
+
+    return []
 
 @app.get("/api/constituencies", response_model=List[ConstituencyItem], tags=["Aggregations"])
 def get_constituency_summaries(

@@ -940,6 +940,9 @@ export interface NationalDashboard {
     total_works?: number;
     total_sanctioned_cr?: number;
     total_spent_cr?: number;
+    unspent_cr?: number;
+    completed_works?: number;
+    delayed_works?: number;
   };
   state_comparisons: Array<{
     state: string;

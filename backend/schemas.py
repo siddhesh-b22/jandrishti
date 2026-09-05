@@ -261,20 +261,22 @@ class AnomalyListResponse(BaseModel):
 
 class StateSummaryItem(BaseModel):
     state: str
-    total_mps: int
-    total_allocated_amount: float
-    total_expenditure: float
-    total_unspent_amount: float
+    total_mps: Optional[int] = 0
+    total_allocated_amount: Optional[float] = 0.0
+    total_expenditure: Optional[float] = 0.0
+    total_unspent_amount: Optional[float] = 0.0
     state_utilization_pct: Optional[float] = 0.0
-    total_recommended_works: int
-    total_completed_works: int
+    total_recommended_works: Optional[int] = 0
+    total_completed_works: Optional[int] = 0
     state_completion_rate_pct: Optional[float] = 0.0
-    total_transactions: int
+    total_transactions: Optional[int] = 0
+    total_successful_payments: Optional[int] = 0
+    total_pending_payments: Optional[int] = 0
     anomalies_count: Optional[int] = 0
 
 class DistrictItem(BaseModel):
-    district_name: str
-    state_name: str
+    district_name: Optional[str] = "UNKNOWN"
+    state_name: Optional[str] = "UNKNOWN"
     lgd_district_code: Optional[str] = None
     works_count: Optional[int] = 0
 

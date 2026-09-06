@@ -9,12 +9,24 @@ Implements:
 - Data Quality & Provenance Analytics
 """
 
+import os
+import json
 import sqlite3
 import re
 import math
 from typing import List, Dict, Any, Optional
 from collections import defaultdict
 from backend.database import get_db_connection
+
+def _load_default_provenance_data() -> Dict[str, Any]:
+    try:
+        data_path = os.path.join(os.path.dirname(__file__), "data", "defaultProvenanceData.json")
+        if os.path.exists(data_path):
+            with open(data_path, "r", encoding="utf-8") as f:
+                return json.load(f)
+    except Exception:
+        pass
+    return {"sources": [], "rules": [], "snapshots": [], "reconciliation": [], "changes": []}
 
 # Common Indian civic/infrastructure stopwords for text similarity
 STOPWORDS = {
@@ -658,7 +670,7 @@ class IntelligenceService:
 
         # Fall back to bundled immutable database if Postgres table is empty/missing
         if not items:
-            import sqlite3, os
+            import sqlite3
             db_path = os.path.join(os.path.dirname(__file__), "..", "database", "mplads.db")
             if os.path.exists(db_path):
                 try:
@@ -668,6 +680,9 @@ class IntelligenceService:
                         items = [dict(r) for r in rows]
                 except Exception:
                     pass
+
+        if not items:
+            items = _load_default_provenance_data().get("sources", [])
 
         return {"total": len(items), "items": items}
 
@@ -684,7 +699,7 @@ class IntelligenceService:
             pass
 
         if not items:
-            import sqlite3, os
+            import sqlite3
             db_path = os.path.join(os.path.dirname(__file__), "..", "database", "mplads.db")
             if os.path.exists(db_path):
                 try:
@@ -694,6 +709,9 @@ class IntelligenceService:
                         items = [dict(r) for r in rows]
                 except Exception:
                     pass
+
+        if not items:
+            items = _load_default_provenance_data().get("rules", [])
 
         return {"total": len(items), "items": items}
 
@@ -1211,19 +1229,45 @@ class IntelligenceService:
 
     def get_historical_snapshots(self) -> Dict[str, Any]:
         """Return all versioned historical snapshots."""
-        conn = get_db_connection()
+        items = []
         try:
-            cur = conn.cursor()
-            rows = cur.execute("""
-                SELECT snapshot_id, source_id, snapshot_date, entity_type,
-                       record_count, checksum_sha256, notes, created_at
-                FROM historical_snapshots
-                ORDER BY snapshot_date DESC;
-            """).fetchall()
-            items = [dict(r) for r in rows]
-            return {"total": len(items), "items": items}
-        finally:
-            conn.close()
+            conn = get_db_connection()
+            try:
+                cur = conn.cursor()
+                rows = cur.execute("""
+                    SELECT snapshot_id, source_id, snapshot_date, entity_type,
+                           record_count, checksum_sha256, notes, created_at
+                    FROM historical_snapshots
+                    ORDER BY snapshot_date DESC;
+                """).fetchall()
+                items = [dict(r) for r in rows]
+            finally:
+                conn.close()
+        except Exception:
+            pass
+
+        if not items:
+            import sqlite3
+            import os
+            db_path = os.path.join(os.path.dirname(__file__), "..", "database", "mplads.db")
+            if os.path.exists(db_path):
+                try:
+                    with sqlite3.connect(db_path) as s_conn:
+                        s_conn.row_factory = sqlite3.Row
+                        rows = s_conn.execute("""
+                            SELECT snapshot_id, source_id, snapshot_date, entity_type,
+                                   record_count, checksum_sha256, notes, created_at
+                            FROM historical_snapshots
+                            ORDER BY snapshot_date DESC;
+                        """).fetchall()
+                        items = [dict(r) for r in rows]
+                except Exception:
+                    pass
+
+        if not items:
+            items = _load_default_provenance_data().get("snapshots", [])
+
+        return {"total": len(items), "items": items}
 
     def get_change_events(
         self,
@@ -1234,67 +1278,111 @@ class IntelligenceService:
         offset: int = 0
     ) -> Dict[str, Any]:
         """Return detected granular change events between snapshots."""
-        conn = get_db_connection()
+        items = []
+        total = 0
         try:
-            cur = conn.cursor()
-            conditions = []
-            params = []
+            conn = get_db_connection()
+            try:
+                cur = conn.cursor()
+                conditions = []
+                params = []
 
+                if entity_id:
+                    conditions.append("entity_id = ?")
+                    params.append(str(entity_id))
+                if change_type:
+                    conditions.append("change_type = ?")
+                    params.append(change_type.upper())
+                if severity:
+                    conditions.append("severity = ?")
+                    params.append(severity.upper())
+
+                where_clause = f"WHERE {' AND '.join(conditions)}" if conditions else ""
+
+                total_row = cur.execute(f"SELECT COUNT(*) FROM change_events {where_clause};", params).fetchone()
+                total = total_row[0] if total_row else 0
+
+                query = f"""
+                    SELECT event_id, snapshot_id, entity_type, entity_id, entity_name,
+                           change_type, field_name, old_value, new_value, change_magnitude,
+                           severity, finding_summary, created_at
+                    FROM change_events
+                    {where_clause}
+                    ORDER BY created_at DESC, event_id DESC
+                    LIMIT ? OFFSET ?;
+                """
+                rows = cur.execute(query, params + [limit, offset]).fetchall()
+                items = [dict(r) for r in rows]
+            finally:
+                conn.close()
+        except Exception:
+            pass
+
+        if not items:
+            default_changes = _load_default_provenance_data().get("changes", [])
+            filtered = default_changes
             if entity_id:
-                conditions.append("entity_id = ?")
-                params.append(str(entity_id))
+                filtered = [c for c in filtered if str(c.get("entity_id")) == str(entity_id)]
             if change_type:
-                conditions.append("change_type = ?")
-                params.append(change_type.upper())
+                filtered = [c for c in filtered if str(c.get("change_type")).upper() == change_type.upper()]
             if severity:
-                conditions.append("severity = ?")
-                params.append(severity.upper())
+                filtered = [c for c in filtered if str(c.get("severity")).upper() == severity.upper()]
+            total = len(filtered)
+            items = filtered[offset: offset + limit]
 
-            where_clause = f"WHERE {' AND '.join(conditions)}" if conditions else ""
-
-            total = cur.execute(f"SELECT COUNT(*) FROM change_events {where_clause};", params).fetchone()[0]
-
-            query = f"""
-                SELECT event_id, snapshot_id, entity_type, entity_id, entity_name,
-                       change_type, field_name, old_value, new_value, change_magnitude,
-                       severity, finding_summary, created_at
-                FROM change_events
-                {where_clause}
-                ORDER BY created_at DESC, event_id DESC
-                LIMIT ? OFFSET ?;
-            """
-            rows = cur.execute(query, params + [limit, offset]).fetchall()
-            items = [dict(r) for r in rows]
-            return {"total": total, "limit": limit, "offset": offset, "items": items}
-        finally:
-            conn.close()
+        return {"total": total, "limit": limit, "offset": offset, "items": items}
 
     def get_reconciliation_records(self) -> Dict[str, Any]:
         """Return official data reconciliation ledger and status distribution."""
-        conn = get_db_connection()
+        items = []
         try:
-            cur = conn.cursor()
-            rows = cur.execute("""
-                SELECT reconciliation_id, entity_type, entity_id, entity_name,
-                       status, existing_value, official_value, variance_summary, reconciled_at
-                FROM reconciliation_records
-                ORDER BY reconciliation_id ASC;
-            """).fetchall()
-            items = [dict(r) for r in rows]
+            conn = get_db_connection()
+            try:
+                cur = conn.cursor()
+                rows = cur.execute("""
+                    SELECT reconciliation_id, entity_type, entity_id, entity_name,
+                           status, existing_value, official_value, variance_summary, reconciled_at
+                    FROM reconciliation_records
+                    ORDER BY reconciliation_id ASC;
+                """).fetchall()
+                items = [dict(r) for r in rows]
+            finally:
+                conn.close()
+        except Exception:
+            pass
 
-            matched = len([i for i in items if i["status"] == "MATCHED"])
-            review = len([i for i in items if i["status"] == "REQUIRES_REVIEW"])
-            gaps = len([i for i in items if i["status"] in ("MISSING_IN_OFFICIAL_SOURCE", "MISSING_IN_EXISTING_DATA")])
+        if not items:
+            import sqlite3
+            import os
+            db_path = os.path.join(os.path.dirname(__file__), "..", "database", "mplads.db")
+            if os.path.exists(db_path):
+                try:
+                    with sqlite3.connect(db_path) as s_conn:
+                        s_conn.row_factory = sqlite3.Row
+                        rows = s_conn.execute("""
+                            SELECT reconciliation_id, entity_type, entity_id, entity_name,
+                                   status, existing_value, official_value, variance_summary, reconciled_at
+                            FROM reconciliation_records
+                            ORDER BY reconciliation_id ASC;
+                        """).fetchall()
+                        items = [dict(r) for r in rows]
+                except Exception:
+                    pass
 
-            return {
-                "total": len(items),
-                "matched_count": matched,
-                "review_count": review,
-                "gap_count": gaps,
-                "items": items
-            }
-        finally:
-            conn.close()
+        if not items:
+            items = _load_default_provenance_data().get("reconciliation", [])
+
+        matched = len([i for i in items if i.get("status") == "MATCHED"])
+        review = len([i for i in items if i.get("status") == "REQUIRES_REVIEW"])
+        gaps = len([i for i in items if i.get("status") in ("MISSING_IN_OFFICIAL_SOURCE", "MISSING_IN_EXISTING_DATA")])
+
+        return {
+            "total": len(items),
+            "matched_count": matched,
+            "review_count": review,
+            "gap_count": gaps,
+            "items": items
+        }
 
     def get_work_risk_summary(self, work_id: int) -> Dict[str, Any]:
         """Synthesize multiple signals on a single project into an aggregated 'Work Requires Attention' payload."""

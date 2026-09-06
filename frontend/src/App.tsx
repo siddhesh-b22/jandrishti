@@ -4,6 +4,7 @@ import { HouseProvider } from './context/HouseContext';
 import { RoleProvider, useRole } from './context/RoleContext';
 import { Layout } from './components/layout/Layout';
 import { RoleRouteGuard } from './components/auth/RoleRouteGuard';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { getRoleHomeRoute } from './utils/roleRoutes';
 
 // Route-level code splitting with lazy loading
@@ -54,78 +55,80 @@ export const App: React.FC = () => {
     <HouseProvider>
       <RoleProvider>
         <BrowserRouter>
-          <Suspense fallback={<RouteLoadingFallback />}>
-            <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/" element={<Layout />}>
-                <Route index element={<OverviewPage />} />
-                <Route path="explore" element={<CitizenWorkspace />} />
-                <Route path="dashboards" element={<RoleDashboardRedirect />} />
+          <ErrorBoundary>
+            <Suspense fallback={<RouteLoadingFallback />}>
+              <Routes>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/" element={<Layout />}>
+                  <Route index element={<OverviewPage />} />
+                  <Route path="explore" element={<CitizenWorkspace />} />
+                  <Route path="dashboards" element={<RoleDashboardRedirect />} />
 
-                {/* Statutory Role Dedicated Workspaces */}
-                <Route
-                  path="admin/national"
-                  element={
-                    <RoleRouteGuard allowedRoles={['MINISTRY_ADMIN', 'MINISTRY_OFFICIAL']}>
-                      <MinistryWorkspace />
-                    </RoleRouteGuard>
-                  }
-                />
-                <Route
-                  path="admin/state"
-                  element={
-                    <RoleRouteGuard allowedRoles={['STATE_NODAL_AUTHORITY', 'MINISTRY_ADMIN']}>
-                      <StateWorkspace />
-                    </RoleRouteGuard>
-                  }
-                />
-                <Route
-                  path="admin/district"
-                  element={
-                    <RoleRouteGuard allowedRoles={['DISTRICT_AUTHORITY', 'MINISTRY_ADMIN']}>
-                      <DistrictWorkspace />
-                    </RoleRouteGuard>
-                  }
-                />
-                <Route
-                  path="mp/constituency"
-                  element={
-                    <RoleRouteGuard allowedRoles={['MP', 'MINISTRY_ADMIN']}>
-                      <MpWorkspace />
-                    </RoleRouteGuard>
-                  }
-                />
-                <Route
-                  path="audit"
-                  element={
-                    <RoleRouteGuard allowedRoles={['AUDITOR', 'MINISTRY_ADMIN']}>
-                      <AuditorWorkspace />
-                    </RoleRouteGuard>
-                  }
-                />
+                  {/* Statutory Role Dedicated Workspaces */}
+                  <Route
+                    path="admin/national"
+                    element={
+                      <RoleRouteGuard allowedRoles={['MINISTRY_ADMIN', 'MINISTRY_OFFICIAL']}>
+                        <MinistryWorkspace />
+                      </RoleRouteGuard>
+                    }
+                  />
+                  <Route
+                    path="admin/state"
+                    element={
+                      <RoleRouteGuard allowedRoles={['STATE_NODAL_AUTHORITY', 'MINISTRY_ADMIN']}>
+                        <StateWorkspace />
+                      </RoleRouteGuard>
+                    }
+                  />
+                  <Route
+                    path="admin/district"
+                    element={
+                      <RoleRouteGuard allowedRoles={['DISTRICT_AUTHORITY', 'MINISTRY_ADMIN']}>
+                        <DistrictWorkspace />
+                      </RoleRouteGuard>
+                    }
+                  />
+                  <Route
+                    path="mp/constituency"
+                    element={
+                      <RoleRouteGuard allowedRoles={['MP', 'MINISTRY_ADMIN']}>
+                        <MpWorkspace />
+                      </RoleRouteGuard>
+                    }
+                  />
+                  <Route
+                    path="audit"
+                    element={
+                      <RoleRouteGuard allowedRoles={['AUDITOR', 'MINISTRY_ADMIN']}>
+                        <AuditorWorkspace />
+                      </RoleRouteGuard>
+                    }
+                  />
 
-                {/* Analytical & Discovery Ledgers */}
-                <Route path="ingest" element={<DataIngestionPage />} />
-                <Route path="track-area" element={<TrackAreaPage />} />
-                <Route path="compare" element={<ComparePage />} />
-                <Route path="works" element={<WorkExplorerPage />} />
-                <Route path="works/:workId" element={<WorkDetailPage />} />
-                <Route path="anomalies" element={<AnomalyCenterPage />} />
-                <Route path="cases" element={<CasesAlertsPage />} />
-                <Route path="alerts" element={<CasesAlertsPage />} />
-                <Route path="duplicates" element={<DuplicateDetectionPage />} />
-                <Route path="data-quality" element={<DataQualityPage />} />
-                <Route path="mps" element={<MpExplorerPage />} />
-                <Route path="mps/:mpId" element={<MpDetailPage />} />
-                <Route path="vendors" element={<VendorExplorerPage />} />
-                <Route path="transactions" element={<TransactionExplorerPage />} />
-                <Route path="states" element={<StatesPage />} />
-                <Route path="methodology" element={<MethodologyPage />} />
-                <Route path="docs" element={<DocumentationPage />} />
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Route>
-            </Routes>
-          </Suspense>
+                  {/* Analytical & Discovery Ledgers */}
+                  <Route path="ingest" element={<DataIngestionPage />} />
+                  <Route path="track-area" element={<TrackAreaPage />} />
+                  <Route path="compare" element={<ComparePage />} />
+                  <Route path="works" element={<WorkExplorerPage />} />
+                  <Route path="works/:workId" element={<WorkDetailPage />} />
+                  <Route path="anomalies" element={<AnomalyCenterPage />} />
+                  <Route path="cases" element={<CasesAlertsPage />} />
+                  <Route path="alerts" element={<CasesAlertsPage />} />
+                  <Route path="duplicates" element={<DuplicateDetectionPage />} />
+                  <Route path="data-quality" element={<DataQualityPage />} />
+                  <Route path="mps" element={<MpExplorerPage />} />
+                  <Route path="mps/:mpId" element={<MpDetailPage />} />
+                  <Route path="vendors" element={<VendorExplorerPage />} />
+                  <Route path="transactions" element={<TransactionExplorerPage />} />
+                  <Route path="states" element={<StatesPage />} />
+                  <Route path="methodology" element={<MethodologyPage />} />
+                  <Route path="docs" element={<DocumentationPage />} />
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Route>
+              </Routes>
+            </Suspense>
+          </ErrorBoundary>
         </BrowserRouter>
       </RoleProvider>
     </HouseProvider>

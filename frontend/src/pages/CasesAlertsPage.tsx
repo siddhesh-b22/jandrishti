@@ -55,6 +55,8 @@ export const CasesAlertsPage: React.FC = () => {
   const { currentRole, roleConfig, canEdit, user } = useRole();
 
   // Authority Scope Guards
+  const isDistrictLocked = currentRole === 'DISTRICT_AUTHORITY' && !!user?.district;
+  const userJurisdictionDistrict = user?.district ? user.district.toUpperCase() : '';
   const isStateLocked = (currentRole === 'STATE_NODAL_AUTHORITY' || currentRole === 'DISTRICT_AUTHORITY') && !!user?.state;
   const userJurisdictionState = user?.state ? user.state.toUpperCase() : '';
 
@@ -104,14 +106,15 @@ export const CasesAlertsPage: React.FC = () => {
   // Initial overview metrics load
   useEffect(() => {
     const scopeState = isStateLocked ? userJurisdictionState : undefined;
+    const scopeDistrict = isDistrictLocked ? userJurisdictionDistrict : undefined;
 
     // Anomalies count
-    api.getAnomalies({ state: scopeState, limit: 1 })
+    api.getAnomalies({ state: scopeState, district: scopeDistrict, limit: 1 })
       .then((res) => setAlertsTotal(res.total))
       .catch(() => {});
 
     // Critical anomalies count
-    api.getAnomalies({ state: scopeState, severity: 'CRITICAL', limit: 1 })
+    api.getAnomalies({ state: scopeState, district: scopeDistrict, severity: 'CRITICAL', limit: 1 })
       .then((res) => setCriticalCount(res.total))
       .catch(() => {});
 
@@ -124,7 +127,7 @@ export const CasesAlertsPage: React.FC = () => {
     api.getAuditTrail(300, 0)
       .then((logs) => setAuditLogs(logs || []))
       .catch(() => {});
-  }, [isStateLocked, userJurisdictionState]);
+  }, [isStateLocked, userJurisdictionState, isDistrictLocked, userJurisdictionDistrict]);
 
   // Fetch Alerts for Tab 1
   const fetchAlerts = async () => {
@@ -133,6 +136,7 @@ export const CasesAlertsPage: React.FC = () => {
       setError(null);
       const res = await api.getAnomalies({
         state: isStateLocked ? userJurisdictionState : undefined,
+        district: isDistrictLocked ? userJurisdictionDistrict : undefined,
         severity: alertSeverity || undefined,
         limit: PAGE_SIZE,
         offset: alertsOffset,
@@ -189,7 +193,7 @@ export const CasesAlertsPage: React.FC = () => {
     } else if (activeTab === 'AUDIT') {
       fetchAudit();
     }
-  }, [activeTab, alertsOffset, alertSeverity, casesOffset, caseStatusFilter, caseSeverityFilter, isStateLocked, userJurisdictionState]);
+  }, [activeTab, alertsOffset, alertSeverity, casesOffset, caseStatusFilter, caseSeverityFilter, isStateLocked, userJurisdictionState, isDistrictLocked, userJurisdictionDistrict]);
 
   // Convert Alert into Review Case
   const handleCreateCaseFromAlert = async (anomalyItem: Anomaly) => {

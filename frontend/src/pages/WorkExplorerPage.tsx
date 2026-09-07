@@ -44,8 +44,8 @@ export const WorkExplorerPage: React.FC = () => {
   const [statsData, setStatsData] = useState<{ completion_rate_pct: number; total_expenditure: number } | null>(null);
 
   // Authority Scope Guards
-  const isStateLocked = currentRole === 'STATE_NODAL_AUTHORITY' && !!user?.state;
   const isDistrictLocked = currentRole === 'DISTRICT_AUTHORITY' && !!user?.district;
+  const isStateLocked = (currentRole === 'STATE_NODAL_AUTHORITY' || currentRole === 'DISTRICT_AUTHORITY') && !!user?.state;
 
   // URL Query Parameters
   const search = searchParams.get('search') || '';

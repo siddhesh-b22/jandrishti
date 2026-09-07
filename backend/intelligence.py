@@ -83,6 +83,7 @@ class IntelligenceService:
     def detect_duplicates(
         self,
         state: Optional[str] = None,
+        district: Optional[str] = None,
         category: Optional[str] = None,
         severity: Optional[str] = None,
         limit: int = 25,
@@ -92,7 +93,7 @@ class IntelligenceService:
         Identifies potential duplicate or overlapping works using:
         1. Description token overlap (Jaccard similarity)
         2. Exact category matching
-        3. Same geographic constituency / MP
+        3. Same geographic constituency / MP / District
         4. Cost proximity (+/- 25% cost variance)
         """
         conn = get_db_connection()
@@ -109,12 +110,16 @@ class IntelligenceService:
         if state:
             query += " AND state_normalized = ?"
             params.append(state.upper())
+        if district:
+            query += " AND (ida_normalized LIKE ? OR constituency_normalized LIKE ?)"
+            d_param = f"%{district.strip().upper()}%"
+            params.extend([d_param, d_param])
         if category:
             query += " AND category_normalized = ?"
             params.append(category)
 
         # Sample across high-volume constituencies to return diverse candidates
-        sample_limit = 1500 if state else 3000
+        sample_limit = 1500 if (state or district) else 3000
         query += f" ORDER BY recommended_amount DESC LIMIT {sample_limit}"
 
         rows = conn.execute(query, params).fetchall()
@@ -238,6 +243,7 @@ class IntelligenceService:
     def get_progress_mismatches(
         self,
         state: Optional[str] = None,
+        district: Optional[str] = None,
         severity: Optional[str] = None,
         min_severity: Optional[str] = None,
         limit: int = 50,
@@ -253,7 +259,7 @@ class IntelligenceService:
             SELECT work_id, internal_mp_id, mp_name_normalized, constituency_normalized,
                    state_normalized, category_normalized, work_description_normalized,
                    lifecycle_status, recommended_amount, final_amount, duration_days,
-                   recommendation_date, completed_date
+                   recommendation_date, completed_date, ida_normalized
             FROM works
             WHERE (recommended_amount > 200000 OR final_amount > 200000)
         """
@@ -261,6 +267,10 @@ class IntelligenceService:
         if state:
             query += " AND state_normalized = ?"
             params.append(state.upper())
+        if district:
+            query += " AND (ida_normalized LIKE ? OR constituency_normalized LIKE ?)"
+            d_param = f"%{district.strip().upper()}%"
+            params.extend([d_param, d_param])
 
         rows = conn.execute(query, params).fetchall()
         conn.close()
@@ -380,6 +390,7 @@ class IntelligenceService:
         self,
         category: Optional[str] = None,
         state: Optional[str] = None,
+        district: Optional[str] = None,
         severity: Optional[str] = None,
         limit: int = 50,
         offset: int = 0
@@ -394,7 +405,8 @@ class IntelligenceService:
         query = """
             SELECT work_id, mp_name_normalized, constituency_normalized, state_normalized,
                    category_normalized, work_description_normalized, lifecycle_status,
-                   duration_days, recommendation_date, recommendation_year, recommended_amount, final_amount
+                   duration_days, recommendation_date, recommendation_year, recommended_amount, final_amount,
+                   ida_normalized
             FROM works
             WHERE lifecycle_status IN ('RECOMMENDED', 'IN_PROGRESS', 'SANCTIONED', 'RECOMMENDED_IN_PROGRESS')
         """
@@ -402,6 +414,10 @@ class IntelligenceService:
         if state:
             query += " AND state_normalized = ?"
             params.append(state.upper())
+        if district:
+            query += " AND (ida_normalized LIKE ? OR constituency_normalized LIKE ?)"
+            d_param = f"%{district.strip().upper()}%"
+            params.extend([d_param, d_param])
         if category:
             query += " AND category_normalized = ?"
             params.append(category)

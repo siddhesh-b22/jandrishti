@@ -264,6 +264,7 @@ export const api = {
   getAnomalies: (params: {
     house?: string;
     state?: string;
+    district?: string;
     entity_type?: string;
     severity?: string;
     anomaly_type?: string;
@@ -314,13 +315,13 @@ export const api = {
   getCategories: () => fetchJson<WorkCategory[]>(`${API_BASE}/categories`),
 
   // Advanced Intelligence
-  getDuplicates: (params?: { state?: string; category?: string; severity?: string; limit?: number; min_similarity?: number }) =>
+  getDuplicates: (params?: { state?: string; district?: string; category?: string; severity?: string; limit?: number; min_similarity?: number }) =>
     fetchJson<DuplicatePair[]>(`${API_BASE}/intelligence/duplicates${params ? buildQuery(params) : ''}`),
 
-  getProgressMismatches: (params?: { state?: string; severity?: string; min_severity?: string; limit?: number; offset?: number }) =>
+  getProgressMismatches: (params?: { state?: string; district?: string; severity?: string; min_severity?: string; limit?: number; offset?: number }) =>
     fetchJson<PaginatedResponse<ProgressMismatch>>(`${API_BASE}/intelligence/progress-mismatch${params ? buildQuery(params) : ''}`),
 
-  getDelayPredictions: (params?: { state?: string; category?: string; severity?: string; limit?: number; offset?: number }) =>
+  getDelayPredictions: (params?: { state?: string; district?: string; category?: string; severity?: string; limit?: number; offset?: number }) =>
     fetchJson<PaginatedResponse<DelayPrediction>>(`${API_BASE}/intelligence/delay-predictions${params ? buildQuery(params) : ''}`),
 
   getWorkProfile: (workId: number) =>

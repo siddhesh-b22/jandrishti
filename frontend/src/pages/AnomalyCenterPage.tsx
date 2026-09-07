@@ -54,13 +54,17 @@ export const AnomalyCenterPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<AnomalyTab>(tabParam);
 
   // Authority Scope Guards
+  const isDistrictLocked = currentRole === 'DISTRICT_AUTHORITY' && !!user?.district;
+  const userJurisdictionDistrict = user?.district ? user.district.toUpperCase() : '';
   const isStateLocked = (currentRole === 'STATE_NODAL_AUTHORITY' || currentRole === 'DISTRICT_AUTHORITY') && !!user?.state;
   const userJurisdictionState = user?.state ? user.state.toUpperCase() : '';
 
   // Filters
   const stateParam = searchParams.get('state') || (isStateLocked ? userJurisdictionState : '');
+  const districtParam = searchParams.get('district') || (isDistrictLocked ? userJurisdictionDistrict : '');
   const severityParam = searchParams.get('severity') || '';
   const [selectedState, setSelectedState] = useState<string>(stateParam);
+  const [selectedDistrict, setSelectedDistrict] = useState<string>(districtParam);
   const [selectedSeverity, setSelectedSeverity] = useState<string>(severityParam);
 
   // Pagination State
@@ -164,22 +168,26 @@ export const AnomalyCenterPage: React.FC = () => {
         const [dupRes, misRes, delRes, outRes] = await Promise.all([
           api.getDuplicates({
             state: selectedState || undefined,
+            district: selectedDistrict || undefined,
             severity: selectedSeverity || undefined,
             min_similarity: 0.60,
             limit: 100
           }).catch(() => []),
           api.getProgressMismatches({
             state: selectedState || undefined,
+            district: selectedDistrict || undefined,
             severity: selectedSeverity || undefined,
             limit: 1
           }).catch(() => ({ total: 0 })),
           api.getDelayPredictions({
             state: selectedState || undefined,
+            district: selectedDistrict || undefined,
             severity: selectedSeverity || undefined,
             limit: 1
           }).catch(() => ({ total: 0 })),
           api.getAnomalies({
             state: selectedState || undefined,
+            district: selectedDistrict || undefined,
             severity: selectedSeverity || undefined,
             limit: 1
           }).catch(() => ({ total: 0 })),
@@ -196,7 +204,7 @@ export const AnomalyCenterPage: React.FC = () => {
       }
     };
     fetchTabSummaries();
-  }, [selectedState, selectedSeverity]);
+  }, [selectedState, selectedDistrict, selectedSeverity]);
 
   // Load active tab data with server-side pagination
   const loadActiveTabData = async () => {
@@ -209,6 +217,7 @@ export const AnomalyCenterPage: React.FC = () => {
       if (activeTab === 'duplicates') {
         const data = await api.getDuplicates({
           state: selectedState || undefined,
+          district: selectedDistrict || undefined,
           severity: selectedSeverity || undefined,
           min_similarity: 0.60,
           limit: 100
@@ -219,6 +228,7 @@ export const AnomalyCenterPage: React.FC = () => {
       } else if (activeTab === 'mismatch') {
         const res = await api.getProgressMismatches({
           state: selectedState || undefined,
+          district: selectedDistrict || undefined,
           severity: selectedSeverity || undefined,
           limit: PAGE_SIZE,
           offset: offset
@@ -228,6 +238,7 @@ export const AnomalyCenterPage: React.FC = () => {
       } else if (activeTab === 'delays') {
         const res = await api.getDelayPredictions({
           state: selectedState || undefined,
+          district: selectedDistrict || undefined,
           severity: selectedSeverity || undefined,
           limit: PAGE_SIZE,
           offset: offset
@@ -237,6 +248,7 @@ export const AnomalyCenterPage: React.FC = () => {
       } else if (activeTab === 'outliers') {
         const res = await api.getAnomalies({
           state: selectedState || undefined,
+          district: selectedDistrict || undefined,
           severity: selectedSeverity || undefined,
           limit: PAGE_SIZE,
           offset: offset
@@ -254,7 +266,7 @@ export const AnomalyCenterPage: React.FC = () => {
 
   useEffect(() => {
     loadActiveTabData();
-  }, [activeTab, selectedState, selectedSeverity, currentPage]);
+  }, [activeTab, selectedState, selectedDistrict, selectedSeverity, currentPage]);
 
   // Slices: Duplicates is sliced client-side from 60 candidates; others are already paged from backend
   const pagedDuplicates = duplicates.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
@@ -288,6 +300,13 @@ export const AnomalyCenterPage: React.FC = () => {
 
             {/* Filter Controls */}
             <div className="flex items-center gap-2.5 flex-wrap">
+              {isDistrictLocked && (
+                <span className="px-3 py-1 rounded-xl bg-[#FAF0EB] text-[#C85A32] text-xs font-mono font-semibold border border-[#E8C5B6] flex items-center gap-1.5 shadow-2xs">
+                  <Building2 className="w-3.5 h-3.5" />
+                  <span>District Mandate: {userJurisdictionDistrict}</span>
+                </span>
+              )}
+
               <select
                 value={selectedState}
                 disabled={isStateLocked}

@@ -37,6 +37,7 @@ router = APIRouter(tags=["AI & Forensic Intelligence"])
 def list_anomalies(
     house: Optional[str] = Query(None, description="Filter by house (LOK_SABHA, RAJYA_SABHA, ALL)"),
     state: Optional[str] = Query(None, description="Filter anomalies by state"),
+    district: Optional[str] = Query(None, description="Filter anomalies by district"),
     entity_type: Optional[str] = Query(None, description="Filter by entity type (WORK, MP, TRANSACTION, VENDOR)"),
     severity: Optional[str] = Query(None, description="Filter by severity (CRITICAL, HIGH, MEDIUM, LOW)"),
     anomaly_type: Optional[str] = Query(None, description="Filter by anomaly type"),
@@ -70,6 +71,18 @@ def list_anomalies(
             OR reason LIKE ?
         )""")
         params.extend([target_state, target_state, target_state, target_state, f"%{target_state}%"])
+
+    target_district = district.strip().upper() if (district and district.strip()) else (
+        user.district.upper() if (user and user.district and user.role == "DISTRICT_AUTHORITY") else None
+    )
+    if target_district:
+        where_clauses.append("""(
+            entity_id IN (SELECT work_id FROM works WHERE ida_normalized LIKE ? OR constituency_normalized LIKE ?)
+            OR entity_id IN (SELECT internal_mp_id FROM mps WHERE constituency_normalized LIKE ?)
+            OR reason LIKE ?
+        )""")
+        d_p = f"%{target_district}%"
+        params.extend([d_p, d_p, d_p, d_p])
     
     if house and house.strip():
         h_clean = house.strip().upper()
@@ -161,6 +174,7 @@ def get_anomaly_detail(anomaly_id: str, conn: sqlite3.Connection = Depends(get_d
 @router.get("/api/intelligence/duplicates", response_model=List[DuplicatePairItem])
 def get_duplicate_works(
     state: Optional[str] = Query(None, description="Filter by state"),
+    district: Optional[str] = Query(None, description="Filter by district"),
     category: Optional[str] = Query(None, description="Filter by category"),
     severity: Optional[str] = Query(None, description="Filter by severity (CRITICAL, HIGH, MEDIUM)"),
     limit: int = Query(25, ge=1, le=100),
@@ -169,6 +183,7 @@ def get_duplicate_works(
     """Detects potential duplicate and overlapping works across geographical clusters."""
     return intelligence_service.detect_duplicates(
         state=state,
+        district=district,
         category=category,
         severity=severity,
         limit=limit,
@@ -178,6 +193,7 @@ def get_duplicate_works(
 @router.get("/api/intelligence/progress-mismatch", response_model=ProgressMismatchListResponse)
 def get_progress_mismatches(
     state: Optional[str] = Query(None, description="Filter by state"),
+    district: Optional[str] = Query(None, description="Filter by district"),
     severity: Optional[str] = Query(None, description="Filter by exact severity (CRITICAL, HIGH, MEDIUM)"),
     min_severity: Optional[str] = Query(None, description="Filter by min severity (CRITICAL, HIGH, MEDIUM)"),
     limit: int = Query(50, ge=1, le=200),
@@ -186,6 +202,7 @@ def get_progress_mismatches(
     """Identifies severe divergences between financial utilization and physical progress."""
     return intelligence_service.get_progress_mismatches(
         state=state,
+        district=district,
         severity=severity,
         min_severity=min_severity,
         limit=limit,
@@ -196,6 +213,7 @@ def get_progress_mismatches(
 def get_delay_predictions(
     category: Optional[str] = Query(None, description="Filter by category"),
     state: Optional[str] = Query(None, description="Filter by state"),
+    district: Optional[str] = Query(None, description="Filter by district"),
     severity: Optional[str] = Query(None, description="Filter by severity (CRITICAL, HIGH, MEDIUM, LOW)"),
     limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0)
@@ -204,6 +222,7 @@ def get_delay_predictions(
     return intelligence_service.get_delay_predictions(
         category=category,
         state=state,
+        district=district,
         severity=severity,
         limit=limit,
         offset=offset

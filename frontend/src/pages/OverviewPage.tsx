@@ -25,7 +25,6 @@ import {
   TrendingUp,
   Eye,
   ShieldCheck,
-  Lock,
   Search,
 } from 'lucide-react';
 import { api } from '../api/client';
@@ -41,7 +40,7 @@ import { EntityDossierDrawer, DossierEntity } from '../components/common/EntityD
 
 export const OverviewPage: React.FC = () => {
   const { selectedHouse } = useHouse();
-  const { user, isAuthenticated, switchTier } = useRole();
+  const { user, isAuthenticated } = useRole();
   const navigate = useNavigate();
 
   const [stats, setStats] = useState<StatsResponse | null>(null);
@@ -54,7 +53,7 @@ export const OverviewPage: React.FC = () => {
   const [activeDossier, setActiveDossier] = useState<DossierEntity | null>(null);
   const [commandViewMode, setCommandViewMode] = useState<'MAP' | 'GRAPHS'>('MAP');
 
-  // Compute active user tier
+  // Compute active user tier for hero secondary CTA
   const getUserTier = (): 'NATIONAL' | 'STATE' | 'DISTRICT' | 'CITIZEN' => {
     if (!user || !isAuthenticated) return 'CITIZEN';
     if (user.role === 'MINISTRY_ADMIN' || user.role === 'MINISTRY_OFFICIAL') return 'NATIONAL';
@@ -64,13 +63,7 @@ export const OverviewPage: React.FC = () => {
   };
 
   const activeUserTier = getUserTier();
-  const [selectedTier, setSelectedTier] = useState<'NATIONAL' | 'STATE' | 'DISTRICT' | 'CITIZEN'>(activeUserTier);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
-
-  // Automatically sync selected tier with user role changes
-  useEffect(() => {
-    setSelectedTier(getUserTier());
-  }, [user?.role, isAuthenticated]);
 
   const loadData = async () => {
     try {
@@ -486,478 +479,13 @@ export const OverviewPage: React.FC = () => {
       </section>
 
       {/* ========================================================= */}
-      {/* § II · ROLE-AWARE STATUTORY GOVERNANCE CONSOLES           */}
-      {/* ========================================================= */}
-      <section className="py-14 sm:py-20 border-b border-[#E4E2DC] bg-[#F7F5F0]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <div className="space-y-2">
-              <span className="cw-badge-section">§ II · STATUTORY GOVERNANCE TIERS</span>
-              <h2 className="text-3xl sm:text-4xl font-serif font-normal text-[#121316] tracking-tight">
-                Role-aware consoles across the constitutional hierarchy.
-              </h2>
-            </div>
-            <p className="text-xs sm:text-sm text-[#71717A] font-light max-w-md">
-              JanDrishti enforces strict statutory role-based access. Select a tier below to inspect its administrative mandate and accountability scope.
-            </p>
-          </div>
-
-          {/* 4 Statutory Tier Tabs with Role Indicators */}
-          <div className="flex flex-wrap items-center gap-2 border-b border-[#E4E2DC] pb-4">
-            <button
-              type="button"
-              onClick={() => setSelectedTier('CITIZEN')}
-              className={`px-4 py-2 rounded-full text-xs font-medium transition cursor-pointer flex items-center gap-2 ${
-                selectedTier === 'CITIZEN'
-                  ? 'bg-[#121316] text-[#FAF8F5]'
-                  : 'bg-[#F0EFEA] text-[#71717A] hover:text-[#121316]'
-              }`}
-            >
-              <span>1. Citizen Social Audit Portal</span>
-              {activeUserTier === 'CITIZEN' ? (
-                <span className="px-1.5 py-0.5 rounded text-[9px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">
-                  Your Role
-                </span>
-              ) : (
-                <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-sky-100 text-sky-800">
-                  Public
-                </span>
-              )}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setSelectedTier('DISTRICT')}
-              className={`px-4 py-2 rounded-full text-xs font-medium transition cursor-pointer flex items-center gap-2 ${
-                selectedTier === 'DISTRICT'
-                  ? 'bg-[#121316] text-[#FAF8F5]'
-                  : 'bg-[#F0EFEA] text-[#71717A] hover:text-[#121316]'
-              }`}
-            >
-              <span>2. District Authority (Collector / DM)</span>
-              {activeUserTier === 'DISTRICT' ? (
-                <span className="px-1.5 py-0.5 rounded text-[9px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">
-                  Your Role
-                </span>
-              ) : (
-                <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-amber-50 text-amber-800 inline-flex items-center gap-0.5 border border-amber-200">
-                  <Lock className="w-2.5 h-2.5" /> Official
-                </span>
-              )}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setSelectedTier('STATE')}
-              className={`px-4 py-2 rounded-full text-xs font-medium transition cursor-pointer flex items-center gap-2 ${
-                selectedTier === 'STATE'
-                  ? 'bg-[#121316] text-[#FAF8F5]'
-                  : 'bg-[#F0EFEA] text-[#71717A] hover:text-[#121316]'
-              }`}
-            >
-              <span>3. State Nodal Authority (SNA)</span>
-              {activeUserTier === 'STATE' ? (
-                <span className="px-1.5 py-0.5 rounded text-[9px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">
-                  Your Role
-                </span>
-              ) : (
-                <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-amber-50 text-amber-800 inline-flex items-center gap-0.5 border border-amber-200">
-                  <Lock className="w-2.5 h-2.5" /> Official
-                </span>
-              )}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setSelectedTier('NATIONAL')}
-              className={`px-4 py-2 rounded-full text-xs font-medium transition cursor-pointer flex items-center gap-2 ${
-                selectedTier === 'NATIONAL'
-                  ? 'bg-[#121316] text-[#FAF8F5]'
-                  : 'bg-[#F0EFEA] text-[#71717A] hover:text-[#121316]'
-              }`}
-            >
-              <span>4. MoSPI / National Administrator</span>
-              {activeUserTier === 'NATIONAL' ? (
-                <span className="px-1.5 py-0.5 rounded text-[9px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">
-                  Your Role
-                </span>
-              ) : (
-                <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-amber-50 text-amber-800 inline-flex items-center gap-0.5 border border-amber-200">
-                  <Lock className="w-2.5 h-2.5" /> Official
-                </span>
-              )}
-            </button>
-          </div>
-
-          {/* Active Tier Content Card */}
-          <div className="cw-card p-6 sm:p-8 bg-white border border-[#E4E2DC]">
-            {/* 1. CITIZEN SOCIAL AUDIT PORTAL */}
-            {selectedTier === 'CITIZEN' && (
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                <div className="lg:col-span-7 space-y-4">
-                  <div className="inline-flex items-center gap-2 text-xs font-mono text-[#C85A32]">
-                    <Sparkles className="w-4 h-4" />
-                    <span>PROACTIVE CITIZEN SOCIAL AUDIT · RTI §4(1)(b) COMPLIANCE</span>
-                  </div>
-                  <h3 className="text-2xl font-serif text-[#121316]">
-                    Citizen Public Social Audit Portal
-                  </h3>
-                  <p className="text-sm text-[#4A4D53] font-light leading-relaxed">
-                    Under the RTI Act proactive disclosure mandate, every citizen can explore complete local development records without login, inspect contractor allocations, compare representative metrics, and submit community discrepancy observations directly to district collectors.
-                  </p>
-                  <ul className="space-y-2 text-xs text-[#71717A] font-light">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#C85A32]" />
-                      <span>Full public visibility across all {totalRecommendedWorks.toLocaleString('en-IN')} ground works</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#C85A32]" />
-                      <span>Interactive constituency mapping and neighborhood project search</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#C85A32]" />
-                      <span>Ground-level social audit observation and photo submission workflow</span>
-                    </li>
-                  </ul>
-
-                  {/* Direct Citizen Civic Actions */}
-                  <div className="pt-3 flex flex-wrap items-center gap-3">
-                    <Link
-                      to="/works"
-                      className="cw-btn-primary text-xs"
-                    >
-                      <Search className="w-3.5 h-3.5" />
-                      <span>Search Local Community Works →</span>
-                    </Link>
-                    <Link
-                      to="/cases"
-                      className="cw-btn-secondary text-xs"
-                    >
-                      <FileText className="w-3.5 h-3.5 text-[#C85A32]" />
-                      <span>Submit Social Audit Observation</span>
-                    </Link>
-                    <Link
-                      to="/mps"
-                      className="inline-flex items-center gap-1.5 text-xs font-mono text-[#71717A] hover:text-[#C85A32] transition pl-2"
-                    >
-                      <span>Track MP Quotas →</span>
-                    </Link>
-                  </div>
-                </div>
-
-                <div className="lg:col-span-5 bg-[#FAF8F5] p-5 rounded-xl border border-[#E4E2DC] space-y-4 text-xs font-mono">
-                  <div className="flex items-center justify-between border-b border-[#E4E2DC] pb-2">
-                    <span className="text-[#71717A]">PUBLIC OPEN ACCESS</span>
-                    <span className="text-emerald-600 font-semibold">RTI MANDATE</span>
-                  </div>
-                  <div className="space-y-2.5">
-                    <div className="flex justify-between">
-                      <span className="text-[#71717A]">Access Status:</span>
-                      <span className="font-bold text-emerald-600">Open Public Access</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-[#71717A]">Ground Works Visible:</span>
-                      <span className="font-bold text-[#121316]">{totalRecommendedWorks.toLocaleString('en-IN')} Works</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-[#71717A]">Constituency Scopes:</span>
-                      <span className="font-bold text-[#121316]">543 Lok Sabha Seats</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-[#71717A]">Community Feedback:</span>
-                      <span className="font-bold text-[#C85A32]">Open Submissions</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* 2. DISTRICT AUTHORITY (COLLECTOR / DM) */}
-            {selectedTier === 'DISTRICT' && (
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                <div className="lg:col-span-7 space-y-4">
-                  <div className="inline-flex items-center gap-2 text-xs font-mono text-[#C85A32]">
-                    <Building2 className="w-4 h-4" />
-                    <span>SANCTIONING AUTHORITY · COLLECTOR &amp; DISTRICT MAGISTRATE</span>
-                  </div>
-                  <h3 className="text-2xl font-serif text-[#121316]">
-                    District Authority (Collector / DM) Console
-                  </h3>
-                  <p className="text-sm text-[#4A4D53] font-light leading-relaxed">
-                    Tracks the 45-day statutory countdown on pending MP recommendations, monitors contractor workload concentration, and manages on-site physical inspection orders. Authorizes stop-payment flags when physical milestones lag financial disbursements.
-                  </p>
-                  <ul className="space-y-2 text-xs text-[#71717A] font-light">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#C85A32]" />
-                      <span>45-day sanction SLA countdown timer per recommendation</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#C85A32]" />
-                      <span>Single-contractor volume saturation warning system</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#C85A32]" />
-                      <span>1-click field inspection orders with photo upload mandate</span>
-                    </li>
-                  </ul>
-
-                  {/* Role Clearance Check */}
-                  <div className="pt-2">
-                    {activeUserTier === 'DISTRICT' ? (
-                      <Link
-                        to="/admin/district"
-                        className="cw-btn-primary text-xs"
-                      >
-                        <span>Open District Authority Console →</span>
-                      </Link>
-                    ) : (
-                      <div className="p-3.5 rounded-lg bg-amber-50/70 border border-amber-200/80 space-y-2">
-                        <div className="flex items-center gap-2 text-xs font-semibold text-amber-900">
-                          <Lock className="w-3.5 h-3.5 text-amber-700" />
-                          <span>Administrative Clearance Required</span>
-                        </div>
-                        <p className="text-[11px] text-amber-800 font-light leading-relaxed">
-                          This console is restricted to certified District Magistrates and Sanctioning Authorities.
-                        </p>
-                        <button
-                          type="button"
-                          onClick={async () => {
-                            await switchTier('DISTRICT');
-                            setSelectedTier('DISTRICT');
-                          }}
-                          className="cw-btn-secondary text-xs px-3.5 py-1.5 flex items-center gap-1.5 mt-1 cursor-pointer"
-                        >
-                          <Building2 className="w-3.5 h-3.5 text-[#C85A32]" />
-                          <span>Switch to District (Pune) Demo Persona</span>
-                          <ArrowRight className="w-3 h-3" />
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="lg:col-span-5 bg-[#FAF8F5] p-5 rounded-xl border border-[#E4E2DC] space-y-4 text-xs font-mono">
-                  <div className="flex items-center justify-between border-b border-[#E4E2DC] pb-2">
-                    <span className="text-[#71717A]">DISTRICT BENCHMARK</span>
-                    <span className="text-[#C85A32] font-semibold">VARANASI (UP)</span>
-                  </div>
-                  <div className="space-y-2.5">
-                    <div className="flex justify-between">
-                      <span className="text-[#71717A]">Pending Sanctions:</span>
-                      <span className="font-bold text-[#121316]">14 Recommendations</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-[#71717A]">Breaching 45-Day SLA:</span>
-                      <span className="font-bold text-[#C85A32]">3 Schemes</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-[#71717A]">Dominant Vendor:</span>
-                      <span className="font-bold text-[#121316]">Apex Infra (38.2%)</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-[#71717A]">Inspections Pending:</span>
-                      <span className="font-bold text-[#C85A32]">5 Scheduled</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* 3. STATE NODAL AUTHORITY (SNA) */}
-            {selectedTier === 'STATE' && (
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                <div className="lg:col-span-7 space-y-4">
-                  <div className="inline-flex items-center gap-2 text-xs font-mono text-[#C85A32]">
-                    <Layers className="w-4 h-4" />
-                    <span>STATE NODAL AUTHORITY &amp; CROSS-DISTRICT PARITY</span>
-                  </div>
-                  <h3 className="text-2xl font-serif text-[#121316]">
-                    State Nodal Authority Command Center
-                  </h3>
-                  <p className="text-sm text-[#4A4D53] font-light leading-relaxed">
-                    Compare district execution velocity, track unspent allocations across administrative divisions, and investigate inter-district fund movements. Issues escalation notices to lagging collectors whose average sanction duration exceeds the 45-day statutory SLA.
-                  </p>
-                  <ul className="space-y-2 text-xs text-[#71717A] font-light">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#C85A32]" />
-                      <span>District-level Gini coefficient &amp; regional equity analytics</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#C85A32]" />
-                      <span>Lagging district escalation generator for state cabinet review</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#C85A32]" />
-                      <span>Inter-district project transfer reconciliation docket</span>
-                    </li>
-                  </ul>
-
-                  {/* Role Clearance Check */}
-                  <div className="pt-2">
-                    {activeUserTier === 'STATE' ? (
-                      <Link
-                        to="/admin/state"
-                        className="cw-btn-primary text-xs"
-                      >
-                        <span>Open State Nodal Console →</span>
-                      </Link>
-                    ) : (
-                      <div className="p-3.5 rounded-lg bg-amber-50/70 border border-amber-200/80 space-y-2">
-                        <div className="flex items-center gap-2 text-xs font-semibold text-amber-900">
-                          <Lock className="w-3.5 h-3.5 text-amber-700" />
-                          <span>Administrative Clearance Required</span>
-                        </div>
-                        <p className="text-[11px] text-amber-800 font-light leading-relaxed">
-                          This console is restricted to certified State Nodal Authority officers.
-                        </p>
-                        <button
-                          type="button"
-                          onClick={async () => {
-                            await switchTier('STATE');
-                            setSelectedTier('STATE');
-                          }}
-                          className="cw-btn-secondary text-xs px-3.5 py-1.5 flex items-center gap-1.5 mt-1 cursor-pointer"
-                        >
-                          <Layers className="w-3.5 h-3.5 text-[#C85A32]" />
-                          <span>Switch to State (MH) Demo Persona</span>
-                          <ArrowRight className="w-3 h-3" />
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="lg:col-span-5 bg-[#FAF8F5] p-5 rounded-xl border border-[#E4E2DC] space-y-4 text-xs font-mono">
-                  <div className="flex items-center justify-between border-b border-[#E4E2DC] pb-2">
-                    <span className="text-[#71717A]">STATE ATLAS BENCHMARK</span>
-                    <span className="text-[#C85A32] font-semibold">MAHARASHTRA</span>
-                  </div>
-                  <div className="space-y-2.5">
-                    <div className="flex justify-between">
-                      <span className="text-[#71717A]">Districts Tracked:</span>
-                      <span className="font-bold text-[#121316]">36 Districts</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-[#71717A]">Avg Sanction Duration:</span>
-                      <span className="font-bold text-[#121316]">52 Days (SLA Breach)</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-[#71717A]">Highest Spend:</span>
-                      <span className="font-bold text-[#121316]">Pune (₹142.50 Cr)</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-[#71717A]">Lagging Jurisdiction:</span>
-                      <span className="font-bold text-[#C85A32]">Gadchiroli (19.4%)</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* 4. MOSPI / NATIONAL ADMINISTRATOR */}
-            {selectedTier === 'NATIONAL' && (
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                <div className="lg:col-span-7 space-y-4">
-                  <div className="inline-flex items-center gap-2 text-xs font-mono text-[#C85A32]">
-                    <Landmark className="w-4 h-4" />
-                    <span>PAN-INDIA FISCAL COMPLIANCE &amp; POLICY LEVEL</span>
-                  </div>
-                  <h3 className="text-2xl font-serif text-[#121316]">
-                    Ministry / MoSPI Administrator Command Center
-                  </h3>
-                  <p className="text-sm text-[#4A4D53] font-light leading-relaxed">
-                    Access national cross-state expenditure velocity, unutilized allocation rankings, and system-wide anomaly rates. Includes a live risk-weight calibration matrix to rebalance cost overrun, milestone delay, duplicate, and progress mismatch multipliers across the entire detection pipeline.
-                  </p>
-                  <ul className="space-y-2 text-xs text-[#71717A] font-light">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#C85A32]" />
-                      <span>Live weight calibration (Cost, Delay, Mismatch, Duplicate)</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#C85A32]" />
-                      <span>Cross-state unspent balance rankings across 28 States &amp; 8 UTs</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#C85A32]" />
-                      <span>National trend line forecasting seasonal disbursement bottlenecks</span>
-                    </li>
-                  </ul>
-
-                  {/* Role Clearance Check */}
-                  <div className="pt-2">
-                    {activeUserTier === 'NATIONAL' ? (
-                      <Link
-                        to="/admin/national"
-                        className="cw-btn-primary text-xs"
-                      >
-                        <span>Open Ministry Command Center →</span>
-                      </Link>
-                    ) : (
-                      <div className="p-3.5 rounded-lg bg-amber-50/70 border border-amber-200/80 space-y-2">
-                        <div className="flex items-center gap-2 text-xs font-semibold text-amber-900">
-                          <Lock className="w-3.5 h-3.5 text-amber-700" />
-                          <span>Administrative Clearance Required</span>
-                        </div>
-                        <p className="text-[11px] text-amber-800 font-light leading-relaxed">
-                          This console is restricted to certified Ministry of Statistics and Programme Implementation (MoSPI) national administrators.
-                        </p>
-                        <button
-                          type="button"
-                          onClick={async () => {
-                            await switchTier('NATIONAL');
-                            setSelectedTier('NATIONAL');
-                          }}
-                          className="cw-btn-secondary text-xs px-3.5 py-1.5 flex items-center gap-1.5 mt-1 cursor-pointer"
-                        >
-                          <Landmark className="w-3.5 h-3.5 text-[#C85A32]" />
-                          <span>Switch to National (MoSPI) Demo Persona</span>
-                          <ArrowRight className="w-3 h-3" />
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="lg:col-span-5 bg-[#FAF8F5] p-5 rounded-xl border border-[#E4E2DC] space-y-4 text-xs font-mono">
-                  <div className="flex items-center justify-between border-b border-[#E4E2DC] pb-2">
-                    <span className="text-[#71717A]">NATIONAL SNAPSHOT</span>
-                    <span className="text-[#C85A32] font-semibold">LIVE RECONCILED</span>
-                  </div>
-                  <div className="space-y-2.5">
-                    <div className="flex justify-between">
-                      <span className="text-[#71717A]">Total Allocation:</span>
-                      <span className="font-bold text-[#121316]">{formatCrores(stats?.total_allocated_amount)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-[#71717A]">Total Disbursed:</span>
-                      <span className="font-bold text-[#121316]">
-                        {formatCrores(stats?.total_expenditure)} ({utilizationRate}%)
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-[#71717A]">Active Ground Works:</span>
-                      <span className="font-bold text-[#121316]">{totalRecommendedWorks.toLocaleString('en-IN')} Works</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-[#71717A]">Critical Alerts:</span>
-                      <span className="font-bold text-[#C85A32]">{criticalAlertsCount} Requiring Action</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================================= */}
-      {/* § III · SELECTED CASE STUDIES (LIVE ANOMALY DOSSIERS)     */}
+      {/* § II · SELECTED CASE STUDIES (LIVE ANOMALY DOSSIERS)      */}
       {/* ========================================================= */}
       <section className="py-14 sm:py-20 border-b border-[#E4E2DC] bg-[#FAF8F5]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div className="space-y-2">
-              <span className="cw-badge-section">§ III · SELECTED CASE STUDIES</span>
+              <span className="cw-badge-section">§ II · SELECTED CASE STUDIES</span>
               <h2 className="text-3xl sm:text-4xl font-serif font-normal text-[#121316] tracking-tight">
                 Live anomaly dockets under active review.
               </h2>
@@ -1124,13 +652,13 @@ export const OverviewPage: React.FC = () => {
       </section>
 
       {/* ========================================================= */}
-      {/* § IV · FORENSIC COMMAND CENTER (ANALYTICS & ATLAS)        */}
+      {/* § III · FORENSIC COMMAND CENTER (ANALYTICS & ATLAS)       */}
       {/* ========================================================= */}
       <section className="py-14 sm:py-20 border-b border-[#E4E2DC] bg-[#F7F5F0]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div className="space-y-2">
-              <span className="cw-badge-section">§ IV · FORENSIC ATLAS</span>
+              <span className="cw-badge-section">§ III · FORENSIC ATLAS</span>
               <h2 className="text-3xl sm:text-4xl font-serif font-normal text-[#121316] tracking-tight">
                 National spatial &amp; graphical command console.
               </h2>
@@ -1186,12 +714,12 @@ export const OverviewPage: React.FC = () => {
       </section>
 
       {/* ========================================================= */}
-      {/* § V · STATUTORY PRINCIPLES & COMPLIANCE FAQ               */}
+      {/* § IV · STATUTORY PRINCIPLES & COMPLIANCE FAQ              */}
       {/* ========================================================= */}
       <section className="py-14 sm:py-20 border-b border-[#E4E2DC] bg-[#FAF8F5]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="space-y-2 text-center">
-            <span className="cw-badge-section">§ V · COMPLIANCE &amp; METHODOLOGY</span>
+            <span className="cw-badge-section">§ IV · COMPLIANCE &amp; METHODOLOGY</span>
             <h2 className="text-3xl sm:text-4xl font-serif font-normal text-[#121316] tracking-tight">
               Evidence-first governance principles.
             </h2>
@@ -1237,7 +765,7 @@ export const OverviewPage: React.FC = () => {
       </section>
 
       {/* ========================================================= */}
-      {/* § VI · EDITORIAL CALL TO ACTION BANNER                     */}
+      {/* § V · EDITORIAL CALL TO ACTION BANNER                     */}
       {/* ========================================================= */}
       <section className="py-16 sm:py-24 bg-[#121316] text-[#FAF8F5] relative overflow-hidden">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 relative z-10">

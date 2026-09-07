@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JanDrishti — Architecture & Statutory Governance Blueprint</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  @page {
+    size: A4 portrait;
+    margin: 12mm 12mm 15mm 12mm;
+    @bottom-right {
+      content: counter(page);
+    }
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #0f172a;
+    background-color: #ffffff;
+    line-height: 1.5;
+    font-size: 13px;
+    padding: 20px;
+  }
+
+  .page-break {
+    page-break-before: always;
+    margin-top: 30px;
+  }
+
+  /* HEADER & HERO */
+  .hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #312e81 100%);
+    color: #ffffff;
+    padding: 28px 32px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    border: 1px solid #4338ca;
+  }
+
+  .badge-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .badge-blue { background: #38bdf8; color: #0f172a; }
+  .badge-orange { background: #f97316; color: #ffffff; }
+  .badge-green { background: #22c55e; color: #0f172a; }
+  .badge-purple { background: #c084fc; color: #0f172a; }
+
+  .hero h1 {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+  }
+
+  .hero h2 {
+    font-size: 14px;
+    font-weight: 500;
+    color: #94a3b8;
+    margin-bottom: 14px;
+  }
+
+  .hero-meta {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .meta-item h4 {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #94a3b8;
+    margin-bottom: 2px;
+  }
+
+  .meta-item p {
+    font-size: 13px;
+    font-weight: 700;
+    color: #f8fafc;
+  }
+
+  /* SECTION STYLING */
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-subtitle {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: -12px;
+    margin-bottom: 16px;
+  }
+
+  /* MIRO FLOWCHART CARDS */
+  .board-container {
+    background: #f8fafc;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 24px;
+  }
+
+  .tier-box {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    border-left: 5px solid #3b82f6;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+
+  .tier-box.tier-gateway { border-left-color: #6366f1; }
+  .tier-box.tier-logic { border-left-color: #a855f7; }
+  .tier-box.tier-forensic { border-left-color: #ec4899; }
+  .tier-box.tier-data { border-left-color: #10b981; }
+
+  .tier-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .tier-header h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e293b;
+  }
+
+  .tier-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  .component-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 8px;
+  }
+
+  .comp-card {
+    background: #f1f5f9;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    border: 1px solid #e2e8f0;
+  }
+
+  .comp-card strong {
+    display: block;
+    color: #0f172a;
+    font-size: 12px;
+    margin-bottom: 2px;
+  }
+
+  .comp-card span {
+    color: #64748b;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+  }
+
+  /* ARROW CONNECTOR */
+  .connector {
+    text-align: center;
+    color: #94a3b8;
+    font-weight: 700;
+    font-size: 14px;
+    margin: -4px 0 8px 0;
+  }
+
+  /* HIERARCHY CARDS */
+  .hierarchy-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .role-card {
+    display: grid;
+    grid-template-columns: 140px 1fr 1fr;
+    gap: 12px;
+    align-items: center;
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px 14px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+
+  .role-card.r1 { border-left: 5px solid #ef4444; }
+  .role-card.r2 { border-left: 5px solid #f97316; }
+  .role-card.r3 { border-left: 5px solid #eab308; }
+  .role-card.r4 { border-left: 5px solid #22c55e; }
+  .role-card.r5 { border-left: 5px solid #818cf8; }
+  .role-card.r6 { border-left: 5px solid #64748b; }
+
+  .role-badge {
+    font-weight: 700;
+    font-size: 11px;
+  }
+
+  .role-badge small {
+    display: block;
+    font-size: 10px;
+    font-weight: 500;
+    color: #64748b;
+  }
+
+  .role-desc {
+    font-size: 11px;
+    color: #334155;
+  }
+
+  .role-scope {
+    font-size: 11px;
+    color: #475569;
+    background: #f8fafc;
+    padding: 6px 8px;
+    border-radius: 4px;
+    border: 1px solid #e2e8f0;
+  }
+
+  /* STATE MACHINE WORKFLOW */
+  .workflow-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .step-node {
+    background: #ffffff;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 10px;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  }
+
+  .step-node.active-step {
+    border-color: #3b82f6;
+    background: #eff6ff;
+  }
+
+  .step-number {
+    font-size: 10px;
+    font-weight: 700;
+    background: #0f172a;
+    color: #ffffff;
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+  }
+
+  .step-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 4px;
+  }
+
+  .step-auth {
+    font-size: 10px;
+    font-weight: 600;
+    color: #2563eb;
+    margin-bottom: 4px;
+  }
+
+  .step-desc {
+    font-size: 10px;
+    color: #64748b;
+    line-height: 1.3;
+  }
+
+  /* TABLES */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    margin-bottom: 18px;
+    background: #ffffff;
+  }
+
+  th {
+    background: #f1f5f9;
+    color: #1e293b;
+    font-weight: 700;
+    text-align: left;
+    padding: 8px 10px;
+    border: 1px solid #cbd5e1;
+  }
+
+  td {
+    padding: 7px 10px;
+    border: 1px solid #e2e8f0;
+    color: #334155;
+    vertical-align: top;
+  }
+
+  tr:nth-child(even) td {
+    background: #f8fafc;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    background: #f1f5f9;
+    padding: 2px 4px;
+    border-radius: 3px;
+    color: #0f172a;
+    border: 1px solid #e2e8f0;
+  }
+
+  /* CALLOUT BOX */
+  .callout {
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 11px;
+    margin-bottom: 16px;
+    border-left: 4px solid;
+  }
+
+  .callout-red {
+    background: #fef2f2;
+    border-left-color: #ef4444;
+    color: #991b1b;
+  }
+
+  .callout-blue {
+    background: #eff6ff;
+    border-left-color: #3b82f6;
+    color: #1e40af;
+  }
+
+  .callout strong {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 12px;
+  }
+
+  /* SEQUENCE FLOW */
+  .seq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .seq-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 8px 12px;
+  }
+
+  .seq-index {
+    background: #3b82f6;
+    color: white;
+    font-weight: 700;
+    font-size: 11px;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .seq-content h4 {
+    font-size: 11px;
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  .seq-content p {
+    font-size: 11px;
+    color: #475569;
+  }
+</style>
+</head>
+<body>
+
+  <!-- HERO SECTION -->
+  <div class="hero">
+    <div class="badge-row">
+      <span class="badge badge-blue">SIH26102</span>
+      <span class="badge badge-orange">Smart Governance</span>
+      <span class="badge badge-green">Production Verified</span>
+      <span class="badge badge-purple">Zero Mock Data</span>
+    </div>
+    <h1>JanDrishti — Architecture & Governance Blueprint</h1>
+    <h2>Parliamentary Intelligence, MPLADS Statutory Audit & Separation of Powers</h2>
+    <div class="hero-meta">
+      <div class="meta-item">
+        <h4>Coverage</h4>
+        <p>542 LS + 236 RS MPs</p>
+      </div>
+      <div class="meta-item">
+        <h4>Reconciled Assets</h4>
+        <p>102,437 Works</p>
+      </div>
+      <div class="meta-item">
+        <h4>Financial Variance</h4>
+        <p>₹0.00 (Balanced)</p>
+      </div>
+      <div class="meta-item">
+        <h4>Statutory Tiers</h4>
+        <p>6 Governance Ranks</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: SYSTEM ARCHITECTURE -->
+  <div class="section-title">🏛️ 1. Full System Architecture & Data Flow (Miro Board)</div>
+  <div class="section-subtitle">Decoupled 3-tier architecture with dual-engine persistence and strict policy gating.</div>
+
+  <div class="board-container">
+    <!-- TIER 1 -->
+    <div class="tier-box">
+      <div class="tier-header">
+        <h3>TIER 1: FRONTEND CLIENT LAYER</h3>
+        <span class="tier-badge" style="background: #e0f2fe; color: #0369a1;">React 19 + TypeScript + Vite</span>
+      </div>
+      <div class="component-grid">
+        <div class="comp-card">
+          <strong>Public Citizen Portal</strong>
+          <span>OverviewPage.tsx, MpExplorerPage.tsx</span>
+          National geographic maps & MP dossier inspection.
+        </div>
+        <div class="comp-card">
+          <strong>Role Workspaces</strong>
+          <span>workspaces/*.tsx (MP, District, State)</span>
+          Dedicated command hubs for authorized personnel.
+        </div>
+        <div class="comp-card">
+          <strong>Intelligence Hub</strong>
+          <span>AnomalyCenterPage.tsx, CasesAlertsPage.tsx</span>
+          Cartel, Benford, and duplication investigation UI.
+        </div>
+        <div class="comp-card">
+          <strong>API Client & Interceptor</strong>
+          <span>frontend/src/api/client.ts</span>
+          JWT Bearer injection, auto-retry, and 403 boundary handling.
+        </div>
+      </div>
+    </div>
+
+    <div class="connector">▼ HTTP / REST with HMAC-SHA256 JWT Bearer Tokens ▼</div>
+
+    <!-- TIER 2 -->
+    <div class="tier-box tier-gateway">
+      <div class="tier-header">
+        <h3>TIER 2: API GATEWAY & SECURITY ENFORCEMENT</h3>
+        <span class="tier-badge" style="background: #e0e7ff; color: #4338ca;">FastAPI + Pydantic v2</span>
+      </div>
+      <div class="component-grid">
+        <div class="comp-card">
+          <strong>FastAPI Router Gateway</strong>
+          <span>backend/main.py</span>
+          95+ REST endpoints with CORS and strict input schemas.
+        </div>
+        <div class="comp-card">
+          <strong>Statutory RBAC & ABAC</strong>
+          <span>backend/rbac_abac.py</span>
+          Multi-rank permission interceptor and field immutability.
+        </div>
+        <div class="comp-card">
+          <strong>Jurisdiction Scoping</strong>
+          <span>backend/scope.py</span>
+          Mandatory SQL territorial clauses (National/State/District/MP).
+        </div>
+        <div class="comp-card">
+          <strong>Auth Session Engine</strong>
+          <span>backend/auth.py</span>
+          Statutory role resolution, demo credentials, token signing.
+        </div>
+      </div>
+    </div>
+
+    <div class="connector">▼ Validated & Jurisdiction-Scoped Service Execution ▼</div>
+
+    <!-- TIER 3 & 4 -->
+    <div class="tier-box tier-logic">
+      <div class="tier-header">
+        <h3>TIER 3 & 4: BUSINESS ENGINES & FORENSIC INTELLIGENCE</h3>
+        <span class="tier-badge" style="background: #fdf4ff; color: #a21caf;">Python 3.13 Services</span>
+      </div>
+      <div class="component-grid">
+        <div class="comp-card">
+          <strong>Governance Service</strong>
+          <span>backend/gov_service.py</span>
+          MP recommendation lifecycle, sanctions, contractor assign.
+        </div>
+        <div class="comp-card">
+          <strong>Workflow State Machine</strong>
+          <span>backend/workflow.py</span>
+          Statutory transition validator (prevents illegal skips).
+        </div>
+        <div class="comp-card">
+          <strong>Forensic Intelligence Hub</strong>
+          <span>backend/intelligence.py</span>
+          Benford's Law, Levenshtein duplication, Cartel HHI indices.
+        </div>
+        <div class="comp-card">
+          <strong>Composite Risk Engine</strong>
+          <span>backend/risk_engine.py</span>
+          Weighted multi-signal risk index and auto-escalation.
+        </div>
+      </div>
+    </div>
+
+    <div class="connector">▼ Dual Database Engine Failover Driver ▼</div>
+
+    <!-- TIER 5 -->
+    <div class="tier-box tier-data">
+      <div class="tier-header">
+        <h3>TIER 5: PERSISTENCE LAYER (Dual Database Engine)</h3>
+        <span class="tier-badge" style="background: #dcfce7; color: #15803d;">Supabase PostgreSQL + SQLite 3</span>
+      </div>
+      <div class="component-grid">
+        <div class="comp-card">
+          <strong>Primary Cloud Database</strong>
+          <span>Supabase PostgreSQL (AWS Tokyo)</span>
+          PostgREST API, RLS security policies, relational ledger.
+        </div>
+        <div class="comp-card">
+          <strong>Resilient Local Fallback</strong>
+          <span>database/mplads.db (SQLite 3)</span>
+          Zero-config offline mode with busy-timeout pragmas.
+        </div>
+        <div class="comp-card">
+          <strong>Unified DB Engine</strong>
+          <span>backend/db_engine.py</span>
+          Transparent cursor wrapper adapting queries for both engines.
+        </div>
+        <div class="comp-card">
+          <strong>Chained Audit Trail</strong>
+          <span>backend/audit_logger.py</span>
+          Immutable log of all user actions, state changes, and client IPs.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- SECTION 2: AUTHORITY HIERARCHY -->
+  <div class="section-title">⚖️ 2. Statutory Authority Hierarchy & Separation of Powers</div>
+  <div class="section-subtitle">Strict compliance with MoSPI operational guidelines across Indian public finance tiers.</div>
+
+  <div class="hierarchy-list">
+    <div class="role-card r1">
+      <div class="role-badge" style="color: #b91c1c;">
+        RANK 1
+        <strong>MINISTRY_ADMIN</strong>
+        <small>Central MoSPI</small>
+      </div>
+      <div class="role-desc">
+        National supervisory power. Can view all Indian states, configure system parameters, freeze suspicious dockets, and handle parliamentary questions.
+      </div>
+      <div class="role-scope">
+        <strong>Jurisdiction:</strong> Pan-India (National)<br/>
+        <strong>Workspaces:</strong> <code>/workspaces/ministry</code>
+      </div>
+    </div>
+
+    <div class="role-card r2">
+      <div class="role-badge" style="color: #c2410c;">
+        RANK 2
+        <strong>STATE_NODAL_AUTHORITY</strong>
+        <small>State Planning Dept</small>
+      </div>
+      <div class="role-desc">
+        Reviews technical approvals from district collectors, manages state allocation quotas, grants statutory financial sanctions, or rejects non-compliant works.
+      </div>
+      <div class="role-scope">
+        <strong>Jurisdiction:</strong> Designated State (<code>user.state</code>)<br/>
+        <strong>Workspaces:</strong> <code>/workspaces/state</code>
+      </div>
+    </div>
+
+    <div class="role-card r3">
+      <div class="role-badge" style="color: #a16207;">
+        RANK 3
+        <strong>DISTRICT_AUTHORITY</strong>
+        <small>District Collector / DM</small>
+      </div>
+      <div class="role-desc">
+        Performs techno-economic scrutiny on MP recommendations, assigns implementing agencies/contractors, records field milestones, and uploads geo-tagged photos.
+      </div>
+      <div class="role-scope">
+        <strong>Jurisdiction:</strong> Designated District (<code>user.district</code>)<br/>
+        <strong>Workspaces:</strong> <code>/workspaces/district</code>
+      </div>
+    </div>
+
+    <div class="role-card r4">
+      <div class="role-badge" style="color: #15803d;">
+        RANK 4
+        <strong>MEMBER OF PARLIAMENT</strong>
+        <small>Lok Sabha / Rajya Sabha</small>
+      </div>
+      <div class="role-desc">
+        Drafts and submits constituency work recommendations within their annual entitlement (₹5 Crore). Tracks sanction velocity and project completion milestones.
+      </div>
+      <div class="role-scope">
+        <strong>Jurisdiction:</strong> MP Seat (<code>user.mp_id</code>)<br/>
+        <strong>Workspaces:</strong> <code>/workspaces/mp</code>
+      </div>
+    </div>
+
+    <div class="role-card r5">
+      <div class="role-badge" style="color: #4338ca;">
+        RANK 5
+        <strong>STATUTORY AUDITOR</strong>
+        <small>CAG / Forensic Auditor</small>
+      </div>
+      <div class="role-desc">
+        Independent forensic oversight. Inspects statistical anomalies, cartel formation, and Benford flags. Creates formal audit cases and flags evidence.
+      </div>
+      <div class="role-scope">
+        <strong>Jurisdiction:</strong> National Independent Oversight<br/>
+        <strong>Workspaces:</strong> <code>/workspaces/auditor</code>
+      </div>
+    </div>
+
+    <div class="role-card r6">
+      <div class="role-badge" style="color: #475569;">
+        RANK 6
+        <strong>CITIZEN</strong>
+        <small>General Public</small>
+      </div>
+      <div class="role-desc">
+        Open civic transparency. Can search any MP's performance, inspect local village works on interactive maps, and file ground discrepancy feedback.
+      </div>
+      <div class="role-scope">
+        <strong>Jurisdiction:</strong> Read-Only Public Corpus<br/>
+        <strong>Workspaces:</strong> <code>/workspaces/citizen</code>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-red">
+    <strong>🔒 Statutory Financial Immutability Rule (ABAC Enforcement)</strong>
+    Fields such as <code>sanctioned_amount</code>, <code>expenditure_amount</code>, <code>work_id</code>, and <code>internal_transaction_id</code> strictly reject generic HTTP PUT/PATCH requests. Financial mutations can only occur via reconciled Treasury Voucher ledger operations with dual-signoff.
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- SECTION 3: WORKFLOW STATE MACHINE -->
+  <div class="section-title">🔄 3. Statutory Recommendation Lifecycle State Machine</div>
+  <div class="section-subtitle">Guaranteed forward-only transitions defined in <code>backend/workflow.py</code>.</div>
+
+  <div class="workflow-grid">
+    <div class="step-node active-step">
+      <span class="step-number">STEP 01</span>
+      <div class="step-title">DRAFT</div>
+      <div class="step-auth">Auth: Member of Parliament</div>
+      <div class="step-desc">MP fills title, sector, estimated cost, location, and justification. Remains editable.</div>
+    </div>
+    <div class="step-node active-step">
+      <span class="step-number">STEP 02</span>
+      <div class="step-title">SUBMITTED</div>
+      <div class="step-auth">Auth: Member of Parliament</div>
+      <div class="step-desc">Proposal locked from further MP modification and dispatched to District Collector.</div>
+    </div>
+    <div class="step-node active-step">
+      <span class="step-number">STEP 03</span>
+      <div class="step-title">DISTRICT_REVIEW</div>
+      <div class="step-auth">Auth: District Authority</div>
+      <div class="step-desc">Collector performs technical feasibility, estimates validation, and site suitability check.</div>
+    </div>
+    <div class="step-node">
+      <span class="step-number">STEP 04</span>
+      <div class="step-title">STATE_REVIEW</div>
+      <div class="step-auth">Auth: State Nodal Authority</div>
+      <div class="step-desc">State planning department reviews district approval against state budget quotas.</div>
+    </div>
+    <div class="step-node">
+      <span class="step-number">STEP 05</span>
+      <div class="step-title">SANCTIONED</div>
+      <div class="step-auth">Auth: State Nodal Authority</div>
+      <div class="step-desc">Official administrative and financial sanction order released; fund commitment booked.</div>
+    </div>
+    <div class="step-node">
+      <span class="step-number">STEP 06</span>
+      <div class="step-title">IN_PROGRESS</div>
+      <div class="step-auth">Auth: District Authority</div>
+      <div class="step-desc">Tender awarded; contractor deployed on ground; physical execution milestones tracked.</div>
+    </div>
+    <div class="step-node">
+      <span class="step-number">STEP 07</span>
+      <div class="step-title">COMPLETED</div>
+      <div class="step-auth">Auth: District Authority</div>
+      <div class="step-desc">100% physical milestone reached; final expenditure voucher generated.</div>
+    </div>
+    <div class="step-node">
+      <span class="step-number">STEP 08</span>
+      <div class="step-title">VERIFIED</div>
+      <div class="step-auth">Auth: District / State / Ministry</div>
+      <div class="step-desc">Geo-tagged photographic evidence validated. Asset registered on national public ledger.</div>
+    </div>
+  </div>
+
+  <div class="callout callout-blue">
+    <strong>↩️ Return for Correction & Rejection Paths</strong>
+    If a proposal contains cost defects, the District Authority transitions it to <code>RETURNED_FOR_CORRECTION</code>, re-opening MP edit access. If a proposal falls under the MoSPI Prohibited Works List, it transitions to <code>REJECTED</code> (Terminal State).
+  </div>
+
+  <!-- SECTION 4: FORENSIC PIPELINE -->
+  <div class="section-title">🧠 4. Pre-Disbursement Forensic Audit Intelligence</div>
+  <div class="section-subtitle">Real-time statistical anomaly screening across 6 autonomous detection engines.</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Forensic Engine</th>
+        <th style="width: 35%;">Algorithmic Principle</th>
+        <th style="width: 20%;">Default Weight</th>
+        <th style="width: 20%;">Threshold Trigger</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1. Semantic Duplication</strong></td>
+        <td>Levenshtein distance and Jaccard similarity across project titles, sectors, and GPS locations to flag duplicate work funding.</td>
+        <td><code>0.35</code> (35%)</td>
+        <td>Similarity index &gt; 0.85</td>
+      </tr>
+      <tr>
+        <td><strong>2. Vendor Cartelization</strong></td>
+        <td>Herfindahl-Hirschman Index (HHI) calculating vendor revenue concentration and repeat contract capture in a single constituency.</td>
+        <td><code>0.25</code> (25%)</td>
+        <td>HHI score &gt; 2,500 (Monopolistic)</td>
+      </tr>
+      <tr>
+        <td><strong>3. Benford's Law Analysis</strong></td>
+        <td>Chi-square and log-frequency goodness-of-fit test on the leading digits of disbursement voucher amounts.</td>
+        <td><code>0.20</code> (20%)</td>
+        <td>p-value &lt; 0.05 deviation</td>
+      </tr>
+      <tr>
+        <td><strong>4. Expenditure Velocity</strong></td>
+        <td>Z-score standard deviation anomaly detector flagging uncharacteristic "March-rush" spending bursts before fiscal close.</td>
+        <td><code>0.20</code> (20%)</td>
+        <td>Z-score &gt; 3.0 standard dev</td>
+      </tr>
+      <tr>
+        <td><strong>5. Predictive Delay Model</strong></td>
+        <td>Random Forest regression estimating expected completion timelines based on historical district performance.</td>
+        <td>Auxiliary Signal</td>
+        <td>Predicted delay &gt; 180 days</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="page-break"></div>
+
+  <!-- SECTION 5: CODE EXECUTION TRACE -->
+  <div class="section-title">⚡ 5. Step-by-Step Code Execution Trace (Front-to-Back)</div>
+  <div class="section-subtitle">How a user request executes across all system layers.</div>
+
+  <div class="seq-list">
+    <div class="seq-item">
+      <div class="seq-index">1</div>
+      <div class="seq-content">
+        <h4>User Interaction in Frontend UI</h4>
+        <p>An MP completes proposal details in <code>frontend/src/pages/workspaces/MpWorkspace.tsx</code> and clicks "Submit Recommendation".</p>
+      </div>
+    </div>
+    <div class="seq-item">
+      <div class="seq-index">2</div>
+      <div class="seq-content">
+        <h4>HTTP Request Dispatch with JWT</h4>
+        <p><code>frontend/src/api/client.ts</code> attaches the stored session JWT to <code>POST /api/v1/recommendations/submit</code>.</p>
+      </div>
+    </div>
+    <div class="seq-item">
+      <div class="seq-index">3</div>
+      <div class="seq-content">
+        <h4>Authentication & Statutory Identity Resolution</h4>
+        <p>FastAPI invokes <code>backend/auth.py::verify_bearer_token()</code>, unpacking the token into an <code>AuthenticatedUser</code> object with role, state, and mp_id.</p>
+      </div>
+    </div>
+    <div class="seq-item">
+      <div class="seq-index">4</div>
+      <div class="seq-content">
+        <h4>ABAC & Jurisdiction Boundary Interception</h4>
+        <p><code>backend/rbac_abac.py::check_permission()</code> verifies role privileges, checks field immutability, and ensures the MP only acts within their constituency boundary.</p>
+      </div>
+    </div>
+    <div class="seq-item">
+      <div class="seq-index">5</div>
+      <div class="seq-content">
+        <h4>Workflow State Machine Transition Check</h4>
+        <p><code>backend/workflow.py::validate_workflow_transition()</code> verifies the current status is <code>DRAFT</code> and target is <code>SUBMITTED</code>, authorized only for <code>ROLE_MP</code>.</p>
+      </div>
+    </div>
+    <div class="seq-item">
+      <div class="seq-index">6</div>
+      <div class="seq-content">
+        <h4>Database Mutation & Dual Engine Failover</h4>
+        <p><code>backend/gov_service.py</code> executes the SQL UPDATE via <code>backend/db_engine.py</code>, targeting Supabase PostgreSQL with transparent SQLite fallback.</p>
+      </div>
+    </div>
+    <div class="seq-item">
+      <div class="seq-index">7</div>
+      <div class="seq-content">
+        <h4>Cryptographic Chained Audit Logging</h4>
+        <p><code>backend/audit_logger.py::record_audit_log()</code> appends a tamper-proof audit record containing timestamp, user_id, action, client IP, and state transition.</p>
+      </div>
+    </div>
+    <div class="seq-item">
+      <div class="seq-index">8</div>
+      <div class="seq-content">
+        <h4>Response Serialization & UI Cache Invalidation</h4>
+        <p>FastAPI serializes the updated record via Pydantic v2 schemas; the React client invalidates its cache and renders a success notification.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: DIRECTORY MATRIX -->
+  <div class="section-title">📁 6. Codebase Directory & Module Responsibility Matrix</div>
+  <div class="section-subtitle">Primary source code files, classes, and their operational responsibilities.</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 30%;">File Path</th>
+        <th style="width: 35%;">Key Functions / Classes</th>
+        <th style="width: 35%;">Operational Responsibility</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>backend/main.py</code></td>
+        <td><code>app</code>, 95+ endpoint routes, CORS middleware</td>
+        <td>HTTP gateway, request dispatching, error mapping.</td>
+      </tr>
+      <tr>
+        <td><code>backend/rbac_abac.py</code></td>
+        <td><code>check_permission()</code>, <code>ROLE_PERMISSIONS</code></td>
+        <td>Statutory RBAC matrix, ABAC boundary & immutability gating.</td>
+      </tr>
+      <tr>
+        <td><code>backend/workflow.py</code></td>
+        <td><code>validate_workflow_transition()</code></td>
+        <td>State machine definitions and transition authority enforcement.</td>
+      </tr>
+      <tr>
+        <td><code>backend/scope.py</code></td>
+        <td><code>jurisdiction_clause()</code>, <code>can_edit_record()</code></td>
+        <td>Generates mandatory SQL filters for user territorial scopes.</td>
+      </tr>
+      <tr>
+        <td><code>backend/gov_service.py</code></td>
+        <td><code>create_recommendation()</code>, <code>review_recommendation()</code></td>
+        <td>Core business logic for recommendations, reviews, and sanctions.</td>
+      </tr>
+      <tr>
+        <td><code>backend/intelligence.py</code></td>
+        <td><code>intelligence_service</code>, Benford, Dupe, Cartel HHI</td>
+        <td>Statistical intelligence algorithms and forensic signal generation.</td>
+      </tr>
+      <tr>
+        <td><code>backend/risk_engine.py</code></td>
+        <td><code>risk_engine</code>, <code>calculate_composite_risk()</code></td>
+        <td>Weighted multi-signal risk scoring and audit case queuing.</td>
+      </tr>
+      <tr>
+        <td><code>backend/db_engine.py</code></td>
+        <td><code>PostgresConnection</code>, <code>get_db_connection()</code></td>
+        <td>Dual-engine database abstraction for Supabase & SQLite.</td>
+      </tr>
+      <tr>
+        <td><code>frontend/src/pages/workspaces/</code></td>
+        <td><code>MpWorkspace</code>, <code>DistrictWorkspace</code>, <code>StateWorkspace</code></td>
+        <td>Role-specific interactive governance user interfaces.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECTION 7: EXTENSION GUIDE -->
+  <div class="section-title">🔧 7. How to Customize & Extend Later</div>
+  <div class="section-subtitle">Quick guide for extending the platform with new roles or workflow rules.</div>
+
+  <div class="component-grid" style="margin-bottom: 20px;">
+    <div class="comp-card" style="padding: 12px;">
+      <strong>1. Adding a New Role</strong>
+      <p style="font-size: 11px; color: #475569; margin-top: 4px;">
+        1. Define constant in <code>backend/rbac_abac.py</code>.<br/>
+        2. Assign rank in <code>ROLE_HIERARCHY_RANK</code>.<br/>
+        3. Define action sets in <code>ROLE_PERMISSIONS</code>.<br/>
+        4. Add UI page in <code>frontend/src/pages/workspaces/</code>.
+      </p>
+    </div>
+    <div class="comp-card" style="padding: 12px;">
+      <strong>2. Modifying Workflow Rules</strong>
+      <p style="font-size: 11px; color: #475569; margin-top: 4px;">
+        1. Edit <code>RECOMMENDATION_TRANSITIONS</code> in <code>backend/workflow.py</code>.<br/>
+        2. Map authorized roles in <code>TRANSITION_AUTHORITY</code>.<br/>
+        3. Add new status badge colors in <code>frontend/src/utils/formatters.ts</code>.
+      </p>
+    </div>
+    <div class="comp-card" style="padding: 12px;">
+      <strong>3. Tweaking Anomaly Weights</strong>
+      <p style="font-size: 11px; color: #475569; margin-top: 4px;">
+        1. Adjust <code>DEFAULT_WEIGHTS</code> in <code>backend/risk_engine.py</code>.<br/>
+        2. Or use live REST API: <code>PUT /api/v1/risk-weights</code> to update weights dynamically without redeploying.
+      </p>
+    </div>
+  </div>
+
+</body>
+</html>

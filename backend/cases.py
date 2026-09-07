@@ -327,15 +327,15 @@ class CaseManagementService:
         conn.close()
         return self.get_case(case_id)
 
-    def get_global_audit_trail(self, limit: int = 50) -> List[Dict[str, Any]]:
+    def get_global_audit_trail(self, limit: int = 50, offset: int = 0) -> List[Dict[str, Any]]:
         conn = get_audit_db_conn()
         rows = conn.execute("""
             SELECT a.*, c.title as case_title, c.severity, c.entity_type, c.entity_id
             FROM audit_trail a
             JOIN review_cases c ON a.case_id = c.case_id
             ORDER BY a.timestamp DESC
-            LIMIT ?
-        """, (limit,)).fetchall()
+            LIMIT ? OFFSET ?
+        """, (limit, offset)).fetchall()
         conn.close()
         return [dict(r) for r in rows]
 

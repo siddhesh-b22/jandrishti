@@ -167,9 +167,12 @@ def create_review_case(
     return case
 
 @router.get("/api/cases/audit-trail", response_model=List[AuditLogItem])
-def get_global_audit_trail(limit: int = Query(50, ge=1, le=100)):
+def get_global_audit_trail(
+    limit: int = Query(50, ge=1, le=500),
+    offset: int = Query(0, ge=0)
+):
     """Retrieve immutable chronological audit trail log."""
-    return case_service.get_global_audit_trail(limit=limit)
+    return case_service.get_global_audit_trail(limit=limit, offset=offset)
 
 @router.get("/api/cases/{case_id}", response_model=ReviewCaseResponse)
 def get_review_case(case_id: str):

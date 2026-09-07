@@ -366,8 +366,8 @@ export const api = {
     body: JSON.stringify(payload)
   }),
 
-  getAuditTrail: (limit: number = 50) =>
-    fetchJson<AuditLog[]>(`${API_BASE}/cases/audit-trail?limit=${limit}`),
+  getAuditTrail: (limit: number = 50, offset: number = 0) =>
+    fetchJson<AuditLog[]>(`${API_BASE}/cases/audit-trail?limit=${limit}&offset=${offset}`),
 
   // Enrichment & Secondary Forensic Intelligence
   getSources: () =>

@@ -1,7 +1,6 @@
 """
 JanDrishti — Architecture & Workflow Visual Board Generator
-Builds a stunning, Miro-style presentation canvas with pure HTML/CSS/SVG visual diagrams.
-Guarantees 100% reliable rendering without CDN dependencies, cutoffs, or awkward scrolling.
+White Theme Edition for Miro & PDF Presentations.
 """
 
 import os
@@ -11,73 +10,85 @@ import sys
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HTML_OUT = os.path.join(BASE_DIR, "JanDrishti_Architecture_and_Workflow.html")
 PDF_OUT = os.path.join(BASE_DIR, "JanDrishti_Architecture_and_Workflow.pdf")
-MD_OUT = os.path.join(BASE_DIR, "ARCHITECTURE_AND_WORKFLOW.md")
 
-HTML_CONTENT = """<!DOCTYPE html>
+SVG1_PATH = os.path.join(BASE_DIR, "Miro_Flowchart_1_Architecture.svg")
+SVG2_PATH = os.path.join(BASE_DIR, "Miro_Flowchart_2_Governance_Lifecycle.svg")
+SVG3_PATH = os.path.join(BASE_DIR, "Miro_Flowchart_3_Forensic_Pipeline.svg")
+
+with open(SVG1_PATH, "r", encoding="utf-8") as f:
+    SVG1_RAW = f.read()
+
+with open(SVG2_PATH, "r", encoding="utf-8") as f:
+    SVG2_RAW = f.read()
+
+with open(SVG3_PATH, "r", encoding="utf-8") as f:
+    SVG3_RAW = f.read()
+
+HTML_CONTENT = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JanDrishti — Visual Architecture & Statutory Governance Miro Canvas</title>
+<title>JanDrishti — Architecture &amp; Governance Miro Canvas (White Theme)</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap');
 
-  @page {
+  @page {{
     size: A4 landscape;
     margin: 8mm 8mm 10mm 8mm;
-    @bottom-right {
+    @bottom-right {{
       content: counter(page);
-    }
-  }
+    }}
+  }}
 
-  * {
+  * {{
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-  }
+  }}
 
-  body {
+  body {{
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     color: #0f172a;
-    background: #0f172a;
+    background: #ffffff;
     line-height: 1.4;
     font-size: 11.5px;
-    padding: 16px;
-  }
+    padding: 20px;
+  }}
 
-  .canvas-wrapper {
-    max-width: 1440px;
+  .canvas-wrapper {{
+    max-width: 1400px;
     margin: 0 auto;
-  }
+  }}
 
-  .page-break {
+  .page-break {{
     page-break-before: always;
-    margin-top: 24px;
-  }
+    margin-top: 30px;
+  }}
 
-  /* TOP MIRO TOOLBAR / HEADER */
-  .miro-toolbar {
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 10px;
-    padding: 12px 20px;
+  /* WHITE THEME TOOLBAR */
+  .miro-toolbar {{
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 14px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  }
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  }}
 
-  .logo-block {
+  .logo-block {{
     display: flex;
     align-items: center;
     gap: 12px;
-  }
+  }}
 
-  .logo-icon {
-    width: 32px;
-    height: 32px;
-    background: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
+  .logo-icon {{
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%);
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -85,941 +96,235 @@ HTML_CONTENT = """<!DOCTYPE html>
     font-size: 18px;
     font-weight: 900;
     color: white;
-  }
+  }}
 
-  .logo-text h1 {
-    font-size: 16px;
+  .logo-text h1 {{
+    font-size: 17px;
     font-weight: 800;
-    color: #ffffff;
+    color: #0f172a;
     letter-spacing: -0.3px;
-  }
+  }}
 
-  .logo-text p {
-    font-size: 10px;
-    color: #94a3b8;
-  }
+  .logo-text p {{
+    font-size: 11px;
+    color: #64748b;
+  }}
 
-  .badge-cluster {
+  .badge-cluster {{
     display: flex;
-    gap: 6px;
-  }
+    gap: 8px;
+  }}
 
-  .chip {
+  .chip {{
     padding: 4px 10px;
     border-radius: 9999px;
-    font-size: 9.5px;
+    font-size: 10px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-  }
+  }}
 
-  .chip-cyan { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
-  .chip-green { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); }
-  .chip-orange { background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.4); }
-  .chip-purple { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); }
+  .chip-blue {{ background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; }}
+  .chip-green {{ background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }}
+  .chip-purple {{ background: #f3e8ff; color: #7e22ce; border: 1px solid #e9d5ff; }}
 
-  /* MIRO BOARD CARD CONTAINER */
-  .board-card {
-    background: #1e293b;
-    border: 1px solid #334155;
+  /* WHITE THEME BOARD CONTAINER */
+  .board-container {{
+    background: #ffffff;
+    border: 1.5px solid #cbd5e1;
     border-radius: 12px;
     padding: 16px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-  }
+    margin-bottom: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  }}
 
-  .board-title {
-    font-size: 15px;
-    font-weight: 800;
-    color: #f8fafc;
-    margin-bottom: 4px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .board-subtitle {
-    font-size: 11px;
-    color: #94a3b8;
+  .board-header {{
     margin-bottom: 14px;
-  }
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 8px;
+  }}
 
-  /* FLOWCHART 1: SYSTEM ARCHITECTURE 5-TIER PIPELINE */
-  .arch-pipeline {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-    position: relative;
-  }
-
-  .tier-col {
-    background: #0f172a;
-    border-radius: 8px;
-    padding: 10px;
-    border: 1px solid #334155;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .tier-col-header {
-    padding: 6px 8px;
-    border-radius: 6px;
-    font-size: 10.5px;
-    font-weight: 800;
-    text-align: center;
-    letter-spacing: 0.3px;
-    text-transform: uppercase;
-  }
-
-  .header-t1 { background: #0284c7; color: #ffffff; }
-  .header-t2 { background: #4f46e5; color: #ffffff; }
-  .header-t3 { background: #7c3aed; color: #ffffff; }
-  .header-t4 { background: #c026d3; color: #ffffff; }
-  .header-t5 { background: #059669; color: #ffffff; }
-
-  .node-box {
-    background: #1e293b;
-    border: 1px solid #475569;
-    border-radius: 6px;
-    padding: 8px 10px;
-    color: #f8fafc;
-    transition: all 0.2s;
-  }
-
-  .node-box strong {
-    display: block;
-    font-size: 11px;
-    font-weight: 700;
-    color: #ffffff;
-    margin-bottom: 2px;
-  }
-
-  .node-box span {
-    display: block;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
-    color: #38bdf8;
-    margin-bottom: 4px;
-  }
-
-  .node-box p {
-    font-size: 10px;
-    color: #94a3b8;
-    line-height: 1.3;
-  }
-
-  /* FLOW ARROW BETWEEN TIERS */
-  .pipe-arrow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #64748b;
-    font-weight: 800;
-    font-size: 14px;
-    margin-top: 4px;
-  }
-
-  /* FLOWCHART 2: HORIZONTAL GOVERNANCE PIPELINE WITH BRANCHES */
-  .gov-canvas {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .stage-row {
-    display: grid;
-    grid-template-columns: 180px 1fr;
-    gap: 12px;
-    background: #0f172a;
-    border-radius: 8px;
-    padding: 10px 12px;
-    border: 1px solid #334155;
-    align-items: center;
-  }
-
-  .stage-label {
-    border-right: 1px solid #334155;
-    padding-right: 10px;
-  }
-
-  .stage-tag {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 9.5px;
-    font-weight: 800;
-    text-transform: uppercase;
-    margin-bottom: 4px;
-  }
-
-  .stage-label h3 {
-    font-size: 12px;
-    font-weight: 800;
-    color: #ffffff;
-  }
-
-  .stage-label p {
-    font-size: 9.5px;
-    color: #94a3b8;
-  }
-
-  .step-flow {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  .flow-card {
-    background: #1e293b;
-    border: 1.5px solid #475569;
-    border-radius: 8px;
-    padding: 8px 12px;
-    min-width: 170px;
-    flex: 1;
-  }
-
-  .flow-card.card-success { border-color: #22c55e; background: rgba(34, 197, 94, 0.05); }
-  .flow-card.card-danger { border-color: #ef4444; background: rgba(239, 68, 68, 0.05); }
-  .flow-card.card-warn { border-color: #f59e0b; background: rgba(245, 158, 11, 0.05); }
-  .flow-card.card-blue { border-color: #38bdf8; background: rgba(56, 189, 248, 0.05); }
-
-  .flow-card-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 4px;
-  }
-
-  .flow-card-head strong {
-    font-size: 11px;
-    font-weight: 700;
-    color: #f8fafc;
-  }
-
-  .status-pill {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
-    font-weight: 700;
-    padding: 1px 6px;
-    border-radius: 4px;
-  }
-
-  .pill-draft { background: #334155; color: #cbd5e1; }
-  .pill-submitted { background: #0284c7; color: #ffffff; }
-  .pill-review { background: #d97706; color: #ffffff; }
-  .pill-sanctioned { background: #15803d; color: #ffffff; }
-  .pill-progress { background: #4f46e5; color: #ffffff; }
-  .pill-completed { background: #0d9488; color: #ffffff; }
-  .pill-verified { background: #16a34a; color: #ffffff; }
-  .pill-rejected { background: #b91c1c; color: #ffffff; }
-  .pill-returned { background: #ea580c; color: #ffffff; }
-
-  .flow-card p {
-    font-size: 10px;
-    color: #94a3b8;
-    line-height: 1.35;
-    margin-bottom: 4px;
-  }
-
-  .flow-card .data-wire {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 8.5px;
-    color: #38bdf8;
-    background: #0f172a;
-    padding: 2px 5px;
-    border-radius: 3px;
-    display: inline-block;
-  }
-
-  .arrow-inline {
-    color: #94a3b8;
+  .board-header h2 {{
     font-size: 16px;
-    font-weight: 900;
-  }
+    font-weight: 800;
+    color: #0f172a;
+  }}
 
-  /* FLOWCHART 3: PRE-DISBURSEMENT FORENSIC ENGINES */
-  .forensic-grid {
-    display: grid;
-    grid-template-columns: 240px 1fr 260px;
-    gap: 12px;
-    align-items: center;
-  }
+  .board-header p {{
+    font-size: 11.5px;
+    color: #64748b;
+  }}
 
-  .input-panel, .output-panel {
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 8px;
-    padding: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .engines-container {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .engine-strip {
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-left: 4px solid #c026d3;
-    border-radius: 6px;
-    padding: 8px 12px;
-    display: grid;
-    grid-template-columns: 140px 1fr 90px;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .engine-strip strong {
-    font-size: 11px;
-    color: #ffffff;
-  }
-
-  .engine-strip span {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9.5px;
-    color: #cbd5e1;
-  }
-
-  .engine-strip .eng-weight {
-    background: #312e81;
-    color: #a5b4fc;
-    font-weight: 700;
-    font-size: 9.5px;
-    padding: 2px 6px;
-    border-radius: 4px;
-    text-align: center;
-  }
-
-  /* FLOWCHART 4: CODE EXECUTION SWIMLANES */
-  .swimlane-container {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .swimlane-row {
-    display: grid;
-    grid-template-columns: 150px repeat(5, 1fr);
-    gap: 8px;
-    align-items: center;
-  }
-
-  .swimlane-actor {
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 6px;
-    padding: 8px 10px;
-    color: #ffffff;
-    font-weight: 700;
-    font-size: 10.5px;
-    text-align: center;
-  }
-
-  .code-cell {
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 6px;
-    padding: 8px 10px;
-  }
-
-  .code-cell.active-cell {
-    border-color: #38bdf8;
-    background: rgba(56, 189, 248, 0.05);
-  }
-
-  .code-cell strong {
-    display: block;
-    color: #38bdf8;
-    font-size: 10.5px;
-    margin-bottom: 2px;
-  }
-
-  .code-cell p {
-    font-size: 9.5px;
-    color: #94a3b8;
-    line-height: 1.3;
-  }
-
-  /* TABLES */
-  .dark-table {
+  .svg-canvas {{
     width: 100%;
-    border-collapse: collapse;
-    font-size: 10.5px;
-    color: #cbd5e1;
-    background: #0f172a;
     border-radius: 8px;
     overflow: hidden;
-    border: 1px solid #334155;
-  }
+    background: #ffffff;
+  }}
 
-  .dark-table th {
-    background: #1e293b;
-    color: #ffffff;
+  .svg-canvas svg {{
+    width: 100%;
+    height: auto;
+    display: block;
+  }}
+
+  /* TABLE */
+  .white-table {{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    color: #334155;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1.5px solid #cbd5e1;
+    margin-top: 14px;
+  }}
+
+  .white-table th {{
+    background: #f8fafc;
+    color: #0f172a;
     font-weight: 700;
     text-align: left;
-    padding: 8px 12px;
-    border-bottom: 2px solid #334155;
-  }
+    padding: 9px 12px;
+    border-bottom: 2px solid #cbd5e1;
+  }}
 
-  .dark-table td {
+  .white-table td {{
     padding: 8px 12px;
-    border-bottom: 1px solid #1e293b;
+    border-bottom: 1px solid #e2e8f0;
     vertical-align: top;
-  }
+  }}
 
-  .dark-table tr:hover td {
-    background: #1e293b;
-  }
+  .white-table tr:nth-child(even) td {{
+    background: #f8fafc;
+  }}
 
-  code {
+  code {{
     font-family: 'JetBrains Mono', monospace;
     font-size: 9.5px;
-    color: #38bdf8;
-    background: #1e293b;
+    color: #0284c7;
+    background: #f1f5f9;
     padding: 1px 4px;
     border-radius: 3px;
-  }
-
-  .callout-box {
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-left: 4px solid #38bdf8;
-    border-radius: 6px;
-    padding: 10px 14px;
-    margin-top: 10px;
-  }
-
-  .callout-box strong {
-    color: #38bdf8;
-    font-size: 11px;
-    display: block;
-    margin-bottom: 2px;
-  }
-
-  .callout-box p {
-    color: #94a3b8;
-    font-size: 10px;
-  }
+    border: 1px solid #e2e8f0;
+  }}
 </style>
 </head>
 <body>
 
 <div class="canvas-wrapper">
 
-  <!-- TOP MIRO BAR -->
+  <!-- TOP BAR -->
   <div class="miro-toolbar">
     <div class="logo-block">
       <div class="logo-icon">👁️</div>
       <div class="logo-text">
-        <h1>JanDrishti — Architecture & Governance Miro Canvas</h1>
-        <p>Problem Statement ID: SIH26102 | Parliamentary Intelligence & Statutory Audit Platform</p>
+        <h1>JanDrishti — Architecture &amp; Governance Miro Canvas</h1>
+        <p>Problem Statement ID: SIH26102 | Clean White Theme for Miro Presentation</p>
       </div>
     </div>
     <div class="badge-cluster">
-      <span class="chip chip-cyan">React 19 + FastAPI</span>
-      <span class="chip chip-green">100% Zero-Mock Data</span>
-      <span class="chip chip-orange">6 Statutory Ranks</span>
-      <span class="chip chip-purple">Pre-Disbursement Forensics</span>
+      <span class="chip chip-blue">React 19 + FastAPI</span>
+      <span class="chip chip-green">100% Zero-Overlap Vectors</span>
+      <span class="chip chip-purple">Miro Drag &amp; Drop Ready</span>
     </div>
   </div>
 
-  <!-- BOARD 1: SYSTEM ARCHITECTURE 5-TIER PIPELINE -->
-  <div class="board-card">
-    <div class="board-title">🏛️ Board 1: Full System Data Flow & Technology Architecture</div>
-    <div class="board-subtitle">Complete 5-Tier layout fitting in a single view: Where user requests originate, how security intercepts them, and where records persist.</div>
-
-    <div class="arch-pipeline">
-      <!-- TIER 1 -->
-      <div class="tier-col">
-        <div class="tier-col-header header-t1">Tier 1: Client UI</div>
-        <div class="node-box">
-          <strong>Citizen Portal</strong>
-          <span>OverviewPage.tsx</span>
-          <p>Interactive TopoJSON constituency maps & MP portfolios.</p>
-        </div>
-        <div class="node-box">
-          <strong>Role Workspaces</strong>
-          <span>workspaces/*.tsx</span>
-          <p>MP, District, State, Auditor, and Ministry consoles.</p>
-        </div>
-        <div class="node-box">
-          <strong>Axios Interceptor</strong>
-          <span>api/client.ts</span>
-          <p>Injects <code>Bearer JWT</code> and catches 401/403 boundaries.</p>
-        </div>
-      </div>
-
-      <!-- TIER 2 -->
-      <div class="tier-col">
-        <div class="tier-col-header header-t2">Tier 2: API Gateway</div>
-        <div class="node-box">
-          <strong>FastAPI Router</strong>
-          <span>backend/main.py</span>
-          <p>95+ REST endpoints with Pydantic v2 input schemas.</p>
-        </div>
-        <div class="node-box">
-          <strong>JWT Auth Guard</strong>
-          <span>backend/auth.py</span>
-          <p>Unpacks user role, state, and parliamentary constituency.</p>
-        </div>
-        <div class="node-box">
-          <strong>RBAC / ABAC Interceptor</strong>
-          <span>backend/rbac_abac.py</span>
-          <p>Rejects cross-jurisdiction edits & locks financial fields.</p>
-        </div>
-      </div>
-
-      <!-- TIER 3 -->
-      <div class="tier-col">
-        <div class="tier-col-header header-t3">Tier 3: Governance</div>
-        <div class="node-box">
-          <strong>Workflow Engine</strong>
-          <span>backend/workflow.py</span>
-          <p>Guarantees legal state machine transitions.</p>
-        </div>
-        <div class="node-box">
-          <strong>Gov Operations</strong>
-          <span>backend/gov_service.py</span>
-          <p>Drafting, technical reviews, sanctions, and milestones.</p>
-        </div>
-        <div class="node-box">
-          <strong>Chained Audit Logger</strong>
-          <span>backend/audit_logger.py</span>
-          <p>Appends tamper-proof log with client IP & user id.</p>
-        </div>
-      </div>
-
-      <!-- TIER 4 -->
-      <div class="tier-col">
-        <div class="tier-col-header header-t4">Tier 4: Forensics</div>
-        <div class="node-box">
-          <strong>Benford's Law Engine</strong>
-          <span>backend/intelligence.py</span>
-          <p>Detects fabricated vouchers by first-digit distribution.</p>
-        </div>
-        <div class="node-box">
-          <strong>Semantic Duplicate</strong>
-          <span>backend/intelligence.py</span>
-          <p>Levenshtein & Jaccard index flags ghost assets.</p>
-        </div>
-        <div class="node-box">
-          <strong>Composite Risk</strong>
-          <span>backend/risk_engine.py</span>
-          <p>Scores risk 0–100; auto-escalates high scores to CAG.</p>
-        </div>
-      </div>
-
-      <!-- TIER 5 -->
-      <div class="tier-col">
-        <div class="tier-col-header header-t5">Tier 5: Dual DB</div>
-        <div class="node-box">
-          <strong>Primary Cloud DB</strong>
-          <span>Supabase PostgreSQL</span>
-          <p>Relational tables, foreign keys, and RLS policies.</p>
-        </div>
-        <div class="node-box">
-          <strong>Local Resilient DB</strong>
-          <span>database/mplads.db</span>
-          <p>SQLite 3 fallback with zero-config failover.</p>
-        </div>
-        <div class="node-box">
-          <strong>Unified DB Engine</strong>
-          <span>backend/db_engine.py</span>
-          <p>Adapts queries dynamically for both PostgreSQL & SQLite.</p>
-        </div>
-      </div>
+  <!-- BOARD 1: FULL ARCHITECTURE -->
+  <div class="board-container">
+    <div class="board-header">
+      <h2>🏛️ Board 1: Full System 5-Tier Data Flow &amp; Technology Architecture</h2>
+      <p>Clean white theme with zero overlapping lines. Ready to drag and drop directly into Miro.</p>
+    </div>
+    <div class="svg-canvas">
+      {SVG1_RAW}
     </div>
   </div>
 
   <div class="page-break"></div>
 
-  <!-- BOARD 2: STATUTORY GOVERNANCE LIFECYCLE (HORIZONTAL PIPELINE) -->
-  <div class="board-card">
-    <div class="board-title">🔄 Board 2: Statutory Governance Lifecycle (From MP Idea to Ground Verification)</div>
-    <div class="board-subtitle">Step-by-step pipeline showing what actually happens, who decides, what database tables change, and all branch conditions.</div>
-
-    <div class="gov-canvas">
-      
-      <!-- STAGE 1: INITIATION -->
-      <div class="stage-row">
-        <div class="stage-label">
-          <span class="stage-tag" style="background:#0284c7; color:#fff;">Stage 1: Proposal</span>
-          <h3>Member of Parliament</h3>
-          <p>Constituency Initiation</p>
-        </div>
-        <div class="step-flow">
-          <div class="flow-card card-blue">
-            <div class="flow-card-head">
-              <strong>1. Draft Proposal</strong>
-              <span class="status-pill pill-draft">DRAFT</span>
-            </div>
-            <p>MP inputs work title, sector, estimated cost (&le; ₹5 Cr), GPS coordinates, and public justification.</p>
-            <span class="data-wire">INSERT INTO recommendations (REC-...)</span>
-          </div>
-
-          <div class="arrow-inline">➔</div>
-
-          <div class="flow-card card-blue">
-            <div class="flow-card-head">
-              <strong>2. Statutory Submit</strong>
-              <span class="status-pill pill-submitted">SUBMITTED</span>
-            </div>
-            <p>MP submits. <strong>Statutory edit lock is applied</strong>; MP edit access is immediately revoked.</p>
-            <span class="data-wire">UPDATE recommendations SET status='SUBMITTED'</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- STAGE 2: DISTRICT SCRUTINY -->
-      <div class="stage-row">
-        <div class="stage-label">
-          <span class="stage-tag" style="background:#d97706; color:#fff;">Stage 2: Scrutiny</span>
-          <h3>District Authority</h3>
-          <p>District Collector / DM</p>
-        </div>
-        <div class="step-flow">
-          <div class="flow-card card-warn">
-            <div class="flow-card-head">
-              <strong>3. Techno-Feasibility Check</strong>
-              <span class="status-pill pill-review">DISTRICT_REVIEW</span>
-            </div>
-            <p>Collector & Executive Engineer verify land title, soil test, and schedule-of-rates cost estimation.</p>
-            <span class="data-wire">UPDATE recommendations SET remarks=?</span>
-          </div>
-
-          <div class="arrow-inline">➔</div>
-
-          <!-- DECISION BRANCHES -->
-          <div class="flow-card card-danger">
-            <div class="flow-card-head">
-              <strong>Branch A: Defect Found</strong>
-              <span class="status-pill pill-returned">RETURNED</span>
-            </div>
-            <p>Land issue or inflated cost: returned to MP with remarks. Edit lock temporarily lifted.</p>
-            <span class="data-wire">status = 'RETURNED_FOR_CORRECTION'</span>
-          </div>
-
-          <div class="flow-card card-danger">
-            <div class="flow-card-head">
-              <strong>Branch B: Prohibited</strong>
-              <span class="status-pill pill-rejected">REJECTED</span>
-            </div>
-            <p>Work violates MoSPI Prohibited List (e.g. commercial/religious assets). Terminal end.</p>
-            <span class="data-wire">status = 'REJECTED'</span>
-          </div>
-
-          <div class="flow-card card-success">
-            <div class="flow-card-head">
-              <strong>Branch C: Feasible</strong>
-              <span class="status-pill pill-review">STATE_REVIEW</span>
-            </div>
-            <p>Technical feasibility certified. Dispatched to State Planning Department for sanction.</p>
-            <span class="data-wire">status = 'STATE_REVIEW'</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- STAGE 3: STATE SANCTION -->
-      <div class="stage-row">
-        <div class="stage-label">
-          <span class="stage-tag" style="background:#15803d; color:#fff;">Stage 3: Sanction</span>
-          <h3>State Nodal Authority</h3>
-          <p>State Planning Department</p>
-        </div>
-        <div class="step-flow">
-          <div class="flow-card card-success">
-            <div class="flow-card-head">
-              <strong>4. AS/FS Sanction Order</strong>
-              <span class="status-pill pill-sanctioned">SANCTIONED</span>
-            </div>
-            <p>State verifies state allocation quota. Formal Administrative & Financial Sanction issued; funds locked.</p>
-            <span class="data-wire">INSERT INTO works (sanctioned_amount)</span>
-          </div>
-
-          <div class="arrow-inline">➔</div>
-
-          <div class="flow-card card-blue">
-            <div class="flow-card-head">
-              <strong>5. Tendering & Award</strong>
-              <span class="status-pill pill-progress">IN_PROGRESS</span>
-            </div>
-            <p>District Authority tenders work to implementing agency (PWD, ZP). Contractor mobilized on site.</p>
-            <span class="data-wire">UPDATE works SET contractor=?, status='IN_PROGRESS'</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- STAGE 4: EXECUTION & VERIFICATION -->
-      <div class="stage-row">
-        <div class="stage-label">
-          <span class="stage-tag" style="background:#0d9488; color:#fff;">Stage 4: Ground Reality</span>
-          <h3>Milestones & Citizens</h3>
-          <p>Execution & Verification</p>
-        </div>
-        <div class="step-flow">
-          <div class="flow-card card-blue">
-            <div class="flow-card-head">
-              <strong>6. Physical Milestones</strong>
-              <span class="status-pill pill-progress">25% ➔ 100%</span>
-            </div>
-            <p>Foundation (25%) &rarr; Superstructure (50%) &rarr; Finishing (75%) &rarr; Complete (100%). Measurement Book signed.</p>
-            <span class="data-wire">UPDATE works SET progress_percentage=100</span>
-          </div>
-
-          <div class="arrow-inline">➔</div>
-
-          <div class="flow-card card-success">
-            <div class="flow-card-head">
-              <strong>7. Final Treasury Voucher</strong>
-              <span class="status-pill pill-completed">COMPLETED</span>
-            </div>
-            <p>Treasury disbursement voucher created. <strong>Financial amounts permanently locked against mutation.</strong></p>
-            <span class="data-wire">INSERT INTO transactions (voucher_no, amount)</span>
-          </div>
-
-          <div class="arrow-inline">➔</div>
-
-          <div class="flow-card card-success">
-            <div class="flow-card-head">
-              <strong>8. Geo-Tagged Photos</strong>
-              <span class="status-pill pill-verified">VERIFIED</span>
-            </div>
-            <p>Tamper-proof latitude/longitude photos uploaded. Asset plaque with QR code generated for public audit.</p>
-            <span class="data-wire">UPDATE works SET has_images=1, status='VERIFIED'</span>
-          </div>
-        </div>
-      </div>
-
+  <!-- BOARD 2: GOVERNANCE LIFECYCLE -->
+  <div class="board-container">
+    <div class="board-header">
+      <h2>🔄 Board 2: Statutory Governance Lifecycle (MP to Citizen Verification)</h2>
+      <p>Explicit decision diamonds, defect loops, and state quota checks without any crossing lines.</p>
+    </div>
+    <div class="svg-canvas">
+      {SVG2_RAW}
     </div>
   </div>
 
   <div class="page-break"></div>
 
-  <!-- BOARD 3: PRE-DISBURSEMENT FORENSIC INTELLIGENCE -->
-  <div class="board-card">
-    <div class="board-title">🧠 Board 3: Pre-Disbursement Forensic Audit Intelligence & Fraud Screening</div>
-    <div class="board-subtitle">Parallel statistical screening before public money is disbursed, calculating a composite risk score to prevent fiscal fraud.</div>
-
-    <div class="forensic-grid">
-      
-      <!-- INPUT -->
-      <div class="input-panel">
-        <strong style="color: #38bdf8; font-size: 11px;">1. Ingested Transaction</strong>
-        <p style="color: #94a3b8; font-size: 10px;">Whenever a work voucher is recorded or updated, it passes through 5 mathematical screening engines in real time.</p>
-        <div style="background: #1e293b; padding: 6px 8px; border-radius: 4px; border: 1px solid #334155;">
-          <span style="font-family:'JetBrains Mono'; font-size: 9px; color:#f8fafc;">
-            Voucher Amount: ₹24,80,000<br/>
-            Contractor: M/S Apex Infratech<br/>
-            Location: Ward 4, Block X<br/>
-            Timestamp: 28-MAR-2026
-          </span>
-        </div>
-      </div>
-
-      <!-- 5 ENGINES -->
-      <div class="engines-container">
-        <div class="engine-strip">
-          <strong>1. Benford's Law</strong>
-          <span>P(d) = log10(1 + 1/d) (Chi-sq p &lt; 0.05)</span>
-          <div class="eng-weight">Weight: 20%</div>
-        </div>
-        <div class="engine-strip">
-          <strong>2. Semantic Duplication</strong>
-          <span>Jaccard &gt; 0.85 &amp; Levenshtein &lt; 3</span>
-          <div class="eng-weight">Weight: 35%</div>
-        </div>
-        <div class="engine-strip">
-          <strong>3. Vendor Cartel (HHI)</strong>
-          <span>HHI = &Sigma; (Market Share)&sup2; (&gt; 2500)</span>
-          <div class="eng-weight">Weight: 25%</div>
-        </div>
-        <div class="engine-strip">
-          <strong>4. Velocity Spikes</strong>
-          <span>Z-Score &gt; 3.0 (March-rush spike)</span>
-          <div class="eng-weight">Weight: 20%</div>
-        </div>
-        <div class="engine-strip">
-          <strong>5. Predictive Delay</strong>
-          <span>RandomForestRegressor(District Track)</span>
-          <div class="eng-weight">Auxiliary</div>
-        </div>
-      </div>
-
-      <!-- OUTPUT DECISIONS -->
-      <div class="output-panel">
-        <strong style="color: #f8fafc; font-size: 11px;">Composite Risk Action</strong>
-        
-        <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; border-radius: 6px; padding: 6px 8px;">
-          <strong style="color: #ef4444; font-size: 10.5px;">🚨 Score &ge; 75 (High Risk)</strong>
-          <p style="font-size: 9.5px; color: #cbd5e1; margin-top: 2px;">
-            Auto-escalated to CAG Auditor Docket in <code>review_cases</code>; Real-time Alert sent to Ministry; Payment lock recommended.
-          </p>
-        </div>
-
-        <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid #f59e0b; border-radius: 6px; padding: 6px 8px;">
-          <strong style="color: #f59e0b; font-size: 10.5px;">⚠️ Score 45–74 (Medium Risk)</strong>
-          <p style="font-size: 9.5px; color: #cbd5e1; margin-top: 2px;">
-            Advisory flag placed on District Collector's dashboard; Executive Engineer explanation required.
-          </p>
-        </div>
-
-        <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid #22c55e; border-radius: 6px; padding: 6px 8px;">
-          <strong style="color: #22c55e; font-size: 10.5px;">✅ Score &lt; 45 (Low Risk)</strong>
-          <p style="font-size: 9.5px; color: #cbd5e1; margin-top: 2px;">
-            Normal treasury clearance granted.
-          </p>
-        </div>
-      </div>
-
+  <!-- BOARD 3: FORENSIC INTELLIGENCE -->
+  <div class="board-container">
+    <div class="board-header">
+      <h2>🧠 Board 3: Pre-Disbursement Forensic Intelligence &amp; Anti-Fraud Pipeline</h2>
+      <p>5 parallel statistical algorithms feeding into a composite vulnerability score with automated threshold actions.</p>
+    </div>
+    <div class="svg-canvas">
+      {SVG3_RAW}
     </div>
   </div>
 
   <div class="page-break"></div>
 
-  <!-- BOARD 4: CODE EXECUTION & SECURITY TRACE -->
-  <div class="board-card">
-    <div class="board-title">⚡ Board 4: Full Code Request-Response Lifecycle (Front-to-Back)</div>
-    <div class="board-subtitle">Step-by-step technical execution: How a user interaction in React 19 travels through security gating to database persistence.</div>
-
-    <div class="swimlane-container">
-      <div class="swimlane-row">
-        <div class="swimlane-actor">1. React 19 UI</div>
-        <div class="code-cell active-cell">
-          <strong>MpWorkspace.tsx</strong>
-          <p>MP clicks "Submit Recommendation". Event handler dispatches payload to Axios client.</p>
-        </div>
-        <div class="code-cell">
-          <strong>api/client.ts</strong>
-          <p>Attaches <code>Authorization: Bearer &lt;JWT&gt;</code> and posts to <code>/api/v1/recommendations/submit</code>.</p>
-        </div>
-        <div class="code-cell">
-          <strong>Optimistic UI</strong>
-          <p>Sets local button loading state to prevent duplicate rapid submissions.</p>
-        </div>
-        <div class="code-cell">
-          <strong>Error Boundary</strong>
-          <p>Catches 401/403 errors and displays contextual statutory error toast.</p>
-        </div>
-        <div class="code-cell">
-          <strong>Cache Invalidation</strong>
-          <p>On 200 OK, invalidates React Query cache and badges status as "SUBMITTED".</p>
-        </div>
-      </div>
-
-      <div class="swimlane-row">
-        <div class="swimlane-actor">2. Security Gate</div>
-        <div class="code-cell">
-          <strong>backend/auth.py</strong>
-          <p>Decodes HMAC-SHA256 JWT; extracts <code>AuthenticatedUser</code> (role='MP', state='MAHARASHTRA').</p>
-        </div>
-        <div class="code-cell active-cell">
-          <strong>backend/rbac_abac.py</strong>
-          <p>Verifies MP role has 'SUBMIT' permission and record state matches user's territorial boundary.</p>
-        </div>
-        <div class="code-cell active-cell">
-          <strong>Immutability Lock</strong>
-          <p>Verifies request does not tamper with <code>sanctioned_amount</code> or primary keys.</p>
-        </div>
-        <div class="code-cell">
-          <strong>backend/scope.py</strong>
-          <p>Generates mandatory SQL fragment: <code>WHERE state_normalized = ? AND internal_mp_id = ?</code>.</p>
-        </div>
-        <div class="code-cell">
-          <strong>Boundary Check</strong>
-          <p>Rejects cross-jurisdiction requests with HTTP 403 Forbidden.</p>
-        </div>
-      </div>
-
-      <div class="swimlane-row">
-        <div class="swimlane-actor">3. Backend Engine</div>
-        <div class="code-cell active-cell">
-          <strong>backend/workflow.py</strong>
-          <p>Verifies transition from 'DRAFT' &rarr; 'SUBMITTED' is legally permitted for 'ROLE_MP'.</p>
-        </div>
-        <div class="code-cell">
-          <strong>gov_service.py</strong>
-          <p>Updates recommendation state and records district remarks.</p>
-        </div>
-        <div class="code-cell active-cell">
-          <strong>db_engine.py</strong>
-          <p>Executes parameterized UPDATE against Supabase Cloud PostgreSQL.</p>
-        </div>
-        <div class="code-cell">
-          <strong>Failover Driver</strong>
-          <p>If cloud connection drops, automatically executes against local SQLite fallback.</p>
-        </div>
-        <div class="code-cell active-cell">
-          <strong>audit_logger.py</strong>
-          <p>Inserts tamper-proof record into <code>audit_logs</code> with IP, user id, and timestamp.</p>
-        </div>
-      </div>
+  <!-- BOARD 4: AUTHORITY MATRIX -->
+  <div class="board-container">
+    <div class="board-header">
+      <h2>🛡️ Board 4: Statutory Authority Matrix (Separation of Powers)</h2>
+      <p>Demarcation of administrative rights and statutory restrictions across Indian public finance tiers.</p>
     </div>
-  </div>
 
-  <!-- BOARD 5: STATUTORY AUTHORITY MATRIX -->
-  <div class="board-card">
-    <div class="board-title">🛡️ Board 5: Statutory Authority Matrix (Separation of Powers)</div>
-    <div class="board-subtitle">Clear demarcation of powers and territorial boundaries across Indian public finance tiers.</div>
-
-    <table class="dark-table">
+    <table class="white-table">
       <thead>
         <tr>
-          <th style="width: 14%;">Role &amp; Rank</th>
-          <th style="width: 16%;">Jurisdiction Scope</th>
-          <th style="width: 35%;">Statutory Powers (What they CAN do)</th>
-          <th style="width: 35%;">Strict Restrictions (What they CANNOT do)</th>
+          <th style="width: 15%;">Role &amp; Rank</th>
+          <th style="width: 18%;">Jurisdiction Scope</th>
+          <th style="width: 33%;">Statutory Powers (Allowed)</th>
+          <th style="width: 34%;">Strict Restrictions (Prohibited)</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong style="color:#ef4444;">RANK 1<br/>MINISTRY_ADMIN</strong></td>
+          <td><strong style="color:#b91c1c;">RANK 1: MINISTRY_ADMIN</strong><br/>Central MoSPI</td>
           <td>Pan-India<br/>(National Corpus)</td>
-          <td>View all 36 States, configure system risk weights, approve central dockets, manage system users, review national audit alerts.</td>
-          <td>Cannot modify ground physical milestone records; cannot bypass district techno-economic feasibility.</td>
+          <td>View all 36 States, configure system risk weights, approve central dockets, manage system users, national audit review.</td>
+          <td>Cannot modify ground milestone records; cannot bypass district techno-feasibility scrutiny.</td>
         </tr>
         <tr>
-          <td><strong style="color:#f97316;">RANK 2<br/>STATE_NODAL</strong></td>
+          <td><strong style="color:#c2410c;">RANK 2: STATE_NODAL</strong><br/>State Planning Dept</td>
           <td>Designated State<br/>(<code>user.state</code>)</td>
-          <td>Review district dockets, grant statutory Financial Sanction (AS/FS), reject non-compliant works, manage state budget quotas.</td>
+          <td>Review district dockets, grant statutory Financial Sanction (AS/FS), reject non-compliant works, monitor state budget quotas.</td>
           <td>Cannot access, approve, or modify records of any other Indian State.</td>
         </tr>
         <tr>
-          <td><strong style="color:#eab308;">RANK 3<br/>DISTRICT_AUTHORITY</strong></td>
+          <td><strong style="color:#a16207;">RANK 3: DISTRICT_AUTHORITY</strong><br/>District Collector / DM</td>
           <td>Designated District<br/>(<code>user.district</code>)</td>
           <td>Techno-economic scrutiny, tender floating, contractor assignment, milestone updates, geo-tagged photo uploads, release final payment.</td>
           <td>Cannot recommend works; cannot sanction outside district; cannot modify treasury transaction values directly.</td>
         </tr>
         <tr>
-          <td><strong style="color:#22c55e;">RANK 4<br/>MEMBER OF PARLIAMENT</strong></td>
+          <td><strong style="color:#15803d;">RANK 4: MP</strong><br/>Lok Sabha / Rajya Sabha</td>
           <td>Parliamentary Seat<br/>(<code>user.mp_id</code>)</td>
-          <td>Draft and submit work recommendations within ₹5 Crore entitlement; track execution velocity; view constituency ledger.</td>
+          <td>Draft and submit work recommendations within &#x20B9;5 Crore entitlement; track execution velocity; view constituency ledger.</td>
           <td>Locked from editing after submission; cannot approve works; cannot access other MPs' dockets.</td>
         </tr>
         <tr>
-          <td><strong style="color:#818cf8;">RANK 5<br/>STATUTORY AUDITOR</strong></td>
-          <td>National Mandate<br/>(CAG / Independent)</td>
+          <td><strong style="color:#4338ca;">RANK 5: STATUTORY AUDITOR</strong><br/>CAG / Independent</td>
+          <td>National Mandate<br/>(Independent Oversight)</td>
           <td>Inspect Benford flags, cartel HHI scores, duplicate work dockets; create forensic audit cases; flag transactions for recovery.</td>
           <td>Read-only to financial ledgers; cannot disburse, approve, or alter financial figures.</td>
         </tr>
         <tr>
-          <td><strong style="color:#94a3b8;">RANK 6<br/>GENERAL CITIZEN</strong></td>
+          <td><strong style="color:#475569;">RANK 6: CITIZEN</strong><br/>General Public</td>
           <td>Open Public<br/>(National Read-Only)</td>
           <td>Inspect all works on interactive maps; search MP utilization; scan QR code plaques on physical assets; submit ground discrepancy feedback.</td>
           <td>Zero mutation power on official records; cannot edit or sanction works.</td>
         </tr>
       </tbody>
     </table>
-
-    <div class="callout-box">
-      <strong>🔒 Absolute Financial Immutability Policy (ABAC)</strong>
-      <p>Under <code>backend/rbac_abac.py</code>, fields including <code>sanctioned_amount</code>, <code>expenditure_amount</code>, <code>work_id</code>, and <code>internal_transaction_id</code> strictly reject generic HTTP PUT/PATCH updates. They can only be updated via verified Treasury Voucher reconciliation ledger operations.</p>
-    </div>
   </div>
 
 </div>
@@ -1029,7 +334,7 @@ HTML_CONTENT = """<!DOCTYPE html>
 """
 
 def generate_pdf():
-    print(f"[*] Writing updated Miro-canvas HTML blueprint to: {HTML_OUT}")
+    print(f"[*] Writing White-Theme HTML blueprint to: {HTML_OUT}")
     with open(HTML_OUT, "w", encoding="utf-8") as f:
         f.write(HTML_CONTENT)
     print(f"[+] HTML generated ({len(HTML_CONTENT)} bytes)")
@@ -1062,7 +367,7 @@ def generate_pdf():
         file_url
     ]
     
-    print(f"[*] Compiling landscape Miro-style PDF: {PDF_OUT} ...")
+    print(f"[*] Compiling White-Theme landscape PDF: {PDF_OUT} ...")
     res = subprocess.run(cmd, capture_output=True, text=True)
     if res.returncode != 0:
         print(f"[-] Browser returned code {res.returncode}: {res.stderr}")
@@ -1070,7 +375,7 @@ def generate_pdf():
 
     if os.path.exists(PDF_OUT):
         size = os.path.getsize(PDF_OUT)
-        print(f"[SUCCESS] PDF successfully created: {PDF_OUT} ({size:,} bytes)")
+        print(f"[SUCCESS] White-Theme PDF successfully created: {PDF_OUT} ({size:,} bytes)")
     else:
         print("[-] PDF compilation failed: output file not found.")
         sys.exit(1)

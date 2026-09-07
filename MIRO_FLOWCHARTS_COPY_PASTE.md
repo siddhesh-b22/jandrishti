@@ -1,229 +1,147 @@
-# JanDrishti — Miro Ready Copy-Paste Flowcharts
-> **How to use in Miro:**
-> 1. Open your Miro board.
-> 2. In the left toolbar, click **More apps (+)** and search for **Mermaid** (or open the Mermaid app).
-> 3. Copy any block below, paste it into the code editor, and click **Create diagram**.
-> 4. Miro will automatically lay out all shapes, connectors, colors, and labels!
+# JanDrishti — White Theme Miro Copy-Paste Flowcharts & SVG Files
+
+> **Option 1 (Recommended - 100% Beautiful in Miro):**  
+> Simply **drag and drop** the `.svg` files directly from your file explorer onto your Miro canvas! They render with crisp vectors, pure white backgrounds, clean colors, and **zero overlapping lines**:
+> - 📄 [`Miro_Flowchart_1_Architecture.svg`](file:///d:/SIH26102/Miro_Flowchart_1_Architecture.svg)
+> - 📄 [`Miro_Flowchart_2_Governance_Lifecycle.svg`](file:///d:/SIH26102/Miro_Flowchart_2_Governance_Lifecycle.svg)
+> - 📄 [`Miro_Flowchart_3_Forensic_Pipeline.svg`](file:///d:/SIH26102/Miro_Flowchart_3_Forensic_Pipeline.svg)
+>
+> **Option 2 (Mermaid Copy-Paste into Miro):**  
+> In Miro, open the **Mermaid tool** (Toolbar &rarr; `+` More tools &rarr; Mermaid), paste any code block below, and click **Create diagram**. These blocks are formatted in **pure White Theme** with **zero overlapping lines**.
 
 ---
 
-## 📋 FLOWCHART 1: Full System 5-Tier Architecture & Data Flow
+## 📋 FLOWCHART 1: Full System 5-Tier Architecture (White Theme)
 
 ```mermaid
-flowchart TD
-    %% CLIENT TIER
-    subgraph T1["TIER 1: CLIENT LAYER (React 19 + TypeScript)"]
-        UI_CITIZEN["Citizen Portal\n(Public Overview & MP Explorer)"]
-        UI_WS["Statutory Workspaces\n(MP, District, State, Auditor, Ministry)"]
-        UI_INTEL["Intelligence Center\n(Anomalies, Duplicates, Cartels)"]
-        AXIOS["Axios HTTP Interceptor\n(Bearer JWT Injection & 403 Boundary)"]
-
-        UI_CITIZEN --> AXIOS
-        UI_WS --> AXIOS
-        UI_INTEL --> AXIOS
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#ffffff', 'primaryTextColor': '#0f172a', 'primaryBorderColor': '#0284c7', 'lineColor': '#64748b', 'background': '#ffffff', 'secondaryColor': '#f8fafc', 'tertiaryColor': '#ffffff'}}}%%
+flowchart LR
+    %% TIER 1
+    subgraph T1["Tier 1: React 19 Frontend"]
+        C1["Citizen Portal\n(Overview & MP Explorer)"]
+        C2["Role Workspaces\n(MP, DM, State, Auditor)"]
+        C3["Axios Interceptor\n(Bearer JWT Token)"]
+        C1 --> C3
+        C2 --> C3
     end
 
-    %% GATEWAY TIER
-    subgraph T2["TIER 2: API GATEWAY & SECURITY (FastAPI)"]
-        ROUTER["FastAPI Router (/api/v1)\n(backend/main.py)"]
-        AUTH["JWT Auth Engine\n(backend/auth.py)"]
-        RBAC["RBAC & ABAC Policy Engine\n(backend/rbac_abac.py)"]
-        SCOPE["Territorial Scoping Engine\n(backend/scope.py)"]
-
-        AXIOS -->|HTTP REST + Bearer JWT| ROUTER
-        ROUTER --> AUTH
-        AUTH -->|Extract Identity| RBAC
-        RBAC -->|Enforce Boundary & Lock| SCOPE
+    %% TIER 2
+    subgraph T2["Tier 2: FastAPI Gateway"]
+        G1["FastAPI Gateway Router\n(backend/main.py)"]
+        G2["JWT Auth & Role Extraction\n(backend/auth.py)"]
+        G3["RBAC / ABAC Interceptor\n(backend/rbac_abac.py)"]
+        G4["Jurisdiction SQL Scoping\n(backend/scope.py)"]
+        G1 --> G2 --> G3 --> G4
     end
 
-    %% BUSINESS TIER
-    subgraph T3["TIER 3: GOVERNANCE & BUSINESS ENGINES"]
-        STATE_MACH["Workflow State Machine\n(backend/workflow.py)"]
-        GOV["Governance Operations Service\n(backend/gov_service.py)"]
-        CASES["Audit Case Docket\n(backend/cases.py)"]
-        AUDIT["Cryptographic Audit Logger\n(backend/audit_logger.py)"]
-
-        SCOPE --> STATE_MACH
-        STATE_MACH -->|Legal Transition| GOV
-        SCOPE --> CASES
-        GOV -.->|Tamper-Proof Trace| AUDIT
-        CASES -.->|Docket Mutation| AUDIT
+    %% TIER 3
+    subgraph T3["Tier 3: Governance Engine"]
+        B1["Workflow State Machine\n(backend/workflow.py)"]
+        B2["Gov Operations Service\n(backend/gov_service.py)"]
+        B3["Audit Case Docket\n(backend/cases.py)"]
+        B4["Chained Audit Logger\n(backend/audit_logger.py)"]
+        B1 --> B2
+        B2 -.-> B4
+        B3 -.-> B4
     end
 
-    %% FORENSIC TIER
-    subgraph T4["TIER 4: PRE-DISBURSEMENT FORENSIC ENGINES"]
-        BENFORD["Benford's Law Engine\n(First-digit log frequency test)"]
-        DUPE["Semantic Work Matcher\n(Levenshtein & Jaccard similarity)"]
-        CARTEL["Vendor Cartelization Engine\n(Herfindahl-Hirschman Index HHI)"]
-        VELOCITY["Expenditure Velocity Engine\n(March-rush spending spike test)"]
-        DELAY["Predictive Delay Model\n(Random Forest completion model)"]
-        RISK["Composite Vulnerability Score\n(backend/risk_engine.py)"]
-
-        ROUTER --> BENFORD
-        ROUTER --> DUPE
-        ROUTER --> CARTEL
-        ROUTER --> VELOCITY
-        ROUTER --> DELAY
-
-        BENFORD --> RISK
-        DUPE --> RISK
-        CARTEL --> RISK
-        VELOCITY --> RISK
-        DELAY --> RISK
-
-        RISK -->|Risk >= 75| CASES
+    %% TIER 4
+    subgraph T4["Tier 4: Forensics (0-100)"]
+        F1["Benford's First-Digit Law\n(Chi-Square p < 0.05)"]
+        F2["Semantic Duplicate Matcher\n(Jaccard > 0.85 & Levenshtein)"]
+        F3["Vendor Cartelization HHI\n(Concentration Index > 2500)"]
+        F4["Composite Risk Engine\n(Score >= 75 -> CAG Escalation)"]
+        F1 --> F4
+        F2 --> F4
+        F3 --> F4
     end
 
-    %% DATA TIER
-    subgraph T5["TIER 5: DUAL-ENGINE STORAGE"]
-        DB_DRIVER["Unified DB Engine\n(backend/db_engine.py)"]
-        PG[("Primary Cloud Database\nSupabase PostgreSQL")]
-        SQLITE[("Resilient Local Fallback\nSQLite 3 (database/mplads.db)")]
-
-        GOV --> DB_DRIVER
-        CASES --> DB_DRIVER
-        AUDIT --> DB_DRIVER
-
-        DB_DRIVER -->|Online| PG
-        DB_DRIVER -->|Offline Fallback| SQLITE
+    %% TIER 5
+    subgraph T5["Tier 5: Dual Database"]
+        D1["Supabase PostgreSQL\n(Primary Cloud DB)"]
+        D2["SQLite 3 (mplads.db)\n(Resilient Local Failover)"]
+        D3["Unified DB Driver\n(backend/db_engine.py)"]
+        D3 --> D1
+        D3 --> D2
     end
+
+    %% CLEAN FORWARD CONNECTORS (NO OVERLAPS)
+    C3 -->|HTTP + JWT| G1
+    G4 -->|Validated Scope| B1
+    G4 -->|Forensic Query| F1
+    B2 -->|Commit Record| D3
+    F4 -->|High Risk Case| B3
 ```
 
 ---
 
-## 📋 FLOWCHART 2: Statutory Governance & Recommendation Lifecycle (MP to Citizen)
+## 📋 FLOWCHART 2: Statutory Governance Lifecycle (White Theme - Linear Pipeline)
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#ffffff', 'primaryTextColor': '#0f172a', 'primaryBorderColor': '#16a34a', 'lineColor': '#64748b', 'background': '#ffffff'}}}%%
 flowchart TD
-    %% STAGE 1
-    S1["1. MP Drafts Proposal\nTitle, Sector, GPS, Cost <= ₹5 Cr\n(Status: DRAFT)"]
-    S2["2. MP Submits Proposal\nStatutory Edit Lock Applied\n(Status: SUBMITTED)"]
-    
-    S1 --> S2
+    %% LINEAR GOVERNANCE FLOW (NO CROSSING LINES)
+    N1["1. MP Drafts Proposal\nTitle, Sector, GPS, Cost <= ₹5 Cr\n(Status: DRAFT)"]
+    N2["2. MP Submits Proposal\nStatutory Edit Lock Applied\n(Status: SUBMITTED)"]
+    N3{"3. District Collector Scrutiny\nExecutive Engineer Feasibility Check"}
 
-    %% STAGE 2
-    DEC1{"3. District Collector Scrutiny\nExecutive Engineer feasibility & estimate check"}
-    S2 --> DEC1
+    N1 --> N2 --> N3
 
-    B_RETURN["Branch A: Defective Estimates\nReturned to MP with remarks\n(Status: RETURNED_FOR_CORRECTION)"]
-    B_REJECT1["Branch B: Prohibited Category\nViolates MoSPI Prohibited Works List\n(Status: REJECTED - Terminal)"]
-    S3["Branch C: Techno-Feasibility Passed\nDispatched to State Planning Dept\n(Status: STATE_REVIEW)"]
+    %% DISTRICT DECISION BRANCHES
+    N3_RET["Branch A: Defective Estimates\nReturned to MP with remarks\n(Status: RETURNED_FOR_CORRECTION)"]
+    N3_REJ["Branch B: Prohibited Works\nViolates MoSPI Prohibited List\n(Status: REJECTED - Terminal)"]
+    N4{"4. State Planning Department\nState Allocation Quota Review\n(Status: STATE_REVIEW)"}
 
-    DEC1 -->|Defect or Land Issue| B_RETURN
-    B_RETURN -->|MP Re-opens & Modifies| S1
-    DEC1 -->|Prohibited Work| B_REJECT1
-    DEC1 -->|Technically Feasible| S3
+    N3 -->|Defect / Land Issue| N3_RET
+    N3_RET -.->|MP Re-justifies & Modifies| N1
+    N3 -->|Prohibited Work| N3_REJ
+    N3 -->|Feasible| N4
 
-    %% STAGE 3
-    DEC2{"4. State Planning Review\nState allocation quota & budget check"}
-    S3 --> DEC2
+    %% STATE DECISION BRANCHES
+    N4_REJ["Branch A: Quota Exhausted\nState Fiscal Limit Exceeded\n(Status: REJECTED - Terminal)"]
+    N5["5. AS/FS Sanction Order\nFinancial Commitment Earmarked in DB\n(Status: SANCTIONED)"]
 
-    B_REJECT2["Branch A: Quota Exhausted\nState fiscal entitlement exceeded\n(Status: REJECTED - Terminal)"]
-    S4["Branch B: Administrative & Financial Sanction\nFormal AS/FS Sanction Order Issued\n(Status: SANCTIONED)"]
+    N4 -->|Budget Overdrawn| N4_REJ
+    N4 -->|Quota Approved| N5
 
-    DEC2 -->|Budget Exceeded| B_REJECT2
-    DEC2 -->|Quota Approved| S4
+    %% EXECUTION & VERIFICATION
+    N6["6. Tendering & Contractor Award\nWork order issued to PWD / Zilla Parishad\n(Status: IN_PROGRESS)"]
+    N7["7. Ground Milestone Tracking\n25% (Foundation) -> 50% -> 75% -> 100%\nMeasurement Book Signed on Ground"]
+    N8["8. Final Treasury Disbursement\nVoucher generated in transactions table\nFinancial amounts permanently locked\n(Status: COMPLETED)"]
+    N9["9. Geo-Tagged Photographic Verification\nTamper-proof latitude/longitude photos uploaded\nAsset Plaque with QR Code Registered\n(Status: VERIFIED)"]
+    N10["10. Public Open Ledger Audit\nCitizens inspect on map & report discrepancies\n(Status: PUBLIC_AUDIT)"]
 
-    %% STAGE 4
-    S5["5. Tendering & Contractor Award\nDistrict awards work order to PWD/ZP\n(Status: IN_PROGRESS)"]
-    S4 --> S5
-
-    S6["6. Physical Ground Execution\nMilestones: 25% -> 50% -> 75% -> 100%\nMeasurement Book signed on-site"]
-    S5 --> S6
-
-    S7["7. Final Disbursement & Treasury Voucher\nVoucher generated in transactions table\nFinancial amounts permanently locked\n(Status: COMPLETED)"]
-    S6 --> S7
-
-    %% STAGE 5
-    S8["8. Geo-Tagged Photographic Verification\nTamper-proof latitude/longitude photos uploaded\n(Status: VERIFIED)"]
-    S7 --> S8
-
-    S9["9. Public Open Ledger Plaque\nOn-site plaque QR code generated\nCitizens inspect & submit discrepancy reports\n(Status: PUBLIC_AUDIT)"]
-    S8 --> S9
+    N5 --> N6 --> N7 --> N8 --> N9 --> N10
 ```
 
 ---
 
-## 📋 FLOWCHART 3: Pre-Disbursement Forensic Intelligence & Anti-Fraud Engine
+## 📋 FLOWCHART 3: Pre-Disbursement Forensic Intelligence Pipeline (White Theme)
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#ffffff', 'primaryTextColor': '#0f172a', 'primaryBorderColor': '#c026d3', 'lineColor': '#64748b', 'background': '#ffffff'}}}%%
 flowchart TD
-    IN["Ingested Transaction / Work Record\nVoucher Amount, Contractor Name, Work Title, Date"]
-    
-    IN --> SPLIT{"Parallel Feature Extraction"}
+    VOUCHER["Ingested Voucher Record\nAmount, Contractor, Location, Timestamp"]
 
-    %% 5 ENGINES
-    SPLIT --> E1["1. Benford's Law Engine\nFormula: P(d) = log10(1 + 1/d)\nFlags unnatural voucher leading digits\nWeight: 20%"]
-    SPLIT --> E2["2. Semantic Duplicate Matcher\nFormula: Jaccard > 0.85 & Levenshtein < 3\nFlags duplicate work funded in same area\nWeight: 35%"]
-    SPLIT --> E3["3. Vendor Cartelization (HHI)\nFormula: HHI = SUM(Market Share)^2\nHHI > 2500 flags contractor monopoly\nWeight: 25%"]
-    SPLIT --> E4["4. Expenditure Velocity Engine\nFormula: Z = (Spend - Mean) / StdDev\nZ-Score > 3.0 flags March fund dumps\nWeight: 20%"]
-    SPLIT --> E5["5. Predictive Delay Model\nRandom Forest model on district performance\nFlags stalled/delayed infrastructure"]
+    VOUCHER --> E1["1. Benford's Law (Weight: 20%)\nLog-frequency first-digit test\nChi-Square p < 0.05"]
+    VOUCHER --> E2["2. Semantic Duplication (Weight: 35%)\nJaccard > 0.85 & Levenshtein < 3\nFlags double-funding in same Gram Panchayat"]
+    VOUCHER --> E3["3. Vendor Cartelization (Weight: 25%)\nHerfindahl-Hirschman Index HHI > 2500\nFlags contractor monopoly in constituency"]
+    VOUCHER --> E4["4. Velocity Outlier (Weight: 20%)\nZ-Score > 3.0 on spend timestamp\nFlags March-rush fund dumping"]
 
-    %% COMPOSITE RISK
-    E1 --> COMP["Composite Risk Calculator\nRisk Score = (0.35 x Dupe) + (0.25 x HHI) +\n(0.20 x Benford) + (0.20 x Velocity)"]
-    E2 --> COMP
-    E3 --> COMP
-    E4 --> COMP
-    E5 --> COMP
+    CALC["Composite Risk Calculator\nRisk = (0.35 x Dupe) + (0.25 x HHI) + (0.20 x Benford) + (0.20 x Velocity)"]
 
-    %% DECISION
-    COMP --> THRESHOLD{"Evaluate Risk Score"}
+    E1 --> CALC
+    E2 --> CALC
+    E3 --> CALC
+    E4 --> CALC
 
-    THRESHOLD -->|Score >= 75 (High Risk)| CRIT["CRITICAL AUDIT DOCKET\n1. Auto-create case in review_cases\n2. Escalate to CAG Auditor Workspace\n3. Real-time alert to Ministry Admin\n4. Recommended payment freeze"]
-    THRESHOLD -->|Score 45 - 74 (Medium Risk)| MED["ADVISORY WARNING\n1. Flagged on District Collector dashboard\n2. Executive Engineer justification required\n3. Field inspection queued"]
-    THRESHOLD -->|Score < 45 (Low Risk)| LOW["NORMAL CLEARANCE\nDisbursement cleared for payment"]
-```
+    CALC --> EVAL{"Evaluate Composite Risk Score"}
 
----
+    R_HIGH["🚨 CRITICAL: Score >= 75\n1. Auto-create case in review_cases\n2. Escalate to CAG Auditor Docket\n3. Real-time alert to Ministry Admin\n4. Recommended payment freeze"]
+    R_MED["⚠️ ADVISORY: Score 45 - 74\n1. Flagged on District Collector dashboard\n2. Executive Engineer explanation required\n3. Enhanced voucher scrutiny"]
+    R_LOW["✅ NORMAL: Score < 45\nStandard treasury disbursement cleared"]
 
-## 📋 FLOWCHART 4: Full Code Request-Response Lifecycle (Front-to-Back)
-
-```mermaid
-sequenceDiagram
-    autonumber
-    actor ACTOR as Statutory Official (MP or DM)
-    participant UI as React 19 Frontend (Workspace)
-    participant CLIENT as Axios Client (api/client.ts)
-    participant GATEWAY as FastAPI Gateway (backend/main.py)
-    participant AUTH as Auth Engine (backend/auth.py)
-    participant RBAC as Policy Interceptor (backend/rbac_abac.py)
-    participant STATE as State Machine (backend/workflow.py)
-    participant GOV as Governance Service (backend/gov_service.py)
-    participant AUDIT as Audit Logger (backend/audit_logger.py)
-    participant DB as Dual DB Engine (backend/db_engine.py)
-
-    ACTOR->>UI: Clicks statutory button (e.g. Submit Recommendation)
-    UI->>CLIENT: Calls api.post('/recommendations/submit', payload)
-    CLIENT->>CLIENT: Injects Bearer JWT from localStorage
-    CLIENT->>GATEWAY: POST /api/v1/recommendations/submit
-
-    Note over GATEWAY,AUTH: Step 1: Authentication & Identity Unpacking
-    GATEWAY->>AUTH: verify_bearer_token(credentials)
-    AUTH-->>GATEWAY: AuthenticatedUser (role='MP', state='MAHARASHTRA')
-
-    Note over GATEWAY,RBAC: Step 2: RBAC & ABAC Boundary Enforcement
-    GATEWAY->>RBAC: check_permission(user, Action.SUBMIT, Resource.RECOMMENDATION)
-    RBAC->>RBAC: 1. Role permission valid? (YES)<br/>2. Territorial boundary matches? (YES)<br/>3. Financial immutability respected? (YES)
-    RBAC-->>GATEWAY: Authorized = True
-
-    Note over GATEWAY,STATE: Step 3: Statutory State Machine Check
-    GATEWAY->>STATE: validate_workflow_transition(from='DRAFT', to='SUBMITTED', role='MP')
-    STATE-->>GATEWAY: Valid Transition = True
-
-    Note over GATEWAY,GOV: Step 4: Business Logic & DB Mutation
-    GATEWAY->>GOV: submit_recommendation(user, rec_id)
-    GOV->>DB: UPDATE recommendations SET workflow_status='SUBMITTED' WHERE id=?
-    DB-->>GOV: Row affected = 1
-
-    Note over GOV,AUDIT: Step 5: Cryptographic Chained Audit Logging
-    GOV->>AUDIT: record_audit_log(user, action='SUBMIT_REC', prev='DRAFT', new='SUBMITTED')
-    AUDIT->>DB: INSERT INTO audit_logs (log_id, user_id, action, timestamp, client_ip)
-    DB-->>AUDIT: Audit log committed
-
-    Note over GATEWAY,UI: Step 6: Response Serialization & UI Update
-    GOV-->>GATEWAY: Updated recommendation dictionary
-    GATEWAY-->>CLIENT: HTTP 200 OK + Pydantic v2 JSON Schema
-    CLIENT-->>UI: Resolves Promise
-    UI->>UI: Invalidates React Query cache -> updates badge to SUBMITTED
-    UI-->>ACTOR: Renders green success notification toast
+    EVAL -->|High Risk| R_HIGH
+    EVAL -->|Medium Risk| R_MED
+    EVAL -->|Low Risk| R_LOW
 ```

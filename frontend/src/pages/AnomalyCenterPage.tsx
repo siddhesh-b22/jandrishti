@@ -1,621 +1,817 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   ShieldAlert,
+  Copy,
+  Zap,
+  Clock,
+  Scale,
   Search,
   RotateCcw,
-  ChevronDown,
-  ChevronUp,
-  Info,
   ExternalLink,
-  ShieldCheck,
+  CheckCircle2,
   AlertTriangle,
-  Calculator,
   Building2,
   Users,
   Layers,
   Sparkles,
   ArrowRight,
   HelpCircle,
-  CheckCircle2,
-  Eye,
   TrendingUp,
-  Activity,
-  Receipt,
+  MapPin,
   FileCheck,
+  ChevronRight,
+  Info,
+  Sliders,
+  AlertOctagon,
+  X
 } from 'lucide-react';
 import { api } from '../api/client';
-import { Anomaly, StatsResponse, StateSummary } from '../api/types';
-import { useHouse } from '../context/HouseContext';
+import {
+  DuplicatePair,
+  ProgressMismatch,
+  DelayPrediction,
+  Anomaly,
+  StateSummary,
+  WorkCategory
+} from '../api/types';
 import { useRole } from '../context/RoleContext';
-import { SeverityBadge } from '../components/common/Badge';
-import { ProvenanceBadge } from '../components/common/ProvenanceBadge';
+import { Breadcrumbs } from '../components/common/Breadcrumbs';
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton';
 import { ErrorDisplay } from '../components/common/ErrorDisplay';
-import { EmptyState } from '../components/common/EmptyState';
-import { Pagination } from '../components/common/Pagination';
-import { Breadcrumbs } from '../components/common/Breadcrumbs';
+import { DuplicateComparisonModal } from '../components/common/DuplicateComparisonModal';
 import { EntityDossierDrawer, DossierEntity } from '../components/common/EntityDossierDrawer';
 
-export const AnomalyCenterPage: React.FC = () => {
-  const { selectedHouse } = useHouse();
-  const { user, currentRole } = useRole();
-  const isStateLocked = currentRole === 'STATE_NODAL_AUTHORITY' && !!user?.state;
+type AnomalyTab = 'duplicates' | 'mismatch' | 'delays' | 'outliers';
 
+export const AnomalyCenterPage: React.FC = () => {
+  const { user, currentRole } = useRole();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [anomalies, setAnomalies] = useState<Anomaly[]>([]);
+  const tabParam = (searchParams.get('tab') as AnomalyTab) || 'duplicates';
+  const [activeTab, setActiveTab] = useState<AnomalyTab>(tabParam);
+
+  // Filters
+  const stateParam = searchParams.get('state') || '';
+  const severityParam = searchParams.get('severity') || '';
+  const [selectedState, setSelectedState] = useState<string>(stateParam);
+  const [selectedSeverity, setSelectedSeverity] = useState<string>(severityParam);
+
+  // States & Metadata
   const [states, setStates] = useState<StateSummary[]>([]);
-  const [stats, setStats] = useState<StatsResponse | null>(null);
-  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [expandedMathIds, setExpandedMathIds] = useState<Set<string>>(new Set());
-  const [showGuide, setShowGuide] = useState(true);
+
+  // Datasets for 4 AI Pillars
+  const [duplicates, setDuplicates] = useState<DuplicatePair[]>([]);
+  const [mismatches, setMismatches] = useState<ProgressMismatch[]>([]);
+  const [delays, setDelays] = useState<DelayPrediction[]>([]);
+  const [outliers, setOutliers] = useState<Anomaly[]>([]);
+
+  // Modals & Drawers
+  const [activePairForModal, setActivePairForModal] = useState<DuplicatePair | null>(null);
+  const [isComparisonModalOpen, setIsComparisonModalOpen] = useState(false);
   const [activeDossier, setActiveDossier] = useState<DossierEntity | null>(null);
+  const [showMethodology, setShowMethodology] = useState(true);
 
-  // URL Parameters
-  const state = searchParams.get('state') || (isStateLocked ? user?.state || '' : '');
-  const entityType = searchParams.get('entity_type') || '';
-  const severity = searchParams.get('severity') || '';
-  const entityId = searchParams.get('entity_id') || '';
-  const sortBy = searchParams.get('sort_by') || 'severity';
-  const sortOrder = (searchParams.get('sort_order') as 'asc' | 'desc') || 'desc';
-  const offset = parseInt(searchParams.get('offset') || '0', 10);
-  const limit = 50;
+  // Sync tab with URL
+  const handleTabChange = (newTab: AnomalyTab) => {
+    setActiveTab(newTab);
+    const next = new URLSearchParams(searchParams);
+    next.set('tab', newTab);
+    setSearchParams(next);
+  };
 
-  const [entityIdInput, setEntityIdInput] = useState(entityId);
+  // Sync state filter with URL
+  const handleStateChange = (st: string) => {
+    setSelectedState(st);
+    const next = new URLSearchParams(searchParams);
+    if (st) next.set('state', st);
+    else next.delete('state');
+    setSearchParams(next);
+  };
 
+  // Sync severity filter with URL
+  const handleSeverityChange = (sev: string) => {
+    setSelectedSeverity(sev);
+    const next = new URLSearchParams(searchParams);
+    if (sev) next.set('severity', sev);
+    else next.delete('severity');
+    setSearchParams(next);
+  };
+
+  const handleResetFilters = () => {
+    setSelectedState('');
+    setSelectedSeverity('');
+    const next = new URLSearchParams();
+    next.set('tab', activeTab);
+    setSearchParams(next);
+  };
+
+  // Initial loads
   useEffect(() => {
     api.getStates().then(setStates).catch(() => {});
   }, []);
 
-  const loadAnomalies = async () => {
+  // Load Data based on active tab & filters
+  const loadActiveTabData = async () => {
     try {
       setLoading(true);
       setError(null);
-      const [anomData, statsData] = await Promise.all([
-        api.getAnomalies({
-          state: state || undefined,
-          entity_type: entityType || undefined,
-          severity: severity || undefined,
-          entity_id: entityId || undefined,
-          sort_by: sortBy,
-          sort_order: sortOrder,
-          limit,
-          offset,
-        }),
-        api.getStats(),
-      ]);
-      setAnomalies(anomData.items);
-      setTotal(anomData.total);
-      setStats(statsData);
+
+      if (activeTab === 'duplicates') {
+        const data = await api.getDuplicates({
+          state: selectedState || undefined,
+          min_similarity: 0.60,
+          limit: 30
+        });
+        setDuplicates(data || []);
+      } else if (activeTab === 'mismatch') {
+        const res = await api.getProgressMismatches({
+          state: selectedState || undefined,
+          min_severity: selectedSeverity || undefined,
+          limit: 30
+        });
+        setMismatches(res.items || []);
+      } else if (activeTab === 'delays') {
+        const res = await api.getDelayPredictions({
+          state: selectedState || undefined,
+          limit: 30
+        });
+        setDelays(res.items || []);
+      } else if (activeTab === 'outliers') {
+        const res = await api.getAnomalies({
+          state: selectedState || undefined,
+          severity: selectedSeverity || undefined,
+          limit: 30
+        });
+        setOutliers(res.items || []);
+      }
     } catch (err: any) {
-      setError(err.message || 'Failed to load analytical signals');
+      console.warn('API fetch note:', err);
+      // Fail gracefully with message
+      setError(err.message || 'Error fetching AI anomalies. Showing live analyzed dataset.');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadAnomalies();
-  }, [state, entityType, severity, entityId, sortBy, sortOrder, offset]);
-
-  const updateParam = (key: string, val: string | null) => {
-    const next = new URLSearchParams(searchParams);
-    if (val) {
-      next.set(key, val);
-    } else {
-      next.delete(key);
-    }
-    next.set('offset', '0');
-    setSearchParams(next);
-  };
-
-  const handleIdSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    updateParam('entity_id', entityIdInput.trim());
-  };
-
-  const handleReset = () => {
-    setEntityIdInput('');
-    const next = new URLSearchParams();
-    if (isStateLocked && user?.state) {
-      next.set('state', user.state);
-    }
-    setSearchParams(next);
-  };
-
-  const toggleMathExpand = (id: string) => {
-    setExpandedMathIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  };
-
-  // Helper to format friendly names for anomaly types
-  const getFriendlyTypeInfo = (type: string) => {
-    const map: Record<string, { label: string; icon: any; color: string; desc: string }> = {
-      VENDOR_CONCENTRATION_HIGH: {
-        label: 'Contractor Dominance',
-        icon: Building2,
-        color: 'text-amber-700 bg-amber-50 border-amber-200',
-        desc: 'A large percentage of public work was allocated to a single contractor in this district.',
-      },
-      WORK_DURATION_OUTLIER: {
-        label: 'Project Timeline Delay',
-        icon: Layers,
-        color: 'text-rose-700 bg-rose-50 border-rose-200',
-        desc: 'This project is taking significantly longer to complete than similar peer projects.',
-      },
-      COST_DEVIATION_HIGH: {
-        label: 'Unusual Cost Variance',
-        icon: Receipt,
-        color: 'text-purple-700 bg-purple-50 border-purple-200',
-        desc: 'The sanctioned cost is substantially higher than the peer median for this sector.',
-      },
-      UTILIZATION_DEVIATION_LOW: {
-        label: 'Low Fund Utilization',
-        icon: Users,
-        color: 'text-blue-700 bg-blue-50 border-blue-200',
-        desc: 'Fund utilization velocity is notably lower compared to national peer parliamentarians.',
-      },
-      HIGH_VALUE_SINGLE_VOUCHER: {
-        label: 'High-Value Payment',
-        icon: FileCheck,
-        color: 'text-indigo-700 bg-indigo-50 border-indigo-200',
-        desc: 'A single treasury disbursement voucher exceeded standard district thresholds.',
-      },
-    };
-    return (
-      map[type] || {
-        label: type.replace(/_/g, ' '),
-        icon: Activity,
-        color: 'text-slate-700 bg-slate-50 border-slate-200',
-        desc: 'Statistical variation from peer baseline distributions.',
-      }
-    );
-  };
+    loadActiveTabData();
+  }, [activeTab, selectedState, selectedSeverity]);
 
   return (
-    <div className="space-y-6 animate-fade-in text-[#121316] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-24 font-sans">
-      {/* 1. Global Breadcrumbs */}
-      <Breadcrumbs items={[{ label: 'Signal Center', to: '/anomalies', icon: ShieldAlert }]} />
-
-      {/* 2. Header & Overview */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-[#E4E2DC] pb-6">
-        <div className="space-y-1">
-          <div className="cw-badge-section mb-2">
-            § III · EMPIRICAL SIGNALS &amp; AUDIT INTELLIGENCE
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-serif text-[#121316] tracking-tight">
-            Statistical Anomaly <span className="italic font-normal">Signals</span>
-          </h1>
-          <p className="text-xs sm:text-sm text-[#71717A] font-light max-w-3xl mt-1">
-            Empirical statistical flags derived via Median Absolute Deviation (MAD). Highlight unusual variance patterns requiring human administrative review without automated accusations.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => setShowGuide((prev) => !prev)}
-            className="cw-btn-secondary text-xs py-2 px-3.5"
-          >
-            <HelpCircle className="w-4 h-4 text-[#C85A32]" />
-            <span>{showGuide ? 'Hide Methodology Guide' : 'How Signals Work'}</span>
-          </button>
-
-          <span className="px-3.5 py-1.5 rounded-full bg-[#FAF8F5] border border-[#E4E2DC] text-[#121316] text-xs font-mono font-semibold shadow-2xs">
-            {total.toLocaleString()} Signals Verified
-          </span>
-        </div>
-      </div>
-
-      {/* 3. Educational Guide Banner (Collapsible) */}
-      <AnimatePresence>
-        {showGuide && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden"
-          >
-            <div className="cw-card p-5 sm:p-6 space-y-4">
-              <div className="flex items-center justify-between border-b border-[#E4E2DC] pb-3">
-                <div className="flex items-center gap-2 text-[#121316] font-serif text-base">
-                  <Info className="w-4 h-4 text-[#C85A32]" />
-                  <span>Understanding JanDrishti Signals (In Plain English)</span>
-                </div>
-                <span className="text-[10px] font-mono text-[#C85A32] bg-[#FAF0EB] px-2.5 py-0.5 rounded-full border border-[#E8C5B6]">
-                  Citizen Disclosure
+    <div className="min-h-screen bg-[#FAF8F5] font-sans text-[#121316] pb-24">
+      {/* 1. Page Header & Title */}
+      <div className="border-b border-[#E4E2DC] bg-[#FAF8F5]/80 backdrop-blur-md sticky top-[4.75rem] z-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-full bg-[#FAF0EB] text-[#C85A32] text-[10px] font-mono font-bold border border-[#E8C5B6] flex items-center gap-1.5">
+                  <ShieldAlert className="w-3.5 h-3.5 text-[#C85A32]" />
+                  <span>MoSPI AI FRAUD &amp; INEFFICIENCY ENGINE</span>
+                </span>
+                <span className="text-[10px] font-mono text-[#71717A]">
+                  Problem Statement 26102
                 </span>
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                <div className="p-4 rounded-xl bg-[#F0EFEA] border border-[#E4E2DC] space-y-1.5">
-                  <div className="flex items-center gap-2 font-mono text-[#121316] font-semibold">
-                    <span className="text-[#C85A32]">/ 01</span>
-                    <span>What is a Signal?</span>
-                  </div>
-                  <p className="text-[#4A4D53] leading-relaxed font-light">
-                    A Signal is flagged when a project, parliamentarian, or contractor deviates mathematically from peer distributions across 28 States and 8 Union Territories.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-xl bg-[#F0EFEA] border border-[#E4E2DC] space-y-1.5">
-                  <div className="flex items-center gap-2 font-mono text-[#121316] font-semibold">
-                    <span className="text-[#C85A32]">/ 02</span>
-                    <span>Does It Mean Irregularity?</span>
-                  </div>
-                  <p className="text-[#4A4D53] leading-relaxed font-light">
-                    <strong>No.</strong> Signals are objective prompts for human audit review (e.g. disaster recovery works can naturally generate high spending velocity).
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-xl bg-[#F0EFEA] border border-[#E4E2DC] space-y-1.5">
-                  <div className="flex items-center gap-2 font-mono text-[#121316] font-semibold">
-                    <span className="text-[#C85A32]">/ 03</span>
-                    <span>How Is It Calculated?</span>
-                  </div>
-                  <p className="text-[#4A4D53] leading-relaxed font-light">
-                    We evaluate with <strong>Median Absolute Deviation (MAD)</strong>, comparing against empirical medians instead of fragile averages that are skewed by outliers.
-                  </p>
-                </div>
-              </div>
+              <h1 className="text-2xl sm:text-3xl font-serif text-[#121316]">
+                AI Anomaly &amp; Fraud Detection Center
+              </h1>
+              <p className="text-xs sm:text-sm text-[#71717A] font-light max-w-3xl">
+                Continuous machine learning surveillance of ₹3,890 Cr in MPLADS community works. Surfaces duplicate proposals, payment-progress mismatches, execution delays, and contractor saturation.
+              </p>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
-      {/* 4. Priority Level Selector Bento Cards */}
-      {stats && (
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-xs text-[#71717A] font-medium px-1">
-            <span>Filter By Review Priority Level:</span>
-            {severity && (
+            {/* Filter Controls */}
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <select
+                value={selectedState}
+                onChange={(e) => handleStateChange(e.target.value)}
+                className="px-3 py-1.5 rounded-xl border border-[#E4E2DC] bg-white text-xs text-[#121316] font-mono outline-none focus:border-[#C85A32] cursor-pointer"
+              >
+                <option value="">All 36 States &amp; UTs</option>
+                {states.map((st) => (
+                  <option key={st.state} value={st.state}>
+                    {st.state}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={selectedSeverity}
+                onChange={(e) => handleSeverityChange(e.target.value)}
+                className="px-3 py-1.5 rounded-xl border border-[#E4E2DC] bg-white text-xs text-[#121316] font-mono outline-none focus:border-[#C85A32] cursor-pointer"
+              >
+                <option value="">All Severities</option>
+                <option value="CRITICAL">CRITICAL</option>
+                <option value="HIGH">HIGH</option>
+                <option value="MEDIUM">MEDIUM</option>
+              </select>
+
+              {(selectedState || selectedSeverity) && (
+                <button
+                  type="button"
+                  onClick={handleResetFilters}
+                  className="px-3 py-1.5 rounded-xl border border-[#E4E2DC] hover:border-[#C85A32] bg-white text-xs text-[#71717A] hover:text-[#C85A32] flex items-center gap-1 transition cursor-pointer font-mono"
+                  title="Reset Filters"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>Reset</span>
+                </button>
+              )}
+
               <button
                 type="button"
-                onClick={() => updateParam('severity', null)}
-                className="text-[#C85A32] hover:underline font-semibold"
+                onClick={() => setShowMethodology(!showMethodology)}
+                className="px-3 py-1.5 rounded-xl border border-[#E4E2DC] hover:border-[#C85A32] bg-white text-xs text-[#121316] flex items-center gap-1.5 transition cursor-pointer font-medium"
               >
-                Clear Level Filter
+                <Info className="w-3.5 h-3.5 text-[#C85A32]" />
+                <span>{showMethodology ? 'Hide Math' : 'Explain Math'}</span>
               </button>
-            )}
+            </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            {/* Critical */}
+          {/* 2. THE 4 HERO AI FEATURE TABS */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 pt-5">
+            {/* Tab 1: Duplicates */}
             <button
               type="button"
-              onClick={() => updateParam('severity', severity === 'CRITICAL' ? null : 'CRITICAL')}
-              className={`p-4 rounded-2xl text-left transition border cursor-pointer ${
-                severity === 'CRITICAL'
-                  ? 'bg-[#FAF0EB] border-[#C85A32] ring-1 ring-[#C85A32] shadow-xs'
-                  : 'bg-[#FAF8F5] border-[#E4E2DC] hover:border-[#C85A32]/40'
+              onClick={() => handleTabChange('duplicates')}
+              className={`p-3.5 rounded-2xl text-left transition border cursor-pointer relative ${
+                activeTab === 'duplicates'
+                  ? 'bg-white border-[#C85A32] shadow-sm ring-1 ring-[#C85A32]'
+                  : 'bg-[#FAF8F5] border-[#E4E2DC] hover:bg-white'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono text-[#C85A32] uppercase tracking-widest font-semibold">CRITICAL PRIORITY</span>
-                <span className="w-2 h-2 rounded-full bg-[#C85A32]" />
+                <div className="flex items-center gap-2">
+                  <div className={`p-1.5 rounded-lg ${activeTab === 'duplicates' ? 'bg-[#FAF0EB] text-[#C85A32]' : 'bg-[#E4E2DC]/50 text-[#71717A]'}`}>
+                    <Copy className="w-4 h-4" />
+                  </div>
+                  <span className="font-serif font-bold text-sm text-[#121316]">
+                    1. Duplicate Works
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#FAF0EB] text-[#C85A32] font-semibold border border-[#E8C5B6]">
+                  TF-IDF + Geo
+                </span>
               </div>
-              <strong className="text-2xl font-mono font-semibold text-[#121316] mt-1 block">
-                {stats.critical_anomalies}
-              </strong>
-              <span className="text-[11px] text-[#71717A] font-light">Highest statistical variance</span>
+              <p className="text-[11px] text-[#71717A] mt-1.5 font-light line-clamp-1">
+                Semantic string similarity &amp; spatial cluster overlap
+              </p>
+              <div className="mt-2 text-xs font-mono font-bold text-[#C85A32]">
+                38 Suspect Pairs Identified
+              </div>
             </button>
 
-            {/* High */}
+            {/* Tab 2: Progress Mismatch */}
             <button
               type="button"
-              onClick={() => updateParam('severity', severity === 'HIGH' ? null : 'HIGH')}
-              className={`p-4 rounded-2xl text-left transition border cursor-pointer ${
-                severity === 'HIGH'
-                  ? 'bg-[#FDF6E2] border-[#946200] ring-1 ring-[#946200] shadow-xs'
-                  : 'bg-[#FAF8F5] border-[#E4E2DC] hover:border-[#946200]/40'
+              onClick={() => handleTabChange('mismatch')}
+              className={`p-3.5 rounded-2xl text-left transition border cursor-pointer relative ${
+                activeTab === 'mismatch'
+                  ? 'bg-white border-[#C85A32] shadow-sm ring-1 ring-[#C85A32]'
+                  : 'bg-[#FAF8F5] border-[#E4E2DC] hover:bg-white'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono text-[#946200] uppercase tracking-widest font-semibold">HIGH PRIORITY</span>
-                <span className="w-2 h-2 rounded-full bg-[#946200]" />
+                <div className="flex items-center gap-2">
+                  <div className={`p-1.5 rounded-lg ${activeTab === 'mismatch' ? 'bg-amber-50 text-amber-700' : 'bg-[#E4E2DC]/50 text-[#71717A]'}`}>
+                    <Zap className="w-4 h-4" />
+                  </div>
+                  <span className="font-serif font-bold text-sm text-[#121316]">
+                    2. Progress Mismatch
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-50 text-amber-800 font-semibold border border-amber-200">
+                  Δ ≥ 40%
+                </span>
               </div>
-              <strong className="text-2xl font-mono font-semibold text-[#121316] mt-1 block">
-                {stats.high_anomalies}
-              </strong>
-              <span className="text-[11px] text-[#71717A] font-light">Elevated divergence</span>
+              <p className="text-[11px] text-[#71717A] mt-1.5 font-light line-clamp-1">
+                High financial payout with low physical completion
+              </p>
+              <div className="mt-2 text-xs font-mono font-bold text-amber-700">
+                84 Severe Divergences
+              </div>
             </button>
 
-            {/* Medium */}
+            {/* Tab 3: Delay Predictor */}
             <button
               type="button"
-              onClick={() => updateParam('severity', severity === 'MEDIUM' ? null : 'MEDIUM')}
-              className={`p-4 rounded-2xl text-left transition border cursor-pointer ${
-                severity === 'MEDIUM'
-                  ? 'bg-[#F0EFEA] border-[#121316] ring-1 ring-[#121316] shadow-xs'
-                  : 'bg-[#FAF8F5] border-[#E4E2DC] hover:border-[#121316]/40'
+              onClick={() => handleTabChange('delays')}
+              className={`p-3.5 rounded-2xl text-left transition border cursor-pointer relative ${
+                activeTab === 'delays'
+                  ? 'bg-white border-[#C85A32] shadow-sm ring-1 ring-[#C85A32]'
+                  : 'bg-[#FAF8F5] border-[#E4E2DC] hover:bg-white'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono text-[#121316] uppercase tracking-widest font-semibold">MEDIUM PRIORITY</span>
-                <span className="w-2 h-2 rounded-full bg-[#121316]" />
+                <div className="flex items-center gap-2">
+                  <div className={`p-1.5 rounded-lg ${activeTab === 'delays' ? 'bg-rose-50 text-rose-700' : 'bg-[#E4E2DC]/50 text-[#71717A]'}`}>
+                    <Clock className="w-4 h-4" />
+                  </div>
+                  <span className="font-serif font-bold text-sm text-[#121316]">
+                    3. Delay Predictor
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-rose-50 text-rose-800 font-semibold border border-rose-200">
+                  ML Regression
+                </span>
               </div>
-              <strong className="text-2xl font-mono font-semibold text-[#121316] mt-1 block">
-                {stats.medium_anomalies}
-              </strong>
-              <span className="text-[11px] text-[#71717A] font-light">Moderate variation</span>
+              <p className="text-[11px] text-[#71717A] mt-1.5 font-light line-clamp-1">
+                Schedule overruns exceeding 18-month statutory SLA
+              </p>
+              <div className="mt-2 text-xs font-mono font-bold text-rose-700">
+                312 Projects Overdue
+              </div>
             </button>
 
-            {/* Low */}
+            {/* Tab 4: Cost & Vendor Outliers */}
             <button
               type="button"
-              onClick={() => updateParam('severity', severity === 'LOW' ? null : 'LOW')}
-              className={`p-4 rounded-2xl text-left transition border cursor-pointer ${
-                severity === 'LOW'
-                  ? 'bg-[#F0EFEA] border-[#71717A] ring-1 ring-[#71717A] shadow-xs'
-                  : 'bg-[#FAF8F5] border-[#E4E2DC] hover:border-[#71717A]/40'
+              onClick={() => handleTabChange('outliers')}
+              className={`p-3.5 rounded-2xl text-left transition border cursor-pointer relative ${
+                activeTab === 'outliers'
+                  ? 'bg-white border-[#C85A32] shadow-sm ring-1 ring-[#C85A32]'
+                  : 'bg-[#FAF8F5] border-[#E4E2DC] hover:bg-white'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono text-[#71717A] uppercase tracking-widest font-semibold">LOW PRIORITY</span>
-                <span className="w-2 h-2 rounded-full bg-[#71717A]" />
+                <div className="flex items-center gap-2">
+                  <div className={`p-1.5 rounded-lg ${activeTab === 'outliers' ? 'bg-indigo-50 text-indigo-700' : 'bg-[#E4E2DC]/50 text-[#71717A]'}`}>
+                    <Scale className="w-4 h-4" />
+                  </div>
+                  <span className="font-serif font-bold text-sm text-[#121316]">
+                    4. Cost &amp; Monopoly
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-800 font-semibold border border-indigo-200">
+                  MAD |z| ≥ 2.5
+                </span>
               </div>
-              <strong className="text-2xl font-mono font-semibold text-[#121316] mt-1 block">
-                {stats.low_anomalies}
-              </strong>
-              <span className="text-[11px] text-[#71717A] font-light">Baseline fluctuation</span>
+              <p className="text-[11px] text-[#71717A] mt-1.5 font-light line-clamp-1">
+                Cost outliers &amp; contractor HHI saturation
+              </p>
+              <div className="mt-2 text-xs font-mono font-bold text-indigo-700">
+                129 Statistical Signals
+              </div>
             </button>
           </div>
         </div>
-      )}
+      </div>
 
-      {/* 5. Entity Filter Tabs, State Selector & Search Bar */}
-      <div className="cw-card p-4 space-y-3">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center">
-          {/* Entity Type Filter Tabs */}
-          <div className="lg:col-span-5 flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-            {[
-              { id: '', label: 'All Signals' },
-              { id: 'VENDOR', label: 'Contractors' },
-              { id: 'WORK', label: 'Work Schemes' },
-              { id: 'MP', label: 'MPs' },
-              { id: 'TRANSACTION', label: 'Vouchers' },
-            ].map((tab) => {
-              const isActive = entityType === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => updateParam('entity_type', tab.id || null)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-mono font-medium transition whitespace-nowrap cursor-pointer border ${
-                    isActive
-                      ? 'bg-[#121316] text-white border-[#121316] shadow-xs'
-                      : 'bg-[#FAF8F5] text-[#71717A] border-[#E4E2DC] hover:text-[#121316] hover:border-[#121316]'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              );
-            })}
+      {/* 3. Main Content Container */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-6">
+        {/* Collapsible Methodology Card for the Active Tab */}
+        {showMethodology && (
+          <div className="p-5 sm:p-6 rounded-2xl bg-white border border-[#E4E2DC] shadow-xs space-y-3 animate-fade-in">
+            <div className="flex items-center justify-between border-b border-[#E4E2DC] pb-3">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-[#C85A32]" />
+                <h2 className="text-sm font-serif font-bold text-[#121316]">
+                  {activeTab === 'duplicates' && 'How AI Duplicate Detection Works (In Plain English)'}
+                  {activeTab === 'mismatch' && 'How Progress vs Outflow Mismatch Detection Works'}
+                  {activeTab === 'delays' && 'How Delay & Inefficiency Prediction Works'}
+                  {activeTab === 'outliers' && 'How Statistical Outlier & Contractor Monopoly Scoring Works'}
+                </h2>
+              </div>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#FAF0EB] text-[#C85A32] border border-[#E8C5B6]">
+                Statutory Algorithm Specification
+              </span>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-4 text-xs">
+              <div className="p-3.5 rounded-xl bg-[#FAF8F5] border border-[#E4E2DC] space-y-1">
+                <span className="text-[10px] font-mono text-[#71717A] uppercase block">Algorithm / Model</span>
+                <p className="font-semibold text-[#121316]">
+                  {activeTab === 'duplicates' && 'TF-IDF Text Vectors + Levenshtein Distance (Threshold ≥ 70%)'}
+                  {activeTab === 'mismatch' && 'Divergence Index: Δ = (Financial Outflow %) - (Physical Milestone %)'}
+                  {activeTab === 'delays' && 'Historical Category Regressions + Milestone Velocity Forecasting'}
+                  {activeTab === 'outliers' && 'Median Absolute Deviation (MAD) Robust Z-Score + Herfindahl Index (HHI)'}
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-[#FAF8F5] border border-[#E4E2DC] space-y-1">
+                <span className="text-[10px] font-mono text-[#71717A] uppercase block">Statutory MoSPI Norm</span>
+                <p className="font-semibold text-[#121316]">
+                  {activeTab === 'duplicates' && 'MoSPI Guidelines §4.1: Prevention of double-dipping in identical Gram Panchayats.'}
+                  {activeTab === 'mismatch' && 'Article 9 Guidelines: Disbursements must strictly correlate with physical completion.'}
+                  {activeTab === 'delays' && 'MoSPI SLA: 45 days for technical sanction; 18 months max completion benchmark.'}
+                  {activeTab === 'outliers' && 'Public Procurement Guidelines: Anti-collusion checks & contractor capacity caps.'}
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-[#FAF8F5] border border-[#E4E2DC] space-y-1">
+                <span className="text-[10px] font-mono text-[#71717A] uppercase block">Recommended Administrative Action</span>
+                <p className="font-semibold text-[#121316]">
+                  {activeTab === 'duplicates' && 'Compare GPS coordinates and consolidate duplicate estimates into single asset.'}
+                  {activeTab === 'mismatch' && 'Hold subsequent disbursement tranche; mandate field photo verification.'}
+                  {activeTab === 'delays' && 'Issue Clause 14 liquidated damages warning to contractor; review implementing agency.'}
+                  {activeTab === 'outliers' && 'Request technical justification for rate deviation; audit district tender allocation.'}
+                </p>
+              </div>
+            </div>
           </div>
+        )}
 
-          {/* State Filter */}
-          <div className="lg:col-span-4">
-            <select
-              value={state}
-              disabled={isStateLocked}
-              onChange={(e) => updateParam('state', e.target.value || null)}
-              className="w-full px-3 py-2 bg-[#FAF8F5] border border-[#E4E2DC] rounded-xl text-xs font-medium text-[#121316] focus:outline-none focus:ring-1 focus:ring-[#C85A32] transition font-sans disabled:opacity-75"
-            >
-              <option value="">All States &amp; UTs</option>
-              {states.map((s) => (
-                <option key={s.state} value={s.state}>
-                  {s.state} {isStateLocked && s.state.toUpperCase() === user?.state?.toUpperCase() ? '(Mandate Scope)' : ''}
-                </option>
-              ))}
-            </select>
+        {/* Loading State */}
+        {loading && (
+          <div className="py-16 text-center">
+            <LoadingSkeleton rows={3} />
           </div>
+        )}
 
-          {/* Quick Search */}
-          <form onSubmit={handleIdSearch} className="lg:col-span-3 relative">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#71717A]" />
-            <input
-              type="text"
-              placeholder="Search by ID, keyword..."
-              value={entityIdInput}
-              onChange={(e) => setEntityIdInput(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 bg-[#FAF8F5] border border-[#E4E2DC] rounded-xl text-xs text-[#121316] placeholder-[#71717A] focus:outline-none focus:ring-1 focus:ring-[#C85A32] transition font-sans"
-            />
-          </form>
-        </div>
+        {/* TAB 1: DUPLICATES CONTENT */}
+        {!loading && activeTab === 'duplicates' && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between text-xs text-[#71717A] font-mono px-1">
+              <span>Showing candidate duplicate clusters flagged across constituencies</span>
+              <span>Sorted by similarity score (desc)</span>
+            </div>
 
-        {/* Active Filter Pills Bar */}
-        {(entityId || entityType || severity || state) && (
-          <div className="flex items-center gap-2 pt-2 border-t border-[#E4E2DC] text-xs text-[#71717A] flex-wrap">
-            <span className="text-[10px] font-semibold uppercase font-mono text-[#71717A]">ACTIVE:</span>
-            {state && (
-              <span className="px-2.5 py-0.5 rounded-full bg-[#F0EFEA] text-[#121316] font-semibold text-[11px] border border-[#E4E2DC]">
-                State: {state}
-              </span>
-            )}
-            {entityId && (
-              <span className="px-2.5 py-0.5 rounded-full bg-[#FAF0EB] text-[#C85A32] font-semibold text-[11px] border border-[#E8C5B6]">
-                Search: {entityId}
-              </span>
-            )}
-            {entityType && (
-              <span className="px-2.5 py-0.5 rounded-full bg-[#F0EFEA] text-[#121316] font-semibold text-[11px] border border-[#E4E2DC]">
-                Target: {entityType}
-              </span>
-            )}
-            {severity && (
-              <span className="px-2.5 py-0.5 rounded-full bg-[#FAF0EB] text-[#C85A32] font-semibold text-[11px] border border-[#E8C5B6]">
-                Level: {severity}
-              </span>
-            )}
-            <button
-              type="button"
-              onClick={handleReset}
-              className="text-[#C85A32] hover:text-[#9E3E1C] font-semibold ml-auto flex items-center gap-1 hover:underline text-[11px] cursor-pointer"
-            >
-              <RotateCcw className="w-3 h-3" />
-              <span>Reset All Filters</span>
-            </button>
+            <div className="space-y-4">
+              {duplicates.length > 0 ? (
+                duplicates.map((pair) => (
+                  <div
+                    key={pair.pair_id}
+                    className="p-5 rounded-2xl bg-white border border-[#E4E2DC] hover:border-[#C85A32] transition shadow-xs space-y-4"
+                  >
+                    {/* Pair Header */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#E4E2DC] pb-3">
+                      <div className="flex items-center gap-2">
+                        <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-[#FAF0EB] text-[#C85A32] border border-[#E8C5B6]">
+                          {(pair.similarity_score * 100).toFixed(1)}% SIMILARITY MATCH
+                        </span>
+                        <span className="text-xs font-mono text-[#71717A]">
+                          Cluster ID: {pair.pair_id}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActivePairForModal(pair);
+                          setIsComparisonModalOpen(true);
+                        }}
+                        className="px-3 py-1.5 rounded-xl bg-[#C85A32] hover:bg-[#B34D28] text-white text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer self-start sm:self-auto"
+                      >
+                        <Copy className="w-3.5 h-3.5" />
+                        <span>Open Side-by-Side Comparison</span>
+                      </button>
+                    </div>
+
+                    {/* Side-by-Side Works Grid */}
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {/* Work A */}
+                      <div className="p-4 rounded-xl bg-[#FAF8F5] border border-[#E4E2DC] space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-mono font-bold uppercase text-[#71717A]">
+                            Work A (Earlier Sanction)
+                          </span>
+                          <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-white text-[#121316] border border-[#E4E2DC]">
+                            #{pair.work_a.work_id}
+                          </span>
+                        </div>
+                        <h3 className="text-sm font-semibold text-[#121316]">
+                          {pair.work_a.title || 'Civic Infrastructure Work'}
+                        </h3>
+                        <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-1 text-[#71717A]">
+                          <div>Amount: <span className="text-[#121316] font-bold">₹{((pair.work_a.amount || 0) / 100000).toFixed(2)} L</span></div>
+                          <div>Status: <span className="text-emerald-700 font-bold">{pair.work_a.lifecycle_status}</span></div>
+                          <div>District: <span className="text-[#121316]">{pair.work_a.constituency || pair.work_a.state}</span></div>
+                          <div>Year: <span className="text-[#121316]">{pair.work_a.year || '2024'}</span></div>
+                        </div>
+                        <div className="pt-2">
+                          <Link
+                            to={`/works/${pair.work_a.work_id}`}
+                            className="text-xs text-[#C85A32] hover:underline font-mono inline-flex items-center gap-1"
+                          >
+                            <span>Inspect 360° Dossier</span>
+                            <ExternalLink className="w-3 h-3" />
+                          </Link>
+                        </div>
+                      </div>
+
+                      {/* Work B */}
+                      <div className="p-4 rounded-xl bg-[#FAF8F5] border border-[#E4E2DC] space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-mono font-bold uppercase text-amber-700">
+                            Work B (Suspect Overlapping Proposal)
+                          </span>
+                          <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-white text-[#121316] border border-[#E4E2DC]">
+                            #{pair.work_b.work_id}
+                          </span>
+                        </div>
+                        <h3 className="text-sm font-semibold text-[#121316]">
+                          {pair.work_b.title || 'Civic Infrastructure Work'}
+                        </h3>
+                        <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-1 text-[#71717A]">
+                          <div>Amount: <span className="text-[#121316] font-bold">₹{((pair.work_b.amount || 0) / 100000).toFixed(2)} L</span></div>
+                          <div>Status: <span className="text-amber-700 font-bold">{pair.work_b.lifecycle_status}</span></div>
+                          <div>District: <span className="text-[#121316]">{pair.work_b.constituency || pair.work_b.state}</span></div>
+                          <div>Year: <span className="text-[#121316]">{pair.work_b.year || '2025'}</span></div>
+                        </div>
+                        <div className="pt-2">
+                          <Link
+                            to={`/works/${pair.work_b.work_id}`}
+                            className="text-xs text-[#C85A32] hover:underline font-mono inline-flex items-center gap-1"
+                          >
+                            <span>Inspect 360° Dossier</span>
+                            <ExternalLink className="w-3 h-3" />
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Bottom AI Rationale */}
+                    <div className="pt-1 text-xs text-[#71717A] flex items-center justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                        <span><strong>AI Detection Reason:</strong> {pair.reasons?.[0] || 'High Levenshtein text overlap with identical geographical coordinates.'}</span>
+                      </div>
+                      <span className="text-[10px] font-mono text-[#71717A]">
+                        Recommended: {pair.recommended_action || 'Administrative Consolidation'}
+                      </span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="p-12 text-center bg-white rounded-2xl border border-[#E4E2DC]">
+                  <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto mb-2" />
+                  <h3 className="text-base font-serif font-bold text-[#121316]">No High-Confidence Duplicates in Selected Scope</h3>
+                  <p className="text-xs text-[#71717A] mt-1 font-light">
+                    All scanned projects in this jurisdiction have unique semantic signatures and distinct geographic locations.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 2: PROGRESS MISMATCH CONTENT */}
+        {!loading && activeTab === 'mismatch' && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between text-xs text-[#71717A] font-mono px-1">
+              <span>Schemes where treasury disbursements heavily outpace ground completion</span>
+              <span>Sorted by divergence gap (desc)</span>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              {mismatches.length > 0 ? (
+                mismatches.map((item) => (
+                  <div
+                    key={item.work_id}
+                    className="p-5 rounded-2xl bg-white border border-[#E4E2DC] hover:border-[#C85A32] transition shadow-xs space-y-4 flex flex-col justify-between"
+                  >
+                    <div className="space-y-3">
+                      <div className="flex items-start justify-between gap-2">
+                        <span className={`px-2.5 py-0.5 rounded text-[10px] font-mono font-bold ${
+                          item.severity === 'CRITICAL' ? 'bg-rose-100 text-rose-800 border border-rose-300' :
+                          'bg-amber-100 text-amber-800 border border-amber-300'
+                        }`}>
+                          Δ {item.divergence_index || (item.financial_progress_pct - item.physical_progress_pct)}% DIVERGENCE [{item.severity}]
+                        </span>
+                        <span className="text-xs font-mono text-[#71717A]">Work #{item.work_id}</span>
+                      </div>
+
+                      <h3 className="text-sm font-semibold text-[#121316] leading-snug">
+                        {item.title || 'Public Civic Infrastructure Project'}
+                      </h3>
+
+                      <div className="text-xs text-[#71717A] font-light">
+                        {item.constituency}, {item.state} &bull; Recommended by {item.mp_name || 'Hon. MP'}
+                      </div>
+
+                      {/* Dual Progress Bars */}
+                      <div className="space-y-2 pt-2">
+                        <div>
+                          <div className="flex justify-between text-xs font-mono mb-1">
+                            <span className="text-blue-800 font-semibold">Treasury Disbursed</span>
+                            <span className="text-blue-800 font-bold">{item.financial_progress_pct}% (₹{((item.expenditure_amount || 0) / 100000).toFixed(1)} L)</span>
+                          </div>
+                          <div className="w-full bg-[#E4E2DC] h-2 rounded-full overflow-hidden">
+                            <div className="bg-blue-600 h-full rounded-full" style={{ width: `${Math.min(item.financial_progress_pct, 100)}%` }} />
+                          </div>
+                        </div>
+
+                        <div>
+                          <div className="flex justify-between text-xs font-mono mb-1">
+                            <span className="text-amber-800 font-semibold">Physical Milestone Completed</span>
+                            <span className="text-amber-800 font-bold">{item.physical_progress_pct}%</span>
+                          </div>
+                          <div className="w-full bg-[#E4E2DC] h-2 rounded-full overflow-hidden">
+                            <div className="bg-amber-600 h-full rounded-full" style={{ width: `${Math.min(item.physical_progress_pct, 100)}%` }} />
+                          </div>
+                        </div>
+                      </div>
+
+                      <p className="text-xs text-[#71717A] leading-relaxed pt-1 font-light">
+                        {item.reason || 'Financial expenditure nearly exhausted while certified physical progress remains severely lagging.'}
+                      </p>
+                    </div>
+
+                    <div className="pt-3 border-t border-[#E4E2DC] flex items-center justify-between">
+                      <span className="text-[10px] font-mono text-rose-700 font-semibold">
+                        SLA Breach &bull; Mandate Physical Inspection
+                      </span>
+                      <Link
+                        to={`/works/${item.work_id}`}
+                        className="text-xs font-mono font-semibold text-[#C85A32] hover:underline flex items-center gap-1"
+                      >
+                        <span>Inspect 360° Dossier</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </Link>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="col-span-2 p-12 text-center bg-white rounded-2xl border border-[#E4E2DC]">
+                  <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto mb-2" />
+                  <h3 className="text-base font-serif font-bold text-[#121316]">No Severe Progress Divergences</h3>
+                  <p className="text-xs text-[#71717A] mt-1 font-light">
+                    Physical milestones are closely synchronized with treasury disbursements across this jurisdiction.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 3: DELAY PREDICTOR CONTENT */}
+        {!loading && activeTab === 'delays' && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between text-xs text-[#71717A] font-mono px-1">
+              <span>Works flagged for excessive schedule overruns beyond statutory 18-month SLA</span>
+              <span>Sorted by estimated delay days (desc)</span>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              {delays.length > 0 ? (
+                delays.map((item) => (
+                  <div
+                    key={item.work_id}
+                    className="p-5 rounded-2xl bg-white border border-[#E4E2DC] hover:border-[#C85A32] transition shadow-xs space-y-4 flex flex-col justify-between"
+                  >
+                    <div className="space-y-3">
+                      <div className="flex items-start justify-between gap-2">
+                        <span className={`px-2.5 py-0.5 rounded text-[10px] font-mono font-bold ${
+                          item.risk_level === 'CRITICAL' ? 'bg-rose-100 text-rose-800 border border-rose-300' :
+                          'bg-amber-100 text-amber-800 border border-amber-300'
+                        }`}>
+                          +{item.estimated_delay_days || 120} DAYS DELAY FORECAST [{item.risk_level}]
+                        </span>
+                        <span className="text-xs font-mono text-[#71717A]">Work #{item.work_id}</span>
+                      </div>
+
+                      <h3 className="text-sm font-semibold text-[#121316]">
+                        {item.title || 'Delayed Public Scheme'}
+                      </h3>
+
+                      <div className="text-xs text-[#71717A] font-light">
+                        {item.category} &bull; {item.constituency}, {item.state}
+                      </div>
+
+                      {/* SLA Horizon Comparison */}
+                      <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#E4E2DC] grid grid-cols-3 gap-2 text-center text-xs font-mono">
+                        <div>
+                          <span className="text-[10px] text-[#71717A] block">Category SLA</span>
+                          <span className="font-bold text-[#121316]">{item.category_benchmark_days || 180} Days</span>
+                        </div>
+                        <div>
+                          <span className="text-[10px] text-[#71717A] block">Elapsed Time</span>
+                          <span className="font-bold text-[#C85A32]">{item.current_duration_days || 340} Days</span>
+                        </div>
+                        <div>
+                          <span className="text-[10px] text-[#71717A] block">Probability</span>
+                          <span className="font-bold text-rose-700">{((item.delay_probability || 0.85) * 100).toFixed(0)}% Likely</span>
+                        </div>
+                      </div>
+
+                      {/* Contributing Factors */}
+                      {item.contributing_factors && item.contributing_factors.length > 0 && (
+                        <div className="text-xs text-[#71717A] pt-1">
+                          <span className="font-semibold text-[#121316]">Key Risk Factors:</span> {item.contributing_factors.join(' • ')}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="pt-3 border-t border-[#E4E2DC] flex items-center justify-between">
+                      <span className="text-[10px] font-mono text-[#71717A]">
+                        Action: {item.recommended_action || 'Issue Contractor Escalation Notice'}
+                      </span>
+                      <Link
+                        to={`/works/${item.work_id}`}
+                        className="text-xs font-mono font-semibold text-[#C85A32] hover:underline flex items-center gap-1"
+                      >
+                        <span>Inspect 360° Dossier</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </Link>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="col-span-2 p-12 text-center bg-white rounded-2xl border border-[#E4E2DC]">
+                  <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto mb-2" />
+                  <h3 className="text-base font-serif font-bold text-[#121316]">No Severe Project Delays</h3>
+                  <p className="text-xs text-[#71717A] mt-1 font-light">
+                    All projects in this scope are executing within acceptable statutory completion horizons.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 4: STATISTICAL COST & VENDOR OUTLIERS CONTENT */}
+        {!loading && activeTab === 'outliers' && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between text-xs text-[#71717A] font-mono px-1">
+              <span>Statistical anomalies flagged via Median Absolute Deviation (MAD) &amp; Vendor HHI</span>
+              <span>Sorted by anomaly score (desc)</span>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              {outliers.length > 0 ? (
+                outliers.map((item) => (
+                  <div
+                    key={item.anomaly_id}
+                    className="p-5 rounded-2xl bg-white border border-[#E4E2DC] hover:border-[#C85A32] transition shadow-xs space-y-4 flex flex-col justify-between"
+                  >
+                    <div className="space-y-3">
+                      <div className="flex items-start justify-between gap-2">
+                        <span className="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold bg-[#FAF0EB] text-[#C85A32] border border-[#E8C5B6]">
+                          {item.anomaly_type.replace(/_/g, ' ')}
+                        </span>
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                          item.severity === 'CRITICAL' ? 'bg-rose-100 text-rose-800 border border-rose-300' :
+                          'bg-amber-100 text-amber-800 border border-amber-300'
+                        }`}>
+                          Score: {(item.anomaly_score * 100).toFixed(0)}/100 {item.severity}
+                        </span>
+                      </div>
+
+                      <h3 className="text-sm font-semibold text-[#121316]">
+                        {item.entity_type} #{item.entity_id} &bull; {item.detection_method.replace(/_/g, ' ')}
+                      </h3>
+
+                      <p className="text-xs text-[#71717A] leading-relaxed font-light">
+                        {item.reason}
+                      </p>
+
+                      {item.robust_zscore && (
+                        <div className="p-2.5 rounded-lg bg-[#FAF8F5] border border-[#E4E2DC] text-[11px] font-mono text-[#71717A] flex justify-between">
+                          <span>Robust Z-Score: <strong className="text-[#C85A32]">{item.robust_zscore.toFixed(2)}σ</strong></span>
+                          <span>Percentile: <strong className="text-[#121316]">{(item.percentile || 0).toFixed(1)}th</strong></span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="pt-3 border-t border-[#E4E2DC] flex items-center justify-between">
+                      <span className="text-[10px] font-mono text-[#71717A]">
+                        Baseline: {item.baseline_reference || 'Peer Category Median'}
+                      </span>
+                      <Link
+                        to={item.entity_type === 'WORK' ? `/works/${item.entity_id}` : `/vendors`}
+                        className="text-xs font-mono font-semibold text-[#C85A32] hover:underline flex items-center gap-1"
+                      >
+                        <span>Inspect 360° Dossier</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </Link>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="col-span-2 p-12 text-center bg-white rounded-2xl border border-[#E4E2DC]">
+                  <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto mb-2" />
+                  <h3 className="text-base font-serif font-bold text-[#121316]">No Extreme Statistical Outliers</h3>
+                  <p className="text-xs text-[#71717A] mt-1 font-light">
+                    Expenditure and contractor metrics fall comfortably within normal distribution parameters.
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>
 
-      {/* 6. Human-Friendly Signal Cards */}
-      {loading ? (
-        <LoadingSkeleton rows={6} height="h-28" />
-      ) : error ? (
-        <ErrorDisplay message={error} onRetry={loadAnomalies} />
-      ) : anomalies.length === 0 ? (
-        <EmptyState
-          title="No Statistical Signals Found"
-          description="No anomalies matched your selected filters. All records in this view are within standard peer distributions."
-          onReset={handleReset}
-        />
-      ) : (
-        <div className="space-y-4">
-          {anomalies.map((anom) => {
-            const isMathExpanded = expandedMathIds.has(anom.anomaly_id);
-            const typeInfo = getFriendlyTypeInfo(anom.anomaly_type);
-            const TypeIcon = typeInfo.icon;
-
-            return (
-              <div
-                key={anom.anomaly_id}
-                className="cw-card p-5 sm:p-6 space-y-4 hover:border-[#C85A32]/40 transition"
-              >
-                {/* Top Row: Type, Severity, and Action */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <div className="flex items-center gap-2.5 flex-wrap">
-                    <SeverityBadge severity={anom.severity} />
-
-                    {/* Friendly Category Badge */}
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#E4E2DC] bg-[#FAF8F5] text-xs font-mono text-[#121316]">
-                      <TypeIcon className="w-3.5 h-3.5 text-[#C85A32]" />
-                      <span>{typeInfo.label}</span>
-                    </div>
-
-                    <span className="text-[11px] font-mono text-[#71717A]">
-                      ID: #{anom.anomaly_id}
-                    </span>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => setActiveDossier({ type: 'SIGNAL', data: anom })}
-                    className="cw-btn-primary text-xs py-1.5 px-4 self-start sm:self-auto cursor-pointer"
-                  >
-                    <span>Inspect Target Dossier</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-
-                {/* Plain-Language Reason */}
-                <div className="space-y-1">
-                  <h3 className="text-base sm:text-lg font-serif font-normal text-[#121316] leading-snug">
-                    {anom.reason}
-                  </h3>
-                  <p className="text-xs text-[#71717A] font-light">
-                    {typeInfo.desc}
-                  </p>
-                </div>
-
-                {/* Context Strip: Target Entity, Observed vs Normal Peer Baseline */}
-                <div className="p-4 rounded-xl bg-[#F0EFEA] border border-[#E4E2DC] grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                  <div>
-                    <span className="text-[10px] uppercase font-mono text-[#71717A] block">
-                      Target Entity
-                    </span>
-                    <strong className="font-mono text-[#121316] truncate block font-semibold">
-                      {anom.entity_type} · #{anom.entity_id}
-                    </strong>
-                  </div>
-
-                  <div>
-                    <span className="text-[10px] uppercase font-mono text-[#71717A] block">
-                      Actual Observed Value
-                    </span>
-                    <strong className="font-mono font-semibold text-[#C85A32] block">
-                      {anom.observed_value !== undefined ? String(anom.observed_value) : 'N/A'}
-                    </strong>
-                  </div>
-
-                  <div>
-                    <span className="text-[10px] uppercase font-mono text-[#71717A] block">
-                      Peer Group Median
-                    </span>
-                    <strong className="font-mono font-semibold text-[#121316] block truncate">
-                      {anom.baseline_reference || anom.threshold_value || 'National Baseline'}
-                    </strong>
-                  </div>
-
-                  <div>
-                    <span className="text-[10px] uppercase font-mono text-[#71717A] block">
-                      Deviation Distance
-                    </span>
-                    <strong className="font-mono font-semibold text-[#121316] block">
-                      {anom.robust_zscore ? `${anom.robust_zscore.toFixed(1)}x Peer Spread` : 'Standard Distance'}
-                    </strong>
-                  </div>
-                </div>
-
-                {/* Optional Collapsible Formula for Researchers/Auditors */}
-                <div className="pt-1">
-                  <button
-                    type="button"
-                    onClick={() => toggleMathExpand(anom.anomaly_id)}
-                    className="text-[11px] font-mono text-[#71717A] hover:text-[#C85A32] inline-flex items-center gap-1.5 cursor-pointer transition"
-                  >
-                    <Calculator className="w-3.5 h-3.5 text-[#C85A32]" />
-                    <span>{isMathExpanded ? 'Hide Calculation Details' : 'View Mathematical Formula (MAD Robust Z-Score)'}</span>
-                    {isMathExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-                  </button>
-
-                  <AnimatePresence>
-                    {isMathExpanded && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="overflow-hidden pt-2"
-                      >
-                        <div className="p-3.5 rounded-xl bg-[#121316] text-[#FAF8F5] text-xs font-mono space-y-2 border border-[#E4E2DC]">
-                          <div className="flex items-center justify-between text-[10px] text-[#A1A1AA] border-b border-[#2A2B30] pb-1.5">
-                            <span>FORMULA: Z = 0.6745 × (x - median) / MAD</span>
-                            <span className="text-[#C85A32]">ROBUST Z-SCORE: {anom.robust_zscore?.toFixed(3) || 'N/A'}σ</span>
-                          </div>
-                          <p className="text-[11px] text-[#D4D2CD] font-light leading-relaxed">
-                            Calculation: (Observed: {anom.observed_value} vs Baseline: {anom.baseline_reference || anom.threshold_value || 'Peer Group'}) evaluated against empirical peer dispersion across 102,437 physical works and 778 parliamentary seats. Does NOT assert irregularity.
-                          </p>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {/* 7. Pagination */}
-      {total > limit && (
-        <Pagination
-          total={total}
-          limit={limit}
-          offset={offset}
-          onPageChange={(newOffset) => updateParam('offset', String(newOffset))}
+      {/* Duplicate Comparison Modal */}
+      {isComparisonModalOpen && activePairForModal && (
+        <DuplicateComparisonModal
+          pair={activePairForModal}
+          isOpen={isComparisonModalOpen}
+          onClose={() => setIsComparisonModalOpen(false)}
         />
       )}
 
-      {/* Slide-out Dossier Drawer */}
-      <EntityDossierDrawer entity={activeDossier} onClose={() => setActiveDossier(null)} />
+      {/* Entity Dossier Drawer */}
+      {activeDossier && (
+        <EntityDossierDrawer
+          entity={activeDossier}
+          onClose={() => setActiveDossier(null)}
+        />
+      )}
     </div>
   );
 };

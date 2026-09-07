@@ -13,7 +13,6 @@ const WorkExplorerPage = lazy(() => import('./pages/WorkExplorerPage').then(m =>
 const WorkDetailPage = lazy(() => import('./pages/WorkDetailPage').then(m => ({ default: m.WorkDetailPage })));
 const AnomalyCenterPage = lazy(() => import('./pages/AnomalyCenterPage').then(m => ({ default: m.AnomalyCenterPage })));
 const CasesAlertsPage = lazy(() => import('./pages/CasesAlertsPage').then(m => ({ default: m.CasesAlertsPage })));
-const DuplicateDetectionPage = lazy(() => import('./pages/DuplicateDetectionPage').then(m => ({ default: m.DuplicateDetectionPage })));
 const DataQualityPage = lazy(() => import('./pages/DataQualityPage').then(m => ({ default: m.DataQualityPage })));
 const MpExplorerPage = lazy(() => import('./pages/MpExplorerPage').then(m => ({ default: m.MpExplorerPage })));
 const MpDetailPage = lazy(() => import('./pages/MpDetailPage').then(m => ({ default: m.MpDetailPage })));
@@ -111,7 +110,7 @@ export const App: React.FC = () => {
                   <Route path="anomalies" element={<AnomalyCenterPage />} />
                   <Route path="cases" element={<CasesAlertsPage />} />
                   <Route path="alerts" element={<CasesAlertsPage />} />
-                  <Route path="duplicates" element={<DuplicateDetectionPage />} />
+                  <Route path="duplicates" element={<Navigate to="/anomalies?tab=duplicates" replace />} />
                   <Route path="data-quality" element={<DataQualityPage />} />
                   <Route path="mps" element={<MpExplorerPage />} />
                   <Route path="mps/:mpId" element={<MpDetailPage />} />

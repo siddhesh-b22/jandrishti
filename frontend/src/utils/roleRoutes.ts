@@ -19,6 +19,27 @@ export function getRoleHomeRoute(role?: string | null): string {
   }
 }
 
+export function getRoleHomeLabel(role?: string | null): string {
+  switch (role) {
+    case 'MINISTRY_ADMIN':
+    case 'MINISTRY_OFFICIAL':
+      return 'National Command';
+    case 'STATE_NODAL_AUTHORITY':
+    case 'STATE_AUTHORITY':
+      return 'State Console';
+    case 'DISTRICT_AUTHORITY':
+      return 'District Hub';
+    case 'MP':
+      return 'Constituency Desk';
+    case 'AUDITOR':
+    case 'ANALYST':
+      return 'Audit Docket';
+    case 'CITIZEN':
+    default:
+      return 'Overview & Map';
+  }
+}
+
 export interface NavItemConfig {
   to: string;
   label: string;
@@ -38,11 +59,12 @@ export interface RoleNavStructure {
 
 export function getNavStructureForRole(role?: string | null): RoleNavStructure {
   const homeRoute = getRoleHomeRoute(role);
-  
+  const homeLabel = getRoleHomeLabel(role);
+
   return {
-    workspaceLink: { to: homeRoute, label: 'Workspace' },
+    workspaceLink: { to: homeRoute, label: homeLabel },
     primaryLinks: [
-      { to: homeRoute, label: 'Overview & Map' },
+      { to: homeRoute, label: homeLabel },
       { to: '/anomalies', label: 'AI Anomaly Center' },
       { to: '/works', label: 'Public Works' },
       { to: '/mps', label: 'MP Tracker' },

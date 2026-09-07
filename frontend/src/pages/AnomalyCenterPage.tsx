@@ -53,8 +53,12 @@ export const AnomalyCenterPage: React.FC = () => {
   const tabParam = (searchParams.get('tab') as AnomalyTab) || 'duplicates';
   const [activeTab, setActiveTab] = useState<AnomalyTab>(tabParam);
 
+  // Authority Scope Guards
+  const isStateLocked = (currentRole === 'STATE_NODAL_AUTHORITY' || currentRole === 'DISTRICT_AUTHORITY') && !!user?.state;
+  const userJurisdictionState = user?.state ? user.state.toUpperCase() : '';
+
   // Filters
-  const stateParam = searchParams.get('state') || '';
+  const stateParam = searchParams.get('state') || (isStateLocked ? userJurisdictionState : '');
   const severityParam = searchParams.get('severity') || '';
   const [selectedState, setSelectedState] = useState<string>(stateParam);
   const [selectedSeverity, setSelectedSeverity] = useState<string>(severityParam);
@@ -130,13 +134,23 @@ export const AnomalyCenterPage: React.FC = () => {
   };
 
   const handleResetFilters = () => {
-    setSelectedState('');
+    setSelectedState(isStateLocked ? userJurisdictionState : '');
     setSelectedSeverity('');
     setCurrentPage(1);
     const next = new URLSearchParams();
     next.set('tab', activeTab);
+    if (isStateLocked && userJurisdictionState) {
+      next.set('state', userJurisdictionState);
+    }
     setSearchParams(next);
   };
+
+  // Sync state filter with role changes
+  useEffect(() => {
+    if (isStateLocked && userJurisdictionState) {
+      setSelectedState(userJurisdictionState);
+    }
+  }, [isStateLocked, userJurisdictionState]);
 
   // Initial loads: States & Overall Tab Counts
   useEffect(() => {
@@ -276,13 +290,14 @@ export const AnomalyCenterPage: React.FC = () => {
             <div className="flex items-center gap-2.5 flex-wrap">
               <select
                 value={selectedState}
+                disabled={isStateLocked}
                 onChange={(e) => handleStateChange(e.target.value)}
-                className="px-3 py-1.5 rounded-xl border border-[#E4E2DC] bg-white text-xs text-[#121316] font-mono outline-none focus:border-[#C85A32] cursor-pointer"
+                className="px-3 py-1.5 rounded-xl border border-[#E4E2DC] bg-white text-xs text-[#121316] font-mono outline-none focus:border-[#C85A32] cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed"
               >
-                <option value="">All 36 States &amp; UTs</option>
+                {!isStateLocked && <option value="">All 36 States &amp; UTs</option>}
                 {states.map((st) => (
                   <option key={st.state} value={st.state}>
-                    {st.state}
+                    {st.state} {isStateLocked && st.state.toUpperCase() === userJurisdictionState ? '(Mandate Scope)' : ''}
                   </option>
                 ))}
               </select>

@@ -20,6 +20,7 @@ import {
 import { api } from '../api/client';
 import { MP, StateSummary } from '../api/types';
 import { useHouse } from '../context/HouseContext';
+import { useRole } from '../context/RoleContext';
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton';
 import { ErrorDisplay } from '../components/common/ErrorDisplay';
 import { EmptyState } from '../components/common/EmptyState';
@@ -31,7 +32,12 @@ import { HelpTooltip } from '../components/common/HelpTooltip';
 export const MpExplorerPage: React.FC = () => {
   const navigate = useNavigate();
   const { selectedHouse, setSelectedHouse, houseLabel } = useHouse();
+  const { user, currentRole } = useRole();
   const [searchParams, setSearchParams] = useSearchParams();
+
+  // Scope Guards
+  const isStateLocked = (currentRole === 'STATE_NODAL_AUTHORITY' || currentRole === 'DISTRICT_AUTHORITY') && !!user?.state;
+  const userJurisdictionState = user?.state ? user.state.toUpperCase() : '';
 
   const [mps, setMps] = useState<MP[]>([]);
   const [states, setStates] = useState<StateSummary[]>([]);
@@ -43,7 +49,7 @@ export const MpExplorerPage: React.FC = () => {
 
   // URL Query Parameters
   const search = searchParams.get('search') || '';
-  const state = searchParams.get('state') || '';
+  const state = searchParams.get('state') || (isStateLocked ? userJurisdictionState : '');
   const sortBy = searchParams.get('sort_by') || 'allocated_amount';
   const sortOrder = (searchParams.get('sort_order') as 'asc' | 'desc') || 'desc';
   const offset = parseInt(searchParams.get('offset') || '0', 10);
@@ -237,13 +243,14 @@ export const MpExplorerPage: React.FC = () => {
 
           <select
             value={state}
+            disabled={isStateLocked}
             onChange={(e) => updateParam('state', e.target.value || null)}
-            className="px-4 py-2.5 rounded-xl border border-[#E4E2DC] bg-[#FAF8F5] text-xs font-medium text-[#121316] focus:outline-none focus:ring-1 focus:ring-[#C85A32] shadow-2xs min-h-[44px]"
+            className="px-4 py-2.5 rounded-xl border border-[#E4E2DC] bg-[#FAF8F5] text-xs font-medium text-[#121316] focus:outline-none focus:ring-1 focus:ring-[#C85A32] shadow-2xs min-h-[44px] disabled:opacity-75 disabled:cursor-not-allowed"
           >
-            <option value="">All 28 States &amp; UTs ({states.length})</option>
+            {!isStateLocked && <option value="">All 28 States &amp; UTs ({states.length})</option>}
             {states.map((s) => (
               <option key={s.state} value={s.state}>
-                {s.state} ({s.total_mps} MPs)
+                {s.state} ({s.total_mps} MPs) {isStateLocked && s.state.toUpperCase() === userJurisdictionState ? '(Mandate Scope)' : ''}
               </option>
             ))}
           </select>

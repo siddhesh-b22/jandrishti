@@ -313,6 +313,7 @@ export interface DuplicateWorkItem {
 
 export interface DuplicatePair {
   pair_id: string;
+  severity?: string;
   similarity_score: number;
   text_similarity: number;
   cost_similarity: number;

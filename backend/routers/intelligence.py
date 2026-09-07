@@ -162,6 +162,7 @@ def get_anomaly_detail(anomaly_id: str, conn: sqlite3.Connection = Depends(get_d
 def get_duplicate_works(
     state: Optional[str] = Query(None, description="Filter by state"),
     category: Optional[str] = Query(None, description="Filter by category"),
+    severity: Optional[str] = Query(None, description="Filter by severity (CRITICAL, HIGH, MEDIUM)"),
     limit: int = Query(25, ge=1, le=100),
     min_similarity: float = Query(0.60, ge=0.4, le=1.0)
 ):
@@ -169,6 +170,7 @@ def get_duplicate_works(
     return intelligence_service.detect_duplicates(
         state=state,
         category=category,
+        severity=severity,
         limit=limit,
         min_similarity=min_similarity
     )
@@ -176,13 +178,15 @@ def get_duplicate_works(
 @router.get("/api/intelligence/progress-mismatch", response_model=ProgressMismatchListResponse)
 def get_progress_mismatches(
     state: Optional[str] = Query(None, description="Filter by state"),
-    min_severity: str = Query("HIGH", description="Filter by min severity (CRITICAL, HIGH, MEDIUM)"),
+    severity: Optional[str] = Query(None, description="Filter by exact severity (CRITICAL, HIGH, MEDIUM)"),
+    min_severity: Optional[str] = Query(None, description="Filter by min severity (CRITICAL, HIGH, MEDIUM)"),
     limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0)
 ):
     """Identifies severe divergences between financial utilization and physical progress."""
     return intelligence_service.get_progress_mismatches(
         state=state,
+        severity=severity,
         min_severity=min_severity,
         limit=limit,
         offset=offset
@@ -192,6 +196,7 @@ def get_progress_mismatches(
 def get_delay_predictions(
     category: Optional[str] = Query(None, description="Filter by category"),
     state: Optional[str] = Query(None, description="Filter by state"),
+    severity: Optional[str] = Query(None, description="Filter by severity (CRITICAL, HIGH, MEDIUM, LOW)"),
     limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0)
 ):
@@ -199,6 +204,7 @@ def get_delay_predictions(
     return intelligence_service.get_delay_predictions(
         category=category,
         state=state,
+        severity=severity,
         limit=limit,
         offset=offset
     )

@@ -84,6 +84,7 @@ class IntelligenceService:
         self,
         state: Optional[str] = None,
         category: Optional[str] = None,
+        severity: Optional[str] = None,
         limit: int = 25,
         min_similarity: float = 0.60
     ) -> List[Dict[str, Any]]:
@@ -113,7 +114,8 @@ class IntelligenceService:
             params.append(category)
 
         # Sample across high-volume constituencies to return diverse candidates
-        query += " ORDER BY recommended_amount DESC LIMIT 1200"
+        sample_limit = 1500 if state else 3000
+        query += f" ORDER BY recommended_amount DESC LIMIT {sample_limit}"
 
         rows = conn.execute(query, params).fetchall()
         conn.close()
@@ -153,6 +155,17 @@ class IntelligenceService:
                     text_sim = calculate_jaccard_similarity(tokens_a, tokens_b)
                     if text_sim >= min_similarity:
                         overall_score = round(0.7 * text_sim + 0.3 * cost_ratio, 3)
+
+                        if overall_score >= 0.82 or text_sim >= 0.85:
+                            pair_sev = "CRITICAL"
+                        elif overall_score >= 0.72 or text_sim >= 0.75:
+                            pair_sev = "HIGH"
+                        else:
+                            pair_sev = "MEDIUM"
+
+                        if severity and pair_sev.upper() != severity.upper():
+                            continue
+
                         seen_pairs.add(pair_id)
 
                         reasons = []
@@ -173,6 +186,7 @@ class IntelligenceService:
 
                         duplicates.append({
                             "pair_id": f"DUP_{pair_id[0]}_{pair_id[1]}",
+                            "severity": pair_sev,
                             "similarity_score": overall_score,
                             "text_similarity": round(text_sim, 3),
                             "cost_similarity": round(cost_ratio, 3),
@@ -208,11 +222,11 @@ class IntelligenceService:
                             "recommended_action": "Conduct site inspection to verify if these represent distinct ground assets or duplicate sanction recommendations."
                         })
 
-                        if len(duplicates) >= limit:
+                        if len(duplicates) >= limit * 3:
                             break
-                if len(duplicates) >= limit:
+                if len(duplicates) >= limit * 3:
                     break
-            if len(duplicates) >= limit:
+            if len(duplicates) >= limit * 3:
                 break
 
         duplicates.sort(key=lambda x: x["similarity_score"], reverse=True)
@@ -224,7 +238,8 @@ class IntelligenceService:
     def get_progress_mismatches(
         self,
         state: Optional[str] = None,
-        min_severity: str = "HIGH",
+        severity: Optional[str] = None,
+        min_severity: Optional[str] = None,
         limit: int = 50,
         offset: int = 0
     ) -> Dict[str, Any]:
@@ -250,6 +265,9 @@ class IntelligenceService:
         rows = conn.execute(query, params).fetchall()
         conn.close()
 
+        from datetime import datetime
+        now_dt = datetime(2026, 9, 7)
+
         mismatches = []
         for r in rows:
             rec_amt = float(r["recommended_amount"] or 0)
@@ -257,8 +275,20 @@ class IntelligenceService:
             status = r["lifecycle_status"] or "UNKNOWN"
             duration = int(r["duration_days"] or 0)
 
+            if duration <= 0:
+                rec_date = r["recommendation_date"]
+                if rec_date:
+                    try:
+                        d_str = rec_date[:10]
+                        dt = datetime.strptime(d_str, "%Y-%m-%d")
+                        duration = max(30, (now_dt - dt).days)
+                    except Exception:
+                        duration = 180
+                else:
+                    duration = 180
+
             # Determine estimated physical progress %
-            if status == "COMPLETED":
+            if status == "COMPLETED" or status == "COMPLETED_ONLY":
                 phys_pct = 100.0
             elif status == "IN_PROGRESS":
                 phys_pct = 45.0 if duration > 180 else 60.0
@@ -266,36 +296,49 @@ class IntelligenceService:
                 phys_pct = 25.0
             elif status == "RECOMMENDED":
                 phys_pct = 10.0
+            elif status == "RECOMMENDED_IN_PROGRESS":
+                if duration > 540:
+                    phys_pct = 20.0
+                elif duration > 360:
+                    phys_pct = 45.0
+                elif duration > 180:
+                    phys_pct = 60.0
+                else:
+                    phys_pct = 75.0
             else:
-                phys_pct = 15.0
+                phys_pct = 25.0
 
             # Determine financial expenditure progress %
             if fin_amt > 0 and rec_amt > 0:
                 fin_pct = min(150.0, (fin_amt / rec_amt) * 100.0)
             elif fin_amt > 0:
                 fin_pct = 100.0
-            elif status == "COMPLETED":
+            elif status in ("COMPLETED", "COMPLETED_ONLY"):
                 fin_pct = 100.0
-            elif status in ("IN_PROGRESS", "SANCTIONED"):
-                fin_pct = 80.0 if duration > 300 else 50.0
+            elif status in ("IN_PROGRESS", "SANCTIONED", "RECOMMENDED_IN_PROGRESS"):
+                fin_pct = 85.0 if duration > 360 else 60.0
             else:
                 fin_pct = 0.0
 
             divergence = fin_pct - phys_pct
 
-            # Flag if financial progress is >= 70% while physical progress is <= 30%
-            if (fin_pct >= 70.0 and phys_pct <= 30.0) or (divergence >= 45.0 and status != "COMPLETED"):
+            # Flag if divergence is substantial or high financial with low physical
+            if (fin_pct >= 70.0 and phys_pct <= 35.0) or (divergence >= 40.0 and status not in ("COMPLETED", "COMPLETED_ONLY")):
                 if divergence >= 60.0:
                     sev = "CRITICAL"
-                elif divergence >= 45.0:
+                elif divergence >= 40.0:
                     sev = "HIGH"
                 else:
                     sev = "MEDIUM"
 
-                if min_severity == "CRITICAL" and sev != "CRITICAL":
-                    continue
-                if min_severity == "HIGH" and sev not in ("CRITICAL", "HIGH"):
-                    continue
+                if severity:
+                    if sev.upper() != severity.upper():
+                        continue
+                elif min_severity:
+                    if min_severity.upper() == "CRITICAL" and sev != "CRITICAL":
+                        continue
+                    if min_severity.upper() == "HIGH" and sev not in ("CRITICAL", "HIGH"):
+                        continue
 
                 mismatches.append({
                     "work_id": r["work_id"],
@@ -337,22 +380,23 @@ class IntelligenceService:
         self,
         category: Optional[str] = None,
         state: Optional[str] = None,
+        severity: Optional[str] = None,
         limit: int = 50,
         offset: int = 0
     ) -> Dict[str, Any]:
         """
-        Evaluates active/in-progress works against category median durations to calculate:
-        - Delay probability (0.0 to 1.0)
+        Evaluates active/in-progress works against statutory 18-month SLA (540 days) and category benchmarks:
+        - Delay probability (0.0 to 1.0) via logistic sigmoid curve
         - Predicted additional days to complete
-        - Estimated completion date
+        - Severity classification: CRITICAL (>= 720 days), HIGH (>= 540 days SLA breach), MEDIUM (>= 300 days)
         """
         conn = get_db_connection()
         query = """
             SELECT work_id, mp_name_normalized, constituency_normalized, state_normalized,
                    category_normalized, work_description_normalized, lifecycle_status,
-                   duration_days, recommendation_date, recommended_amount, final_amount
+                   duration_days, recommendation_date, recommendation_year, recommended_amount, final_amount
             FROM works
-            WHERE lifecycle_status IN ('RECOMMENDED', 'IN_PROGRESS', 'SANCTIONED')
+            WHERE lifecycle_status IN ('RECOMMENDED', 'IN_PROGRESS', 'SANCTIONED', 'RECOMMENDED_IN_PROGRESS')
         """
         params = []
         if state:
@@ -362,39 +406,56 @@ class IntelligenceService:
             query += " AND category_normalized = ?"
             params.append(category)
 
-        query += " ORDER BY duration_days DESC LIMIT 2000"
+        query += " ORDER BY recommended_amount DESC LIMIT 3000"
 
         rows = conn.execute(query, params).fetchall()
         conn.close()
 
+        from datetime import datetime
+        now_dt = datetime(2026, 9, 7)
+
         predictions = []
         for r in rows:
             cat = r["category_normalized"] or "Other"
-            cat_median = self._category_duration_medians.get(cat, 180.0)
+            cat_median = self._category_duration_medians.get(cat, 365.0)
             duration = int(r["duration_days"] or 0)
 
-            # Heuristic logistic model for delay probability
-            if cat_median > 0:
-                ratio = duration / cat_median
-                # Sigmoid curve around ratio = 1.0
-                prob = 1.0 / (1.0 + math.exp(-3.5 * (ratio - 1.0)))
-            else:
-                prob = 0.5
+            if duration <= 0:
+                rec_date = r["recommendation_date"]
+                rec_year = r["recommendation_year"]
+                if rec_date:
+                    try:
+                        d_str = rec_date[:10]
+                        dt = datetime.strptime(d_str, "%Y-%m-%d")
+                        duration = max(30, (now_dt - dt).days)
+                    except Exception:
+                        duration = 180
+                elif rec_year:
+                    duration = max(30, (2026 - int(rec_year)) * 365 + 180)
+                else:
+                    duration = 180
 
+            # Heuristic logistic model for delay probability
+            ratio = duration / cat_median if cat_median > 0 else 1.0
+            prob = 1.0 / (1.0 + math.exp(-3.5 * (ratio - 1.0)))
             prob = max(0.05, min(0.98, prob))
 
-            if ratio >= 2.0:
+            # Statutory 18-month SLA is 540 days
+            if duration >= 720 or ratio >= 2.0:
                 risk_level = "CRITICAL"
-                est_delay_days = int(duration * 0.5)
-            elif ratio >= 1.2:
+                est_delay_days = int(duration * 0.4)
+            elif duration >= 540 or ratio >= 1.3:
                 risk_level = "HIGH"
                 est_delay_days = int(duration * 0.25)
-            elif ratio >= 0.9:
+            elif duration >= 300 or ratio >= 0.85:
                 risk_level = "MEDIUM"
                 est_delay_days = int(duration * 0.1)
             else:
                 risk_level = "LOW"
                 est_delay_days = 0
+
+            if severity and risk_level.upper() != severity.upper():
+                continue
 
             predictions.append({
                 "work_id": r["work_id"],

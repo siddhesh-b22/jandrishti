@@ -150,16 +150,18 @@ export const AnomalyCenterPage: React.FC = () => {
         const [dupRes, misRes, delRes, outRes] = await Promise.all([
           api.getDuplicates({
             state: selectedState || undefined,
+            severity: selectedSeverity || undefined,
             min_similarity: 0.60,
-            limit: 50
+            limit: 100
           }).catch(() => []),
           api.getProgressMismatches({
             state: selectedState || undefined,
-            min_severity: selectedSeverity || undefined,
+            severity: selectedSeverity || undefined,
             limit: 1
           }).catch(() => ({ total: 0 })),
           api.getDelayPredictions({
             state: selectedState || undefined,
+            severity: selectedSeverity || undefined,
             limit: 1
           }).catch(() => ({ total: 0 })),
           api.getAnomalies({
@@ -193,8 +195,9 @@ export const AnomalyCenterPage: React.FC = () => {
       if (activeTab === 'duplicates') {
         const data = await api.getDuplicates({
           state: selectedState || undefined,
+          severity: selectedSeverity || undefined,
           min_similarity: 0.60,
-          limit: 60
+          limit: 100
         });
         const items = data || [];
         setDuplicates(items);
@@ -202,7 +205,7 @@ export const AnomalyCenterPage: React.FC = () => {
       } else if (activeTab === 'mismatch') {
         const res = await api.getProgressMismatches({
           state: selectedState || undefined,
-          min_severity: selectedSeverity || undefined,
+          severity: selectedSeverity || undefined,
           limit: PAGE_SIZE,
           offset: offset
         });
@@ -211,6 +214,7 @@ export const AnomalyCenterPage: React.FC = () => {
       } else if (activeTab === 'delays') {
         const res = await api.getDelayPredictions({
           state: selectedState || undefined,
+          severity: selectedSeverity || undefined,
           limit: PAGE_SIZE,
           offset: offset
         });
@@ -524,10 +528,19 @@ export const AnomalyCenterPage: React.FC = () => {
                   >
                     {/* Pair Header */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#E4E2DC] pb-3">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-[#FAF0EB] text-[#C85A32] border border-[#E8C5B6]">
                           {(pair.similarity_score * 100).toFixed(1)}% SIMILARITY MATCH
                         </span>
+                        {pair.severity && (
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                            pair.severity === 'CRITICAL' ? 'bg-rose-100 text-rose-800 border border-rose-300' :
+                            pair.severity === 'HIGH' ? 'bg-amber-100 text-amber-800 border border-amber-300' :
+                            'bg-blue-100 text-blue-800 border border-blue-300'
+                          }`}>
+                            [{pair.severity}]
+                          </span>
+                        )}
                         <span className="text-xs font-mono text-[#71717A]">
                           Cluster ID: {pair.pair_id}
                         </span>
@@ -623,9 +636,11 @@ export const AnomalyCenterPage: React.FC = () => {
               ) : (
                 <div className="p-12 text-center bg-white rounded-2xl border border-[#E4E2DC]">
                   <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto mb-2" />
-                  <h3 className="text-base font-serif font-bold text-[#121316]">No High-Confidence Duplicates in Selected Scope</h3>
+                  <h3 className="text-base font-serif font-bold text-[#121316]">
+                    No {selectedSeverity ? `${selectedSeverity} ` : ''}Duplicate Pairs in Selected Scope
+                  </h3>
                   <p className="text-xs text-[#71717A] mt-1 font-light">
-                    All scanned projects in this jurisdiction have unique semantic signatures and distinct geographic locations.
+                    {selectedState ? `All analyzed works in ${selectedState} have distinct lexical descriptions and independent budgets.` : 'All scanned projects in this jurisdiction have unique semantic signatures and distinct geographic locations.'}
                   </p>
                 </div>
               )}
@@ -724,9 +739,11 @@ export const AnomalyCenterPage: React.FC = () => {
               ) : (
                 <div className="col-span-2 p-12 text-center bg-white rounded-2xl border border-[#E4E2DC]">
                   <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto mb-2" />
-                  <h3 className="text-base font-serif font-bold text-[#121316]">No Severe Progress Divergences</h3>
+                  <h3 className="text-base font-serif font-bold text-[#121316]">
+                    No {selectedSeverity ? `${selectedSeverity} ` : ''}Progress Divergences Found
+                  </h3>
                   <p className="text-xs text-[#71717A] mt-1 font-light">
-                    Physical milestones are closely synchronized with treasury disbursements across this jurisdiction.
+                    {selectedState ? `Treasury releases and certified milestones for ${selectedState} are closely aligned without severe anomalies.` : 'Physical milestones are closely synchronized with treasury disbursements across this jurisdiction.'}
                   </p>
                 </div>
               )}
@@ -821,9 +838,11 @@ export const AnomalyCenterPage: React.FC = () => {
               ) : (
                 <div className="col-span-2 p-12 text-center bg-white rounded-2xl border border-[#E4E2DC]">
                   <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto mb-2" />
-                  <h3 className="text-base font-serif font-bold text-[#121316]">No Severe Project Delays</h3>
+                  <h3 className="text-base font-serif font-bold text-[#121316]">
+                    No {selectedSeverity ? `${selectedSeverity} ` : ''}Overdue Project Delays Found
+                  </h3>
                   <p className="text-xs text-[#71717A] mt-1 font-light">
-                    All projects in this scope are executing within acceptable statutory completion horizons.
+                    {selectedState ? `Active community projects in ${selectedState} are executing within statutory completion horizons.` : 'All projects in this scope are executing within acceptable statutory completion horizons.'}
                   </p>
                 </div>
               )}
@@ -904,9 +923,11 @@ export const AnomalyCenterPage: React.FC = () => {
               ) : (
                 <div className="col-span-2 p-12 text-center bg-white rounded-2xl border border-[#E4E2DC]">
                   <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto mb-2" />
-                  <h3 className="text-base font-serif font-bold text-[#121316]">No Extreme Statistical Outliers</h3>
+                  <h3 className="text-base font-serif font-bold text-[#121316]">
+                    No {selectedSeverity ? `${selectedSeverity} ` : ''}Statistical Cost or Monopoly Outliers
+                  </h3>
                   <p className="text-xs text-[#71717A] mt-1 font-light">
-                    Expenditure and contractor metrics fall comfortably within normal distribution parameters.
+                    {selectedState ? `Expenditure patterns and contractor concentration for ${selectedState} fall comfortably within normal distribution parameters.` : 'Expenditure and contractor metrics fall comfortably within normal distribution parameters.'}
                   </p>
                 </div>
               )}

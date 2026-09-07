@@ -314,6 +314,7 @@ class DuplicateWorkDetail(BaseModel):
 
 class DuplicatePairItem(BaseModel):
     pair_id: str
+    severity: Optional[str] = "HIGH"
     similarity_score: float
     text_similarity: float
     cost_similarity: float

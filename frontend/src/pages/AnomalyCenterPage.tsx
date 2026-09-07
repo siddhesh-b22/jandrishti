@@ -42,6 +42,7 @@ import { LoadingSkeleton } from '../components/common/LoadingSkeleton';
 import { ErrorDisplay } from '../components/common/ErrorDisplay';
 import { DuplicateComparisonModal } from '../components/common/DuplicateComparisonModal';
 import { EntityDossierDrawer, DossierEntity } from '../components/common/EntityDossierDrawer';
+import { Pagination } from '../components/common/Pagination';
 
 type AnomalyTab = 'duplicates' | 'mismatch' | 'delays' | 'outliers';
 
@@ -57,6 +58,10 @@ export const AnomalyCenterPage: React.FC = () => {
   const severityParam = searchParams.get('severity') || '';
   const [selectedState, setSelectedState] = useState<string>(stateParam);
   const [selectedSeverity, setSelectedSeverity] = useState<string>(severityParam);
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const PAGE_SIZE = 6;
 
   // States & Metadata
   const [states, setStates] = useState<StateSummary[]>([]);
@@ -75,9 +80,16 @@ export const AnomalyCenterPage: React.FC = () => {
   const [activeDossier, setActiveDossier] = useState<DossierEntity | null>(null);
   const [showMethodology, setShowMethodology] = useState(true);
 
+  const handlePageChange = (newOffset: number) => {
+    const nextPg = Math.floor(newOffset / PAGE_SIZE) + 1;
+    setCurrentPage(nextPg);
+    window.scrollTo({ top: 320, behavior: 'smooth' });
+  };
+
   // Sync tab with URL
   const handleTabChange = (newTab: AnomalyTab) => {
     setActiveTab(newTab);
+    setCurrentPage(1);
     const next = new URLSearchParams(searchParams);
     next.set('tab', newTab);
     setSearchParams(next);
@@ -86,6 +98,7 @@ export const AnomalyCenterPage: React.FC = () => {
   // Sync state filter with URL
   const handleStateChange = (st: string) => {
     setSelectedState(st);
+    setCurrentPage(1);
     const next = new URLSearchParams(searchParams);
     if (st) next.set('state', st);
     else next.delete('state');
@@ -95,6 +108,7 @@ export const AnomalyCenterPage: React.FC = () => {
   // Sync severity filter with URL
   const handleSeverityChange = (sev: string) => {
     setSelectedSeverity(sev);
+    setCurrentPage(1);
     const next = new URLSearchParams(searchParams);
     if (sev) next.set('severity', sev);
     else next.delete('severity');
@@ -104,6 +118,7 @@ export const AnomalyCenterPage: React.FC = () => {
   const handleResetFilters = () => {
     setSelectedState('');
     setSelectedSeverity('');
+    setCurrentPage(1);
     const next = new URLSearchParams();
     next.set('tab', activeTab);
     setSearchParams(next);
@@ -150,7 +165,6 @@ export const AnomalyCenterPage: React.FC = () => {
       }
     } catch (err: any) {
       console.warn('API fetch note:', err);
-      // Fail gracefully with message
       setError(err.message || 'Error fetching AI anomalies. Showing live analyzed dataset.');
     } finally {
       setLoading(false);
@@ -160,6 +174,12 @@ export const AnomalyCenterPage: React.FC = () => {
   useEffect(() => {
     loadActiveTabData();
   }, [activeTab, selectedState, selectedSeverity]);
+
+  // Paginated Slices
+  const pagedDuplicates = duplicates.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  const pagedMismatches = mismatches.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  const pagedDelays = delays.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  const pagedOutliers = outliers.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] font-sans text-[#121316] pb-24">
@@ -263,7 +283,7 @@ export const AnomalyCenterPage: React.FC = () => {
                 Semantic string similarity &amp; spatial cluster overlap
               </p>
               <div className="mt-2 text-xs font-mono font-bold text-[#C85A32]">
-                38 Suspect Pairs Identified
+                {duplicates.length} Suspect Pairs Identified
               </div>
             </button>
 
@@ -294,7 +314,7 @@ export const AnomalyCenterPage: React.FC = () => {
                 High financial payout with low physical completion
               </p>
               <div className="mt-2 text-xs font-mono font-bold text-amber-700">
-                84 Severe Divergences
+                {mismatches.length} Severe Divergences
               </div>
             </button>
 
@@ -325,7 +345,7 @@ export const AnomalyCenterPage: React.FC = () => {
                 Schedule overruns exceeding 18-month statutory SLA
               </p>
               <div className="mt-2 text-xs font-mono font-bold text-rose-700">
-                312 Projects Overdue
+                {delays.length} Projects Overdue
               </div>
             </button>
 
@@ -356,7 +376,7 @@ export const AnomalyCenterPage: React.FC = () => {
                 Cost outliers &amp; contractor HHI saturation
               </p>
               <div className="mt-2 text-xs font-mono font-bold text-indigo-700">
-                129 Statistical Signals
+                {outliers.length} Statistical Signals
               </div>
             </button>
           </div>
@@ -429,12 +449,12 @@ export const AnomalyCenterPage: React.FC = () => {
           <div className="space-y-4">
             <div className="flex items-center justify-between text-xs text-[#71717A] font-mono px-1">
               <span>Showing candidate duplicate clusters flagged across constituencies</span>
-              <span>Sorted by similarity score (desc)</span>
+              <span>Page {currentPage} of {Math.max(1, Math.ceil(duplicates.length / PAGE_SIZE))}</span>
             </div>
 
             <div className="space-y-4">
-              {duplicates.length > 0 ? (
-                duplicates.map((pair) => (
+              {pagedDuplicates.length > 0 ? (
+                pagedDuplicates.map((pair) => (
                   <div
                     key={pair.pair_id}
                     className="p-5 rounded-2xl bg-white border border-[#E4E2DC] hover:border-[#C85A32] transition shadow-xs space-y-4"
@@ -547,6 +567,18 @@ export const AnomalyCenterPage: React.FC = () => {
                 </div>
               )}
             </div>
+
+            {/* Pagination */}
+            {duplicates.length > PAGE_SIZE && (
+              <div className="pt-4 border-t border-[#E4E2DC]">
+                <Pagination
+                  total={duplicates.length}
+                  limit={PAGE_SIZE}
+                  offset={(currentPage - 1) * PAGE_SIZE}
+                  onPageChange={handlePageChange}
+                />
+              </div>
+            )}
           </div>
         )}
 
@@ -555,12 +587,12 @@ export const AnomalyCenterPage: React.FC = () => {
           <div className="space-y-4">
             <div className="flex items-center justify-between text-xs text-[#71717A] font-mono px-1">
               <span>Schemes where treasury disbursements heavily outpace ground completion</span>
-              <span>Sorted by divergence gap (desc)</span>
+              <span>Page {currentPage} of {Math.max(1, Math.ceil(mismatches.length / PAGE_SIZE))}</span>
             </div>
 
             <div className="grid md:grid-cols-2 gap-4">
-              {mismatches.length > 0 ? (
-                mismatches.map((item) => (
+              {pagedMismatches.length > 0 ? (
+                pagedMismatches.map((item) => (
                   <div
                     key={item.work_id}
                     className="p-5 rounded-2xl bg-white border border-[#E4E2DC] hover:border-[#C85A32] transition shadow-xs space-y-4 flex flex-col justify-between"
@@ -636,6 +668,18 @@ export const AnomalyCenterPage: React.FC = () => {
                 </div>
               )}
             </div>
+
+            {/* Pagination */}
+            {mismatches.length > PAGE_SIZE && (
+              <div className="pt-4 border-t border-[#E4E2DC]">
+                <Pagination
+                  total={mismatches.length}
+                  limit={PAGE_SIZE}
+                  offset={(currentPage - 1) * PAGE_SIZE}
+                  onPageChange={handlePageChange}
+                />
+              </div>
+            )}
           </div>
         )}
 
@@ -644,12 +688,12 @@ export const AnomalyCenterPage: React.FC = () => {
           <div className="space-y-4">
             <div className="flex items-center justify-between text-xs text-[#71717A] font-mono px-1">
               <span>Works flagged for excessive schedule overruns beyond statutory 18-month SLA</span>
-              <span>Sorted by estimated delay days (desc)</span>
+              <span>Page {currentPage} of {Math.max(1, Math.ceil(delays.length / PAGE_SIZE))}</span>
             </div>
 
             <div className="grid md:grid-cols-2 gap-4">
-              {delays.length > 0 ? (
-                delays.map((item) => (
+              {pagedDelays.length > 0 ? (
+                pagedDelays.map((item) => (
                   <div
                     key={item.work_id}
                     className="p-5 rounded-2xl bg-white border border-[#E4E2DC] hover:border-[#C85A32] transition shadow-xs space-y-4 flex flex-col justify-between"
@@ -721,6 +765,18 @@ export const AnomalyCenterPage: React.FC = () => {
                 </div>
               )}
             </div>
+
+            {/* Pagination */}
+            {delays.length > PAGE_SIZE && (
+              <div className="pt-4 border-t border-[#E4E2DC]">
+                <Pagination
+                  total={delays.length}
+                  limit={PAGE_SIZE}
+                  offset={(currentPage - 1) * PAGE_SIZE}
+                  onPageChange={handlePageChange}
+                />
+              </div>
+            )}
           </div>
         )}
 
@@ -729,12 +785,12 @@ export const AnomalyCenterPage: React.FC = () => {
           <div className="space-y-4">
             <div className="flex items-center justify-between text-xs text-[#71717A] font-mono px-1">
               <span>Statistical anomalies flagged via Median Absolute Deviation (MAD) &amp; Vendor HHI</span>
-              <span>Sorted by anomaly score (desc)</span>
+              <span>Page {currentPage} of {Math.max(1, Math.ceil(outliers.length / PAGE_SIZE))}</span>
             </div>
 
             <div className="grid md:grid-cols-2 gap-4">
-              {outliers.length > 0 ? (
-                outliers.map((item) => (
+              {pagedOutliers.length > 0 ? (
+                pagedOutliers.map((item) => (
                   <div
                     key={item.anomaly_id}
                     className="p-5 rounded-2xl bg-white border border-[#E4E2DC] hover:border-[#C85A32] transition shadow-xs space-y-4 flex flex-col justify-between"
@@ -792,6 +848,18 @@ export const AnomalyCenterPage: React.FC = () => {
                 </div>
               )}
             </div>
+
+            {/* Pagination */}
+            {outliers.length > PAGE_SIZE && (
+              <div className="pt-4 border-t border-[#E4E2DC]">
+                <Pagination
+                  total={outliers.length}
+                  limit={PAGE_SIZE}
+                  offset={(currentPage - 1) * PAGE_SIZE}
+                  onPageChange={handlePageChange}
+                />
+              </div>
+            )}
           </div>
         )}
       </div>

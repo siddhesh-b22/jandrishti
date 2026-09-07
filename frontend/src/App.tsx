@@ -20,12 +20,8 @@ const MpDetailPage = lazy(() => import('./pages/MpDetailPage').then(m => ({ defa
 const VendorExplorerPage = lazy(() => import('./pages/VendorExplorerPage').then(m => ({ default: m.VendorExplorerPage })));
 const TransactionExplorerPage = lazy(() => import('./pages/TransactionExplorerPage').then(m => ({ default: m.TransactionExplorerPage })));
 const StatesPage = lazy(() => import('./pages/StatesPage').then(m => ({ default: m.StatesPage })));
-const MethodologyPage = lazy(() => import('./pages/MethodologyPage').then(m => ({ default: m.MethodologyPage })));
-const TrackAreaPage = lazy(() => import('./pages/TrackAreaPage').then(m => ({ default: m.TrackAreaPage })));
-const ComparePage = lazy(() => import('./pages/ComparePage').then(m => ({ default: m.ComparePage })));
 const DataIngestionPage = lazy(() => import('./pages/DataIngestionPage').then(m => ({ default: m.DataIngestionPage })));
 const LoginPage = lazy(() => import('./pages/LoginPage').then(m => ({ default: m.LoginPage })));
-const DocumentationPage = lazy(() => import('./pages/DocumentationPage').then(m => ({ default: m.DocumentationPage })));
 
 // Dedicated Role Workspaces
 const MinistryWorkspace = lazy(() => import('./pages/workspaces/MinistryWorkspace').then(m => ({ default: m.MinistryWorkspace })));
@@ -108,8 +104,8 @@ export const App: React.FC = () => {
 
                   {/* Analytical & Discovery Ledgers */}
                   <Route path="ingest" element={<DataIngestionPage />} />
-                  <Route path="track-area" element={<TrackAreaPage />} />
-                  <Route path="compare" element={<ComparePage />} />
+                  <Route path="track-area" element={<Navigate to="/works" replace />} />
+                  <Route path="compare" element={<Navigate to="/states" replace />} />
                   <Route path="works" element={<WorkExplorerPage />} />
                   <Route path="works/:workId" element={<WorkDetailPage />} />
                   <Route path="anomalies" element={<AnomalyCenterPage />} />
@@ -122,8 +118,8 @@ export const App: React.FC = () => {
                   <Route path="vendors" element={<VendorExplorerPage />} />
                   <Route path="transactions" element={<TransactionExplorerPage />} />
                   <Route path="states" element={<StatesPage />} />
-                  <Route path="methodology" element={<MethodologyPage />} />
-                  <Route path="docs" element={<DocumentationPage />} />
+                  <Route path="methodology" element={<Navigate to="/data-quality" replace />} />
+                  <Route path="docs" element={<Navigate to="/anomalies" replace />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Route>
               </Routes>

@@ -137,7 +137,7 @@ export const LoginPage: React.FC = () => {
               1-Click Demo Evaluation Identities
             </p>
             <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-[#EBF5EE] text-[#1E7E34] border border-[#BCE2C5]">
-              Supabase Connected
+              Statutory Roles
             </span>
           </div>
           <p className="text-xs text-[#71717A] px-1 font-light">

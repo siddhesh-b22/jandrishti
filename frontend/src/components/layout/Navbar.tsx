@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink, useLocation, Link } from 'react-router-dom';
+import { NavLink, useLocation, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Menu,
@@ -35,7 +35,8 @@ import { useRole } from '../../context/RoleContext';
 import { getRoleHomeRoute, getNavStructureForRole } from '../../utils/roleRoutes';
 
 export const Navbar: React.FC = () => {
-  const { isAuthenticated, user, logout, roleConfig } = useRole();
+  const navigate = useNavigate();
+  const { isAuthenticated, user, logout, switchTier } = useRole();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -43,6 +44,37 @@ export const Navbar: React.FC = () => {
   const [followMoneyModalOpen, setFollowMoneyModalOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const location = useLocation();
+
+  const getCurrentTier = () => {
+    if (!isAuthenticated || !user) {
+      return { label: 'Citizen Public View', shortLabel: 'Citizen Public', icon: ShieldCheck, badge: 'Public' };
+    }
+    if (user.role === 'MINISTRY_ADMIN' || user.role === 'MINISTRY_OFFICIAL') {
+      return { label: 'MoSPI National Admin', shortLabel: 'National (MoSPI)', icon: Landmark, badge: 'National' };
+    }
+    if (user.role === 'STATE_NODAL_AUTHORITY' || user.role === 'STATE_AUTHORITY') {
+      return { label: 'State Nodal Authority', shortLabel: 'State (MH)', icon: Layers, badge: 'State' };
+    }
+    if (user.role === 'DISTRICT_AUTHORITY') {
+      return { label: 'District Magistrate', shortLabel: 'District (Pune)', icon: Building2, badge: 'District' };
+    }
+    if (user.role === 'MP') {
+      return { label: 'MP Desk (Pune)', shortLabel: 'MP (Pune)', icon: Users, badge: 'MP Quota' };
+    }
+    return { label: 'Citizen Public View', shortLabel: 'Citizen Public', icon: ShieldCheck, badge: 'Public' };
+  };
+
+  const currentTier = getCurrentTier();
+  const CurrentTierIcon = currentTier.icon;
+
+  const handleSelectTier = async (tier: 'NATIONAL' | 'STATE' | 'DISTRICT' | 'CITIZEN') => {
+    setUserMenuOpen(false);
+    await switchTier(tier);
+    if (tier === 'NATIONAL') navigate('/admin/national');
+    else if (tier === 'STATE') navigate('/admin/state');
+    else if (tier === 'DISTRICT') navigate('/admin/district');
+    else navigate('/explore');
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -170,124 +202,173 @@ export const Navbar: React.FC = () => {
               ))}
             </nav>
 
-            {/* Right: Role Identity Badge or Official Login */}
-            <div className="flex items-center gap-2.5">
+            {/* Right: Quick Search + 1-Click Governance Tier Switcher */}
+            <div className="flex items-center gap-2 sm:gap-3">
               {/* Quick Search Trigger */}
               <button
                 type="button"
                 onClick={() => setSearchModalOpen(true)}
-                className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-full hover:bg-[#F0EFEA] text-[#71717A] transition border border-[#E4E2DC] text-xs font-mono cursor-pointer"
-                title="Search (⌘K)"
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-[#F0EFEA] text-[#71717A] hover:text-[#121316] transition border border-[#E4E2DC] text-xs font-mono cursor-pointer"
+                title="Search Schemes, MPs, Districts (⌘K)"
               >
                 <Search className="w-3.5 h-3.5" />
-                <span className="text-[11px]">⌘K</span>
+                <span className="text-[11px]">Search (⌘K)</span>
               </button>
 
-              {/* Follow The Money Modal Trigger */}
-              <button
-                type="button"
-                onClick={() => setFollowMoneyModalOpen(true)}
-                className="hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white hover:bg-[#FAF8F5] text-xs text-[#121316] border border-[#E4E2DC] hover:border-[#C85A32] transition cursor-pointer font-sans"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-[#C85A32]" />
-                <span className="font-medium text-xs">Trace Money</span>
-              </button>
+              {/* 1-Click Governance Tier Switcher Pill */}
+              <div className="relative font-sans">
+                <button
+                  type="button"
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FAF0EB] hover:bg-[#F3E5DE] border border-[#E8C5B6] text-xs transition cursor-pointer min-h-[38px] shadow-2xs group"
+                  title="Switch Governance Tier (National, State, District, Citizen)"
+                >
+                  <div className="p-1 rounded-full bg-[#C85A32] text-white">
+                    <CurrentTierIcon className="w-3 h-3" />
+                  </div>
+                  <span className="font-semibold text-[#121316] text-xs">
+                    {currentTier.shortLabel}
+                  </span>
+                  <ChevronDown className={`w-3.5 h-3.5 text-[#71717A] transition-transform duration-150 ${userMenuOpen ? 'rotate-180' : ''}`} />
+                </button>
 
-              {/* Login / Auth Identity Badge */}
-              {isAuthenticated && user ? (
-                <div className="relative font-sans">
-                  <button
-                    type="button"
-                    onClick={() => setUserMenuOpen(!userMenuOpen)}
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FAF0EB] hover:bg-[#F3E5DE] border border-[#E8C5B6] text-xs transition cursor-pointer min-h-[38px]"
-                    title={`Logged in as ${user.display_name} (${user.role})`}
-                  >
-                    <div className="w-5 h-5 rounded-full bg-[#C85A32] text-white flex items-center justify-center text-[10px] font-bold">
-                      {user.display_name.charAt(0)}
-                    </div>
-                    <span className="hidden xl:inline text-[#121316] font-medium max-w-[130px] truncate">
-                      {user.display_name}
-                    </span>
-                    <span className="hidden md:inline px-1.5 py-0.2 rounded bg-white text-[#C85A32] text-[9px] font-mono uppercase border border-[#E8C5B6]">
-                      {user.jurisdiction}
-                    </span>
-                    <ChevronDown className="w-3 h-3 text-[#71717A]" />
-                  </button>
-
-                  <AnimatePresence>
-                    {userMenuOpen && (
-                      <>
-                        <div
-                          className="fixed inset-0 z-40"
-                          onClick={() => setUserMenuOpen(false)}
-                          aria-hidden="true"
-                        />
-                        <motion.div
-                          initial={{ opacity: 0, y: 6 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 4 }}
-                          transition={{ duration: 0.15 }}
-                          className="absolute right-0 top-full mt-2 w-72 bg-[#FAF8F5] rounded-2xl p-3 shadow-xl border border-[#E4E2DC] z-50 normal-case space-y-2.5"
-                        >
-                          <div className="border-b border-[#E4E2DC] pb-2 px-1">
-                            <div className="text-xs font-semibold text-[#121316]">{user.display_name}</div>
-                            <div className="text-[10px] font-mono text-[#71717A] mt-0.5">
-                              Role: <span className="text-[#C85A32] font-semibold">{user.role}</span>
-                            </div>
-                            <div className="text-[10px] font-mono text-[#71717A]">
-                              Scope: <span className="text-[#121316] font-medium">{user.jurisdiction_type} ({user.jurisdiction})</span>
-                            </div>
-                            <div className="mt-1.5">
-                              <span className="inline-block px-1.5 py-0.5 rounded text-[9px] font-mono bg-[#EBF5EE] text-[#1E7E34] border border-[#BCE2C5]">
-                                ✓ Statutory Official Mandate
-                              </span>
-                            </div>
+                <AnimatePresence>
+                  {userMenuOpen && (
+                    <>
+                      <div
+                        className="fixed inset-0 z-40"
+                        onClick={() => setUserMenuOpen(false)}
+                        aria-hidden="true"
+                      />
+                      <motion.div
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 4 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute right-0 top-full mt-2 w-80 bg-[#FAF8F5] rounded-2xl p-3 shadow-xl border border-[#E4E2DC] z-50 normal-case space-y-2.5"
+                      >
+                        <div className="border-b border-[#E4E2DC] pb-2 px-1">
+                          <div className="text-[10px] font-mono uppercase tracking-widest text-[#C85A32] font-semibold">
+                            Switch Governance Scope
                           </div>
+                          <p className="text-[11px] text-[#71717A] mt-0.5 font-light">
+                            Select any statutory tier to instantly preview role-tailored metrics & powers:
+                          </p>
+                        </div>
 
-                          <div className="space-y-1">
-                            <Link
-                              to={homeRoute}
-                              onClick={() => setUserMenuOpen(false)}
-                              className="flex items-center justify-between p-2 rounded-xl text-xs hover:bg-[#F0EFEA] text-[#121316] transition"
-                            >
-                              <span>Open Role Workspace</span>
-                              <ArrowRight className="w-3.5 h-3.5 text-[#71717A]" />
-                            </Link>
-                            <Link
-                              to="/login"
-                              onClick={() => setUserMenuOpen(false)}
-                              className="flex items-center justify-between p-2 rounded-xl text-xs hover:bg-[#F0EFEA] text-[#121316] transition"
-                            >
-                              <span>Switch Official Identity</span>
-                              <ArrowRight className="w-3.5 h-3.5 text-[#71717A]" />
-                            </Link>
+                        <div className="space-y-1">
+                          <button
+                            type="button"
+                            onClick={() => handleSelectTier('NATIONAL')}
+                            className={`w-full text-left p-2 rounded-xl transition flex items-center justify-between group cursor-pointer ${
+                              currentTier.badge === 'National' ? 'bg-[#FAF0EB] border border-[#E8C5B6]' : 'hover:bg-[#F0EFEA]'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2.5">
+                              <div className="p-1.5 rounded-lg bg-[#FAF0EB] text-[#C85A32] group-hover:bg-[#C85A32] group-hover:text-white transition">
+                                <Landmark className="w-4 h-4" />
+                              </div>
+                              <div>
+                                <div className="text-xs font-semibold text-[#121316]">1. National (MoSPI Admin)</div>
+                                <div className="text-[10px] text-[#71717A]">Macro All-India & National Fraud Flags</div>
+                              </div>
+                            </div>
+                            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white text-[#C85A32] border border-[#E8C5B6]">
+                              36 States
+                            </span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => handleSelectTier('STATE')}
+                            className={`w-full text-left p-2 rounded-xl transition flex items-center justify-between group cursor-pointer ${
+                              currentTier.badge === 'State' ? 'bg-[#FAF0EB] border border-[#E8C5B6]' : 'hover:bg-[#F0EFEA]'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2.5">
+                              <div className="p-1.5 rounded-lg bg-[#FAF0EB] text-[#C85A32] group-hover:bg-[#C85A32] group-hover:text-white transition">
+                                <Layers className="w-4 h-4" />
+                              </div>
+                              <div>
+                                <div className="text-xs font-semibold text-[#121316]">2. State Nodal (Maharashtra)</div>
+                                <div className="text-[10px] text-[#71717A]">Inter-District Ranks & Escalations</div>
+                              </div>
+                            </div>
+                            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white text-[#C85A32] border border-[#E8C5B6]">
+                              State Tier
+                            </span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => handleSelectTier('DISTRICT')}
+                            className={`w-full text-left p-2 rounded-xl transition flex items-center justify-between group cursor-pointer ${
+                              currentTier.badge === 'District' || currentTier.badge === 'MP Quota' ? 'bg-[#FAF0EB] border border-[#E8C5B6]' : 'hover:bg-[#F0EFEA]'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2.5">
+                              <div className="p-1.5 rounded-lg bg-[#FAF0EB] text-[#C85A32] group-hover:bg-[#C85A32] group-hover:text-white transition">
+                                <Building2 className="w-4 h-4" />
+                              </div>
+                              <div>
+                                <div className="text-xs font-semibold text-[#121316]">3. District Authority (Pune)</div>
+                                <div className="text-[10px] text-[#71717A]">Ground Execution, Milestones & Quota</div>
+                              </div>
+                            </div>
+                            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white text-[#C85A32] border border-[#E8C5B6]">
+                              Local
+                            </span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => handleSelectTier('CITIZEN')}
+                            className={`w-full text-left p-2 rounded-xl transition flex items-center justify-between group cursor-pointer ${
+                              currentTier.badge === 'Public' ? 'bg-[#FAF0EB] border border-[#E8C5B6]' : 'hover:bg-[#F0EFEA]'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2.5">
+                              <div className="p-1.5 rounded-lg bg-[#FAF0EB] text-[#C85A32] group-hover:bg-[#C85A32] group-hover:text-white transition">
+                                <ShieldCheck className="w-4 h-4" />
+                              </div>
+                              <div>
+                                <div className="text-xs font-semibold text-[#121316]">4. Citizen Transparency Mode</div>
+                                <div className="text-[10px] text-[#71717A]">Public Ledger & Community Reporting</div>
+                              </div>
+                            </div>
+                            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white text-[#C85A32] border border-[#E8C5B6]">
+                              Civic
+                            </span>
+                          </button>
+                        </div>
+
+                        <div className="pt-2 border-t border-[#E4E2DC] flex items-center justify-between text-[11px] text-[#71717A]">
+                          <Link
+                            to="/login"
+                            onClick={() => setUserMenuOpen(false)}
+                            className="text-[#C85A32] hover:underline font-medium flex items-center gap-1"
+                          >
+                            <span>More Logins (MPs / Custom)</span>
+                            <ArrowRight className="w-3 h-3" />
+                          </Link>
+                          {isAuthenticated && (
                             <button
                               type="button"
                               onClick={() => {
                                 logout();
                                 setUserMenuOpen(false);
                               }}
-                              className="w-full flex items-center justify-between p-2 rounded-xl text-xs hover:bg-[#FAF0EB] text-[#C85A32] transition cursor-pointer font-medium"
+                              className="text-[#71717A] hover:text-[#C85A32] transition cursor-pointer"
                             >
-                              <span>Sign Out to Citizen Mode</span>
-                              <LogOut className="w-3.5 h-3.5" />
+                              Sign out
                             </button>
-                          </div>
-                        </motion.div>
-                      </>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ) : (
-                <Link
-                  to="/login"
-                  className="flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#E4E2DC] hover:border-[#C85A32] bg-[#FAF8F5] hover:bg-white text-xs text-[#121316] transition min-h-[38px] shadow-2xs group"
-                >
-                  <LogIn className="w-3.5 h-3.5 text-[#C85A32] group-hover:translate-x-0.5 transition-transform" />
-                  <span className="font-semibold tracking-wide">Official Login</span>
-                  <span className="hidden md:inline text-[10px] text-[#71717A] font-mono border-l border-[#E4E2DC] pl-2">Authorities</span>
-                </Link>
-              )}
+                          )}
+                        </div>
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
+              </div>
 
               {/* Mobile menu toggle */}
               <button

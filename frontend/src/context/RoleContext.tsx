@@ -106,6 +106,7 @@ export interface RoleContextType {
   token: string | null;
   login: (username: string, password: string) => Promise<AuthUser>;
   logout: () => void;
+  switchTier: (tier: 'NATIONAL' | 'STATE' | 'DISTRICT' | 'CITIZEN') => Promise<void>;
   canEdit: (state?: string | null, district?: string | null, mpId?: string | null) => boolean;
 }
 
@@ -192,6 +193,22 @@ export const RoleProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setCurrentRole('CITIZEN');
   };
 
+  const switchTier = async (tier: 'NATIONAL' | 'STATE' | 'DISTRICT' | 'CITIZEN'): Promise<void> => {
+    try {
+      if (tier === 'NATIONAL') {
+        await login('ministry', 'Demo@Ministry2026');
+      } else if (tier === 'STATE') {
+        await login('state.mh', 'Demo@State2026');
+      } else if (tier === 'DISTRICT') {
+        await login('district.pune', 'Demo@District2026');
+      } else {
+        logout();
+      }
+    } catch (err) {
+      console.error('Failed to switch tier', err);
+    }
+  };
+
   const canEdit = (state?: string | null, district?: string | null, mpId?: string | null): boolean => {
     const activeRole = user?.role || currentRole;
     if (activeRole === 'CITIZEN') return false;
@@ -244,6 +261,7 @@ export const RoleProvider: React.FC<{ children: React.ReactNode }> = ({ children
         token,
         login,
         logout,
+        switchTier,
         canEdit,
       }}
     >

@@ -262,6 +262,7 @@ class IntelligenceService:
                    recommendation_date, completed_date, ida_normalized
             FROM works
             WHERE (recommended_amount > 200000 OR final_amount > 200000)
+              AND lifecycle_status NOT IN ('COMPLETED', 'COMPLETED_ONLY')
         """
         params = []
         if state:
@@ -289,13 +290,13 @@ class IntelligenceService:
                 rec_date = r["recommendation_date"]
                 if rec_date:
                     try:
-                        d_str = rec_date[:10]
+                        d_str = str(rec_date)[:10]
                         dt = datetime.strptime(d_str, "%Y-%m-%d")
                         duration = max(30, (now_dt - dt).days)
                     except Exception:
-                        duration = 180
+                        duration = 365
                 else:
-                    duration = 180
+                    duration = 365
 
             # Determine estimated physical progress %
             if status == "COMPLETED" or status == "COMPLETED_ONLY":

@@ -55,17 +55,14 @@ def list_anomalies(
     cursor = conn.cursor()
     where_clauses = ["1=1"]
     params: List[Any] = []
-    if user and user.mp_id:
-        where_clauses.append("entity_id = ?")
-        params.append(user.mp_id)
-    
+    # Role-based state scoping (exclude MP, Citizen, Analyst, and Ministry from forced override so they can view national scope)
     target_state = state.strip().upper() if (state and state.strip()) else (
-        user.state.upper() if (user and user.state and user.jurisdiction_type not in ("NATIONAL", "PUBLIC") and user.role not in ("CITIZEN", "ANALYST", "MINISTRY_ADMIN", "MINISTRY_OFFICIAL")) else None
+        user.state.upper() if (user and user.state and user.jurisdiction_type not in ("NATIONAL", "PUBLIC") and user.role not in ("CITIZEN", "ANALYST", "MINISTRY_ADMIN", "MINISTRY_OFFICIAL", "MP")) else None
     )
     if target_state:
         where_clauses.append("""(
             entity_id IN (SELECT internal_mp_id FROM mps WHERE state_normalized = ?)
-            OR entity_id IN (SELECT work_id FROM works WHERE state_normalized = ?)
+            OR entity_id IN (SELECT CAST(work_id AS TEXT) FROM works WHERE state_normalized = ?)
             OR entity_id IN (SELECT internal_transaction_id FROM transactions WHERE state_normalized = ?)
             OR entity_id IN (SELECT internal_vendor_id FROM vendors WHERE primary_state = ?)
             OR reason LIKE ?
@@ -77,7 +74,7 @@ def list_anomalies(
     )
     if target_district:
         where_clauses.append("""(
-            entity_id IN (SELECT work_id FROM works WHERE ida_normalized LIKE ? OR constituency_normalized LIKE ?)
+            entity_id IN (SELECT CAST(work_id AS TEXT) FROM works WHERE ida_normalized LIKE ? OR constituency_normalized LIKE ?)
             OR entity_id IN (SELECT internal_mp_id FROM mps WHERE constituency_normalized LIKE ?)
             OR reason LIKE ?
         )""")

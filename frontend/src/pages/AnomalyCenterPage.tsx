@@ -545,6 +545,22 @@ export const AnomalyCenterPage: React.FC = () => {
           </div>
         )}
 
+        {/* Error Notice */}
+        {!loading && error && (
+          <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+              <span>{error}</span>
+            </div>
+            <button
+              onClick={() => loadActiveTabData()}
+              className="px-3 py-1 bg-white border border-amber-300 rounded-lg font-mono text-[11px] font-semibold text-amber-800 hover:bg-amber-100 transition"
+            >
+              Retry
+            </button>
+          </div>
+        )}
+
         {/* TAB 1: DUPLICATES CONTENT */}
         {!loading && activeTab === 'duplicates' && (
           <div className="space-y-4">

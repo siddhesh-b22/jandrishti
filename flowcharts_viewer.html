@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JanDrishti — Simple & Explainable System Flowcharts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --primary: #38bdf8;
+      --primary-dark: #0284c7;
+      --accent: #a855f7;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 30px 20px;
+    }
+    .header {
+      max-width: 1200px;
+      margin: 0 auto 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .header-title h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .header-title p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--primary);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+    .card-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.6);
+    }
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card-desc {
+      color: #38bdf8;
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-top: 6px;
+    }
+    .diagram-wrapper {
+      padding: 30px 20px;
+      background: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 180px;
+      overflow-x: auto;
+    }
+    .diagram-wrapper svg {
+      max-width: 100%;
+      height: auto;
+    }
+    .card-footer {
+      padding: 18px 24px;
+      background: rgba(15, 23, 42, 0.4);
+      border-top: 1px solid var(--border);
+    }
+    .pitch-box {
+      background: rgba(56, 189, 248, 0.08);
+      border-left: 4px solid var(--primary);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.9rem;
+      color: #e2e8f0;
+    }
+    .pitch-label {
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .print-btn {
+      background: var(--primary-dark);
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .print-btn:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-title">
+      <h1>JanDrishti — System Architecture & Flowcharts</h1>
+      <p>Clean, Simple &amp; Presentation-Ready for SIH 2026 Jury</p>
+    </div>
+    <div style="display: flex; gap: 12px; align-items: center;">
+      <span class="badge">SIH26102</span>
+      <button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- MASTER FLOWCHART CARD -->
+    <div class="card" style="border: 2px solid var(--primary);">
+      <div class="card-header" style="background: rgba(2, 132, 199, 0.15);">
+        <div class="card-title">⭐ MASTER FLOWCHART: End-to-End System Process & Technical Methodology</div>
+        <div class="card-desc">📌 In Simple Words: The 4-Tier pipeline from messy government file ingestion ➔ dual-engine storage ➔ deterministic AI fraud scanning ➔ citizen &amp; official workspaces.</div>
+      </div>
+      <div class="diagram-wrapper">
+        <div class="mermaid">
+flowchart TD
+    subgraph T1 ["1️⃣ TIER 1: DATA INGESTION & NORMALIZATION PIPELINE"]
+        direction TB
+        RAW1["🏛️ MoSPI Public Portal Exports (eSAKSHI)"]
+        RAW2["📜 Sansad.in MP Registers (778 MPs)"]
+        RAW3["🗺️ Survey of India TopoJSON (542 Constituencies)"]
+        NORM["⚙️ Normalization Engine<br/>• Entity Resolution: 34,000 contractor variants ➔ 22,377 canonical vendors<br/>• Double-Entry Check: Allocation = Expenditure + Unspent Balance (₹0.00 Variance)"]
+        RAW1 & RAW2 & RAW3 --> NORM
+    end
+
+    subgraph T2 ["2️⃣ TIER 2: CANONICAL DATA TIER (Dual-Engine Topology)"]
+        direction TB
+        DB_ROUTER{"🔀 Unified DB Router<br/>(backend/db_engine.py)"}
+        DB_CLOUD["☁️ Primary: Supabase PostgreSQL 15<br/>(PostgREST streaming API over HTTPS)"]
+        DB_LOCAL["💽 Fallback: Local SQLite 3 in WAL Mode<br/>(100% Offline resilience for remote district offices)"]
+        DB_ROUTER -->|Normal Operation| DB_CLOUD
+        DB_ROUTER -.->|Network Drop / Failover| DB_LOCAL
+    end
+
+    subgraph T3 ["3️⃣ TIER 3: CORE BACKEND & FORENSIC INTELLIGENCE ENGINE (FastAPI)"]
+        direction TB
+        SEC["🔐 Security & Jurisdiction Enforcement<br/>• HMAC-SHA256 JWT Token Authentication<br/>• Geographic ABAC Scoping (WHERE state = :s AND district = :d)"]
+        AI_HUB{"🧠 Deterministic Forensic AI Hub"}
+        AI_D1["👯 Duplicate Detector<br/>(TF-IDF + Cosine > 0.85, GPS < 1km)"]
+        AI_D2["⚠️ Progress Mismatch<br/>(Funds > 80%, Physical < 20%)"]
+        AI_D3["⏳ Stalled Projects<br/>(Sanctioned > 18 mo, Zero progress)"]
+        AI_D4["💰 Cost Outliers<br/>(MAD Robust Z-Score > 2.5x)"]
+        SEC --> AI_HUB
+        AI_HUB --> AI_D1 & AI_D2 & AI_D3 & AI_D4
+    end
+
+    subgraph T4 ["4️⃣ TIER 4: INTERACTIVE USER EXPERIENCE & WORKSPACES (React 19 + Vite)"]
+        direction TB
+        UI1["🌐 Public Citizen Portal<br/>542-Constituency TopoJSON Map, MP Profiles, Works Explorer"]
+        UI2["🏛️ Statutory Role Workspaces<br/>Ministry (National) • State Nodal • District Collector (DPO) • MP"]
+        UI3["📋 MoSPI Statutory Case Docket<br/>1-Click Actionable Audit Dossier (Payment Freeze, Site Audit)"]
+    end
+
+    NORM ==> DB_ROUTER
+    DB_CLOUD & DB_LOCAL ==> SEC
+    AI_D1 & AI_D2 & AI_D3 & AI_D4 ==> UI3
+    SEC ==> UI1 & UI2
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="pitch-box">
+          <div class="pitch-label">🎤 How to Explain to the Jury:</div>
+          "This 4-tier methodology processes raw government data into trusted canonical records, persists them in a resilient dual-engine database, screens every transaction through 4 deterministic AI algorithms, and delivers actionable transparency across citizen portals and statutory role workspaces."
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 1 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">1. The 4 User Roles &amp; Data Access (Who sees what?)</div>
+        <div class="card-desc">📌 In Simple Words: A 4-level pyramid where national officials see the big picture, and local officials only see their own district.</div>
+      </div>
+      <div class="diagram-wrapper">
+        <div class="mermaid">
+flowchart TD
+    A["🏛️ 1. Ministry (Central MoSPI)<br/>Sees: Whole India (All 36 States & UTs, 778 MPs)"] --> B["🏢 2. State Authority<br/>Sees: Only their own State (e.g. Maharashtra)"]
+    B --> C["🏛️ 3. District Collector (DPO)<br/>Sees: Only their own District (e.g. Pune)"]
+    C --> D["🌐 4. Public / Citizen<br/>Sees: Transparency data across works (Read-Only)"]
+
+    style A fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#0369a1
+    style B fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#15803d
+    style C fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#b45309
+    style D fill:#f1f5f9,stroke:#64748b,stroke-width:2px,color:#334155
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="pitch-box">
+          <div class="pitch-label">🎤 How to Explain to the Jury:</div>
+          "We designed a strict 4-tier governance hierarchy based on official MoSPI guidelines. Central Ministry monitors national metrics, State officials manage allocations, District Collectors take field actions in their jurisdiction, and Citizens have full transparency."
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">2. How the Code Works (Frontend to Database Request Lifecycle)</div>
+        <div class="card-desc">📌 In Simple Words: Clean 5-step flow from user click to database and instant screen update.</div>
+      </div>
+      <div class="diagram-wrapper">
+        <div class="mermaid">
+flowchart LR
+    Step1["1. React Frontend<br/>(User clicks on page)"] --> Step2["2. API Client (Axios)<br/>(Sends HTTP + JWT Token)"]
+    Step2 --> Step3["3. FastAPI Backend<br/>(Verifies Role & Jurisdiction)"]
+    Step3 --> Step4["4. Database Engine<br/>(Reads SQLite or Supabase)"]
+    Step4 --> Step5["5. Screen Updates<br/>(User sees data & graphs)"]
+
+    style Step1 fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e40af
+    style Step2 fill:#f5f3ff,stroke:#8b5cf6,stroke-width:2px,color:#5b21b6
+    style Step3 fill:#fdf2f8,stroke:#ec4899,stroke-width:2px,color:#9d174d
+    style Step4 fill:#ecfdf5,stroke:#10b981,stroke-width:2px,color:#065f46
+    style Step5 fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#92400e
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="pitch-box">
+          <div class="pitch-label">🎤 How to Explain to the Jury:</div>
+          "Our decoupled architecture connects a reactive React 19 frontend to modular FastAPI routers. Every database query executes in sub-50ms with automatic role security injection."
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">3. AI Anomaly Detection &amp; Forensic Case Docket Pipeline (The 4 Hero Tabs)</div>
+        <div class="card-desc">📌 In Simple Words: Automated 24/7 AI financial detective scanning project data for 4 critical red flags.</div>
+      </div>
+      <div class="diagram-wrapper">
+        <div class="mermaid">
+flowchart TD
+    subgraph S1 ["📄 CONTINUOUS TRANSACTION INGESTION"]
+        RAW["MPLADS Works Ledger<br/>Titles, Sanction Dates, Funds Disbursed, Physical Progress %"]
+    end
+
+    subgraph S2 ["🧠 4 AI FORENSIC DETECTORS"]
+        D1["1️⃣ Duplicate Detection Engine<br/>• TF-IDF & Cosine title similarity > 0.85<br/>• Geo-distance < 1.0 km in same District"]
+        D2["2️⃣ Progress Mismatch Engine<br/>• High Expenditure (> 80% fund release)<br/>• Lagging Physical Progress (< 20%)"]
+        D3["3️⃣ Stalled Project Engine<br/>• Sanctioned > 18-24 months ago<br/>• Zero physical or financial movement"]
+        D4["4️⃣ Cost Outlier Engine<br/>• Expenditure > 2.5x Z-score of sector normal<br/>• Unjustified budget inflation"]
+    end
+
+    subgraph S3 ["🖥️ ANOMALY CENTER (4 HERO TABS)"]
+        T1["Tab 1: Duplicate Works"]
+        T2["Tab 2: Progress Mismatch"]
+        T3["Tab 3: Stalled Works"]
+        T4["Tab 4: Cost Outliers"]
+    end
+
+    subgraph S4 ["🧮 COMPOSITE RISK TRIAGING"]
+        RISK{"Composite Risk Score<br/>(0 to 100)"}
+        R_NORM["🟢 Normal (Score < 45)<br/>Standard Monitoring"]
+        R_ADV["🟡 Advisory (Score 45 - 74)<br/>Executive Engineer Inquiry"]
+        R_CRIT["🔴 Critical (Score >= 75)<br/>Immediate Statutory Escalation"]
+    end
+
+    subgraph S5 ["📋 MoSPI STATUTORY CASE DOCKET (CasesAlertsPage.tsx)"]
+        DOCKET["District Collector / Auditor Docket<br/>1. Freeze Vendor Payment<br/>2. Issue 14-Day Show-Cause Notice<br/>3. Dispatch GIS Photo Verification Team<br/>4. Close Case with Audit Justification"]
+    end
+
+    RAW --> D1 & D2 & D3 & D4
+    D1 --> T1
+    D2 --> T2
+    D3 --> T3
+    D4 --> T4
+
+    T1 & T2 & T3 & T4 --> RISK
+    RISK -->|Score < 45| R_NORM
+    RISK -->|45 <= Score < 75| R_ADV
+    RISK -->|Score >= 75| R_CRIT
+
+    R_ADV & R_CRIT --> DOCKET
+
+    style S1 fill:#f8fafc,stroke:#64748b,stroke-width:2px,color:#1e293b
+    style S2 fill:#fdf4ff,stroke:#c084fc,stroke-width:2px,color:#6b21a8
+    style S3 fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e40af
+    style S4 fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#92400e
+    style S5 fill:#ecfdf5,stroke:#059669,stroke-width:2px,color:#065f46
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="pitch-box">
+          <div class="pitch-label">🎤 How to Explain to the Jury:</div>
+          "Instead of waiting 5 years for a post-mortem CAG audit, JanDrishti detects financial corruption before final disbursement. We organize anomalies into 4 Hero Tabs: duplicates, progress mismatch, stalled projects, and cost outliers. If the composite risk score hits 75, the case is escalated to the District Collector's docket with an immediate payment-freeze recommendation."
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 4 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">4. Project Lifecycle &amp; Pre-Disbursement Fraud Gate</div>
+        <div class="card-desc">📌 In Simple Words: Stopping fraudulent payments digitally before money leaves the treasury.</div>
+      </div>
+      <div class="diagram-wrapper">
+        <div class="mermaid">
+flowchart TD
+    S1["1. MP Drafts & Recommends<br/>Work proposed within ₹5 Cr quota<br/>(Status: DRAFT / SUBMITTED)"] --> S2["2. District Techno Scrutiny<br/>Executive Engineer validates DPR & land eligibility<br/>(Status: SCRUTINY)"]
+    
+    S2 --> GATE{"🛡️ JanDrishti AI Gate<br/>Any anomaly detected?<br/>(Duplicate, Cost Spike, Stalled)"}
+    
+    GATE -->|🚨 Risk >= 75| FREEZE["🛑 PAYMENT FROZEN<br/>Escalated to MoSPI Case Docket<br/>Administrative inquiry ordered"]
+    GATE -->|✅ Clean| S3["3. Administrative Sanction (AS)<br/>Financial Sanction (FS) issued<br/>(Status: SANCTIONED)"]
+    
+    FREEZE -.->|Inquiry Cleared by Collector| S3
+    
+    S3 --> S4["4. Tendering & Work Order<br/>Contractor assigned, work begins<br/>(Status: IN_PROGRESS)"]
+    
+    S4 --> S5["5. Milestone Inspections (25% ➔ 50% ➔ 75%)<br/>Funds released in tranches only after<br/>geotagged site photos uploaded"]
+    
+    S5 --> S6["6. Completion & Public Plaque<br/>Utilization Certificate (UC) issued<br/>Citizen QR Code plaque installed<br/>(Status: COMPLETED)"]
+
+    style S1 fill:#eff6ff,stroke:#3b82f6,color:#1e40af
+    style S2 fill:#eff6ff,stroke:#3b82f6,color:#1e40af
+    style GATE fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#92400e
+    style FREEZE fill:#fee2e2,stroke:#ef4444,stroke-width:2px,color:#991b1b
+    style S3 fill:#ecfdf5,stroke:#10b981,color:#065f46
+    style S4 fill:#ecfdf5,stroke:#10b981,color:#065f46
+    style S5 fill:#ecfdf5,stroke:#10b981,color:#065f46
+    style S6 fill:#d1fae5,stroke:#059669,stroke-width:2px,color:#065f46
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="pitch-box">
+          <div class="pitch-label">🎤 How to Explain to the Jury:</div>
+          "Our system enforces a Zero-Trust Pre-Disbursement Gate. In traditional systems, money is released first and investigated years later. JanDrishti validates the work digitally before the money is transferred."
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 5 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">5. Cloud &amp; Local Database Failover (Supabase ↔ SQLite 3)</div>
+        <div class="card-desc">📌 In Simple Words: Works seamlessly online in the cloud, or completely offline on a local laptop.</div>
+      </div>
+      <div class="diagram-wrapper">
+        <div class="mermaid">
+flowchart TD
+    App["JanDrishti Backend Engine (backend/db_engine.py)"] --> Check{"Is Cloud Database<br/>(Supabase PostgREST) reachable?"}
+    
+    Check -->|Yes (Online)| Cloud["☁️ Supabase Cloud (PostgreSQL 15)<br/>AWS Tokyo, live streaming, multi-user sync"]
+    Check -->|No / Network Drop| Local["📁 Local SQLite 3 Database (WAL Mode)<br/>Instant fallback, sub-5ms local queries, 100% offline"]
+    
+    Cloud -.->|Automatic Circuit Breaker| Local
+    Local -.->|Syncs back when reconnected| Cloud
+
+    style App fill:#f1f5f9,stroke:#475569,stroke-width:2px,color:#1e293b
+    style Check fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#92400e
+    style Cloud fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#15803d
+    style Local fill:#ffedd5,stroke:#ea580c,stroke-width:2px,color:#9a3412
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="pitch-box">
+          <div class="pitch-label">🎤 How to Explain to the Jury:</div>
+          "We built a hybrid storage architecture: in production it connects to cloud Supabase PostgreSQL, and for field officers or hackathon offline demos it falls back smoothly to local SQLite."
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 6 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">6. How a Citizen Reports an Issue &amp; Ground Photo Verification</div>
+        <div class="card-desc">📌 In Simple Words: Citizens verify projects on the ground and submit geotagged photo evidence directly to the Collector.</div>
+      </div>
+      <div class="diagram-wrapper">
+        <div class="mermaid">
+flowchart LR
+    C1["1. Citizen Checks Work<br/>Opens public portal on phone"] --> C2["2. Visits Physical Site<br/>Finds road unbuilt or broken"]
+    C2 --> C3["3. Uploads Evidence<br/>Takes geotagged live photo"]
+    C3 --> Engine["4. JanDrishti Matches GPS<br/>Verifies report matches project location (< 500m)"]
+    Engine --> Alert["5. Collector Notified<br/>Formal inspection inquiry ordered"]
+
+    style C1 fill:#f8fafc,stroke:#94a3b8,color:#1e293b
+    style C2 fill:#fef2f2,stroke:#f87171,color:#991b1b
+    style C3 fill:#eff6ff,stroke:#60a5fa,color:#1e40af
+    style Engine fill:#f3e8ff,stroke:#c084fc,stroke-width:2px,color:#6b21a8
+    style Alert fill:#ecfdf5,stroke:#34d399,stroke-width:2px,color:#065f46
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="pitch-box">
+          <div class="pitch-label">🎤 How to Explain to the Jury:</div>
+          "JanDrishti empowers public vigilance. A citizen uploads a photo from the ground, our backend verifies the EXIF GPS coordinates against the sanctioned location, and automatically escalates suspicious projects."
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'base',
+      themeVariables: {
+        primaryColor: '#ffffff',
+        primaryTextColor: '#0f172a',
+        primaryBorderColor: '#0284c7',
+        lineColor: '#475569',
+        background: '#ffffff',
+        secondaryColor: '#f8fafc',
+        tertiaryColor: '#ffffff',
+        fontFamily: 'Inter, sans-serif'
+      }
+    });
+  </script>
+</body>
+</html>

@@ -171,8 +171,8 @@ export const AnomalyCenterPage: React.FC = () => {
             district: selectedDistrict || undefined,
             severity: selectedSeverity || undefined,
             min_similarity: 0.60,
-            limit: 100
-          }).catch(() => []),
+            limit: 1
+          }).catch(() => ({ total: 0, items: [] })),
           api.getProgressMismatches({
             state: selectedState || undefined,
             district: selectedDistrict || undefined,
@@ -193,8 +193,12 @@ export const AnomalyCenterPage: React.FC = () => {
           }).catch(() => ({ total: 0 })),
         ]);
 
+        const dupTotal = (dupRes as any)?.total !== undefined
+          ? (dupRes as any).total
+          : (Array.isArray(dupRes) ? dupRes.length : 0);
+
         setTabCounts({
-          duplicates: Array.isArray(dupRes) ? dupRes.length : 0,
+          duplicates: dupTotal,
           mismatch: misRes.total || 0,
           delays: delRes.total || 0,
           outliers: outRes.total || 0,
@@ -215,16 +219,18 @@ export const AnomalyCenterPage: React.FC = () => {
       const offset = (currentPage - 1) * PAGE_SIZE;
 
       if (activeTab === 'duplicates') {
-        const data = await api.getDuplicates({
+        const res = await api.getDuplicates({
           state: selectedState || undefined,
           district: selectedDistrict || undefined,
           severity: selectedSeverity || undefined,
           min_similarity: 0.60,
-          limit: 100
+          limit: PAGE_SIZE,
+          offset: offset,
         });
-        const items = data || [];
+        const items = Array.isArray(res) ? res : (res.items || []);
+        const total = (res as any)?.total !== undefined ? (res as any).total : items.length;
         setDuplicates(items);
-        setActiveTotal(items.length);
+        setActiveTotal(total);
       } else if (activeTab === 'mismatch') {
         const res = await api.getProgressMismatches({
           state: selectedState || undefined,
@@ -268,8 +274,8 @@ export const AnomalyCenterPage: React.FC = () => {
     loadActiveTabData();
   }, [activeTab, selectedState, selectedDistrict, selectedSeverity, currentPage]);
 
-  // Slices: Duplicates is sliced client-side from 60 candidates; others are already paged from backend
-  const pagedDuplicates = duplicates.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  // Slices: All 4 tabs are paged from backend using server-side limit & offset
+  const pagedDuplicates = duplicates;
   const pagedMismatches = mismatches;
   const pagedDelays = delays;
   const pagedOutliers = outliers;
@@ -566,7 +572,7 @@ export const AnomalyCenterPage: React.FC = () => {
           <div className="space-y-4">
             <div className="flex items-center justify-between text-xs text-[#71717A] font-mono px-1">
               <span>Showing candidate duplicate clusters flagged across constituencies</span>
-              <span>Page {currentPage} of {Math.max(1, Math.ceil(duplicates.length / PAGE_SIZE))}</span>
+              <span>Page {currentPage} of {Math.max(1, Math.ceil(activeTotal / PAGE_SIZE))}</span>
             </div>
 
             <div className="space-y-4">
@@ -697,10 +703,10 @@ export const AnomalyCenterPage: React.FC = () => {
             </div>
 
             {/* Pagination */}
-            {duplicates.length > PAGE_SIZE && (
+            {activeTotal > PAGE_SIZE && (
               <div className="pt-4 border-t border-[#E4E2DC]">
                 <Pagination
-                  total={duplicates.length}
+                  total={activeTotal}
                   limit={PAGE_SIZE}
                   offset={(currentPage - 1) * PAGE_SIZE}
                   onPageChange={handlePageChange}

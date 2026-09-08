@@ -26,6 +26,7 @@ export const DuplicateDetectionPage: React.FC = () => {
   const isStateLocked = currentRole === 'STATE_NODAL_AUTHORITY' && !!user?.state;
 
   const [duplicates, setDuplicates] = useState<DuplicatePair[]>([]);
+  const [totalCount, setTotalCount] = useState<number>(0);
   const [states, setStates] = useState<StateSummary[]>([]);
   const [categories, setCategories] = useState<WorkCategory[]>([]);
   const [loading, setLoading] = useState(true);
@@ -59,7 +60,10 @@ export const DuplicateDetectionPage: React.FC = () => {
         min_similarity: minSimilarity,
         limit: 30,
       });
-      setDuplicates(data);
+      const items = Array.isArray(data) ? data : (data.items || []);
+      const total = (data as any)?.total !== undefined ? (data as any).total : items.length;
+      setDuplicates(items);
+      setTotalCount(total);
     } catch (err: any) {
       setError(err.message || 'Failed to load duplicate work clusters');
     } finally {
@@ -97,7 +101,7 @@ export const DuplicateDetectionPage: React.FC = () => {
 
         <div className="flex items-center gap-3">
           <span className="px-3.5 py-1.5 rounded-full bg-[#FAF8F5] border border-[#E4E2DC] text-[#121316] text-xs font-mono font-semibold shadow-2xs">
-            {duplicates.length} Clusters Flagged
+            {(totalCount || duplicates.length).toLocaleString()} Clusters Flagged
           </span>
         </div>
       </div>
@@ -110,7 +114,7 @@ export const DuplicateDetectionPage: React.FC = () => {
             <span className="text-[10px] font-mono text-[#71717A]">Active In Scope</span>
           </div>
           <div className="text-2xl font-mono font-semibold text-[#121316]">
-            {duplicates.length} Pairs
+            {(totalCount || duplicates.length).toLocaleString()} Pairs
           </div>
           <div className="text-xs text-[#71717A] mt-1 font-light">
             Works exceeding text &amp; spatial overlap thresholds

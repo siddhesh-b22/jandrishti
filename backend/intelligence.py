@@ -87,8 +87,9 @@ class IntelligenceService:
         category: Optional[str] = None,
         severity: Optional[str] = None,
         limit: int = 25,
+        offset: int = 0,
         min_similarity: float = 0.60
-    ) -> List[Dict[str, Any]]:
+    ) -> Dict[str, Any]:
         """
         Identifies potential duplicate or overlapping works using:
         1. Description token overlap (Jaccard similarity)
@@ -118,8 +119,8 @@ class IntelligenceService:
             query += " AND category_normalized = ?"
             params.append(category)
 
-        # Sample across high-volume constituencies to return diverse candidates
-        sample_limit = 1500 if (state or district) else 3000
+        # Sample across high-volume works to return diverse candidates
+        sample_limit = 2500 if (state or district) else 4000
         query += f" ORDER BY recommended_amount DESC LIMIT {sample_limit}"
 
         rows = conn.execute(query, params).fetchall()
@@ -138,6 +139,7 @@ class IntelligenceService:
 
         for key, work_list in clusters.items():
             n = len(work_list)
+            cluster_pairs_added = 0
             for i in range(n):
                 work_a, tokens_a = work_list[i]
                 for j in range(i + 1, min(i + 15, n)):
@@ -226,16 +228,21 @@ class IntelligenceService:
                             "reasons": reasons,
                             "recommended_action": "Conduct site inspection to verify if these represent distinct ground assets or duplicate sanction recommendations."
                         })
-
-                        if len(duplicates) >= limit * 3:
+                        cluster_pairs_added += 1
+                        # Balanced sampling: prevent single constituency from starving other districts when viewing broad scope
+                        if cluster_pairs_added >= 20 and not district:
                             break
-                if len(duplicates) >= limit * 3:
-                    break
-            if len(duplicates) >= limit * 3:
-                break
 
         duplicates.sort(key=lambda x: x["similarity_score"], reverse=True)
-        return duplicates[:limit]
+        total_count = len(duplicates)
+        paginated_items = duplicates[offset:offset + limit]
+
+        return {
+            "total": total_count,
+            "limit": limit,
+            "offset": offset,
+            "items": paginated_items
+        }
 
     # -------------------------------------------------------------
     # 2. PHYSICAL VS FINANCIAL PROGRESS MISMATCH (Core Req 8)

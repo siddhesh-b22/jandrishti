@@ -13,6 +13,7 @@ from backend.schemas import (
     AnomalyResponse,
     AnomalyListResponse,
     DuplicatePairItem,
+    DuplicatePairListResponse,
     ProgressMismatchListResponse,
     DelayPredictionListResponse,
     DataQualityResponse,
@@ -168,13 +169,14 @@ def get_anomaly_detail(anomaly_id: str, conn: sqlite3.Connection = Depends(get_d
 # CORE AI ALGORITHMS
 # ---------------------------------------------------------
 
-@router.get("/api/intelligence/duplicates", response_model=List[DuplicatePairItem])
+@router.get("/api/intelligence/duplicates", response_model=DuplicatePairListResponse)
 def get_duplicate_works(
     state: Optional[str] = Query(None, description="Filter by state"),
     district: Optional[str] = Query(None, description="Filter by district"),
     category: Optional[str] = Query(None, description="Filter by category"),
     severity: Optional[str] = Query(None, description="Filter by severity (CRITICAL, HIGH, MEDIUM)"),
-    limit: int = Query(25, ge=1, le=100),
+    limit: int = Query(25, ge=1, le=200),
+    offset: int = Query(0, ge=0),
     min_similarity: float = Query(0.60, ge=0.4, le=1.0)
 ):
     """Detects potential duplicate and overlapping works across geographical clusters."""
@@ -184,6 +186,7 @@ def get_duplicate_works(
         category=category,
         severity=severity,
         limit=limit,
+        offset=offset,
         min_similarity=min_similarity
     )
 

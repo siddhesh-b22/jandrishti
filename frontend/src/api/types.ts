@@ -327,6 +327,13 @@ export interface DuplicatePair {
   recommended_action: string;
 }
 
+export interface DuplicatePairListResponse {
+  total: number;
+  limit: number;
+  offset: number;
+  items: DuplicatePair[];
+}
+
 export interface ProgressMismatch {
   work_id: number;
   mp_name: string | null;

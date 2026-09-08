@@ -16,6 +16,7 @@ import {
   DistrictItem,
   WorkCategory,
   DuplicatePair,
+  DuplicatePairListResponse,
   ProgressMismatch,
   DelayPrediction,
   WorkIntelligenceProfile,
@@ -315,8 +316,8 @@ export const api = {
   getCategories: () => fetchJson<WorkCategory[]>(`${API_BASE}/categories`),
 
   // Advanced Intelligence
-  getDuplicates: (params?: { state?: string; district?: string; category?: string; severity?: string; limit?: number; min_similarity?: number }) =>
-    fetchJson<DuplicatePair[]>(`${API_BASE}/intelligence/duplicates${params ? buildQuery(params) : ''}`),
+  getDuplicates: (params?: { state?: string; district?: string; category?: string; severity?: string; limit?: number; offset?: number; min_similarity?: number }) =>
+    fetchJson<DuplicatePairListResponse | DuplicatePair[]>(`${API_BASE}/intelligence/duplicates${params ? buildQuery(params) : ''}`),
 
   getProgressMismatches: (params?: { state?: string; district?: string; severity?: string; min_severity?: string; limit?: number; offset?: number }) =>
     fetchJson<PaginatedResponse<ProgressMismatch>>(`${API_BASE}/intelligence/progress-mismatch${params ? buildQuery(params) : ''}`),

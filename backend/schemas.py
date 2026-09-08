@@ -327,6 +327,12 @@ class DuplicatePairItem(BaseModel):
     reasons: List[str]
     recommended_action: str
 
+class DuplicatePairListResponse(BaseModel):
+    total: int
+    limit: int
+    offset: int
+    items: List[DuplicatePairItem]
+
 class ProgressMismatchItem(BaseModel):
     work_id: int
     mp_name: Optional[str] = None

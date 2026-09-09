@@ -310,6 +310,10 @@ class AlertsService:
                 d["evidence_parsed"] = json.loads(d["evidence"])
             except Exception:
                 d["evidence_parsed"] = {}
+            if not d.get("state") and d["evidence_parsed"].get("state"):
+                d["state"] = d["evidence_parsed"]["state"]
+            if (not d.get("district") or d.get("district") == "GENERAL") and d["evidence_parsed"].get("district"):
+                d["district"] = d["evidence_parsed"]["district"]
             items.append(d)
 
         return {
@@ -346,6 +350,11 @@ class AlertsService:
             alert_dict["evidence_parsed"] = json.loads(alert_dict["evidence"])
         except Exception:
             alert_dict["evidence_parsed"] = {}
+
+        if not alert_dict.get("state") and alert_dict["evidence_parsed"].get("state"):
+            alert_dict["state"] = alert_dict["evidence_parsed"]["state"]
+        if (not alert_dict.get("district") or alert_dict.get("district") == "GENERAL") and alert_dict["evidence_parsed"].get("district"):
+            alert_dict["district"] = alert_dict["evidence_parsed"]["district"]
 
         # Fetch audit trail for this alert
         audit_rows = conn.execute(

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   ShieldAlert,
@@ -21,10 +21,13 @@ import {
   HelpCircle,
   FileCheck2,
   Building2,
-  UserCheck
+  UserCheck,
+  Camera,
+  Eye,
+  Sparkles
 } from 'lucide-react';
 import { api } from '../api/client';
-import { Anomaly, ReviewCase, AuditLog } from '../api/types';
+import { Anomaly, ReviewCase, AuditLog, CitizenReport } from '../api/types';
 import { useRole } from '../context/RoleContext';
 import { SeverityBadge } from '../components/common/Badge';
 import { Breadcrumbs } from '../components/common/Breadcrumbs';
@@ -53,6 +56,10 @@ const OBSERVATION_TEMPLATES = [
 
 export const CasesAlertsPage: React.FC = () => {
   const { currentRole, roleConfig, canEdit, user } = useRole();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const urlTab = searchParams.get('tab');
+  const targetCaseId = searchParams.get('case') || searchParams.get('case_id') || searchParams.get('q') || '';
 
   // Authority Scope Guards
   const isDistrictLocked = currentRole === 'DISTRICT_AUTHORITY' && !!user?.district;
@@ -60,7 +67,16 @@ export const CasesAlertsPage: React.FC = () => {
   const isStateLocked = (currentRole === 'STATE_NODAL_AUTHORITY' || currentRole === 'DISTRICT_AUTHORITY') && !!user?.state;
   const userJurisdictionState = user?.state ? user.state.toUpperCase() : '';
 
-  const [activeTab, setActiveTab] = useState<'ALERTS' | 'CASES' | 'AUDIT'>('ALERTS');
+  const savedTab = localStorage.getItem('jandrishti_cases_tab') as any;
+  const initialActiveTab = (
+    urlTab === 'CASES' ? 'CASES' :
+    urlTab === 'CITIZEN_REPORTS' ? 'CITIZEN_REPORTS' :
+    urlTab === 'AUDIT' ? 'AUDIT' :
+    urlTab === 'ALERTS' ? 'ALERTS' :
+    (savedTab && ['ALERTS', 'CASES', 'AUDIT', 'CITIZEN_REPORTS'].includes(savedTab)) ? savedTab : 'ALERTS'
+  );
+
+  const [activeTab, setActiveTab] = useState<'ALERTS' | 'CASES' | 'AUDIT' | 'CITIZEN_REPORTS'>(initialActiveTab);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -68,6 +84,7 @@ export const CasesAlertsPage: React.FC = () => {
   const [alertsTotal, setAlertsTotal] = useState(0);
   const [casesTotal, setCasesTotal] = useState(0);
   const [criticalCount, setCriticalCount] = useState(0);
+  const [citizenReportsTotal, setCitizenReportsTotal] = useState(0);
 
   // TAB 1: Risk Alerts Feed
   const [alerts, setAlerts] = useState<Anomaly[]>([]);
@@ -84,8 +101,31 @@ export const CasesAlertsPage: React.FC = () => {
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
   const [auditOffset, setAuditOffset] = useState(0);
 
-  // Keyword search across active view
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  // TAB 4: Citizen Ground Reports State
+  const [citizenReports, setCitizenReports] = useState<CitizenReport[]>([]);
+  const [selectedCitizenReport, setSelectedCitizenReport] = useState<CitizenReport | null>(null);
+  const [previewPhotoUrl, setPreviewPhotoUrl] = useState<string | null>(null);
+  const [actingOnReportId, setActingOnReportId] = useState<string | null>(null);
+  const [citizenStatusFilter, setCitizenStatusFilter] = useState<string>('ALL');
+
+  // Keyword search across active view - initialized from URL parameter if provided
+  const [searchQuery, setSearchQuery] = useState<string>(targetCaseId);
+
+  // Synchronize Tab changes with URL Search Params & Local Storage
+  const handleTabChange = (newTab: 'ALERTS' | 'CASES' | 'AUDIT' | 'CITIZEN_REPORTS') => {
+    setActiveTab(newTab);
+    localStorage.setItem('jandrishti_cases_tab', newTab);
+    setSearchQuery('');
+    setSearchParams((prev) => {
+      const p = new URLSearchParams(prev);
+      p.set('tab', newTab);
+      if (newTab !== 'CASES') {
+        p.delete('case');
+        p.delete('case_id');
+      }
+      return p;
+    });
+  };
 
   // Status update modal state
   const [selectedCase, setSelectedCase] = useState<ReviewCase | null>(null);
@@ -156,8 +196,10 @@ export const CasesAlertsPage: React.FC = () => {
       setLoading(true);
       setError(null);
       const res = await api.getCases({
+        search: searchQuery || undefined,
         status: caseStatusFilter || undefined,
         severity: caseSeverityFilter || undefined,
+        sort_by: 'newest',
         limit: PAGE_SIZE,
         offset: casesOffset,
       });
@@ -184,6 +226,85 @@ export const CasesAlertsPage: React.FC = () => {
     }
   };
 
+  // Fetch Citizen Reports for Tab 4
+  const fetchCitizenReports = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const params: any = { limit: 50 };
+      if (isDistrictLocked && userJurisdictionDistrict) {
+        params.district = userJurisdictionDistrict;
+      } else if (isStateLocked && userJurisdictionState) {
+        params.state = userJurisdictionState;
+      }
+      if (citizenStatusFilter && citizenStatusFilter !== 'ALL') {
+        params.status = citizenStatusFilter;
+      }
+      const res = await api.listCitizenReports(params);
+      const items = Array.isArray(res) ? res : (res?.items || []);
+      const total = Array.isArray(res) ? res.length : (res?.total || items.length);
+      setCitizenReports(items);
+      setCitizenReportsTotal(total);
+    } catch (err: any) {
+      setError(err.message || 'Failed to load citizen ground reports');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Authority Action Handlers for Citizen Reports
+  const handleDispatchInspection = async (report: CitizenReport) => {
+    try {
+      setActingOnReportId(report.report_id);
+      await api.updateCitizenReportStatus(report.report_id, {
+        status: 'INSPECTION_DISPATCHED',
+        assigned_authority: `District Verification Cell (${userJurisdictionDistrict || report.district || 'Pune'})`,
+        notes: `Physical verification team dispatched on-site by ${roleConfig.shortLabel}.`
+      });
+      showToast(`Inspection dispatched for Report #${report.report_id}. Status synced to citizen tracker.`, 'success');
+      fetchCitizenReports();
+    } catch (err: any) {
+      showToast(err.message || 'Failed to update inspection status', 'error');
+    } finally {
+      setActingOnReportId(null);
+    }
+  };
+
+  const handleEscalateToCase = async (report: CitizenReport) => {
+    try {
+      setActingOnReportId(report.report_id);
+      const res = await api.escalateCitizenReport(report.report_id, {
+        priority: 'CRITICAL',
+        notes: `Escalated to statutory investigation docket by ${roleConfig.shortLabel}. Payment tranches frozen pending ground inspection.`
+      });
+      showToast(`Report #${report.report_id} escalated to Statutory Case #${res.case.case_id}!`, 'success');
+      setActiveTab('CASES');
+      setCasesOffset(0);
+      fetchCases();
+      fetchCitizenReports();
+    } catch (err: any) {
+      showToast(err.message || 'Failed to escalate report to case', 'error');
+    } finally {
+      setActingOnReportId(null);
+    }
+  };
+
+  const handleMarkResolved = async (report: CitizenReport) => {
+    try {
+      setActingOnReportId(report.report_id);
+      await api.updateCitizenReportStatus(report.report_id, {
+        status: 'VERIFIED',
+        notes: `On-ground physical rectification completed and verified by ${roleConfig.shortLabel}.`
+      });
+      showToast(`Report #${report.report_id} verified & marked RESOLVED.`, 'success');
+      fetchCitizenReports();
+    } catch (err: any) {
+      showToast(err.message || 'Failed to resolve report', 'error');
+    } finally {
+      setActingOnReportId(null);
+    }
+  };
+
   // Load data based on active tab & filters
   useEffect(() => {
     if (activeTab === 'ALERTS') {
@@ -192,8 +313,10 @@ export const CasesAlertsPage: React.FC = () => {
       fetchCases();
     } else if (activeTab === 'AUDIT') {
       fetchAudit();
+    } else if (activeTab === 'CITIZEN_REPORTS') {
+      fetchCitizenReports();
     }
-  }, [activeTab, alertsOffset, alertSeverity, casesOffset, caseStatusFilter, caseSeverityFilter, isStateLocked, userJurisdictionState, isDistrictLocked, userJurisdictionDistrict]);
+  }, [activeTab, searchQuery, alertsOffset, alertSeverity, casesOffset, caseStatusFilter, caseSeverityFilter, citizenStatusFilter, isStateLocked, userJurisdictionState, isDistrictLocked, userJurisdictionDistrict]);
 
   // Convert Alert into Review Case
   const handleCreateCaseFromAlert = async (anomalyItem: Anomaly) => {
@@ -302,6 +425,20 @@ export const CasesAlertsPage: React.FC = () => {
     return filteredAuditLogs.slice(auditOffset, auditOffset + PAGE_SIZE);
   }, [filteredAuditLogs, auditOffset]);
 
+  const displayedCitizenReports = useMemo(() => {
+    if (!searchQuery.trim()) return citizenReports;
+    const q = searchQuery.toLowerCase();
+    return citizenReports.filter(
+      (r) =>
+        r.report_id?.toLowerCase().includes(q) ||
+        r.work_id?.toLowerCase().includes(q) ||
+        r.description?.toLowerCase().includes(q) ||
+        r.reported_location?.toLowerCase().includes(q) ||
+        r.discrepancy_category?.toLowerCase().includes(q) ||
+        r.status?.toLowerCase().includes(q)
+    );
+  }, [citizenReports, searchQuery]);
+
   const getAnomalyInsight = (a: Anomaly) => {
     const type = a.anomaly_type;
     if (type === 'CONTRACTOR_CONCENTRATION') {
@@ -335,6 +472,14 @@ export const CasesAlertsPage: React.FC = () => {
         nextStep: 'Cross-check the Detailed Project Report (DPR) line items and schedule of rates (SoR).',
         method: 'Peer Cost Distribution Outlier Detection',
         confidence: 'Moderate (Document Review Required)',
+      };
+    } else if (type === 'CITIZEN_DISCREPANCY') {
+      return {
+        what: 'Local resident submitted on-ground physical observation & photographic discrepancy evidence.',
+        why: a.reason || 'Reported non-existence, abandoned progress, or substandard material during field social audit.',
+        nextStep: 'Dispatch District Verification Cell engineer to inspect site and freeze pending disbursement tranche under Rule 3.12.',
+        method: 'Citizen Social Audit & On-Ground Photogrammetry',
+        confidence: 'High Ground Truth (Community Whistleblower)',
       };
     } else if (type === 'LOW_UTILIZATION_ALERT') {
       return {
@@ -429,6 +574,10 @@ export const CasesAlertsPage: React.FC = () => {
               <span className="text-[10px] uppercase text-[#C85A32] block font-sans font-semibold tracking-wide">Critical Flags</span>
               <span className="text-2xl font-bold text-[#C85A32]">{criticalCount ? criticalCount.toLocaleString() : '21'}</span>
             </div>
+            <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-center min-w-[110px]">
+              <span className="text-[10px] uppercase text-amber-800 block font-sans font-semibold tracking-wide">Citizen Flags</span>
+              <span className="text-2xl font-bold text-amber-900">{citizenReportsTotal ? citizenReportsTotal.toLocaleString() : '18'}</span>
+            </div>
           </div>
         </div>
 
@@ -438,10 +587,7 @@ export const CasesAlertsPage: React.FC = () => {
           <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-1">
             <button
               type="button"
-              onClick={() => {
-                setActiveTab('ALERTS');
-                setSearchQuery('');
-              }}
+              onClick={() => handleTabChange('ALERTS')}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-medium transition cursor-pointer shrink-0 ${
                 activeTab === 'ALERTS'
                   ? 'bg-[#121316] text-[#FAF8F5] shadow-xs'
@@ -454,10 +600,7 @@ export const CasesAlertsPage: React.FC = () => {
 
             <button
               type="button"
-              onClick={() => {
-                setActiveTab('CASES');
-                setSearchQuery('');
-              }}
+              onClick={() => handleTabChange('CASES')}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-medium transition cursor-pointer shrink-0 ${
                 activeTab === 'CASES'
                   ? 'bg-[#121316] text-[#FAF8F5] shadow-xs'
@@ -470,10 +613,20 @@ export const CasesAlertsPage: React.FC = () => {
 
             <button
               type="button"
-              onClick={() => {
-                setActiveTab('AUDIT');
-                setSearchQuery('');
-              }}
+              onClick={() => handleTabChange('CITIZEN_REPORTS')}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-medium transition cursor-pointer shrink-0 ${
+                activeTab === 'CITIZEN_REPORTS'
+                  ? 'bg-[#121316] text-[#FAF8F5] shadow-xs'
+                  : 'bg-[#F0EFEA] text-[#71717A] hover:text-[#121316] hover:bg-[#E4E2DC]'
+              }`}
+            >
+              <Camera className="w-3.5 h-3.5 text-[#C85A32]" />
+              <span>Citizen Ground Dockets ({citizenReportsTotal.toLocaleString()})</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleTabChange('AUDIT')}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-medium transition cursor-pointer shrink-0 ${
                 activeTab === 'AUDIT'
                   ? 'bg-[#121316] text-[#FAF8F5] shadow-xs'
@@ -490,7 +643,7 @@ export const CasesAlertsPage: React.FC = () => {
             <Search className="w-4 h-4 text-[#71717A] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
-              placeholder={`Search in ${activeTab === 'ALERTS' ? 'alerts' : activeTab === 'CASES' ? 'cases' : 'audit logs'}...`}
+              placeholder={`Search in ${activeTab === 'ALERTS' ? 'alerts' : activeTab === 'CASES' ? 'cases' : activeTab === 'CITIZEN_REPORTS' ? 'citizen reports' : 'audit logs'}...`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-8 py-2 rounded-full border border-[#E4E2DC] bg-[#FAF8F5] text-xs text-[#121316] placeholder:text-[#71717A] focus:outline-none focus:ring-1 focus:ring-[#C85A32] focus:border-[#C85A32] transition"
@@ -589,6 +742,11 @@ export const CasesAlertsPage: React.FC = () => {
                             <span className="text-[11px] font-mono text-[#71717A]">
                               {a.anomaly_id}
                             </span>
+                            {a.anomaly_type === 'CITIZEN_DISCREPANCY' && (
+                              <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 text-xs font-mono font-bold border border-amber-300">
+                                CITIZEN GROUND AUDIT
+                              </span>
+                            )}
                           </div>
 
                           <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto">
@@ -761,6 +919,7 @@ export const CasesAlertsPage: React.FC = () => {
               ) : (
                 <div className="space-y-3">
                   {displayedCases.map((c) => {
+                    const isTargeted = targetCaseId && (c.case_id.toLowerCase() === targetCaseId.toLowerCase() || c.entity_id === targetCaseId);
                     const badge = STATUS_BADGES[c.status] || {
                       bg: 'bg-neutral-100',
                       text: 'text-neutral-700',
@@ -771,11 +930,20 @@ export const CasesAlertsPage: React.FC = () => {
                     return (
                       <div
                         key={c.case_id}
-                        className="p-5 sm:p-6 rounded-3xl bg-white border border-[#E4E2DC] shadow-2xs hover:border-[#C85A32]/40 transition space-y-3.5"
+                        className={`p-5 sm:p-6 rounded-3xl bg-white border shadow-2xs transition space-y-3.5 ${
+                          isTargeted
+                            ? 'border-[#C85A32] ring-2 ring-[#C85A32]/20 bg-[#FAF8F5]'
+                            : 'border-[#E4E2DC] hover:border-[#C85A32]/40'
+                        }`}
                       >
                         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                           <div className="space-y-2 flex-1">
                             <div className="flex items-center gap-2 flex-wrap">
+                              {isTargeted && (
+                                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#C85A32] text-white animate-pulse">
+                                  TARGET CASE DOCKET
+                                </span>
+                              )}
                               <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold border ${badge.bg} ${badge.text} ${badge.border}`}>
                                 {badge.label}
                               </span>
@@ -926,8 +1094,202 @@ export const CasesAlertsPage: React.FC = () => {
                 </div>
             </div>
           )}
+
+          {/* TAB 4: CITIZEN GROUND REPORTS & SOCIAL AUDIT */}
+          {activeTab === 'CITIZEN_REPORTS' && (
+            <div className="space-y-4">
+              {/* Filter Toolbar */}
+              <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-white border border-[#E4E2DC] shadow-2xs">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="text-xs font-semibold text-[#121316] mr-1">Filter Status:</span>
+                  {['ALL', 'SUBMITTED', 'ACKNOWLEDGED', 'INSPECTION_DISPATCHED', 'VERIFIED', 'RESOLVED', 'ESCALATED_TO_CASE'].map((st) => (
+                    <button
+                      key={st}
+                      type="button"
+                      onClick={() => setCitizenStatusFilter(st)}
+                      className={`px-3 py-1 rounded-full text-xs font-medium transition cursor-pointer ${
+                        citizenStatusFilter === st
+                          ? 'bg-[#121316] text-[#FAF8F5]'
+                          : 'bg-[#FAF8F5] text-[#71717A] border border-[#E4E2DC] hover:border-[#C85A32] hover:text-[#121316]'
+                      }`}
+                    >
+                      {st === 'ALL' ? 'All Reports' : st.replace(/_/g, ' ')}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="text-xs font-mono text-[#71717A]">
+                  Active Scope: <strong className="text-[#121316] font-semibold">{isDistrictLocked ? `${userJurisdictionDistrict} (District Authority)` : isStateLocked ? `${userJurisdictionState} (State Nodal)` : 'National Ground Repository'}</strong> &middot; <strong>{displayedCitizenReports.length}</strong> reports
+                </div>
+              </div>
+
+              {/* Citizen Reports Grid */}
+              {displayedCitizenReports.length === 0 ? (
+                <div className="rounded-3xl border border-[#E4E2DC] bg-white p-12 text-center space-y-3">
+                  <Camera className="w-8 h-8 text-[#71717A] mx-auto opacity-50" />
+                  <h3 className="text-base font-serif text-[#121316]">No Citizen Ground Reports in Scope</h3>
+                  <p className="text-xs text-[#71717A] max-w-sm mx-auto font-light">
+                    No citizen ground discrepancy observations have been logged for this jurisdiction matching the current filter.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {displayedCitizenReports.map((rep) => (
+                    <div
+                      key={rep.report_id}
+                      className="p-5 sm:p-6 rounded-3xl bg-white border border-[#E4E2DC] shadow-2xs hover:border-[#C85A32]/50 transition space-y-4 flex flex-col justify-between"
+                    >
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between gap-2 flex-wrap">
+                          <span className={`px-2.5 py-0.5 rounded-full text-xs font-mono font-semibold border ${
+                            ['GHOST_WORK', 'GHOST_PROJECT', 'FUND_MISUSE'].includes(rep.discrepancy_category)
+                              ? 'bg-rose-50 text-rose-800 border-rose-200'
+                              : 'bg-amber-50 text-amber-800 border-amber-200'
+                          }`}>
+                            {rep.discrepancy_category.replace(/_/g, ' ')}
+                          </span>
+                          <span className="text-[11px] font-mono text-[#71717A]">
+                            {rep.report_id}
+                          </span>
+                        </div>
+
+                        <div>
+                          <div className="text-xs font-mono text-[#71717A]">
+                            Location: <strong className="text-[#121316] font-medium">{rep.reported_location || `${rep.district || 'Pune'}, ${rep.state || 'Maharashtra'}`}</strong>
+                          </div>
+                          {rep.work_id && (
+                            <Link
+                              to={`/works/${rep.work_id}`}
+                              className="text-xs font-semibold text-[#C85A32] hover:underline flex items-center gap-1 mt-1"
+                            >
+                              <span>Inspect Linked Work #{rep.work_id}</span>
+                              <ChevronRight className="w-3 h-3" />
+                            </Link>
+                          )}
+                        </div>
+
+                        <p className="text-xs text-[#121316] italic leading-relaxed bg-[#FAF8F5] p-3 rounded-xl border border-[#E4E2DC]">
+                          "{rep.description}"
+                        </p>
+
+                        {/* Photo Evidence Preview */}
+                        {rep.photo_url && (
+                          <div className="space-y-1">
+                            <span className="text-[10px] font-mono uppercase text-[#71717A] flex items-center gap-1">
+                              <Camera className="w-3 h-3 text-[#C85A32]" />
+                              Attached Photographic Proof:
+                            </span>
+                            <img
+                              src={rep.photo_url.startsWith('http') ? rep.photo_url : `http://127.0.0.1:8000${rep.photo_url}`}
+                              alt="Ground proof"
+                              className="w-full h-36 object-cover rounded-xl border border-[#E4E2DC] cursor-pointer hover:opacity-90 transition"
+                              onClick={() => setPreviewPhotoUrl(rep.photo_url?.startsWith('http') ? rep.photo_url : `http://127.0.0.1:8000${rep.photo_url}`)}
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).style.display = 'none';
+                              }}
+                            />
+                          </div>
+                        )}
+
+                        <div className="flex items-center justify-between text-[11px] font-mono text-[#71717A] pt-2 border-t border-[#F0EFEA]">
+                          <span>Status: <strong className="text-[#121316]">{rep.status}</strong></span>
+                          <span>{new Date(rep.created_at || Date.now()).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                        </div>
+                      </div>
+
+                      {/* Authority Actions */}
+                      {canEdit() && (
+                        <div className="flex items-center gap-2 pt-3 border-t border-[#F0EFEA] flex-wrap">
+                          {rep.status === 'SUBMITTED' && (
+                            <button
+                              type="button"
+                              disabled={actingOnReportId === rep.report_id}
+                              onClick={() => handleDispatchInspection(rep)}
+                              className="px-3 py-1.5 rounded-full bg-blue-50 hover:bg-blue-100 text-blue-800 text-[11px] font-medium border border-blue-200 transition cursor-pointer flex items-center gap-1"
+                            >
+                              <Clock className="w-3 h-3" />
+                              <span>Dispatch Inspection</span>
+                            </button>
+                          )}
+
+                          {(rep.status === 'SUBMITTED' || rep.status === 'ACKNOWLEDGED' || rep.status === 'INSPECTION_DISPATCHED') && (
+                            <button
+                              type="button"
+                              disabled={actingOnReportId === rep.report_id}
+                              onClick={() => handleEscalateToCase(rep)}
+                              className="px-3 py-1.5 rounded-full bg-[#C85A32] hover:bg-[#B34E28] text-white text-[11px] font-medium transition cursor-pointer flex items-center gap-1 shadow-xs"
+                            >
+                              <PlusCircle className="w-3 h-3" />
+                              <span>Escalate to Statutory Case</span>
+                            </button>
+                          )}
+
+                          {rep.status === 'INSPECTION_DISPATCHED' && (
+                            <button
+                              type="button"
+                              disabled={actingOnReportId === rep.report_id}
+                              onClick={() => handleMarkResolved(rep)}
+                              className="px-3 py-1.5 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-[11px] font-medium border border-emerald-200 transition cursor-pointer flex items-center gap-1"
+                            >
+                              <CheckCircle2 className="w-3 h-3" />
+                              <span>Mark Verified &amp; Close</span>
+                            </button>
+                          )}
+
+                          {rep.status === 'ESCALATED_TO_CASE' && (
+                            <span className="px-3 py-1 rounded-full bg-purple-100 text-purple-900 border border-purple-300 text-xs font-mono font-medium flex items-center gap-1">
+                              <FileText className="w-3.5 h-3.5 text-purple-700" />
+                              <span>Case Docket Active</span>
+                            </span>
+                          )}
+
+                          {(rep.status === 'VERIFIED' || rep.status === 'RESOLVED') && (
+                            <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-mono font-medium flex items-center gap-1">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
+                              <span>On-Ground Verified &amp; Closed</span>
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
+
+      {/* Full Photo Preview Modal */}
+      <AnimatePresence>
+        {previewPhotoUrl && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs cursor-pointer"
+            onClick={() => setPreviewPhotoUrl(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="relative max-w-2xl max-h-[85vh] bg-white rounded-2xl overflow-hidden p-2 shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                type="button"
+                onClick={() => setPreviewPhotoUrl(null)}
+                className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/60 text-white hover:bg-black transition"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              <img
+                src={previewPhotoUrl}
+                alt="Full photographic evidence"
+                className="max-h-[80vh] w-auto mx-auto rounded-xl object-contain"
+              />
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Case Status Update Modal */}
       <AnimatePresence>

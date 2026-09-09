@@ -280,9 +280,9 @@ flowchart TD
     D4 --> T4
 
     T1 & T2 & T3 & T4 --> RISK
-    RISK -->|Score < 45| R_NORM
-    RISK -->|45 <= Score < 75| R_ADV
-    RISK -->|Score >= 75| R_CRIT
+    RISK -->|"Score < 45"| R_NORM
+    RISK -->|"45 <= Score < 75"| R_ADV
+    RISK -->|"Score >= 75"| R_CRIT
 
     R_ADV & R_CRIT --> DOCKET
 
@@ -336,7 +336,7 @@ flowchart TD
     
     S2 --> GATE{"🛡️ JanDrishti AI Gate<br/>Any anomaly detected?<br/>(Duplicate, Cost Spike, Stalled)"}
     
-    GATE -->|🚨 Risk >= 75| FREEZE["🛑 PAYMENT FROZEN<br/>Escalated to MoSPI Case Docket<br/>Administrative inquiry ordered"]
+    GATE -->|"🚨 Risk >= 75"| FREEZE["🛑 PAYMENT FROZEN<br/>Escalated to MoSPI Case Docket<br/>Administrative inquiry ordered"]
     GATE -->|✅ Clean| S3["3. Administrative Sanction (AS)<br/>Financial Sanction (FS) issued<br/>(Status: SANCTIONED)"]
     
     FREEZE -.->|Inquiry Cleared by Collector| S3
@@ -379,7 +379,7 @@ JanDrishti can run anywhere: in the cloud with Supabase, or completely offline o
 flowchart TD
     App["JanDrishti Backend Engine (backend/db_engine.py)"] --> Check{"Is Cloud Database<br/>(Supabase PostgREST) reachable?"}
     
-    Check -->|Yes (Online)| Cloud["☁️ Supabase Cloud (PostgreSQL 15)<br/>AWS Tokyo, live streaming, multi-user sync"]
+    Check -->|"Yes (Online)"| Cloud["☁️ Supabase Cloud (PostgreSQL 15)<br/>AWS Tokyo, live streaming, multi-user sync"]
     Check -->|No / Network Drop| Local["📁 Local SQLite 3 Database (WAL Mode)<br/>Instant fallback, sub-5ms local queries, 100% offline"]
     
     Cloud -.->|Automatic Circuit Breaker| Local
@@ -442,3 +442,4 @@ flowchart LR
 | **4. Fund Lifecycle** | Pre-disbursement fraud check prevents corrupt fund release | Zero-Trust Financial Gate | `backend/workflow.py`, `backend/gov_service.py` |
 | **5. Dual DB Failover** | Cloud Supabase with offline SQLite edge fallback | Dual-mode automatic circuit breaker | `backend/db_engine.py` |
 | **6. Citizen Vigilance** | Geotagged civic photo verification triggers Collector inquiries | EXIF GPS matching within 500m | `frontend/src/pages/OverviewPage.tsx` |
+

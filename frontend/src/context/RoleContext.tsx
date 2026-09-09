@@ -131,11 +131,15 @@ export const RoleProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
 
   const [currentRole, setCurrentRole] = useState<UserRole>(() => {
+    const savedRole = localStorage.getItem('jandrishti_user_role');
+    if (savedRole && savedRole in ROLE_CONFIGS) {
+      return savedRole as UserRole;
+    }
     const savedUserStr = localStorage.getItem('jandrishti_user');
     if (savedUserStr) {
       try {
         const u = JSON.parse(savedUserStr);
-        if (u && u.role && u.role in ROLE_CONFIGS && u.role !== 'CITIZEN') {
+        if (u && u.role && u.role in ROLE_CONFIGS) {
           return u.role as UserRole;
         }
       } catch {
@@ -170,6 +174,109 @@ export const RoleProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [user]);
 
+  const setRole = (newRole: UserRole) => {
+    setCurrentRole(newRole);
+    localStorage.setItem('jandrishti_user_role', newRole);
+    
+    let newUser: AuthUser | null = null;
+    if (newRole === 'DISTRICT_AUTHORITY') {
+      newUser = {
+        user_id: 'usr_district_pune',
+        display_name: 'District Authority (Pune)',
+        role: 'DISTRICT_AUTHORITY',
+        jurisdiction: 'Pune, Maharashtra',
+        jurisdiction_type: 'DISTRICT',
+        state: 'MAHARASHTRA',
+        district: 'PUNE',
+        constituency: 'PUNE',
+        is_admin: false,
+        can_mutate_cases: true
+      };
+      setSelectedState('MAHARASHTRA');
+      setSelectedDistrict('PUNE');
+    } else if (newRole === 'STATE_NODAL_AUTHORITY') {
+      newUser = {
+        user_id: 'usr_state_mh',
+        display_name: 'State Nodal Authority (Maharashtra)',
+        role: 'STATE_NODAL_AUTHORITY',
+        jurisdiction: 'Maharashtra',
+        jurisdiction_type: 'STATE',
+        state: 'MAHARASHTRA',
+        district: '',
+        constituency: '',
+        is_admin: true,
+        can_mutate_cases: true
+      };
+      setSelectedState('MAHARASHTRA');
+    } else if (newRole === 'MINISTRY_ADMIN') {
+      newUser = {
+        user_id: 'usr_ministry',
+        display_name: 'MoSPI National Administrator',
+        role: 'MINISTRY_ADMIN',
+        jurisdiction: 'National',
+        jurisdiction_type: 'NATIONAL',
+        state: '',
+        district: '',
+        constituency: '',
+        is_admin: true,
+        can_mutate_cases: true
+      };
+    } else if (newRole === 'MINISTRY_OFFICIAL') {
+      newUser = {
+        user_id: 'usr_cag',
+        display_name: 'National CAG Auditor',
+        role: 'MINISTRY_OFFICIAL',
+        jurisdiction: 'National',
+        jurisdiction_type: 'NATIONAL',
+        state: '',
+        district: '',
+        constituency: '',
+        is_admin: true,
+        can_mutate_cases: true
+      };
+    } else if (newRole === 'AUDITOR') {
+      newUser = {
+        user_id: 'usr_auditor',
+        display_name: 'Public Finance Integrity Auditor',
+        role: 'AUDITOR',
+        jurisdiction: 'National',
+        jurisdiction_type: 'NATIONAL',
+        state: '',
+        district: '',
+        constituency: '',
+        is_admin: false,
+        can_mutate_cases: true
+      };
+    } else if (newRole === 'MP') {
+      newUser = {
+        user_id: 'usr_mp_pune',
+        display_name: 'Hon. MP (Pune Constituency)',
+        role: 'MP',
+        jurisdiction: 'Pune Lok Sabha',
+        jurisdiction_type: 'CONSTITUENCY',
+        state: 'MAHARASHTRA',
+        district: 'PUNE',
+        constituency: 'PUNE',
+        mp_id: 'MH_PUNE_01',
+        is_admin: false,
+        can_mutate_cases: false
+      };
+      setSelectedState('MAHARASHTRA');
+      setSelectedDistrict('PUNE');
+      setSelectedMpId('MH_PUNE_01');
+    } else {
+      newUser = null;
+    }
+
+    if (newUser) {
+      setUser(newUser);
+      localStorage.setItem('jandrishti_user', JSON.stringify(newUser));
+    } else {
+      setUser(null);
+      localStorage.removeItem('jandrishti_user');
+    }
+  };
+
   const login = async (username: string, password: string): Promise<AuthUser> => {
     const res = await api.login({ username, password });
     setToken(res.access_token);
@@ -190,6 +297,7 @@ export const RoleProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
     localStorage.removeItem('jandrishti_token');
     localStorage.removeItem('jandrishti_user');
+    localStorage.removeItem('jandrishti_user_role');
     setCurrentRole('CITIZEN');
   };
 
@@ -245,7 +353,7 @@ export const RoleProvider: React.FC<{ children: React.ReactNode }> = ({ children
       value={{
         currentRole,
         roleConfig,
-        setRole: setCurrentRole,
+        setRole,
         selectedState,
         setSelectedState,
         selectedDistrict,

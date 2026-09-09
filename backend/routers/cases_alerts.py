@@ -132,6 +132,8 @@ def list_review_cases(
     severity: Optional[str] = Query(None, description="Filter by severity"),
     category: Optional[str] = Query(None, description="Filter by category"),
     role: Optional[str] = Query(None, description="Filter by assigned role"),
+    search: Optional[str] = Query(None, description="Keyword search query"),
+    sort_by: str = Query("newest", description="Sort order ('newest' or 'risk_score')"),
     limit: int = Query(50, ge=1, le=100),
     offset: int = Query(0, ge=0)
 ):
@@ -141,6 +143,8 @@ def list_review_cases(
         severity=severity,
         category=category,
         role=role,
+        search=search,
+        sort_by=sort_by,
         limit=limit,
         offset=offset
     )

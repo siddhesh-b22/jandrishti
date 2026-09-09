@@ -17,7 +17,11 @@ import {
   Send,
   Sparkles,
   ExternalLink,
-  ArrowRight
+  ArrowRight,
+  Camera,
+  Upload,
+  ImageIcon,
+  Trash2
 } from 'lucide-react';
 import { api } from '../../api/client';
 import { Work, CitizenReport } from '../../api/types';
@@ -59,6 +63,13 @@ export const CitizenWorkspace: React.FC = () => {
     citizen_contact: ''
   });
 
+  // File upload state
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [filePreview, setFilePreview] = useState<string | null>(null);
+  const [uploadingFile, setUploadingFile] = useState(false);
+  const [fileError, setFileError] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+
   const loadData = async () => {
     try {
       setLoading(true);
@@ -67,7 +78,8 @@ export const CitizenWorkspace: React.FC = () => {
         api.listCitizenReports().catch(() => [])
       ]);
       setWorks(worksRes.items || []);
-      setCitizenReports(reportsRes || []);
+      const repItems = Array.isArray(reportsRes) ? reportsRes : (reportsRes?.items || []);
+      setCitizenReports(repItems);
     } catch {
       // Graceful fallback
     } finally {
@@ -79,13 +91,61 @@ export const CitizenWorkspace: React.FC = () => {
     loadData();
   }, [activeState]);
 
+  const handleFileSelect = (file: File) => {
+    setFileError(null);
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      setFileError('Only JPEG, PNG, and WebP images are accepted.');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setFileError(`File size (${(file.size / (1024 * 1024)).toFixed(1)} MB) exceeds the 5 MB limit.`);
+      return;
+    }
+    setSelectedFile(file);
+    const reader = new FileReader();
+    reader.onloadend = () => setFilePreview(reader.result as string);
+    reader.readAsDataURL(file);
+  };
+
+  const handleClearFile = () => {
+    setSelectedFile(null);
+    setFilePreview(null);
+    setFileError(null);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) handleFileSelect(file);
+  };
+
   const handleSubmitReport = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       setReportSubmitting(true);
       setReportSuccessMsg(null);
+
+      let photoUrl = reportForm.photo_url;
+
+      // Upload file first if selected
+      if (selectedFile) {
+        setUploadingFile(true);
+        try {
+          const uploadRes = await api.uploadCitizenEvidence(selectedFile);
+          photoUrl = uploadRes.photo_url;
+        } catch (uploadErr: any) {
+          alert(uploadErr.message || 'Failed to upload evidence photo');
+          return;
+        } finally {
+          setUploadingFile(false);
+        }
+      }
+
       const res = await api.submitCitizenReport({
         ...reportForm,
+        photo_url: photoUrl,
         state: activeState,
         district: 'PUNE',
         constituency: 'PUNE'
@@ -102,6 +162,7 @@ export const CitizenWorkspace: React.FC = () => {
         citizen_name: '',
         citizen_contact: ''
       });
+      handleClearFile();
       setTimeout(() => {
         setIsReportModalOpen(false);
         setReportSuccessMsg(null);
@@ -318,9 +379,18 @@ export const CitizenWorkspace: React.FC = () => {
               Public Discrepancy Reports &amp; Social Audit Docket
             </h2>
           </div>
-          <span className="text-[10px] font-mono text-[#71717A]">
-            Direct Civic Accountability
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="text-[10px] font-mono text-[#71717A] hidden sm:inline">
+              Direct Civic Accountability
+            </span>
+            <Link
+              to="/track-reports"
+              className="text-[11px] font-mono font-semibold text-[#C85A32] hover:underline flex items-center gap-1"
+            >
+              <span>Open Full Tracker</span>
+              <ArrowRight className="w-3 h-3" />
+            </Link>
+          </div>
         </div>
 
         {citizenReports.length === 0 ? (
@@ -350,6 +420,21 @@ export const CitizenWorkspace: React.FC = () => {
                 <p className="text-xs text-[#4A4D53] bg-white p-2.5 rounded-lg border border-[#E4E2DC]">
                   "{report.description}"
                 </p>
+
+                {report.photo_url && (
+                  <div className="rounded-lg overflow-hidden border border-[#E4E2DC] bg-white">
+                    <img
+                      src={report.photo_url.startsWith('http') ? report.photo_url : `${window.location.protocol}//${window.location.hostname}:8000${report.photo_url}`}
+                      alt="Evidence photo"
+                      className="w-full h-32 object-cover"
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                    />
+                    <div className="px-2.5 py-1.5 flex items-center gap-1.5 text-[10px] font-mono text-[#71717A]">
+                      <Camera className="w-3 h-3" />
+                      <span>Photographic Ground Evidence Attached</span>
+                    </div>
+                  </div>
+                )}
 
                 <div className="flex items-center justify-between text-[10px] font-mono text-[#71717A] pt-1">
                   <span>Reported by: {report.citizen_name || 'Anonymous Citizen'}</span>
@@ -437,6 +522,80 @@ export const CitizenWorkspace: React.FC = () => {
                   />
                 </div>
 
+                {/* Photo Evidence Upload Zone */}
+                <div>
+                  <label className="block text-xs font-mono text-[#71717A] mb-1">
+                    <Camera className="w-3.5 h-3.5 inline mr-1" />
+                    Photographic Evidence (Optional, max 5 MB)
+                  </label>
+
+                  {filePreview ? (
+                    <div className="relative rounded-xl border border-emerald-300 bg-emerald-50/50 p-3 space-y-2">
+                      <div className="relative rounded-lg overflow-hidden border border-[#E4E2DC]">
+                        <img
+                          src={filePreview}
+                          alt="Evidence preview"
+                          className="w-full h-36 object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleClearFile}
+                          className="absolute top-2 right-2 p-1.5 rounded-lg bg-white/90 hover:bg-red-50 border border-[#E4E2DC] text-[#71717A] hover:text-red-600 transition"
+                          title="Remove photo"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <div className="flex items-center gap-2 text-[10px] font-mono text-emerald-700">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        <span>{selectedFile?.name} ({((selectedFile?.size || 0) / 1024).toFixed(0)} KB)</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                      onDragLeave={() => setIsDragging(false)}
+                      onDrop={handleDrop}
+                      onClick={() => document.getElementById('evidence-file-input')?.click()}
+                      className={`relative rounded-xl border-2 border-dashed p-5 text-center cursor-pointer transition-all ${
+                        isDragging
+                          ? 'border-[#C85A32] bg-[#FAF0EB] scale-[1.01]'
+                          : 'border-[#E4E2DC] bg-[#FAF8F5] hover:border-[#C85A32] hover:bg-[#FAF0EB]/50'
+                      }`}
+                    >
+                      <input
+                        id="evidence-file-input"
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        onChange={(e) => {
+                          const f = e.target.files?.[0];
+                          if (f) handleFileSelect(f);
+                          e.target.value = '';
+                        }}
+                        className="hidden"
+                      />
+                      <div className="flex flex-col items-center gap-2">
+                        <div className={`p-2.5 rounded-full transition ${
+                          isDragging ? 'bg-[#C85A32]/10' : 'bg-[#F0EFEA]'
+                        }`}>
+                          <Upload className={`w-5 h-5 transition ${isDragging ? 'text-[#C85A32]' : 'text-[#71717A]'}`} />
+                        </div>
+                        <div>
+                          <p className="text-xs font-medium text-[#121316]">Click or drag photo here</p>
+                          <p className="text-[10px] text-[#71717A] font-mono mt-0.5">JPEG, PNG, or WebP • Max 5 MB</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {fileError && (
+                    <div className="mt-2 flex items-center gap-1.5 text-[11px] text-red-600 font-mono bg-red-50 px-3 py-1.5 rounded-lg border border-red-200">
+                      <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0" />
+                      <span>{fileError}</span>
+                    </div>
+                  )}
+                </div>
+
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-mono text-[#71717A] mb-1">Your Name (Optional)</label>
@@ -472,7 +631,7 @@ export const CitizenWorkspace: React.FC = () => {
                     className="cw-btn-primary px-4 py-2 text-xs flex items-center gap-2"
                   >
                     <Send className="w-4 h-4" />
-                    <span>{reportSubmitting ? 'Logging...' : 'Submit to Public Social Audit'}</span>
+                    <span>{reportSubmitting ? (uploadingFile ? 'Uploading evidence...' : 'Logging...') : 'Submit to Public Social Audit'}</span>
                   </button>
                 </div>
               </form>

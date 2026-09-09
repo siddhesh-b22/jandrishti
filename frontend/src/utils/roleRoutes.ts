@@ -61,6 +61,20 @@ export function getNavStructureForRole(role?: string | null): RoleNavStructure {
   const homeRoute = getRoleHomeRoute(role);
   const homeLabel = getRoleHomeLabel(role);
 
+  const isCitizen = !role || role === 'CITIZEN';
+
+  if (isCitizen) {
+    return {
+      workspaceLink: { to: homeRoute, label: homeLabel },
+      primaryLinks: [
+        { to: homeRoute, label: homeLabel },
+        { to: '/works', label: 'Public Works' },
+        { to: '/mps', label: 'MP Tracker' },
+        { to: '/track-reports', label: 'Track Reports' },
+      ],
+    };
+  }
+
   return {
     workspaceLink: { to: homeRoute, label: homeLabel },
     primaryLinks: [

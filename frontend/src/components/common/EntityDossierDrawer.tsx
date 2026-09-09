@@ -311,7 +311,7 @@ export const EntityDossierDrawer: React.FC<EntityDossierDrawerProps> = ({ entity
                     <Users className="w-4 h-4 text-[#C85A32]" />
                   </Link>
                   <Link
-                    to={`/works?mp=${encodeURIComponent(entity.data.mp_name_normalized)}`}
+                    to={`/mps/${entity.data.internal_mp_id}?tab=WORKS`}
                     onClick={onClose}
                     className="w-full p-3 rounded-lg bg-[#F0EFEA] hover:bg-[#E4E2DC] text-[#121316] text-xs font-semibold flex items-center justify-between transition border border-[#E4E2DC]"
                   >

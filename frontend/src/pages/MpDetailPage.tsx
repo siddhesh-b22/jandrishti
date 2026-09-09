@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
 import {
   Users,
   MapPin,
@@ -40,9 +40,18 @@ import { ProvenanceBadge } from '../components/common/ProvenanceBadge';
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton';
 import { ErrorDisplay } from '../components/common/ErrorDisplay';
 import { Breadcrumbs } from '../components/common/Breadcrumbs';
+import { Pagination } from '../components/common/Pagination';
+
+const WORKS_PAGE_SIZE = 10;
 
 export const MpDetailPage: React.FC = () => {
   const { mpId } = useParams<{ mpId: string }>();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const tabParam = (searchParams.get('tab') || '').toUpperCase();
+  const validTabs = ['OVERVIEW', 'WORKS', 'TRANSACTIONS', 'VENDORS', 'SIGNALS'] as const;
+  type TabType = typeof validTabs[number];
+  const initialTab: TabType = validTabs.includes(tabParam as TabType) ? (tabParam as TabType) : 'OVERVIEW';
 
   const [mp, setMp] = useState<MPDetail | null>(null);
   const [profile, setProfile] = useState<EntityProfile | null>(null);
@@ -54,8 +63,10 @@ export const MpDetailPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [activeTab, setActiveTab] = useState<'OVERVIEW' | 'WORKS' | 'TRANSACTIONS' | 'VENDORS' | 'SIGNALS'>('OVERVIEW');
+  const [activeTab, setActiveTab] = useState<TabType>(initialTab);
   const [works, setWorks] = useState<Work[]>([]);
+  const [worksOffset, setWorksOffset] = useState(0);
+  const [worksTotal, setWorksTotal] = useState(0);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [tabLoading, setTabLoading] = useState(false);
 
@@ -72,6 +83,7 @@ export const MpDetailPage: React.FC = () => {
       ]);
 
       setMp(mpRes);
+      setWorksTotal(mpRes.recommended_works_count || 0);
       setProfile(profileRes);
       setTimeline(timelineRes);
       if (mediaRes && mediaRes.items.length > 0) {
@@ -88,13 +100,21 @@ export const MpDetailPage: React.FC = () => {
     loadMp();
   }, [mpId]);
 
-  // Lazy load sub-lists when switching tabs
+  // Synchronize activeTab when URL query param changes
+  useEffect(() => {
+    if (tabParam && validTabs.includes(tabParam as TabType) && tabParam !== activeTab) {
+      setActiveTab(tabParam as TabType);
+    }
+  }, [tabParam]);
   useEffect(() => {
     if (!mpId || !mp) return;
-    if (activeTab === 'WORKS' && works.length === 0) {
+    if (activeTab === 'WORKS') {
       setTabLoading(true);
-      api.getWorks({ mp_id: mp.internal_mp_id, limit: 50 })
-        .then((res) => setWorks(res.items))
+      api.getWorks({ mp_id: mp.internal_mp_id, limit: WORKS_PAGE_SIZE, offset: worksOffset })
+        .then((res) => {
+          setWorks(res.items);
+          setWorksTotal(res.total ?? mp.recommended_works_count);
+        })
         .catch(() => {})
         .finally(() => setTabLoading(false));
     } else if (activeTab === 'TRANSACTIONS' && transactions.length === 0) {
@@ -104,7 +124,7 @@ export const MpDetailPage: React.FC = () => {
         .catch(() => {})
         .finally(() => setTabLoading(false));
     }
-  }, [activeTab, mpId, mp]);
+  }, [activeTab, mpId, mp, worksOffset]);
 
   const copyToClipboard = (text: string, field: string) => {
     navigator.clipboard.writeText(text);
@@ -406,7 +426,10 @@ export const MpDetailPage: React.FC = () => {
             <button
               key={tab.id}
               type="button"
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => {
+                setActiveTab(tab.id);
+                setSearchParams({ tab: tab.id });
+              }}
               className={`px-4 py-2 rounded-full text-xs font-medium transition whitespace-nowrap cursor-pointer ${
                 activeTab === tab.id
                   ? 'bg-[#121316] text-[#FAF8F5] shadow-xs'
@@ -558,7 +581,7 @@ export const MpDetailPage: React.FC = () => {
         <div className="rounded-2xl border border-[#E4E2DC] bg-white p-6 sm:p-8 shadow-xs space-y-4">
           <div className="flex items-center justify-between border-b border-[#E4E2DC] pb-3">
             <h3 className="text-xl font-serif text-[#121316]">
-              Recommended Ground Works ({works.length > 0 ? works.length : mp.recommended_works_count})
+              Recommended Ground Works ({worksTotal > 0 ? worksTotal.toLocaleString() : mp.recommended_works_count})
             </h3>
             <Link to={`/works?mp_id=${mp.internal_mp_id}`} className="text-xs text-[#C85A32] font-semibold hover:underline flex items-center gap-1 font-mono">
               <span>Open in Full Explorer</span>
@@ -571,28 +594,42 @@ export const MpDetailPage: React.FC = () => {
           ) : works.length === 0 ? (
             <p className="text-xs text-[#71717A] py-6 text-center">No individual works recorded.</p>
           ) : (
-            <div className="divide-y divide-[#E4E2DC]">
-              {works.map((w) => (
-                <div key={w.work_id} className="py-3 flex items-center justify-between gap-4">
-                  <div>
-                    <Link to={`/works/${w.work_id}`} className="text-xs font-semibold text-[#121316] hover:text-[#C85A32]">
-                      {w.work_description_normalized || `Work #${w.work_id}`}
-                    </Link>
-                    <div className="flex items-center gap-2 text-[10px] text-[#71717A] mt-0.5">
-                      <span className="font-mono">#{w.work_id}</span>
-                      <span>•</span>
-                      <span>{w.category_normalized}</span>
-                      <span>•</span>
-                      <span className="font-bold text-[#2E7D32]">{w.lifecycle_status}</span>
+            <div className="space-y-4">
+              <div className="divide-y divide-[#E4E2DC]">
+                {works.map((w) => (
+                  <div key={w.work_id} className="py-3 flex items-center justify-between gap-4">
+                    <div>
+                      <Link to={`/works/${w.work_id}`} className="text-xs font-semibold text-[#121316] hover:text-[#C85A32]">
+                        {w.work_description_normalized || `Work #${w.work_id}`}
+                      </Link>
+                      <div className="flex items-center gap-2 text-[10px] text-[#71717A] mt-0.5">
+                        <span className="font-mono">#{w.work_id}</span>
+                        <span>•</span>
+                        <span>{w.category_normalized}</span>
+                        <span>•</span>
+                        <span className="font-bold text-[#2E7D32]">{w.lifecycle_status}</span>
+                      </div>
+                    </div>
+                    <div className="text-right shrink-0 font-mono text-xs">
+                      <span className="font-bold text-[#121316]">
+                        ₹{(((w.sanctioned_amount || w.recommended_amount || w.final_amount || 0)) / 1e5).toFixed(2)} L
+                      </span>
                     </div>
                   </div>
-                  <div className="text-right shrink-0 font-mono text-xs">
-                    <span className="font-bold text-[#121316]">
-                      ₹{(((w.sanctioned_amount || w.recommended_amount || w.final_amount || 0)) / 1e5).toFixed(2)} L
-                    </span>
-                  </div>
+                ))}
+              </div>
+
+              {/* Works Pagination Controls */}
+              {worksTotal > WORKS_PAGE_SIZE && (
+                <div className="pt-3 border-t border-[#E4E2DC]">
+                  <Pagination
+                    total={worksTotal}
+                    limit={WORKS_PAGE_SIZE}
+                    offset={worksOffset}
+                    onPageChange={(newOffset) => setWorksOffset(newOffset)}
+                  />
                 </div>
-              ))}
+              )}
             </div>
           )}
         </div>

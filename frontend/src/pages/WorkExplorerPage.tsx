@@ -56,6 +56,8 @@ export const WorkExplorerPage: React.FC = () => {
   const lifecycleStatus = searchParams.get('status') || '';
   const sortBy = searchParams.get('sort_by') || 'sanctioned_amount';
   const sortOrder = (searchParams.get('sort_order') as 'asc' | 'desc') || 'desc';
+  const mpId = searchParams.get('mp_id') || '';
+  const mpName = searchParams.get('mp') || '';
   const offset = parseInt(searchParams.get('offset') || '0', 10);
   const limit = 50;
 
@@ -91,7 +93,8 @@ export const WorkExplorerPage: React.FC = () => {
       setLoading(true);
       setError(null);
       const res = await api.getWorks({
-        search: search || undefined,
+        search: search || mpName || undefined,
+        mp_id: mpId || undefined,
         state: state || undefined,
         district: district || undefined,
         constituency: constituency || undefined,
@@ -113,7 +116,7 @@ export const WorkExplorerPage: React.FC = () => {
 
   useEffect(() => {
     loadWorks();
-  }, [search, state, district, constituency, category, lifecycleStatus, sortBy, sortOrder, offset]);
+  }, [search, mpId, mpName, state, district, constituency, category, lifecycleStatus, sortBy, sortOrder, offset]);
 
   const updateParam = (key: string, val: string | null) => {
     const next = new URLSearchParams(searchParams);

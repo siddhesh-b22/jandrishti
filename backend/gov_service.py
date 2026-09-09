@@ -222,9 +222,10 @@ class GovernanceService:
             raise PermissionError(trans_reason)
 
         # Jurisdiction boundary check
+        req_action = Action.REJECT if target_status == "REJECTED" else Action.APPROVE
         allowed, reason = check_permission(
             user=user,
-            action=Action.APPROVE if "REVIEW" in target_status or target_status == "SANCTIONED" else Action.EDIT,
+            action=req_action,
             resource=Resource.RECOMMENDATION,
             target_record=rec
         )
@@ -625,18 +626,53 @@ class GovernanceService:
             conn.close()
 
     # =========================================================================
-    # 5. CITIZEN PUBLIC DISCREPANCY REPORTING
+    # 5. CITIZEN PUBLIC DISCREPANCY REPORTING & SOCIAL AUDIT
     # =========================================================================
     def submit_citizen_report(
         self,
         data: Dict[str, Any],
         client_ip: Optional[str] = None
     ) -> Dict[str, Any]:
-        """Public citizen reports an on-site discrepancy without altering source DB directly."""
+        """Public citizen reports an on-site discrepancy and automatically raises a statutory risk alert."""
         report_id = f"CIT-REP-{uuid.uuid4().hex[:10].upper()}"
         conn = get_db_connection()
         cur = conn.cursor()
         try:
+            work_id = str(data.get("work_id", "")).strip()
+            state = (data.get("state") or "").strip().upper()
+            district = (data.get("district") or "").strip().upper()
+            constituency = (data.get("constituency") or "").strip().upper()
+            work_desc = ""
+
+            # Auto-lookup work metadata if present
+            if work_id:
+                try:
+                    cur.execute("SELECT state_normalized, constituency_normalized, work_description_normalized FROM works WHERE CAST(work_id AS TEXT) = ?", [work_id])
+                    w_row = cur.fetchone()
+                    if w_row:
+                        if not state:
+                            state = (w_row["state_normalized"] or "").upper()
+                        if not district:
+                            district = (w_row["constituency_normalized"] or "").upper()
+                        if not constituency:
+                            constituency = (w_row["constituency_normalized"] or "").upper()
+                        work_desc = w_row["work_description_normalized"] or ""
+                except Exception as e:
+                    logger.warning("Could not lookup work %s: %s", work_id, e)
+
+            # Fallback defaults
+            if not state:
+                state = "MAHARASHTRA"
+            if not district:
+                district = "PUNE"
+            if not constituency:
+                constituency = district
+
+            cat = (data.get("discrepancy_category") or "QUALITY_ISSUE").upper()
+            description = data.get("description", "")
+            location = data.get("reported_location") or f"{district}, {state}"
+            photo_url = data.get("photo_url", "")
+
             stmt = """
                 INSERT INTO citizen_reports (
                     report_id, work_id, state, district, constituency,
@@ -647,14 +683,14 @@ class GovernanceService:
                 stmt,
                 [
                     report_id,
-                    str(data.get("work_id", "")),
-                    data.get("state", ""),
-                    data.get("district", ""),
-                    data.get("constituency", ""),
-                    data.get("discrepancy_category", "QUALITY_ISSUE"),
-                    data.get("description", ""),
-                    data.get("reported_location", ""),
-                    data.get("photo_url", ""),
+                    work_id,
+                    state,
+                    district,
+                    constituency,
+                    cat,
+                    description,
+                    location,
+                    photo_url,
                 ]
             )
             conn.commit()
@@ -664,25 +700,228 @@ class GovernanceService:
                 action="SUBMIT_CITIZEN_REPORT",
                 entity_type=Resource.CITIZEN_REPORT,
                 entity_id=report_id,
-                new_value=data.get("description", "")[:100],
-                reason=f"Public citizen submitted ground discrepancy report for Work #{data.get('work_id')}.",
+                new_value=description[:100],
+                reason=f"Public citizen submitted ground discrepancy report for Work #{work_id} in {district}.",
                 ip_address=client_ip
             )
+
+            # Auto-create alert in alerts service so it immediately appears in Cases & Alerts for District/State/National
+            try:
+                from backend.alerts_service import alerts_service
+                sev = "CRITICAL" if cat in ("GHOST_WORK", "GHOST_PROJECT", "FUND_MISUSE", "FUND_DIVERSION") else "HIGH"
+                clean_desc = f"Citizen Ground Audit [{cat}]: {description[:120]}"
+                if work_desc:
+                    clean_desc += f" (Work: {work_desc[:60]})"
+
+                alerts_service.create_alert(
+                    project_id=work_id or "0",
+                    severity=sev,
+                    alert_type="CITIZEN_DISCREPANCY",
+                    description=clean_desc,
+                    evidence={
+                        "report_id": report_id,
+                        "discrepancy_category": cat,
+                        "description": description,
+                        "reported_location": location,
+                        "photo_url": photo_url,
+                        "state": state,
+                        "district": district,
+                        "constituency": constituency,
+                        "submitted_by": data.get("citizen_name") or "Public Citizen / Social Auditor"
+                    },
+                    assigned_to=f"District Authority ({district})",
+                    assigned_role="DISTRICT_AUTHORITY",
+                    user="Public Citizen / Social Auditor",
+                    role="CITIZEN"
+                )
+            except Exception as alert_err:
+                logger.warning("Could not auto-create alert for citizen report %s: %s", report_id, alert_err)
 
             cur.execute("SELECT * FROM citizen_reports WHERE report_id = ?", [report_id])
             return dict(cur.fetchone())
         finally:
             conn.close()
 
-    def list_citizen_reports(self, limit: int = 50) -> List[Dict[str, Any]]:
+    def list_citizen_reports(
+        self,
+        state: Optional[str] = None,
+        district: Optional[str] = None,
+        status: Optional[str] = None,
+        work_id: Optional[str] = None,
+        limit: int = 50,
+        offset: int = 0
+    ) -> Dict[str, Any]:
+        """List citizen ground reports with multi-criteria jurisdiction filtering."""
         conn = get_db_connection()
         cur = conn.cursor()
         try:
-            cur.execute("SELECT * FROM citizen_reports ORDER BY created_at DESC LIMIT ?", [limit])
+            query = "SELECT * FROM citizen_reports WHERE 1=1"
+            params = []
+            if work_id:
+                query += " AND CAST(work_id AS TEXT) = ?"
+                params.append(str(work_id))
+            if status and status.upper() != "ALL":
+                query += " AND UPPER(status) = ?"
+                params.append(status.upper())
+            if state and state.upper() != "ALL":
+                query += " AND (UPPER(state) = ? OR UPPER(reported_location) LIKE ?)"
+                params.extend([state.upper(), f"%{state.upper()}%"])
+            if district and district.upper() != "ALL":
+                query += " AND (UPPER(district) = ? OR UPPER(constituency) = ? OR UPPER(reported_location) LIKE ?)"
+                params.extend([district.upper(), district.upper(), f"%{district.upper()}%"])
+
+            # Count total
+            count_q = query.replace("SELECT *", "SELECT COUNT(*)", 1)
+            cur.execute(count_q, params)
+            total = cur.fetchone()[0]
+
+            query += " ORDER BY created_at DESC LIMIT ? OFFSET ?"
+            params.extend([limit, offset])
+
+            cur.execute(query, params)
             rows = cur.fetchall()
-            return [dict(r) for r in rows]
+            return {
+                "total": total,
+                "limit": limit,
+                "offset": offset,
+                "items": [dict(r) for r in rows]
+            }
         finally:
             conn.close()
+
+    def update_citizen_report_status(
+        self,
+        report_id: str,
+        status: str,
+        assigned_authority: Optional[str] = None,
+        notes: Optional[str] = None,
+        user: Optional[AuthenticatedUser] = None
+    ) -> Dict[str, Any]:
+        """District or State authority updates citizen ground observation status."""
+        conn = get_db_connection()
+        cur = conn.cursor()
+        try:
+            cur.execute("SELECT * FROM citizen_reports WHERE report_id = ?", [report_id])
+            existing = cur.fetchone()
+            if not existing:
+                raise ValueError(f"Citizen report '{report_id}' not found.")
+
+            valid_statuses = (
+                "SUBMITTED",
+                "ACKNOWLEDGED",
+                "INSPECTION_DISPATCHED",
+                "VERIFIED",
+                "RESOLVED",
+                "REJECTED",
+                "ESCALATED_TO_CASE"
+            )
+            clean_status = status.upper()
+            if clean_status not in valid_statuses:
+                raise ValueError(f"Invalid status '{status}'. Must be one of {valid_statuses}")
+
+            stmt = "UPDATE citizen_reports SET status = ?"
+            params = [clean_status]
+            if assigned_authority is not None:
+                stmt += ", assigned_authority = ?"
+                params.append(assigned_authority)
+            stmt += " WHERE report_id = ?"
+            params.append(report_id)
+
+            cur.execute(stmt, params)
+            conn.commit()
+
+            record_audit_log(
+                user=user,
+                action="UPDATE_CITIZEN_REPORT_STATUS",
+                entity_type=Resource.CITIZEN_REPORT,
+                entity_id=report_id,
+                old_value=existing["status"],
+                new_value=clean_status,
+                reason=notes or f"Status updated by {user.display_name if user else 'Authority'}"
+            )
+
+            # Sync with alert status and reviewer comment
+            try:
+                from backend.database import get_db_write_connection
+                wconn = get_db_write_connection()
+                alert_status = "NEW"
+                if clean_status in ("VERIFIED", "RESOLVED"):
+                    alert_status = "RESOLVED"
+                elif clean_status in ("INSPECTION_DISPATCHED", "ESCALATED_TO_CASE"):
+                    alert_status = "UNDER_INVESTIGATION"
+                elif clean_status == "ACKNOWLEDGED":
+                    alert_status = "ACKNOWLEDGED"
+
+                wconn.execute(
+                    "UPDATE alerts SET status = ?, reviewer_comment = ? WHERE evidence LIKE ?",
+                    [alert_status, f"Citizen Report {clean_status}: {notes or ''}", f"%{report_id}%"]
+                )
+                wconn.commit()
+                wconn.close()
+            except Exception as sync_e:
+                logger.warning("Could not sync citizen report status to alert: %s", sync_e)
+
+            cur.execute("SELECT * FROM citizen_reports WHERE report_id = ?", [report_id])
+            return dict(cur.fetchone())
+        finally:
+            conn.close()
+
+    def escalate_citizen_report_to_case(
+        self,
+        report_id: str,
+        user: AuthenticatedUser,
+        priority: Optional[str] = None,
+        notes: Optional[str] = None
+    ) -> Dict[str, Any]:
+        """Convert a citizen ground observation directly into an official Statutory Review Case."""
+        conn = get_db_connection()
+        cur = conn.cursor()
+        try:
+            cur.execute("SELECT * FROM citizen_reports WHERE report_id = ?", [report_id])
+            rep = cur.fetchone()
+            if not rep:
+                raise ValueError(f"Citizen report '{report_id}' not found.")
+            rep_dict = dict(rep)
+        finally:
+            conn.close()
+
+        from backend.cases import case_service
+        work_id = rep_dict.get("work_id") or "UNKNOWN"
+        cat = rep_dict.get("discrepancy_category") or "GHOST_WORK"
+        sev = priority or ("CRITICAL" if cat in ("GHOST_WORK", "FUND_MISUSE", "FUND_DIVERSION") else "HIGH")
+        title = f"Citizen Social Audit Inquiry: Work #{work_id} [{cat}]"
+        initial_note = f"Escalated from Citizen Ground Report #{report_id}. Observation: {rep_dict.get('description')}. {notes or ''}"
+        if rep_dict.get("photo_url"):
+            initial_note += f" | Photo Proof: {rep_dict.get('photo_url')}"
+
+        new_case = case_service.create_case(
+            entity_type="WORK",
+            entity_id=str(work_id),
+            title=title,
+            severity=sev,
+            risk_score=90.0 if sev == "CRITICAL" else 75.0,
+            category="CITIZEN_WHISTLEBLOWER",
+            assigned_to=f"District Collectorate / IDA ({rep_dict.get('district') or 'PUNE'})",
+            assigned_role=user.role if user else "DISTRICT_AUTHORITY",
+            user=user.display_name if user else "Authority",
+            role=user.role if user else "DISTRICT_AUTHORITY",
+            notes=initial_note
+        )
+
+        # Update citizen report status
+        self.update_citizen_report_status(
+            report_id=report_id,
+            status="ESCALATED_TO_CASE",
+            assigned_authority=f"District Collectorate (Docket #{new_case['case_id']})",
+            notes=f"Formally escalated to Statutory Review Docket #{new_case['case_id']}",
+            user=user
+        )
+
+        return {
+            "case": new_case,
+            "report_id": report_id,
+            "status": "ESCALATED_TO_CASE"
+        }
 
 
 gov_service = GovernanceService()

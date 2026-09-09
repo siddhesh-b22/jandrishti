@@ -1,5 +1,9 @@
+import os
+import uuid
+import shutil
+from pathlib import Path
 from typing import Optional
-from fastapi import APIRouter, HTTPException, Query, Depends, Request, status
+from fastapi import APIRouter, HTTPException, Query, Depends, Request, status, File, UploadFile
 from pydantic import BaseModel, Field
 
 from backend.auth import (
@@ -88,6 +92,17 @@ class CitizenReportPayload(BaseModel):
     description: str
     reported_location: Optional[str] = None
     photo_url: Optional[str] = None
+    citizen_name: Optional[str] = None
+    citizen_contact: Optional[str] = None
+
+class CitizenReportUpdatePayload(BaseModel):
+    status: str
+    assigned_authority: Optional[str] = None
+    notes: Optional[str] = None
+
+class CitizenReportEscalatePayload(BaseModel):
+    priority: Optional[str] = None
+    notes: Optional[str] = None
 
 @router.get("/api/rbac/me")
 def get_rbac_identity(
@@ -287,10 +302,107 @@ def submit_citizen_report(
     ip = request.client.host if request.client else None
     return gov_service.submit_citizen_report(data=req.dict(), client_ip=ip)
 
+ALLOWED_EVIDENCE_TYPES = {
+    "image/jpeg": ".jpg",
+    "image/png": ".png",
+    "image/webp": ".webp",
+}
+MAX_EVIDENCE_SIZE_BYTES = 5 * 1024 * 1024  # 5 MB
+EVIDENCE_DIR = Path("uploads/citizen_evidence")
+EVIDENCE_DIR.mkdir(parents=True, exist_ok=True)
+
+@router.post("/api/citizen-reports/upload-evidence")
+async def upload_citizen_evidence(file: UploadFile = File(...)):
+    """Upload photographic evidence for a citizen discrepancy report. Accepts JPEG, PNG, or WebP up to 5 MB."""
+    # Validate content type
+    if file.content_type not in ALLOWED_EVIDENCE_TYPES:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Invalid file type '{file.content_type}'. Only JPEG, PNG, and WebP images are accepted."
+        )
+
+    # Read and validate size
+    contents = await file.read()
+    if len(contents) > MAX_EVIDENCE_SIZE_BYTES:
+        raise HTTPException(
+            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            detail=f"File size ({len(contents) / (1024 * 1024):.1f} MB) exceeds the 5 MB limit."
+        )
+
+    # Save with UUID filename
+    ext = ALLOWED_EVIDENCE_TYPES[file.content_type]
+    filename = f"{uuid.uuid4().hex}{ext}"
+    filepath = EVIDENCE_DIR / filename
+    with open(filepath, "wb") as f:
+        f.write(contents)
+
+    photo_url = f"/uploads/citizen_evidence/{filename}"
+    return {"photo_url": photo_url, "filename": filename, "size_bytes": len(contents)}
+
 @router.get("/api/citizen-reports")
-def list_citizen_reports(limit: int = Query(50, ge=1, le=100)):
-    """List citizen ground discrepancy reports."""
-    return gov_service.list_citizen_reports(limit=limit)
+def list_citizen_reports(
+    state: Optional[str] = Query(None, description="Filter by State"),
+    district: Optional[str] = Query(None, description="Filter by District"),
+    status: Optional[str] = Query(None, description="Filter by Status"),
+    work_id: Optional[str] = Query(None, description="Filter by Work ID"),
+    limit: int = Query(50, ge=1, le=100),
+    offset: int = Query(0, ge=0),
+    user: Optional[AuthenticatedUser] = Depends(optional_authenticated_user)
+):
+    """List citizen ground discrepancy reports with multi-criteria role scoping."""
+    if user and user.jurisdiction_type == "STATE" and not state:
+        state = user.state
+    elif user and user.jurisdiction_type == "DISTRICT":
+        if not state:
+            state = user.state
+        if not district:
+            district = user.district or user.constituency
+    elif user and (user.jurisdiction_type == "CONSTITUENCY" or user.role == "MP") and not district:
+        district = user.constituency or user.district
+
+    return gov_service.list_citizen_reports(
+        state=state,
+        district=district,
+        status=status,
+        work_id=work_id,
+        limit=limit,
+        offset=offset
+    )
+
+@router.patch("/api/citizen-reports/{report_id}")
+def update_citizen_report(
+    report_id: str,
+    payload: CitizenReportUpdatePayload,
+    user: Optional[AuthenticatedUser] = Depends(optional_authenticated_user)
+):
+    """Authority updates citizen ground observation status and notes."""
+    try:
+        return gov_service.update_citizen_report_status(
+            report_id=report_id,
+            status=payload.status,
+            assigned_authority=payload.assigned_authority,
+            notes=payload.notes,
+            user=user
+        )
+    except ValueError as ve:
+        raise HTTPException(status_code=404, detail=str(ve))
+
+@router.post("/api/citizen-reports/{report_id}/escalate")
+def escalate_citizen_report(
+    report_id: str,
+    payload: CitizenReportEscalatePayload,
+    user: Optional[AuthenticatedUser] = Depends(optional_authenticated_user)
+):
+    """Convert a citizen ground report into an official Statutory Review Case."""
+    try:
+        return gov_service.escalate_citizen_report_to_case(
+            report_id=report_id,
+            user=user,
+            priority=payload.priority,
+            notes=payload.notes
+        )
+    except ValueError as ve:
+        raise HTTPException(status_code=404, detail=str(ve))
 
 # 6. Immutable Audit Trail
 @router.get("/api/audit-logs")

@@ -6,6 +6,7 @@ from collections import defaultdict, deque
 from typing import Dict
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 
 from backend.config import API_TITLE, API_VERSION, API_DESCRIPTION
@@ -132,3 +133,9 @@ app.include_router(dashboards_router)
 app.include_router(cases_alerts_router)
 app.include_router(ingest_router)
 app.include_router(governance_router)
+
+# Serve uploaded citizen evidence images
+import pathlib
+_uploads_dir = pathlib.Path("uploads/citizen_evidence")
+_uploads_dir.mkdir(parents=True, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")

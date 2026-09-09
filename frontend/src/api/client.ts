@@ -332,7 +332,7 @@ export const api = {
     fetchJson<DataQualityReport>(`${API_BASE}/intelligence/data-quality`),
 
   // Case Management & Audit Trail
-  getCases: (params?: { status?: string; severity?: string; category?: string; role?: string; limit?: number; offset?: number }) =>
+  getCases: (params?: { status?: string; severity?: string; category?: string; role?: string; search?: string; sort_by?: string; limit?: number; offset?: number }) =>
     fetchJson<PaginatedResponse<ReviewCase>>(`${API_BASE}/cases${params ? buildQuery(params) : ''}`),
 
   getCaseDetail: (caseId: string) =>
@@ -821,8 +821,36 @@ export const api = {
       body: JSON.stringify(data)
     }),
 
-  listCitizenReports: () =>
-    fetchJson<CitizenReport[]>(`${API_BASE}/citizen-reports`),
+  uploadCitizenEvidence: async (file: File): Promise<{ photo_url: string; filename: string; size_bytes: number }> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const res = await fetch(`${API_BASE}/citizen-reports/upload-evidence`, {
+      method: 'POST',
+      body: formData,
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ detail: 'Upload failed' }));
+      throw new Error(err.detail || 'Upload failed');
+    }
+    return res.json();
+  },
+
+  listCitizenReports: (params?: { state?: string; district?: string; status?: string; work_id?: string; limit?: number; offset?: number }) =>
+    fetchJson<PaginatedResponse<CitizenReport>>(`${API_BASE}/citizen-reports${params ? buildQuery(params) : ''}`),
+
+  updateCitizenReportStatus: (reportId: string, payload: { status: string; assigned_authority?: string; notes?: string }) =>
+    fetchJson<CitizenReport>(`${API_BASE}/citizen-reports/${encodeURIComponent(reportId)}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }),
+
+  escalateCitizenReport: (reportId: string, payload?: { priority?: string; notes?: string }) =>
+    fetchJson<{ case: ReviewCase; report_id: string; status: string }>(`${API_BASE}/citizen-reports/${encodeURIComponent(reportId)}/escalate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload || {})
+    }),
 
   getAuditLogs: (limit: number = 50, entityType?: string) =>
     fetchJson<StatutoryAuditLog[]>(`${API_BASE}/audit-logs?limit=${limit}${entityType ? `&entity_type=${entityType}` : ''}`),

@@ -71,7 +71,7 @@ flowchart TD
 
         ROUTER --> ENGINES
         ENGINES --> RISK_CALC
-        RISK_CALC -->|Risk > 75 (High)| CASE_SVC
+        RISK_CALC -->|"Risk > 75 (High)"| CASE_SVC
     end
 
     subgraph TIER5 ["💾 TIER 5: DUAL-ENGINE STORAGE & PERSISTENCE"]
@@ -190,11 +190,11 @@ flowchart TD
 
     COMPOSITE --> EVAL{"⚖️ Risk Score Evaluation"}
 
-    EVAL -->|Score >= 75 (High Risk)| HIGH_RISK["🚨 CRITICAL STATUTORY AUDIT CASE<br/>1. Automated Audit Case Created in review_cases<br/>2. Dispatched to CAG Auditor Workspace<br/>3. Real-Time Alert sent to Ministry Admin<br/>4. Temporary Payment Lock Recommended"]:::flagNode
+    EVAL -->|"Score >= 75 (High Risk)"| HIGH_RISK["🚨 CRITICAL STATUTORY AUDIT CASE<br/>1. Automated Audit Case Created in review_cases<br/>2. Dispatched to CAG Auditor Workspace<br/>3. Real-Time Alert sent to Ministry Admin<br/>4. Temporary Payment Lock Recommended"]:::flagNode
 
-    EVAL -->|Score 45 - 74 (Medium Risk)| MED_RISK["⚠️ ADVISORY MONITORING FLAG<br/>1. Flagged in District Collector Docket<br/>2. Requires Executive Engineer Explanation<br/>3. Physical Audit Inspection Scheduled"]:::scoreNode
+    EVAL -->|"Score 45 - 74 (Medium Risk)"| MED_RISK["⚠️ ADVISORY MONITORING FLAG<br/>1. Flagged in District Collector Docket<br/>2. Requires Executive Engineer Explanation<br/>3. Physical Audit Inspection Scheduled"]:::scoreNode
 
-    EVAL -->|Score < 45 (Low Risk)| LOW_RISK["✅ NORMAL CLEARANCE<br/>Disbursement proceeds through standard treasury route"]:::safeNode
+    EVAL -->|"Score < 45 (Low Risk)"| LOW_RISK["✅ NORMAL CLEARANCE<br/>Disbursement proceeds through standard treasury route"]:::safeNode
 ```
 
 ### Forensic Engines Specification

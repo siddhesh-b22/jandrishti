@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   MapPin,
@@ -26,6 +26,9 @@ import {
   FileText,
   ExternalLink,
   X,
+  Camera,
+  Upload,
+  Trash2,
 } from 'lucide-react';
 import { api } from '../api/client';
 import { WorkDetail, WorkIntelligenceProfile, WorkRiskSummary } from '../api/types';
@@ -40,6 +43,7 @@ import { Breadcrumbs } from '../components/common/Breadcrumbs';
 export const WorkDetailPage: React.FC = () => {
   const { workId } = useParams<{ workId: string }>();
   const { currentRole, roleConfig, canEdit } = useRole();
+  const navigate = useNavigate();
 
   const [work, setWork] = useState<WorkDetail | null>(null);
   const [profile, setProfile] = useState<WorkIntelligenceProfile | null>(null);
@@ -76,7 +80,14 @@ export const WorkDetailPage: React.FC = () => {
     loadWorkData();
   }, [workId]);
 
-  const handleInitiateCase = async () => {
+  // Authority Review Case Modal State
+  const [showCaseModal, setShowCaseModal] = useState(false);
+  const [caseSeverity, setCaseSeverity] = useState<'HIGH' | 'CRITICAL'>('HIGH');
+  const [caseAssignee, setCaseAssignee] = useState('District Collectorate / IDA (Pune)');
+  const [caseDirectiveNotes, setCaseDirectiveNotes] = useState('');
+
+  const handleInitiateCase = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (!work) return;
     try {
       setCreatingCase(true);
@@ -84,16 +95,17 @@ export const WorkDetailPage: React.FC = () => {
         entity_type: 'WORK',
         entity_id: `${work.work_id}`,
         title: `Comprehensive Review: ${work.work_description_normalized || `Work #${work.work_id}`}`,
-        severity: profile?.risk_assessment.risk_level || 'HIGH',
-        risk_score: profile?.risk_assessment.overall_score || 75.0,
+        severity: caseSeverity,
+        risk_score: profile?.risk_assessment.overall_score || (caseSeverity === 'CRITICAL' ? 90.0 : 75.0),
         category: profile?.progress.mismatch_detected ? 'PROGRESS_MISMATCH' : 'PROJECT_AUDIT',
-        assigned_to: 'District Collectorate / IDA',
+        assigned_to: caseAssignee || 'District Collectorate / IDA',
         assigned_role: 'DISTRICT_AUTHORITY',
         user: roleConfig.shortLabel,
         role: currentRole,
-        notes: `Initiated from 360° Project Dossier. ${profile?.risk_assessment.explainable_reasons.join(' ') || ''}`
+        notes: caseDirectiveNotes || `Initiated from 360° Project Dossier. ${profile?.risk_assessment.explainable_reasons.join(' ') || 'Statutory review docket opened under MPLADS Rule 3.12.'}`
       });
       setCaseCreated(res.case_id);
+      setShowCaseModal(false);
     } catch (err) {
       alert('Failed to register review case');
     } finally {
@@ -109,26 +121,79 @@ export const WorkDetailPage: React.FC = () => {
   const [submittingCitizenAudit, setSubmittingCitizenAudit] = useState(false);
   const [citizenAuditSuccess, setCitizenAuditSuccess] = useState<string | null>(null);
 
+  // File upload state for citizen social audit
+  const [obsSelectedFile, setObsSelectedFile] = useState<File | null>(null);
+  const [obsFilePreview, setObsFilePreview] = useState<string | null>(null);
+  const [obsUploadingFile, setObsUploadingFile] = useState(false);
+  const [obsFileError, setObsFileError] = useState<string | null>(null);
+  const [obsIsDragging, setObsIsDragging] = useState(false);
+
+  const handleObsFileSelect = (file: File) => {
+    setObsFileError(null);
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      setObsFileError('Only JPEG, PNG, and WebP images are accepted.');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setObsFileError(`File size (${(file.size / (1024 * 1024)).toFixed(1)} MB) exceeds the 5 MB limit.`);
+      return;
+    }
+    setObsSelectedFile(file);
+    const reader = new FileReader();
+    reader.onloadend = () => setObsFilePreview(reader.result as string);
+    reader.readAsDataURL(file);
+  };
+
+  const handleObsClearFile = () => {
+    setObsSelectedFile(null);
+    setObsFilePreview(null);
+    setObsFileError(null);
+  };
+
+  const handleObsDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setObsIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) handleObsFileSelect(file);
+  };
+
   const handleCitizenAuditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!work) return;
     try {
       setSubmittingCitizenAudit(true);
-      const res = await api.createCase({
-        entity_type: 'WORK',
-        entity_id: `${work.work_id}`,
-        title: `Citizen Social Audit: ${work.work_description_normalized || `Work #${work.work_id}`}`,
-        severity: citizenStatus === 'CANNOT_LOCATE' ? 'HIGH' : 'MEDIUM',
-        risk_score: citizenStatus === 'CANNOT_LOCATE' ? 85.0 : 45.0,
-        category: 'SOCIAL_AUDIT',
-        assigned_to: 'District Collectorate / Social Audit Cell',
-        assigned_role: 'DISTRICT_AUTHORITY',
-        user: 'Citizen Social Auditor',
-        role: 'CITIZEN',
-        notes: `Physical Status: ${citizenStatus} | Display Board Present: ${hasBoard} | Observations: ${citizenNotes || 'Ground inspection verified by local resident under RTI §4(1)(b).'}`
+
+      let photoUrl = '';
+
+      // Upload evidence photo if selected
+      if (obsSelectedFile) {
+        setObsUploadingFile(true);
+        try {
+          const uploadRes = await api.uploadCitizenEvidence(obsSelectedFile);
+          photoUrl = uploadRes.photo_url;
+        } catch (uploadErr: any) {
+          alert(uploadErr.message || 'Failed to upload evidence photo');
+          return;
+        } finally {
+          setObsUploadingFile(false);
+        }
+      }
+
+      const res = await api.submitCitizenReport({
+        work_id: `${work.work_id}`,
+        state: work.state_normalized || 'MAHARASHTRA',
+        district: work.constituency_normalized || 'PUNE',
+        constituency: work.constituency_normalized || 'PUNE',
+        discrepancy_category: citizenStatus === 'CANNOT_LOCATE' ? 'GHOST_WORK' : (citizenStatus === 'ABANDONED' ? 'DELAYED_WORK' : 'QUALITY_ISSUE'),
+        description: `Physical Status: ${citizenStatus} | Display Board Present: ${hasBoard} | Observations: ${citizenNotes || 'Ground inspection verified by local resident under RTI §4(1)(b).'}`,
+        reported_location: `${work.constituency_normalized || 'Pune'}, ${work.state_normalized || 'Maharashtra'}`,
+        photo_url: photoUrl,
+        citizen_name: 'Citizen Social Auditor'
       });
-      setCitizenAuditSuccess(res.case_id);
+      setCitizenAuditSuccess(res.report_id);
       setShowCitizenModal(false);
+      handleObsClearFile();
     } catch (err) {
       alert('Failed to submit social audit observation');
     } finally {
@@ -232,8 +297,14 @@ export const WorkDetailPage: React.FC = () => {
             {canEdit() ? (
               <button
                 type="button"
-                onClick={handleInitiateCase}
-                disabled={creatingCase || !!caseCreated}
+                onClick={() => {
+                  if (caseCreated) {
+                    navigate(`/cases?tab=CASES&case=${encodeURIComponent(caseCreated)}`);
+                  } else {
+                    setShowCaseModal(true);
+                  }
+                }}
+                disabled={creatingCase}
                 className="cw-btn-primary text-xs flex items-center gap-2"
               >
                 <PlusCircle className="w-3.5 h-3.5" />
@@ -241,7 +312,7 @@ export const WorkDetailPage: React.FC = () => {
                   {creatingCase
                     ? 'Docketing Review Case...'
                     : caseCreated
-                    ? `Case #${caseCreated} Docketed`
+                    ? `Case #${caseCreated} Docketed → View Docket`
                     : 'Initiate Statutory Review Case'}
                 </span>
               </button>
@@ -261,9 +332,9 @@ export const WorkDetailPage: React.FC = () => {
             <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>Statutory administrative case <strong>#{caseCreated}</strong> has been registered on the district review docket.</span>
+                <span>Statutory administrative case <strong>#{caseCreated}</strong> has been registered on the review docket.</span>
               </div>
-              <Link to="/cases" className="font-semibold underline hover:text-emerald-950 shrink-0">
+              <Link to={`/cases?tab=CASES&case=${encodeURIComponent(caseCreated)}`} className="font-semibold underline hover:text-emerald-950 shrink-0">
                 View in Cases &amp; Alerts &rarr;
               </Link>
             </div>
@@ -275,8 +346,8 @@ export const WorkDetailPage: React.FC = () => {
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>Citizen Social Audit observation <strong>#{citizenAuditSuccess}</strong> logged with District Authority under RTI &sect;4(1)(b).</span>
               </div>
-              <Link to="/cases" className="font-semibold underline hover:text-emerald-950 shrink-0">
-                Inspect Public Docket &rarr;
+              <Link to="/track-reports" className="font-semibold underline hover:text-emerald-950 shrink-0">
+                Track Public Docket &rarr;
               </Link>
             </div>
           )}
@@ -835,20 +906,31 @@ export const WorkDetailPage: React.FC = () => {
 
               {/* Action Trigger Button */}
               <div className="pt-2 border-t border-[#E4E2DC]">
-                {caseCreated ? (
-                  <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>Review Case Registered: <strong>{caseCreated}</strong></span>
-                  </div>
+                {currentRole !== 'CITIZEN' ? (
+                  caseCreated ? (
+                    <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <span>Review Case Registered: <strong>{caseCreated}</strong></span>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      disabled={creatingCase}
+                      onClick={handleInitiateCase}
+                      className="w-full cw-btn-primary py-3 text-xs font-semibold justify-center min-h-[44px]"
+                    >
+                      <PlusCircle className="w-4 h-4" />
+                      <span>{creatingCase ? 'Registering...' : 'Initiate Administrative Review Case'}</span>
+                    </button>
+                  )
                 ) : (
                   <button
                     type="button"
-                    disabled={creatingCase}
-                    onClick={handleInitiateCase}
-                    className="w-full cw-btn-primary py-3 text-xs font-semibold justify-center min-h-[44px]"
+                    onClick={() => setShowCitizenModal(true)}
+                    className="w-full px-4 py-3 rounded-xl bg-[#C85A32] hover:bg-[#B34D28] text-white text-xs font-medium flex items-center justify-center gap-2 shadow-xs transition cursor-pointer min-h-[44px]"
                   >
-                    <PlusCircle className="w-4 h-4" />
-                    <span>{creatingCase ? 'Registering...' : 'Initiate Administrative Review Case'}</span>
+                    <Camera className="w-4 h-4" />
+                    <span>Submit Ground Observation &amp; Photo</span>
                   </button>
                 )}
               </div>
@@ -1039,6 +1121,80 @@ export const WorkDetailPage: React.FC = () => {
                   </span>
                 </div>
 
+                {/* Photo Evidence Upload Zone */}
+                <div className="space-y-1.5">
+                  <label className="block font-semibold text-[#121316] flex items-center gap-1.5">
+                    <Camera className="w-3.5 h-3.5" />
+                    Photographic Evidence (Optional, max 5 MB)
+                  </label>
+
+                  {obsFilePreview ? (
+                    <div className="relative rounded-xl border border-emerald-300 bg-emerald-50/50 p-3 space-y-2">
+                      <div className="relative rounded-lg overflow-hidden border border-[#E4E2DC]">
+                        <img
+                          src={obsFilePreview}
+                          alt="Evidence preview"
+                          className="w-full h-36 object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleObsClearFile}
+                          className="absolute top-2 right-2 p-1.5 rounded-lg bg-white/90 hover:bg-red-50 border border-[#E4E2DC] text-[#71717A] hover:text-red-600 transition"
+                          title="Remove photo"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <div className="flex items-center gap-2 text-[10px] font-mono text-emerald-700">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        <span>{obsSelectedFile?.name} ({((obsSelectedFile?.size || 0) / 1024).toFixed(0)} KB)</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      onDragOver={(e) => { e.preventDefault(); setObsIsDragging(true); }}
+                      onDragLeave={() => setObsIsDragging(false)}
+                      onDrop={handleObsDrop}
+                      onClick={() => document.getElementById('obs-evidence-file-input')?.click()}
+                      className={`relative rounded-xl border-2 border-dashed p-5 text-center cursor-pointer transition-all ${
+                        obsIsDragging
+                          ? 'border-[#C85A32] bg-[#FAF0EB] scale-[1.01]'
+                          : 'border-[#E4E2DC] bg-[#FAF8F5] hover:border-[#C85A32] hover:bg-[#FAF0EB]/50'
+                      }`}
+                    >
+                      <input
+                        id="obs-evidence-file-input"
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        onChange={(e) => {
+                          const f = e.target.files?.[0];
+                          if (f) handleObsFileSelect(f);
+                          e.target.value = '';
+                        }}
+                        className="hidden"
+                      />
+                      <div className="flex flex-col items-center gap-2">
+                        <div className={`p-2.5 rounded-full transition ${
+                          obsIsDragging ? 'bg-[#C85A32]/10' : 'bg-[#F0EFEA]'
+                        }`}>
+                          <Upload className={`w-5 h-5 transition ${obsIsDragging ? 'text-[#C85A32]' : 'text-[#71717A]'}`} />
+                        </div>
+                        <div>
+                          <p className="text-xs font-medium text-[#121316]">Click or drag photo here</p>
+                          <p className="text-[10px] text-[#71717A] font-mono mt-0.5">JPEG, PNG, or WebP • Max 5 MB</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {obsFileError && (
+                    <div className="mt-1 flex items-center gap-1.5 text-[11px] text-red-600 font-mono bg-red-50 px-3 py-1.5 rounded-lg border border-red-200">
+                      <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0" />
+                      <span>{obsFileError}</span>
+                    </div>
+                  )}
+                </div>
+
                 <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#E4E2DC]">
                   <button
                     type="button"
@@ -1052,7 +1208,126 @@ export const WorkDetailPage: React.FC = () => {
                     disabled={submittingCitizenAudit}
                     className="cw-btn-primary text-xs flex items-center gap-2"
                   >
-                    {submittingCitizenAudit ? 'Logging Observation...' : 'Submit to District Ledger'}
+                    {submittingCitizenAudit ? (obsUploadingFile ? 'Uploading evidence...' : 'Logging Observation...') : 'Submit to District Ledger'}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+
+        {/* Authority Statutory Case Initiation Modal */}
+        {showCaseModal && work && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-[#E4E2DC] space-y-5"
+            >
+              <div className="flex items-center justify-between border-b border-[#E4E2DC] pb-4">
+                <div className="space-y-0.5">
+                  <span className="text-[10px] font-mono uppercase text-[#C85A32] font-semibold tracking-wider">
+                    Statutory Governance Directive · Rule 3.12
+                  </span>
+                  <h3 className="text-base font-serif font-bold text-[#121316]">
+                    Initiate Administrative Review Case
+                  </h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowCaseModal(false)}
+                  className="p-1 rounded-lg text-[#71717A] hover:bg-[#F0EFEA] transition"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-[#FAF0EB] border border-[#E8C5B6] space-y-1 text-xs">
+                <div className="font-semibold text-[#121316] line-clamp-2">
+                  Work #{work.work_id}: {work.work_description_normalized}
+                </div>
+                <div className="flex items-center gap-3 text-[11px] font-mono text-[#71717A] pt-1">
+                  <span>Jurisdiction: <strong className="text-[#121316]">{work.constituency_normalized || 'Pune'}, {work.state_normalized || 'Maharashtra'}</strong></span>
+                  <span>Risk: <strong className="text-[#C85A32]">{profile?.risk_assessment.risk_level || 'HIGH'}</strong></span>
+                </div>
+              </div>
+
+              <form onSubmit={handleInitiateCase} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-medium text-[#121316] mb-1">
+                    Supervisory Assignee &amp; Implementing Agency
+                  </label>
+                  <input
+                    type="text"
+                    value={caseAssignee}
+                    onChange={(e) => setCaseAssignee(e.target.value)}
+                    className="cw-input text-xs w-full font-mono"
+                    placeholder="e.g. District Collectorate / IDA (Pune)"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-[#121316] mb-1">
+                    Statutory Review Severity &amp; Action Level
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setCaseSeverity('HIGH')}
+                      className={`p-2.5 rounded-xl text-xs font-mono text-left border transition ${
+                        caseSeverity === 'HIGH'
+                          ? 'border-amber-500 bg-amber-50 text-amber-900 font-bold'
+                          : 'border-[#E4E2DC] bg-white text-[#71717A] hover:bg-[#FAF8F5]'
+                      }`}
+                    >
+                      <div className="font-semibold">HIGH PRIORITY</div>
+                      <div className="text-[10px] text-amber-700 font-normal">Standard Verification &amp; Milestone Audit</div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCaseSeverity('CRITICAL')}
+                      className={`p-2.5 rounded-xl text-xs font-mono text-left border transition ${
+                        caseSeverity === 'CRITICAL'
+                          ? 'border-red-500 bg-red-50 text-red-900 font-bold'
+                          : 'border-[#E4E2DC] bg-white text-[#71717A] hover:bg-[#FAF8F5]'
+                      }`}
+                    >
+                      <div className="font-semibold text-red-700">CRITICAL VIGILANCE</div>
+                      <div className="text-[10px] text-red-600 font-normal">Freeze Tranche &amp; Immediate Show-Cause</div>
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-[#121316] mb-1">
+                    Initial Executive Directives &amp; Audit Notes
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={caseDirectiveNotes}
+                    onChange={(e) => setCaseDirectiveNotes(e.target.value)}
+                    className="cw-input text-xs w-full"
+                    placeholder="e.g. Dispatched on-site engineering team. Ordered immediate freeze on subsequent payment tranche pending physical milestone verification."
+                  />
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#E4E2DC]">
+                  <button
+                    type="button"
+                    onClick={() => setShowCaseModal(false)}
+                    className="cw-btn-secondary text-xs"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={creatingCase}
+                    className="cw-btn-primary text-xs flex items-center gap-2"
+                  >
+                    <PlusCircle className="w-3.5 h-3.5" />
+                    <span>{creatingCase ? 'Docketing Official Case...' : 'Register Official Review Docket'}</span>
                   </button>
                 </div>
               </form>

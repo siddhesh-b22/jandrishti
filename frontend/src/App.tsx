@@ -29,6 +29,7 @@ const DistrictWorkspace = lazy(() => import('./pages/workspaces/DistrictWorkspac
 const MpWorkspace = lazy(() => import('./pages/workspaces/MpWorkspace').then(m => ({ default: m.MpWorkspace })));
 const AuditorWorkspace = lazy(() => import('./pages/workspaces/AuditorWorkspace').then(m => ({ default: m.AuditorWorkspace })));
 const CitizenWorkspace = lazy(() => import('./pages/workspaces/CitizenWorkspace').then(m => ({ default: m.CitizenWorkspace })));
+const TrackReportsPage = lazy(() => import('./pages/TrackReportsPage').then(m => ({ default: m.TrackReportsPage })));
 
 const RouteLoadingFallback: React.FC = () => (
   <div className="min-h-[50vh] flex items-center justify-center p-8 font-sans">
@@ -43,6 +44,19 @@ const RouteLoadingFallback: React.FC = () => (
 const RoleDashboardRedirect: React.FC = () => {
   const { user } = useRole();
   return <Navigate to={getRoleHomeRoute(user?.role)} replace />;
+};
+
+// Route wrapper that smoothly forwards Citizens away from internal vigilance/statistical tools
+const AuthorityOnlyRoute: React.FC<{ children: React.ReactElement; fallbackTo: string }> = ({
+  children,
+  fallbackTo,
+}) => {
+  const { user, currentRole } = useRole();
+  const role = user?.role || currentRole || 'CITIZEN';
+  if (role === 'CITIZEN') {
+    return <Navigate to={fallbackTo} replace />;
+  }
+  return children;
 };
 
 export const App: React.FC = () => {
@@ -107,9 +121,32 @@ export const App: React.FC = () => {
                   <Route path="compare" element={<Navigate to="/states" replace />} />
                   <Route path="works" element={<WorkExplorerPage />} />
                   <Route path="works/:workId" element={<WorkDetailPage />} />
-                  <Route path="anomalies" element={<AnomalyCenterPage />} />
-                  <Route path="cases" element={<CasesAlertsPage />} />
-                  <Route path="alerts" element={<CasesAlertsPage />} />
+                  <Route path="track-reports" element={<TrackReportsPage />} />
+                  <Route path="citizen-reports" element={<Navigate to="/track-reports" replace />} />
+                  <Route
+                    path="anomalies"
+                    element={
+                      <AuthorityOnlyRoute fallbackTo="/works">
+                        <AnomalyCenterPage />
+                      </AuthorityOnlyRoute>
+                    }
+                  />
+                  <Route
+                    path="cases"
+                    element={
+                      <AuthorityOnlyRoute fallbackTo="/track-reports">
+                        <CasesAlertsPage />
+                      </AuthorityOnlyRoute>
+                    }
+                  />
+                  <Route
+                    path="alerts"
+                    element={
+                      <AuthorityOnlyRoute fallbackTo="/track-reports">
+                        <CasesAlertsPage />
+                      </AuthorityOnlyRoute>
+                    }
+                  />
                   <Route path="duplicates" element={<Navigate to="/anomalies?tab=duplicates" replace />} />
                   <Route path="data-quality" element={<DataQualityPage />} />
                   <Route path="mps" element={<MpExplorerPage />} />

@@ -286,30 +286,35 @@ export const DistrictWorkspace: React.FC = () => {
         ) : (
           <div className="grid md:grid-cols-2 gap-4">
             {recommendations.slice(0, 4).map((rec) => (
-              <div key={rec.id} className="p-4 rounded-xl border border-[#E4E2DC] bg-[#FAF8F5] space-y-2.5">
+              <div key={rec.recommendation_id || rec.id} className="p-4 rounded-xl border border-[#E4E2DC] bg-[#FAF8F5] space-y-2.5">
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <h3 className="text-xs font-bold text-[#121316]">
                       {rec.proposed_title || rec.title || 'Infrastructure Scheme'}
                     </h3>
                     <div className="text-[10px] font-mono text-[#71717A] mt-0.5">
-                      Sector: {rec.sector || rec.category || 'Civil'} &bull; MP: {rec.mp_id || 'Lok Sabha Pune'}
+                      Sector: {rec.sector || rec.category || 'Civil'} &bull; MP: {rec.mp_name ? rec.mp_name.split('–')[0].replace('Hon.', '').trim() : (rec.mp_id || 'Lok Sabha Pune')}
                     </div>
                   </div>
-                  <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
-                    rec.status === 'TECHNICAL_SANCTIONED' ? 'bg-emerald-100 text-emerald-800' :
-                    rec.status === 'REJECTED' ? 'bg-rose-100 text-rose-800' :
-                    'bg-amber-100 text-amber-800'
-                  }`}>
-                    {rec.status}
-                  </span>
+                  {(() => {
+                    const st = rec.workflow_status || rec.status || 'SUBMITTED';
+                    return (
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                        st === 'TECHNICAL_SANCTIONED' ? 'bg-emerald-100 text-emerald-800' :
+                        st === 'REJECTED' ? 'bg-rose-100 text-rose-800' :
+                        'bg-amber-100 text-amber-800'
+                      }`}>
+                        {st}
+                      </span>
+                    );
+                  })()}
                 </div>
 
                 <div className="text-xs font-mono text-[#121316]">
                   Estimated Cost: <span className="font-bold">₹{((rec.estimated_cost || 1500000) / 100000).toFixed(2)} Lakhs</span>
                 </div>
 
-                {rec.status !== 'TECHNICAL_SANCTIONED' && rec.status !== 'REJECTED' && (
+                {(rec.workflow_status || rec.status) !== 'TECHNICAL_SANCTIONED' && (rec.workflow_status || rec.status) !== 'REJECTED' && (
                   <div className="flex items-center gap-2 pt-1">
                     <button
                       onClick={() => handleAdvanceRec(rec.recommendation_id || rec.id || '', 'TECHNICAL_SANCTIONED')}

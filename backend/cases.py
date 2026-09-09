@@ -179,6 +179,8 @@ class CaseManagementService:
         severity: Optional[str] = None,
         category: Optional[str] = None,
         role: Optional[str] = None,
+        search: Optional[str] = None,
+        sort_by: str = "newest",
         limit: int = 50,
         offset: int = 0
     ) -> Dict[str, Any]:
@@ -198,8 +200,15 @@ class CaseManagementService:
         if role:
             query += " AND assigned_role = ?"
             params.append(role.upper())
+        if search and search.strip():
+            s_term = f"%{search.strip()}%"
+            query += " AND (case_id LIKE ? OR entity_id LIKE ? OR title LIKE ? OR resolution_notes LIKE ?)"
+            params.extend([s_term, s_term, s_term, s_term])
 
-        query += " ORDER BY risk_score DESC, updated_at DESC LIMIT ? OFFSET ?"
+        if sort_by == "risk_score":
+            query += " ORDER BY risk_score DESC, updated_at DESC LIMIT ? OFFSET ?"
+        else:
+            query += " ORDER BY created_at DESC, updated_at DESC LIMIT ? OFFSET ?"
         params.extend([limit, offset])
 
         rows = conn.execute(query, params).fetchall()
@@ -219,6 +228,10 @@ class CaseManagementService:
         if role:
             count_q += " AND assigned_role = ?"
             count_params.append(role.upper())
+        if search and search.strip():
+            s_term = f"%{search.strip()}%"
+            count_q += " AND (case_id LIKE ? OR entity_id LIKE ? OR title LIKE ? OR resolution_notes LIKE ?)"
+            count_params.extend([s_term, s_term, s_term, s_term])
 
         total = conn.execute(count_q, count_params).fetchone()[0]
         conn.close()
@@ -277,6 +290,56 @@ class CaseManagementService:
             INSERT INTO audit_trail (case_id, action, performed_by, role, timestamp, details, previous_state, new_state)
             VALUES (?, 'CASE_CREATED', ?, ?, ?, ?, '', 'NEW')
         """, (case_id, user, role, now_ts, f"Initiated review case for {entity_type} #{entity_id}. {notes}"))
+
+        # Auto-sync to anomalies and alerts so Tab 1 (Alerts feed) also flags this case
+        try:
+            anom_id = f"ANOM-{case_id}"
+            import json
+            conn.execute("""
+                INSERT OR IGNORE INTO anomalies (
+                    anomaly_id, entity_type, entity_id, anomaly_type, anomaly_score,
+                    severity, reason, supporting_metrics, detection_method, threshold_value,
+                    observed_value, percentile, robust_zscore, baseline_reference, generated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                anom_id,
+                entity_type,
+                str(entity_id),
+                "STATUTORY_REVIEW_CASE" if category == "PROJECT_AUDIT" else category,
+                float(risk_score) / 100.0 if risk_score else 0.75,
+                severity,
+                f"Statutory Administrative Review Case #{case_id} Docketed: {title}. Notes: {notes or 'Initiated from 360° Project Dossier under MPLADS Rule 3.12.'}",
+                json.dumps({"case_id": case_id, "statutory_rule": "MPLADS Rule 3.12", "notes": notes, "assigned_to": assigned_to}),
+                f"Administrative Review ({assigned_role})",
+                "Statutory baseline",
+                f"Case #{case_id} Open",
+                95.0,
+                2.85,
+                "Rule 3.12 Directive Registry",
+                now_ts
+            ))
+
+            alert_id = f"ALT-{case_id}"
+            conn.execute("""
+                INSERT OR IGNORE INTO alerts (
+                    alert_id, project_id, severity, alert_type, description, evidence,
+                    status, assigned_to, assigned_role, created_at, reviewer_comment
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                alert_id,
+                str(entity_id),
+                severity,
+                "STATUTORY_REVIEW_CASE",
+                f"Statutory Administrative Review Case #{case_id} Docketed: {title}",
+                json.dumps({"case_id": case_id, "notes": notes, "rule": "MPLADS Rule 3.12"}),
+                "NEW",
+                assigned_to or "District Authority",
+                assigned_role or "DISTRICT_AUTHORITY",
+                now_ts,
+                notes or ""
+            ))
+        except Exception as sync_err:
+            logger.warning("Could not auto-sync case %s to anomalies/alerts: %s", case_id, sync_err)
 
         conn.commit()
         conn.close()

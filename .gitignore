@@ -48,6 +48,7 @@ frontend/dist-ssr/
 # Editor & OS
 .vscode/
 .idea/
+*.iml
 *.swp
 *.swo
 .DS_Store

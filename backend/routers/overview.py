@@ -407,7 +407,7 @@ def get_state_summaries(
             SELECT state, COUNT(*) as anomalies_count FROM (
                 SELECT m2.state_normalized as state FROM anomalies a2 JOIN mps m2 ON a2.entity_id = m2.internal_mp_id WHERE a2.entity_type = 'MP'
                 UNION ALL
-                SELECT w2.state_normalized as state FROM anomalies a2 JOIN works w2 ON CAST(a2.entity_id AS TEXT) = CAST(w2.work_id AS TEXT) WHERE a2.entity_type = 'WORK'
+                SELECT w2.state_normalized as state FROM anomalies a2 JOIN works w2 ON w2.work_id = CAST(a2.entity_id AS INTEGER) WHERE a2.entity_type = 'WORK'
                 UNION ALL
                 SELECT t2.state_normalized as state FROM anomalies a2 JOIN transactions t2 ON a2.entity_id = t2.internal_transaction_id WHERE a2.entity_type = 'TRANSACTION'
                 UNION ALL

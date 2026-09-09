@@ -882,7 +882,7 @@ export const AnomalyCenterPage: React.FC = () => {
                       {item.robust_zscore && (
                         <div className="p-2.5 rounded-lg bg-[#FAF8F5] border border-[#E4E2DC] text-[11px] font-mono text-[#71717A] flex justify-between">
                           <span>Robust Z-Score: <strong className="text-[#C85A32]">{item.robust_zscore.toFixed(2)}σ</strong></span>
-                          <span>Percentile: <strong className="text-[#121316]">{(item.percentile || 0).toFixed(1)}th</strong></span>
+                          <span>Percentile: <strong className="text-[#121316]">{(item.percentile != null ? (item.percentile <= 1.0 ? item.percentile * 100 : item.percentile) : 0).toFixed(1)}th</strong></span>
                         </div>
                       )}
                     </div>

@@ -18,8 +18,10 @@ import json
 import re
 import datetime
 from typing import List, Dict, Any, Optional, Tuple
-import numpy as np
-from sklearn.ensemble import IsolationForest
+try:
+    from sklearn.ensemble import IsolationForest
+except ImportError:
+    IsolationForest = None
 from backend.database import get_db_connection
 
 # Common Indian infrastructure stopwords for fuzzy token matching

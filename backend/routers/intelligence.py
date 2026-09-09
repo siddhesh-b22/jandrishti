@@ -1,5 +1,7 @@
 import json
 import sqlite3
+import hashlib
+import datetime
 from typing import Optional, List, Any
 from fastapi import APIRouter, HTTPException, Query, Depends, status
 
@@ -24,6 +26,7 @@ from backend.schemas import (
     WorkRiskSummary,
     RiskWeightsConfig,
     RiskWeightsUpdateRequest,
+    AIReviewLabelRequest,
 )
 from backend.intelligence import intelligence_service
 from backend.risk_engine import risk_engine
@@ -349,4 +352,106 @@ def assess_work_risk_on_demand(
     project_dict["expenditure"] = row["final_amount"]
     project_dict["physical_progress"] = 100.0 if row["lifecycle_status"] == "COMPLETED" else 45.0
 
-    return risk_engine.assess_project_risk(project_dict)
+    assessment = risk_engine.assess_project_risk(project_dict)
+    feature_version = "ai-features-v1"
+    try:
+        with open("data/features/ai_feature_snapshot.json", "r", encoding="utf-8") as handle:
+            feature_version = json.load(handle).get("version", feature_version)
+    except FileNotFoundError:
+        pass
+    created_at = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    assessment_id = "ASSESS_" + hashlib.sha256(
+        f"WORK:{work_id}:{created_at}".encode("utf-8")
+    ).hexdigest()[:20]
+    evidence = assessment.get("explainable_reasons", [])
+    signals = {
+        "score_breakdown": assessment.get("score_breakdown", {}),
+        "weights_used": assessment.get("weights_used", {}),
+    }
+    limitations = [
+        "This is an analytical risk-prioritization signal, not proof of fraud.",
+        "Detailed source records are snapshot-backed unless marked live by source lineage.",
+        "Physical verification and human review are required before action.",
+    ]
+    db.execute(
+        """INSERT INTO ai_assessments
+        (assessment_id, entity_type, entity_id, model_name, model_version,
+         feature_snapshot_version, risk_score, confidence, signals_json,
+         evidence_json, limitations_json, review_status, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+        (
+            assessment_id, "WORK", str(work_id), "JanDrishti Risk Ensemble",
+            "risk-engine-v2", feature_version, assessment["risk_score"],
+            round(min(1.0, max(0.0, len(evidence) / 5)), 3),
+            json.dumps(signals), json.dumps(evidence), json.dumps(limitations),
+            "PENDING", created_at,
+        ),
+    )
+    db.commit()
+    assessment["governance"] = {
+        "assessment_id": assessment_id,
+        "model_name": "JanDrishti Risk Ensemble",
+        "model_version": "risk-engine-v2",
+        "feature_snapshot_version": feature_version,
+        "review_status": "PENDING",
+        "confidence": round(min(1.0, max(0.0, len(evidence) / 5)), 3),
+        "limitations": limitations,
+    }
+    return assessment
+
+
+@router.get("/api/ai/assessments/{assessment_id}")
+def get_ai_assessment(
+    assessment_id: str,
+    db: sqlite3.Connection = Depends(get_db),
+):
+    """Return the immutable explainability and review metadata for an assessment."""
+    row = db.execute(
+        "SELECT * FROM ai_assessments WHERE assessment_id = ?",
+        (assessment_id.strip(),),
+    ).fetchone()
+    if not row:
+        raise HTTPException(status_code=404, detail="AI assessment not found")
+    result = dict(row)
+    for field in ("signals_json", "evidence_json", "limitations_json"):
+        result[field.removesuffix("_json")] = json.loads(result.pop(field))
+    return result
+
+
+@router.post("/api/ai/review-labels")
+def create_ai_review_label(
+    request: AIReviewLabelRequest,
+    current_user: AuthenticatedUser = Depends(require_case_management_role),
+    db: sqlite3.Connection = Depends(get_db),
+):
+    """Record an expert review label; labels are not accepted from public readers."""
+    label = request.label.strip().upper()
+    allowed = {"CONFIRMED_RISK", "NO_ISSUE", "NEEDS_MORE_EVIDENCE"}
+    if label not in allowed:
+        raise HTTPException(status_code=400, detail=f"Label must be one of: {', '.join(sorted(allowed))}")
+    anomaly = db.execute("SELECT anomaly_id FROM anomalies WHERE anomaly_id = ?", (request.anomaly_id.strip(),)).fetchone()
+    if not anomaly:
+        raise HTTPException(status_code=404, detail="Anomaly not found")
+    now = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    label_id = "LABEL_" + hashlib.sha256(
+        f"{request.anomaly_id}:{current_user.user_id}:{now}".encode("utf-8")
+    ).hexdigest()[:20]
+    db.execute(
+        """INSERT INTO ai_review_labels
+        (label_id, anomaly_id, label, reviewer_id, reviewer_role, notes, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?)""",
+        (label_id, request.anomaly_id.strip(), label, current_user.user_id, current_user.role, request.notes, now),
+    )
+    db.commit()
+    return {"label_id": label_id, "anomaly_id": request.anomaly_id, "label": label, "reviewer_id": current_user.user_id, "created_at": now}
+
+
+@router.get("/api/ai/review-labels")
+def list_ai_review_labels(
+    limit: int = Query(100, ge=1, le=500),
+    db: sqlite3.Connection = Depends(get_db),
+):
+    rows = db.execute(
+        "SELECT * FROM ai_review_labels ORDER BY created_at DESC LIMIT ?", (limit,)
+    ).fetchall()
+    return {"items": [dict(row) for row in rows], "total": len(rows)}

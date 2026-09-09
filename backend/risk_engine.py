@@ -18,6 +18,8 @@ import json
 import re
 import datetime
 from typing import List, Dict, Any, Optional, Tuple
+import numpy as np
+from sklearn.ensemble import IsolationForest
 from backend.database import get_db_connection
 
 # Common Indian infrastructure stopwords for fuzzy token matching
@@ -409,6 +411,36 @@ class RiskEngine:
 
         return score, reasons, delay_data
 
+    def evaluate_payment_network_signals(self, project: Dict[str, Any]) -> Tuple[float, List[str], Dict[str, Any]]:
+        """Score payment timing and concentration indicators for review prioritization."""
+        score = 0.0
+        reasons = []
+        velocity_z = float(project.get("payment_velocity_z") or project.get("vendor_monthly_peak_z") or 0)
+        concentration = float(project.get("vendor_concentration_pct") or project.get("vendor_single_mp_dependency") or 0)
+        year_end_share = float(project.get("financial_year_end_share_pct") or 0)
+        repeated_amount = bool(project.get("repeated_amount_flag") or False)
+        if velocity_z >= 3:
+            score += 40
+            reasons.append(f"Payment velocity is {velocity_z:.1f} robust deviations above baseline.")
+        elif velocity_z >= 2:
+            score += 20
+            reasons.append(f"Payment velocity is elevated at {velocity_z:.1f} robust deviations above baseline.")
+        if concentration >= 70:
+            score += 30
+            reasons.append(f"Vendor concentration indicator is {concentration:.1f}%.")
+        if year_end_share >= 40:
+            score += 20
+            reasons.append(f"{year_end_share:.1f}% of payments fall near financial-year end.")
+        if repeated_amount:
+            score += 10
+            reasons.append("Repeated payment amounts require invoice and milestone review.")
+        return min(100.0, score), reasons, {
+            "payment_velocity_z": velocity_z,
+            "vendor_concentration_pct": concentration,
+            "financial_year_end_share_pct": year_end_share,
+            "repeated_amount_flag": repeated_amount,
+        }
+
     # ------------------------------------------------------------------
     # 6. DUPLICATE WORK DETECTION (Fuzzy Matching)
     # ------------------------------------------------------------------
@@ -499,6 +531,7 @@ class RiskEngine:
         ml_score, raw_ml, ml_explanation = self.evaluate_ml_anomaly(project)
         mismatch_score, mismatch_reasons, mismatch_info = self.evaluate_progress_mismatch(project)
         delay_score, delay_reasons, delay_info = self.evaluate_delay(project)
+        network_score, network_reasons, network_info = self.evaluate_payment_network_signals(project)
 
         # Check for potential duplicates
         title = project.get("project_name") or project.get("work_description_normalized") or ""
@@ -522,7 +555,7 @@ class RiskEngine:
         duplicate_score = (duplicate_candidates[0]["similarity_score"] * 100.0) if duplicate_candidates else 0.0
 
         # Weighted Composite Score
-        composite_score = (
+        existing_score = (
             self.weights["rule_violation"] * rule_score +
             self.weights["statistical_anomaly"] * cost_score +
             self.weights["ml_isolation_forest"] * ml_score +
@@ -530,6 +563,7 @@ class RiskEngine:
             self.weights["cost_deviation"] * (cost_score * 0.8) +
             self.weights["expenditure_progress_mismatch"] * mismatch_score
         )
+        composite_score = (existing_score * 0.90) + (network_score * 0.10)
         composite_score = round(min(100.0, max(0.0, composite_score)), 1)
 
         # Determine Risk Level
@@ -548,6 +582,7 @@ class RiskEngine:
         all_reasons.extend(mismatch_reasons)
         all_reasons.extend(delay_reasons)
         all_reasons.extend(cost_reasons)
+        all_reasons.extend(network_reasons)
         if duplicate_candidates:
             top_dup = duplicate_candidates[0]
             all_reasons.append(
@@ -566,7 +601,8 @@ class RiskEngine:
                 "delay_component": round(delay_score, 1),
                 "cost_deviation_component": round(cost_score, 1),
                 "ml_anomaly_component": round(ml_score, 1),
-                "duplicate_overlap_component": round(duplicate_score, 1)
+                "duplicate_overlap_component": round(duplicate_score, 1),
+                "payment_network_component": round(network_score, 1)
             },
             "weights_used": self.weights,
             "explainable_reasons": all_reasons,
@@ -580,6 +616,7 @@ class RiskEngine:
             "cost_benchmark": cost_info,
             "mismatch_analysis": mismatch_info,
             "delay_analysis": delay_info,
+            "payment_network_analysis": network_info,
             "rule_violations": violations,
             "duplicate_candidates": duplicate_candidates
         }

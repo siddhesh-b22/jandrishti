@@ -15,7 +15,33 @@ CREATE TABLE IF NOT EXISTS data_sources (
     description TEXT NOT NULL,
     record_count INTEGER NOT NULL,
     file_size_bytes INTEGER NOT NULL,
-    created_at TEXT NOT NULL
+    created_at TEXT NOT NULL,
+    source_checksum_sha256 TEXT,
+    source_effective_date TEXT,
+    validation_status TEXT NOT NULL DEFAULT 'UNVALIDATED'
+);
+
+CREATE TABLE IF NOT EXISTS ingestion_batches (
+    batch_id TEXT PRIMARY KEY,
+    source_id TEXT NOT NULL,
+    dataset_name TEXT NOT NULL,
+    source_effective_date TEXT,
+    fetched_at TEXT NOT NULL,
+    checksum_sha256 TEXT NOT NULL,
+    record_count INTEGER NOT NULL DEFAULT 0,
+    file_size_bytes INTEGER NOT NULL DEFAULT 0,
+    status TEXT NOT NULL DEFAULT 'FETCHED',
+    error_message TEXT
+);
+
+CREATE TABLE IF NOT EXISTS source_health (
+    source_id TEXT PRIMARY KEY,
+    last_checked_at TEXT NOT NULL,
+    last_success_at TEXT,
+    last_batch_id TEXT,
+    status TEXT NOT NULL,
+    http_status INTEGER,
+    error_message TEXT
 );
 
 -- 2. MEMBERS OF PARLIAMENT (MP MASTER)
@@ -190,6 +216,42 @@ CREATE TABLE IF NOT EXISTS anomalies (
     robust_zscore REAL,
     baseline_reference TEXT,
     generated_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS ai_model_runs (
+    model_run_id TEXT PRIMARY KEY,
+    model_name TEXT NOT NULL,
+    model_version TEXT NOT NULL,
+    feature_snapshot_version TEXT NOT NULL,
+    training_status TEXT NOT NULL,
+    metrics_json TEXT NOT NULL DEFAULT '{}',
+    created_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS ai_review_labels (
+    label_id TEXT PRIMARY KEY,
+    anomaly_id TEXT NOT NULL,
+    label TEXT NOT NULL,
+    reviewer_id TEXT NOT NULL,
+    reviewer_role TEXT NOT NULL,
+    notes TEXT,
+    created_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS ai_assessments (
+    assessment_id TEXT PRIMARY KEY,
+    entity_type TEXT NOT NULL,
+    entity_id TEXT NOT NULL,
+    model_name TEXT NOT NULL,
+    model_version TEXT NOT NULL,
+    feature_snapshot_version TEXT NOT NULL,
+    risk_score REAL NOT NULL,
+    confidence REAL,
+    signals_json TEXT NOT NULL DEFAULT '{}',
+    evidence_json TEXT NOT NULL DEFAULT '[]',
+    limitations_json TEXT NOT NULL DEFAULT '[]',
+    review_status TEXT NOT NULL DEFAULT 'PENDING',
+    created_at TEXT NOT NULL
 );
 
 -- ====================================================================

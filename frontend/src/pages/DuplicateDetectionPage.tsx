@@ -95,7 +95,7 @@ export const DuplicateDetectionPage: React.FC = () => {
             Duplicate Work <span className="italic font-normal">Detection Studio</span>
           </h1>
           <p className="text-xs sm:text-sm text-[#71717A] max-w-3xl font-light mt-1">
-            Scans 102,437 physical works to identify high semantic similarity (TF-IDF cosine) and geospatial proximity for human administrative verification.
+            Flags potentially overlapping works for human administrative verification.
           </p>
         </div>
 
@@ -103,48 +103,6 @@ export const DuplicateDetectionPage: React.FC = () => {
           <span className="px-3.5 py-1.5 rounded-full bg-[#FAF8F5] border border-[#E4E2DC] text-[#121316] text-xs font-mono font-semibold shadow-2xs">
             {(totalCount || duplicates.length).toLocaleString()} Clusters Flagged
           </span>
-        </div>
-      </div>
-
-      {/* Bento Summary Metrics (/ 01, / 02, / 03) */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="cw-card p-5">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-[10px] font-mono text-[#C85A32] uppercase tracking-widest font-semibold">/ 01 Flagged Pairs</span>
-            <span className="text-[10px] font-mono text-[#71717A]">Active In Scope</span>
-          </div>
-          <div className="text-2xl font-mono font-semibold text-[#121316]">
-            {(totalCount || duplicates.length).toLocaleString()} Pairs
-          </div>
-          <div className="text-xs text-[#71717A] mt-1 font-light">
-            Works exceeding text &amp; spatial overlap thresholds
-          </div>
-        </div>
-
-        <div className="cw-card p-5">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-[10px] font-mono text-[#C85A32] uppercase tracking-widest font-semibold">/ 02 Analytical Model</span>
-            <span className="text-[10px] font-mono text-[#71717A]">Cosine + Geo</span>
-          </div>
-          <div className="text-2xl font-mono font-semibold text-[#121316]">
-            TF-IDF 3-Gram
-          </div>
-          <div className="text-xs text-[#71717A] mt-1 font-light">
-            Tokenized n-gram cosine matching combined with GPS radii
-          </div>
-        </div>
-
-        <div className="cw-card p-5">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-[10px] font-mono text-[#C85A32] uppercase tracking-widest font-semibold">/ 03 Statutory Notice</span>
-            <span className="text-[10px] font-mono text-[#71717A]">Norms Check</span>
-          </div>
-          <div className="text-2xl font-mono font-semibold text-[#121316]">
-            Review Required
-          </div>
-          <div className="text-xs text-[#71717A] mt-1 font-light">
-            Empirical flag for engineer inspection; does NOT assert irregularity
-          </div>
         </div>
       </div>
 

@@ -978,7 +978,7 @@ export const CasesAlertsPage: React.FC = () => {
                             )}
                           </div>
 
-                          {canEdit() && (
+                          {canEdit() && c.status !== 'RESOLVED' && (
                             <div className="shrink-0 self-start sm:self-auto">
                               <button
                                 type="button"
@@ -1349,12 +1349,35 @@ export const CasesAlertsPage: React.FC = () => {
                     onChange={(e) => setUpdateStatus(e.target.value)}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-[#E4E2DC] bg-[#FAF8F5] font-medium text-[#121316] min-h-[42px] focus:outline-none focus:ring-1 focus:ring-[#C85A32] focus:border-[#C85A32]"
                   >
-                    <option value="NEW">New (Pending Field Review)</option>
-                    <option value="UNDER_REVIEW">Under Review (Committee Assigned)</option>
-                    <option value="CLARIFICATION_REQUESTED">Clarification Requested (Official Show-Cause Issued)</option>
-                    <option value="DETAILED_REVIEW">Detailed Review / Technical Audit</option>
-                    <option value="RESOLVED">Resolved (Field Milestone / Vouchers Reconciled)</option>
-                    <option value="ESCALATED">Escalated (Referred to MoSPI / CAG Inquiry)</option>
+                    {currentRole === 'DISTRICT_AUTHORITY' && (
+                      <>
+                        <option value="UNDER_REVIEW">Under Review (Committee Assigned)</option>
+                        <option value="CLARIFICATION_REQUESTED">Clarification Requested (Official Show-Cause Issued)</option>
+                        <option value="RESOLVED">Resolved (Field Milestone / Vouchers Reconciled)</option>
+                        <option value="ESCALATED">Escalated (Referred to State / Nodal Authority)</option>
+                      </>
+                    )}
+                    {currentRole === 'STATE_NODAL_AUTHORITY' && (
+                      <>
+                        <option value="DETAILED_REVIEW">Detailed Review / Technical Audit</option>
+                        <option value="CLARIFICATION_REQUESTED">Clarification Requested (Official Show-Cause Issued)</option>
+                        <option value="RESOLVED">Resolved (Field Milestone / Vouchers Reconciled)</option>
+                        <option value="ESCALATED">Escalated (Referred to MoSPI / CAG Inquiry)</option>
+                      </>
+                    )}
+                    {currentRole === 'MINISTRY_ADMIN' && (
+                      <>
+                        <option value="DETAILED_REVIEW">Detailed Review / National Technical Audit</option>
+                        <option value="RESOLVED">Closed (National Directive Issued / Case Settled)</option>
+                      </>
+                    )}
+                    {!['DISTRICT_AUTHORITY', 'STATE_NODAL_AUTHORITY', 'MINISTRY_ADMIN'].includes(currentRole) && (
+                      <>
+                        <option value="NEW">New (Pending Field Review)</option>
+                        <option value="UNDER_REVIEW">Under Review (Committee Assigned)</option>
+                        <option value="RESOLVED">Resolved (Field Milestone / Vouchers Reconciled)</option>
+                      </>
+                    )}
                   </select>
                 </div>
 

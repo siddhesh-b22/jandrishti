@@ -176,7 +176,7 @@ def main():
     parser = argparse.ArgumentParser(description="JanDrishti Reproducible Master Data Refresh Pipeline")
     parser.add_argument(
         "--stage",
-        choices=["all", "verify", "build-master", "features", "anomalies", "db", "enrich", "checksums"],
+        choices=["all", "verify", "sync-granular", "build-master", "features", "anomalies", "db", "enrich", "checksums"],
         default="all",
         help="Pipeline stage to execute (default: all)"
     )
@@ -200,14 +200,21 @@ def main():
 
     if args.stage == "verify":
         sys.exit(0)
+    if args.stage == "sync-granular":
+        sys.exit(run_script("sync_granular_sources.py", "GRANULAR_SOURCE_SYNC") is not True)
 
     stages = []
     if args.stage in ["all", "build-master"]:
         stages.append(("build_master_dataset.py", "ETL_NORMALIZATION"))
     if args.stage in ["all", "features"]:
         stages.append(("feature_engineering.py", "FEATURE_ENGINEERING"))
+        stages.append(("build_ai_features.py", "AI_FEATURE_SNAPSHOT"))
+        stages.append(("monitor_ai.py", "AI_EVALUATION_MONITORING"))
+        stages.append(("build_predictive_insights.py", "PREDICTIVE_INSIGHTS"))
     if args.stage in ["all", "anomalies"]:
         stages.append(("run_anomaly_engine.py", "ANOMALY_DETECTION"))
+    if args.stage in ["all", "db"]:
+        stages.append(("validate_data_quality.py", "DATA_QUALITY"))
     if args.stage in ["all", "db"]:
         stages.append(("build_database.py", "DATABASE_COMPILATION"))
     if args.stage in ["all", "enrich"]:

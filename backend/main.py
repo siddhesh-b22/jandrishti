@@ -22,6 +22,7 @@ from backend.routers.dashboards import router as dashboards_router
 from backend.routers.cases_alerts import router as cases_alerts_router
 from backend.routers.ingest import router as ingest_router
 from backend.routers.governance import router as governance_router
+from backend.routers.sources import router as sources_router
 
 logger = logging.getLogger("jandrishti.api")
 
@@ -133,6 +134,7 @@ app.include_router(dashboards_router)
 app.include_router(cases_alerts_router)
 app.include_router(ingest_router)
 app.include_router(governance_router)
+app.include_router(sources_router)
 
 # Serve uploaded citizen evidence images
 import pathlib

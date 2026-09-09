@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import hashlib
 import sqlite3
 import datetime
 import pandas as pd
@@ -19,18 +20,50 @@ SCHEMA_PATH = os.path.join(DATABASE_DIR, "schema.sql")
 
 BUILD_TIMESTAMP = datetime.datetime.now(datetime.timezone.utc).isoformat()
 
+REQUIRED_INPUTS = [
+    os.path.join(PROCESSED_DIR, "mp_master.csv"),
+    os.path.join(PROCESSED_DIR, "allocation_master.csv"),
+    os.path.join(PROCESSED_DIR, "vendor_master.csv"),
+    os.path.join(FEATURES_DIR, "vendor_features.csv"),
+    os.path.join(PROCESSED_DIR, "work_master.csv"),
+    os.path.join(FEATURES_DIR, "work_features.csv"),
+    os.path.join(PROCESSED_DIR, "expenditure_master.csv"),
+    os.path.join(FEATURES_DIR, "transaction_features.csv"),
+]
+
+
+def sha256_file(path):
+    digest = hashlib.sha256()
+    with open(path, "rb") as source_file:
+        for chunk in iter(lambda: source_file.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
 print("==================================================")
 print("SIH26102 — SQLITE DATABASE BUILD & VALIDATION")
 print(f"Database Path: {DB_PATH}")
 print(f"Timestamp: {BUILD_TIMESTAMP}")
 print("==================================================")
 
+# Validate every input before touching the active database. A failed rebuild must
+# leave the last known-good snapshot available for read-only consumers.
+missing_inputs = [path for path in REQUIRED_INPUTS if not os.path.isfile(path)]
+if missing_inputs:
+    print("\n[PRECHECK] Required build inputs are missing:")
+    for path in missing_inputs:
+        print(f"  - {path}")
+    raise SystemExit(
+        "Database build aborted before replacing the active database. "
+        "Provide all required processed datasets and retry."
+    )
+
 # 1. Initialize Database & Apply Schema
 print("\n[1/6] Initializing SQLite database with DDL schema...")
-if os.path.exists(DB_PATH):
-    os.remove(DB_PATH)
+staging_db_path = f"{DB_PATH}.staging"
+if os.path.exists(staging_db_path):
+    os.remove(staging_db_path)
 
-conn = sqlite3.connect(DB_PATH)
+conn = sqlite3.connect(staging_db_path)
 cursor = conn.cursor()
 
 cursor.execute("PRAGMA foreign_keys = ON;")
@@ -55,6 +88,9 @@ sources = [
         "description": "MP-level macro allocation, cumulative expenditure, work recommendations, and completions for the 18th Lok Sabha.",
         "record_count": 543,
         "file_size_bytes": 65885,
+        "source_checksum_sha256": sha256_file(os.path.join("data", "raw", "mplads_mp_summary_2026-08-26.csv")),
+        "source_effective_date": "2026-08-26",
+        "validation_status": "VALIDATED_SNAPSHOT",
         "created_at": BUILD_TIMESTAMP
     },
     {
@@ -66,6 +102,9 @@ sources = [
         "description": "Granular work recommendations submitted by Lok Sabha MPs, containing Work IDs, categories, and proposed amounts.",
         "record_count": 68872,
         "file_size_bytes": 17782809,
+        "source_checksum_sha256": sha256_file(os.path.join("data", "raw", "mplads_recommended_works_2026-08-26.csv")),
+        "source_effective_date": "2026-08-26",
+        "validation_status": "VALIDATED_SNAPSHOT",
         "created_at": BUILD_TIMESTAMP
     },
     {
@@ -77,6 +116,9 @@ sources = [
         "description": "Granular physically completed public works, containing Work IDs, final expenditures, and completion dates.",
         "record_count": 33746,
         "file_size_bytes": 8693682,
+        "source_checksum_sha256": sha256_file(os.path.join("data", "raw", "mplads_completed_works_2026-08-26.csv")),
+        "source_effective_date": "2026-08-26",
+        "validation_status": "VALIDATED_SNAPSHOT",
         "created_at": BUILD_TIMESTAMP
     },
     {
@@ -88,6 +130,9 @@ sources = [
         "description": "Line-item financial disbursements and payment vouchers to vendors and implementing agencies.",
         "record_count": 82296,
         "file_size_bytes": 19400732,
+        "source_checksum_sha256": sha256_file(os.path.join("data", "raw", "mplads_expenditures_2026-08-26.csv")),
+        "source_effective_date": "2026-08-26",
+        "validation_status": "VALIDATED_SNAPSHOT",
         "created_at": BUILD_TIMESTAMP
     },
     {
@@ -99,6 +144,9 @@ sources = [
         "description": "National summary benchmarks directly cached from official dashboard API.",
         "record_count": 1,
         "file_size_bytes": 584,
+        "source_checksum_sha256": sha256_file(os.path.join("data", "raw", "json_2026-08-26.json")),
+        "source_effective_date": "2026-08-26",
+        "validation_status": "VALIDATED_SNAPSHOT",
         "created_at": BUILD_TIMESTAMP
     }
 ]
@@ -270,7 +318,7 @@ print("\nALL DATABASE RECONCILIATION ASSERTIONS PASSED WITH ZERO TOLERANCE ERROR
 # 6. Generate Database Validation Report Markdown
 print("\n[6/6] Writing docs/database_validation_report.md...")
 
-db_file_size = os.path.getsize(DB_PATH)
+db_file_size = os.path.getsize(staging_db_path)
 db_size_mb = db_file_size / (1024 * 1024)
 
 report_md = f"""# SIH26102 — SQLite Database Validation Report
@@ -340,5 +388,10 @@ The following 18 indexes were created and verified for sub-millisecond query per
 with open(os.path.join(DOCS_DIR, "database_validation_report.md"), "w", encoding="utf-8") as vf:
     vf.write(report_md)
 
+conn.execute("PRAGMA wal_checkpoint(TRUNCATE)")
 conn.close()
+os.replace(staging_db_path, DB_PATH)
+for sidecar_path in (f"{staging_db_path}-wal", f"{staging_db_path}-shm"):
+    if os.path.exists(sidecar_path):
+        os.remove(sidecar_path)
 print("Database build and validation successfully completed!")

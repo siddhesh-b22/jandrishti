@@ -353,7 +353,7 @@ def get_state_summaries(
     user: Optional[AuthenticatedUser] = Depends(optional_authenticated_user)
 ):
     """Retrieve state-level macro performance summaries."""
-    cache_key = f"states_{house or 'ALL'}_{user.role if user else 'ANON'}_{user.jurisdiction_state if user else 'ALL'}"
+    cache_key = f"states_{house or 'ALL'}_{user.role if user else 'ANON'}_{user.state if user else 'ALL'}"
     now = time.time()
     if cache_key in _MACRO_CACHE and _MACRO_CACHE_EXPIRY.get(cache_key, 0) > now:
         return _MACRO_CACHE[cache_key]

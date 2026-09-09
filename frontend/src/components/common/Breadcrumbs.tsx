@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronRight, Home, Landmark, Users, Layers, Receipt, Building2, MapPin, ShieldAlert, FileText } from 'lucide-react';
-import { useHouse } from '../../context/HouseContext';
 
 interface BreadcrumbItem {
   label: string;
@@ -18,8 +17,6 @@ interface BreadcrumbsProps {
 
 export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, customCurrent, className = '' }) => {
   const location = useLocation();
-  const { houseLabel } = useHouse();
-
   // If items not explicitly passed, deduce default hierarchy from pathname
   const pathSegments = location.pathname.split('/').filter(Boolean);
 
@@ -106,13 +103,6 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, customCurrent, 
         })}
       </ol>
 
-      {/* Viewing Scope Context Pill */}
-      <div className="hidden md:flex items-center gap-2 text-[11px] font-mono text-[#71717A] shrink-0">
-        <span>Active Scope:</span>
-        <span className="px-2.5 py-0.5 rounded-full bg-[#F0EFEA] border border-[#E4E2DC] text-[#121316] font-semibold">
-          {houseLabel}
-        </span>
-      </div>
     </nav>
   );
 };

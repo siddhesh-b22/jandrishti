@@ -26,7 +26,6 @@ import {
 import { api } from '../../api/client';
 import { Work, CitizenReport } from '../../api/types';
 import { useRole } from '../../context/RoleContext';
-import { Breadcrumbs } from '../../components/common/Breadcrumbs';
 
 const POPULAR_STATES = [
   'MAHARASHTRA',
@@ -186,31 +185,15 @@ export const CitizenWorkspace: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fade-in font-sans">
-      <Breadcrumbs
-        items={[
-          { label: 'Public Portal' },
-          { label: 'Citizen Transparency & Social Audit Desk' }
-        ]}
-      />
-
       {/* Public Civic Transparency Banner */}
       <div className="rounded-2xl border border-[#E4E2DC] bg-white p-6 sm:p-8 shadow-xs space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E4E2DC] pb-4">
           <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full bg-[#FAF0EB] text-[#C85A32] text-[10px] font-mono font-bold border border-[#E8C5B6] flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#C85A32]" />
-                <span>OPEN CIVIC TRANSPARENCY</span>
-              </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[10px] font-mono font-bold border border-emerald-200">
-                RTI Act Section 4(1)(b) Proactive Public Disclosure
-              </span>
-            </div>
             <h1 className="text-2xl sm:text-3xl font-serif text-[#121316]">
               JanDrishti Open Infrastructure &amp; Expenditure Explorer
             </h1>
             <p className="text-xs sm:text-sm text-[#71717A] font-light max-w-3xl">
-              Zero-barrier civic audit portal for verified public works, contractor payments, and community infrastructure delivery across India without requiring official credentials.
+              Public works, payments, and community infrastructure information for civic review.
             </p>
           </div>
 

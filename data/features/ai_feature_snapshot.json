@@ -1,0 +1,12 @@
+{
+  "version": "ai-features-v1",
+  "generated_at": "2026-09-09T06:43:45.770673+00:00",
+  "row_count": 102437,
+  "sha256": "499fe58015f4856bf5fbf15b0c5c2145a8b0fe11a354e9f903e14806d6b5490d",
+  "source_files": [
+    "work_master.csv",
+    "expenditure_master.csv",
+    "vendor_master.csv"
+  ],
+  "label_status": "UNLABELED"
+}

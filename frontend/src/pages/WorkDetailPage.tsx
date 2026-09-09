@@ -352,59 +352,7 @@ export const WorkDetailPage: React.FC = () => {
             </div>
           )}
 
-          {/* Plain-Language 4-Question Audit Explanation */}
-          {profile && (profile.progress.mismatch_detected || profile.risk_assessment.risk_level !== 'LOW') && (
-            <div className="mt-4 p-5 rounded-2xl bg-[#FAF0EB] border border-[#E8C5B6] space-y-3">
-              <div className="flex items-center gap-2 text-[#C85A32]">
-                <ShieldAlert className="w-4 h-4 shrink-0" />
-                <span className="font-mono text-xs font-bold uppercase tracking-wider">
-                  Four-Question Government Audit Finding
-                </span>
-              </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-                <div className="p-3.5 rounded-xl bg-white border border-[#E8C5B6] space-y-1">
-                  <strong className="block text-[10px] font-mono uppercase text-[#C85A32]">
-                    1. What happened?
-                  </strong>
-                  <p className="text-[#4A4D53] leading-relaxed font-light">
-                    {profile.progress.mismatch_detected
-                      ? `Fund expenditure leads physical delivery by ${profile.progress.divergence_index} percentage points.`
-                      : profile.delay_prediction.status === 'CRITICALLY_DELAYED'
-                      ? `Project execution is running ${profile.delay_prediction.schedule_deviation}x past the category benchmark.`
-                      : 'Multi-factor statutory risk score is elevated for this public scheme.'}
-                  </p>
-                </div>
-
-                <div className="p-3.5 rounded-xl bg-white border border-[#E8C5B6] space-y-1">
-                  <strong className="block text-[10px] font-mono uppercase text-amber-800">
-                    2. Why was it flagged?
-                  </strong>
-                  <p className="text-[#4A4D53] leading-relaxed font-light">
-                    {profile.risk_assessment.explainable_reasons[0] || 'Statistical divergence exceeds category baseline (MAD Robust Z-Score > 2.5).'}
-                  </p>
-                </div>
-
-                <div className="p-3.5 rounded-xl bg-white border border-[#E8C5B6] space-y-1">
-                  <strong className="block text-[10px] font-mono uppercase text-[#121316]">
-                    3. What should be reviewed?
-                  </strong>
-                  <p className="text-[#4A4D53] leading-relaxed font-light">
-                    Issue inquiry to {work.ida_normalized || 'the Implementing District Authority'} and inspect on-site geo-tagged asset photographs.
-                  </p>
-                </div>
-
-                <div className="p-3.5 rounded-xl bg-white border border-[#E8C5B6] space-y-1">
-                  <strong className="block text-[10px] font-mono uppercase text-[#2E7D32]">
-                    4. How was it detected?
-                  </strong>
-                  <p className="text-[#4A4D53] leading-relaxed font-light">
-                    Automated deterministic comparison against MPLADS Guidelines 2023 &amp; Robust MAD scoring.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Milestone Lifecycle Progress */}

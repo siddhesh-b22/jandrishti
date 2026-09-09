@@ -259,6 +259,11 @@ class AnomalyListResponse(BaseModel):
     offset: int
     items: List[AnomalyResponse]
 
+class AIReviewLabelRequest(BaseModel):
+    anomaly_id: str
+    label: str
+    notes: Optional[str] = None
+
 class StateSummaryItem(BaseModel):
     state: str
     total_mps: Optional[int] = 0
@@ -803,4 +808,3 @@ class AlertUpdateRequest(BaseModel):
     assigned_to: Optional[str] = None
     assigned_role: Optional[str] = None
     reviewer_comment: Optional[str] = None
-

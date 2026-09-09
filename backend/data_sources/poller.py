@@ -15,6 +15,7 @@ from backend.data_sources.connector import government_connector
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DB_PATH = os.path.join(BASE_DIR, "database", "mplads.db")
+ARCHIVE_DIR = os.path.join(BASE_DIR, "data", "raw", "live_batches")
 
 MOSPI_TILES_URL = "https://www.mplads.mospi.gov.in/rest/PreLoginDashboardData/getTilesData"
 MOSPI_HEADERS = {
@@ -121,6 +122,42 @@ class MacroSnapshotPoller:
 
         payload_bytes = json.dumps(metrics["raw_response"], sort_keys=True).encode("utf-8")
         checksum = hashlib.sha256(payload_bytes).hexdigest()
+        batch_id = f"BATCH_{checksum[:24]}"
+        os.makedirs(ARCHIVE_DIR, exist_ok=True)
+        archive_path = os.path.join(ARCHIVE_DIR, f"{batch_id}.json")
+        if not os.path.exists(archive_path):
+            with open(archive_path, "wb") as archive:
+                archive.write(payload_bytes)
+
+        cur.execute("""
+        CREATE TABLE IF NOT EXISTS ingestion_batches (
+            batch_id TEXT PRIMARY KEY, source_id TEXT NOT NULL, dataset_name TEXT NOT NULL,
+            source_effective_date TEXT, fetched_at TEXT NOT NULL, checksum_sha256 TEXT NOT NULL,
+            record_count INTEGER NOT NULL DEFAULT 0, file_size_bytes INTEGER NOT NULL DEFAULT 0,
+            status TEXT NOT NULL DEFAULT 'FETCHED', error_message TEXT
+        )
+        """)
+        cur.execute("""
+        CREATE TABLE IF NOT EXISTS source_health (
+            source_id TEXT PRIMARY KEY, last_checked_at TEXT NOT NULL, last_success_at TEXT,
+            last_batch_id TEXT, status TEXT NOT NULL, http_status INTEGER, error_message TEXT
+        )
+        """)
+        cur.execute("""
+        INSERT OR REPLACE INTO ingestion_batches
+        (batch_id, source_id, dataset_name, source_effective_date, fetched_at,
+         checksum_sha256, record_count, file_size_bytes, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            batch_id, "SRC_MOSPI_TILES", "mospi_tiles_macro.json",
+            today_str, now_str, checksum, metrics["works_completed"],
+            len(payload_bytes), "FETCHED"
+        ))
+        cur.execute("""
+        INSERT OR REPLACE INTO source_health
+        (source_id, last_checked_at, last_success_at, last_batch_id, status, http_status, error_message)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        """, ("SRC_MOSPI_TILES", now_str, now_str, batch_id, "HEALTHY", 200, None))
 
         # Insert new snapshot
         cur.execute("""
@@ -177,6 +214,8 @@ class MacroSnapshotPoller:
 
         summary = {
             "snapshot_id": snap_id,
+            "batch_id": batch_id,
+            "archive_path": os.path.relpath(archive_path, BASE_DIR),
             "checksum": checksum[:16],
             "works_completed": metrics["works_completed"],
             "expenditure_cr": round(metrics["expenditure"] / 1e7, 2),

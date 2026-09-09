@@ -15,14 +15,12 @@ import {
   Building2,
   Users,
   Layers,
-  Sparkles,
   ArrowRight,
   HelpCircle,
   TrendingUp,
   MapPin,
   FileCheck,
   ChevronRight,
-  Info,
   Sliders,
   AlertOctagon,
   X
@@ -100,7 +98,6 @@ export const AnomalyCenterPage: React.FC = () => {
   const [activePairForModal, setActivePairForModal] = useState<DuplicatePair | null>(null);
   const [isComparisonModalOpen, setIsComparisonModalOpen] = useState(false);
   const [activeDossier, setActiveDossier] = useState<DossierEntity | null>(null);
-  const [showMethodology, setShowMethodology] = useState(true);
 
   const handlePageChange = (newOffset: number) => {
     const nextPg = Math.floor(newOffset / PAGE_SIZE) + 1;
@@ -350,14 +347,6 @@ export const AnomalyCenterPage: React.FC = () => {
                 </button>
               )}
 
-              <button
-                type="button"
-                onClick={() => setShowMethodology(!showMethodology)}
-                className="px-3 py-1.5 rounded-xl border border-[#E4E2DC] hover:border-[#C85A32] bg-white text-xs text-[#121316] flex items-center gap-1.5 transition cursor-pointer font-medium"
-              >
-                <Info className="w-3.5 h-3.5 text-[#C85A32]" />
-                <span>{showMethodology ? 'Hide Math' : 'Explain Math'}</span>
-              </button>
             </div>
           </div>
 
@@ -382,9 +371,6 @@ export const AnomalyCenterPage: React.FC = () => {
                     1. Duplicate Works
                   </span>
                 </div>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#FAF0EB] text-[#C85A32] font-semibold border border-[#E8C5B6]">
-                  TF-IDF + Geo
-                </span>
               </div>
               <p className="text-[11px] text-[#71717A] mt-1.5 font-light line-clamp-1">
                 Semantic string similarity &amp; spatial cluster overlap
@@ -413,9 +399,6 @@ export const AnomalyCenterPage: React.FC = () => {
                     2. Progress Mismatch
                   </span>
                 </div>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-50 text-amber-800 font-semibold border border-amber-200">
-                  Δ ≥ 40%
-                </span>
               </div>
               <p className="text-[11px] text-[#71717A] mt-1.5 font-light line-clamp-1">
                 High financial payout with low physical completion
@@ -444,9 +427,6 @@ export const AnomalyCenterPage: React.FC = () => {
                     3. Delay Predictor
                   </span>
                 </div>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-rose-50 text-rose-800 font-semibold border border-rose-200">
-                  ML Regression
-                </span>
               </div>
               <p className="text-[11px] text-[#71717A] mt-1.5 font-light line-clamp-1">
                 Schedule overruns exceeding 18-month statutory SLA
@@ -475,9 +455,6 @@ export const AnomalyCenterPage: React.FC = () => {
                     4. Cost &amp; Monopoly
                   </span>
                 </div>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-800 font-semibold border border-indigo-200">
-                  MAD |z| ≥ 2.5
-                </span>
               </div>
               <p className="text-[11px] text-[#71717A] mt-1.5 font-light line-clamp-1">
                 Cost outliers &amp; contractor HHI saturation
@@ -492,58 +469,6 @@ export const AnomalyCenterPage: React.FC = () => {
 
       {/* 3. Main Content Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-6">
-        {/* Collapsible Methodology Card for the Active Tab */}
-        {showMethodology && (
-          <div className="p-5 sm:p-6 rounded-2xl bg-white border border-[#E4E2DC] shadow-xs space-y-3 animate-fade-in">
-            <div className="flex items-center justify-between border-b border-[#E4E2DC] pb-3">
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#C85A32]" />
-                <h2 className="text-sm font-serif font-bold text-[#121316]">
-                  {activeTab === 'duplicates' && 'How AI Duplicate Detection Works (In Plain English)'}
-                  {activeTab === 'mismatch' && 'How Progress vs Outflow Mismatch Detection Works'}
-                  {activeTab === 'delays' && 'How Delay & Inefficiency Prediction Works'}
-                  {activeTab === 'outliers' && 'How Statistical Outlier & Contractor Monopoly Scoring Works'}
-                </h2>
-              </div>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#FAF0EB] text-[#C85A32] border border-[#E8C5B6]">
-                Statutory Algorithm Specification
-              </span>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-4 text-xs">
-              <div className="p-3.5 rounded-xl bg-[#FAF8F5] border border-[#E4E2DC] space-y-1">
-                <span className="text-[10px] font-mono text-[#71717A] uppercase block">Algorithm / Model</span>
-                <p className="font-semibold text-[#121316]">
-                  {activeTab === 'duplicates' && 'TF-IDF Text Vectors + Levenshtein Distance (Threshold ≥ 70%)'}
-                  {activeTab === 'mismatch' && 'Divergence Index: Δ = (Financial Outflow %) - (Physical Milestone %)'}
-                  {activeTab === 'delays' && 'Historical Category Regressions + Milestone Velocity Forecasting'}
-                  {activeTab === 'outliers' && 'Median Absolute Deviation (MAD) Robust Z-Score + Herfindahl Index (HHI)'}
-                </p>
-              </div>
-
-              <div className="p-3.5 rounded-xl bg-[#FAF8F5] border border-[#E4E2DC] space-y-1">
-                <span className="text-[10px] font-mono text-[#71717A] uppercase block">Statutory MoSPI Norm</span>
-                <p className="font-semibold text-[#121316]">
-                  {activeTab === 'duplicates' && 'MoSPI Guidelines §4.1: Prevention of double-dipping in identical Gram Panchayats.'}
-                  {activeTab === 'mismatch' && 'Article 9 Guidelines: Disbursements must strictly correlate with physical completion.'}
-                  {activeTab === 'delays' && 'MoSPI SLA: 45 days for technical sanction; 18 months max completion benchmark.'}
-                  {activeTab === 'outliers' && 'Public Procurement Guidelines: Anti-collusion checks & contractor capacity caps.'}
-                </p>
-              </div>
-
-              <div className="p-3.5 rounded-xl bg-[#FAF8F5] border border-[#E4E2DC] space-y-1">
-                <span className="text-[10px] font-mono text-[#71717A] uppercase block">Recommended Administrative Action</span>
-                <p className="font-semibold text-[#121316]">
-                  {activeTab === 'duplicates' && 'Compare GPS coordinates and consolidate duplicate estimates into single asset.'}
-                  {activeTab === 'mismatch' && 'Hold subsequent disbursement tranche; mandate field photo verification.'}
-                  {activeTab === 'delays' && 'Issue Clause 14 liquidated damages warning to contractor; review implementing agency.'}
-                  {activeTab === 'outliers' && 'Request technical justification for rate deviation; audit district tender allocation.'}
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Loading State */}
         {loading && (
           <div className="py-16 text-center">

@@ -177,6 +177,48 @@ def _is_valid_sqlite_db(path: str) -> bool:
 _fallback_initialized = False
 
 
+def _ensure_sqlite_schema(conn) -> None:
+    """Apply additive compatibility changes to existing local snapshots."""
+    columns = {
+        row[1]
+        for row in conn.execute("PRAGMA table_info(data_sources)").fetchall()
+    }
+    additions = (
+        ("source_checksum_sha256", "TEXT"),
+        ("source_effective_date", "TEXT"),
+        ("validation_status", "TEXT NOT NULL DEFAULT 'UNVALIDATED'"),
+    )
+    if not columns:
+        return
+    conn.executescript("""
+        CREATE TABLE IF NOT EXISTS ingestion_batches (
+            batch_id TEXT PRIMARY KEY,
+            source_id TEXT NOT NULL,
+            dataset_name TEXT NOT NULL,
+            source_effective_date TEXT,
+            fetched_at TEXT NOT NULL,
+            checksum_sha256 TEXT NOT NULL,
+            record_count INTEGER NOT NULL DEFAULT 0,
+            file_size_bytes INTEGER NOT NULL DEFAULT 0,
+            status TEXT NOT NULL DEFAULT 'FETCHED',
+            error_message TEXT
+        );
+        CREATE TABLE IF NOT EXISTS source_health (
+            source_id TEXT PRIMARY KEY,
+            last_checked_at TEXT NOT NULL,
+            last_success_at TEXT,
+            last_batch_id TEXT,
+            status TEXT NOT NULL,
+            http_status INTEGER,
+            error_message TEXT
+        );
+    """)
+    for name, definition in additions:
+        if name not in columns:
+            conn.execute(f"ALTER TABLE data_sources ADD COLUMN {name} {definition}")
+    conn.commit()
+
+
 def _get_fallback_connection():
     global _fallback_initialized
     import tempfile
@@ -193,6 +235,7 @@ def _get_fallback_connection():
                 CREATE TABLE IF NOT EXISTS anomalies (anomaly_id TEXT PRIMARY KEY, entity_type TEXT, entity_id TEXT, anomaly_type TEXT, description TEXT, severity TEXT, detected_at TEXT);
                 CREATE TABLE IF NOT EXISTS alerts (alert_id TEXT PRIMARY KEY, project_id TEXT, severity TEXT, alert_type TEXT, description TEXT, evidence TEXT, status TEXT DEFAULT 'NEW', assigned_to TEXT, assigned_role TEXT, created_at TEXT, resolved_at TEXT, reviewer_comment TEXT);
                 CREATE TABLE IF NOT EXISTS review_cases (case_id TEXT PRIMARY KEY, entity_type TEXT, entity_id TEXT, title TEXT, severity TEXT, risk_score REAL, category TEXT, status TEXT DEFAULT 'NEW', assigned_to TEXT, assigned_role TEXT, created_at TEXT, updated_at TEXT, resolution_notes TEXT);
+                CREATE TABLE IF NOT EXISTS ai_assessments (assessment_id TEXT PRIMARY KEY, entity_type TEXT NOT NULL, entity_id TEXT NOT NULL, model_name TEXT NOT NULL, model_version TEXT NOT NULL, feature_snapshot_version TEXT NOT NULL, risk_score REAL NOT NULL, confidence REAL, signals_json TEXT NOT NULL DEFAULT '{}', evidence_json TEXT NOT NULL DEFAULT '[]', limitations_json TEXT NOT NULL DEFAULT '[]', review_status TEXT NOT NULL DEFAULT 'PENDING', created_at TEXT NOT NULL);
                 CREATE TABLE IF NOT EXISTS audit_trail (id INTEGER PRIMARY KEY AUTOINCREMENT, case_id TEXT, action TEXT, performed_by TEXT, role TEXT, timestamp TEXT, details TEXT, previous_state TEXT, new_state TEXT);
             """)
             conn.commit()
@@ -223,8 +266,10 @@ def get_db_connection():
         conn.row_factory = sqlite3.Row
         try:
             conn.execute("PRAGMA busy_timeout = 10000;")
+            _ensure_sqlite_schema(conn)
         except Exception:
-            pass
+            conn.close()
+            raise
         return conn
     except Exception as exc:
         logger.error("Failed to connect to local SQLite database (%s): %s", db_path_abs, exc)
@@ -251,8 +296,10 @@ def get_db_write_connection():
         conn.row_factory = sqlite3.Row
         try:
             conn.execute("PRAGMA busy_timeout = 10000;")
+            _ensure_sqlite_schema(conn)
         except Exception:
-            pass
+            conn.close()
+            raise
         return conn
     except Exception as exc:
         logger.error("Failed to open local SQLite write connection (%s): %s", db_path_abs, exc)
